@@ -6,6 +6,7 @@
 *.lo
 *.o
 *.obj
+*.vs
 
 # Precompiled Headers
 *.gch
@@ -34,3 +35,4 @@
 # Ignore windows build files
 /bin/
 /build/
+/out/

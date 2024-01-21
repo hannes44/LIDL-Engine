@@ -1,5 +1,6 @@
 #include <iostream>
 #include "transform.hpp"
+#include "SDL.h"
 
 int main(int argc, char* argv[])
 {
@@ -7,6 +8,7 @@ int main(int argc, char* argv[])
 	engine::Transform transform{};
 	transform.setPosition(glm::vec3(1.0f, 2.0f, 3.0f));
 	std::cout << "Position: " << transform.getPosition().x << ", " << transform.getPosition().y << ", " << transform.getPosition().z << std::endl;
+	SDL_Log("%s", "Hello Test!");
 	return 0;
 }
 
