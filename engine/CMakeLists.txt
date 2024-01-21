@@ -9,5 +9,14 @@ target_sources(Engine PRIVATE
 	component.hpp
 	point_light_component.hpp
 	physics_component.hpp
+	Game.hpp
+	Game.cpp
+	TestGame.hpp
+	TestGame.cpp
+	Display.hpp
+	DisplayTerminal.hpp
+	DisplayTerminal.cpp
+	Bootstrap.hpp
+	Bootstrap.cpp
 )
 target_link_libraries(Engine PRIVATE vendor)
