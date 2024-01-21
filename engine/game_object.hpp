@@ -1,12 +1,16 @@
 #pragma once
 
 #include "transform.hpp"
+#include "component.hpp"
+#include <vector>
+#include <memory>
 
 namespace engine
 {
 	class GameObject
 	{
 	public:
+		GameObject() = default;
 		// Called every frame
 		virtual void update() = 0;
 
@@ -17,6 +21,7 @@ namespace engine
 
 		bool isVisible = true;
 
-		bool isPhysicsEnabled = false;
+		// TODO: Should limit each component to one of each type
+		std::vector<std::shared_ptr<Component>> components {};
 	};
 }
