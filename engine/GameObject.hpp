@@ -1,7 +1,7 @@
 #pragma once
 
-#include "transform.hpp"
-#include "component.hpp"
+#include "Transform.hpp"
+#include "Component.hpp"
 #include <vector>
 #include <memory>
 
