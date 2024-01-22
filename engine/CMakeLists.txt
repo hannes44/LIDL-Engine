@@ -18,5 +18,7 @@ target_sources(Engine PRIVATE
 	DisplayTerminal.cpp
 	Bootstrap.hpp
 	Bootstrap.cpp
+	logger.hpp
+	logger.cpp
 )
 target_link_libraries(Engine PRIVATE vendor)
