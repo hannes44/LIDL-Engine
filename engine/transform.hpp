@@ -8,7 +8,7 @@ namespace engine
 	public:
 		Transform();
 
-		glm::mat4 transformMatrix {0};
+		glm::mat4 transformMatrix{ 0 };
 
 		glm::vec3 getPosition();
 		void setPosition(glm::vec3 position);

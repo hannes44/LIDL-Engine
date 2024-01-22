@@ -5,29 +5,29 @@
 
 namespace engine
 {
-    class Window
-    {
-    public:
-        Window(Window const&) = delete;
-        ~Window() {};
+	class Window
+	{
+	public:
+		Window(Window const&) = delete;
+		~Window() {};
 
-        static Window& getInstance();
+		static Window& getInstance();
 
-        void createWindow(int width, int height, const std::string title);
+		void createWindow(int width, int height, const std::string title);
 
-        void cleanup();
+		void cleanup();
 
-        void getWindowSize(int* width, int* height);
-        void setWindowTitle(const std::string title);
+		void getWindowSize(int* width, int* height);
+		void setWindowTitle(const std::string title);
 
-        void closeWindow();
+		void closeWindow();
 
-        void newFrame();
+		void newFrame();
 
-    protected:
-        inline static Window* instance = nullptr;
-        Window() {};
+	protected:
+		inline static Window* instance = nullptr;
+		Window() {};
 
-        SDL_Window* window = nullptr;
-    };
+		SDL_Window* window = nullptr;
+	};
 } // namespace engine

@@ -22,6 +22,6 @@ namespace engine
 		bool isVisible = true;
 
 		// TODO: Should limit each component to one of each type
-		std::vector<std::shared_ptr<Component>> components {};
+		std::vector<std::shared_ptr<Component>> components{};
 	};
 }

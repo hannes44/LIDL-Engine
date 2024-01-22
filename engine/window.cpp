@@ -45,7 +45,7 @@ namespace engine
 	void Window::newFrame()
 	{
 		SDL_Event test_event;
-		while (SDL_PollEvent(&test_event)) 
+		while (SDL_PollEvent(&test_event))
 		{
 			if (test_event.type == SDL_EVENT_QUIT)
 			{
