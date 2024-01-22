@@ -31,8 +31,9 @@ namespace engine
 		std::vector<tinyobj::shape_t> shapes;
 		std::vector<tinyobj::material_t> materials;
 		std::string err;
+		std::string warn;
 
-		if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &err, (MODELS_PATH + filename).c_str())) {
+		if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, (MODELS_PATH + filename).c_str())) {
 			LOG_ERROR("Failed to load mesh from file: {0}", filename);
 			throw std::runtime_error(err);
 		}
