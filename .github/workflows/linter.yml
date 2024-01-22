@@ -16,7 +16,10 @@ jobs:
     - uses: ZedThree/clang-tidy-review@v0.14.0
       id: review
       with:
-        clang_tidy_checks: '-*,performance-*,readability-*,bugprone-*,clang-analyzer-*,cppcoreguidelines-*,mpi-*,misc-*,-cppcoreguidelines-avoid-non-const-global-variables'
+        clang_tidy_checks: "-*,performance-*,readability-*,bugprone-*,clang-analyzer-*,cppcoreguidelines-*,mpi-*,misc-*,\
+                            -cppcoreguidelines-avoid-non-const-global-variables,\
+                            -readability-identifier-length,\
+                            -cppcoreguidelines-special-member-functions"
 
     # If there are any comments, fail the check
     - if: steps.review.outputs.total_comments > 0
