@@ -10,7 +10,7 @@ int main(int argc, char* argv[])
 {
 	engine::Logger::init();
 
-	engine::Uuid test;
+	engine::Uuid const test;
 	std::cout << test.getId();
 
 	/*
