@@ -1,4 +1,4 @@
-#include "game_object_manager.hpp"
+#include "GameObjectManager.hpp"
 
 namespace engine
 {

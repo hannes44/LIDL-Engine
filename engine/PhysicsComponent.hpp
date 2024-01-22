@@ -1,5 +1,5 @@
 #pragma once
-#include "component.hpp"
+#include "Component.hpp"
 
 
 namespace engine

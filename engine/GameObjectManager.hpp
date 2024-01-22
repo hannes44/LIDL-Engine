@@ -1,6 +1,6 @@
 #pragma once
 
-#include "game_object.hpp"
+#include "GameObject.hpp"
 #include <vector>
 #include <memory>
 
