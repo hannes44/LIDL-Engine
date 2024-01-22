@@ -7,7 +7,7 @@ namespace engine
 {
     std::list<InputListener> InputSystem::listeners;
 
-    void InputSystem::addListener(InputListener listener) {
+    void InputSystem::addListener(const InputListener& listener) {
         for (const InputListener& l : listeners) {
             if (l.getInstance() == listener.getInstance()) {
                 return;
