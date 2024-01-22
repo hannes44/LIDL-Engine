@@ -1,4 +1,4 @@
-#include "window.hpp"
+#include "Window.hpp"
 
 namespace engine
 {

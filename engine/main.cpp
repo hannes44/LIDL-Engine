@@ -2,6 +2,7 @@
 #include "transform.hpp"
 #include "TestGame.hpp"
 #include "logger.hpp"
+#include "MeshComponent.hpp"
 
 int main(int argc, char* argv[])
 {
