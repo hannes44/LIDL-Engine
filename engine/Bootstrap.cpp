@@ -10,9 +10,9 @@ namespace engine
 		return *instance;
 	}
 
-	Display* Bootstrap::getDisplay()
+	Display& Bootstrap::getDisplay()
 	{
-		return display;
+		return *display;
 	}
 
 }
