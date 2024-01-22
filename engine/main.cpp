@@ -3,6 +3,8 @@
 #include "TestGame.hpp"
 #include "logger.hpp"
 #include "uuid.hpp"
+#include "MeshComponent.hpp"
+
 
 int main(int argc, char* argv[])
 {

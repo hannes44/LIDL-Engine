@@ -1,4 +1,4 @@
-#include "transform.hpp"
+#include "Transform.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 engine::Transform::Transform()
@@ -7,7 +7,7 @@ engine::Transform::Transform()
 
 glm::vec3 engine::Transform::getPosition()
 {
-    return glm::vec3(transformMatrix[3]);
+	return glm::vec3(transformMatrix[3]);
 }
 
 void engine::Transform::setPosition(glm::vec3 position)

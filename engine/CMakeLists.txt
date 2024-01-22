@@ -4,6 +4,8 @@ source_group("Components" FILES
 	Component.hpp
 	PointLightComponent.hpp
 	PhysicsComponent.hpp
+	MeshComponent.hpp
+	MeshComponent.cpp
 )
 
 target_sources(Engine PRIVATE 
@@ -31,5 +33,9 @@ target_sources(Engine PRIVATE
 	Window.cpp
 	Uuid.hpp
 	Uuid.cpp
+	MeshComponent.hpp
+	MeshComponent.cpp
+	Vertex.hpp
+	../vendor/tinyobjloader/tiny_obj_loader.h
 )
 target_link_libraries(Engine PRIVATE vendor)
