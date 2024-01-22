@@ -49,7 +49,8 @@ jobs:
                             -cppcoreguidelines-special-member-functions,\
                             -bugprone-easily-swappable-parameters,\
                             -readability-braces-around-statements,\
-                            -bugprone-branch-clone"
+                            -bugprone-branch-clone,\
+                            cppcoreguidelines-init-variables"
 
     # If there are any comments, fail the check
     - if: steps.review.outputs.total_comments > 0

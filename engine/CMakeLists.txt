@@ -33,6 +33,7 @@ target_sources(Engine PRIVATE
 	Window.cpp
 	MeshComponent.hpp
 	MeshComponent.cpp
+	Vertex.hpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 )
 target_link_libraries(Engine PRIVATE vendor)
