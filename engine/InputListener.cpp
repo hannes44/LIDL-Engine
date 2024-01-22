@@ -11,7 +11,7 @@ namespace engine
         return instance;
     }
 
-    void InputListener::handleInput(const InputEvent& event) const {
+    virtual void InputListener::handleInput(const InputEvent& event) const {
         // Add your input handling logic here
         std::cout << "InputListener " << instance << " handles input event with classification: "
             << event.getClassification() << std::endl;
