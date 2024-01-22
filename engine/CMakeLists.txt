@@ -20,5 +20,7 @@ target_sources(Engine PRIVATE
 	Bootstrap.cpp
 	logger.hpp
 	logger.cpp
+	window.hpp
+	window.cpp
 )
 target_link_libraries(Engine PRIVATE vendor)
