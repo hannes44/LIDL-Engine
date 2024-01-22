@@ -1,5 +1,5 @@
 #pragma once
-#include "component.hpp"
+#include "Component.hpp"
 #include <glm/glm.hpp>
 
 namespace engine

@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <windows.h>
+#include <Windows.h>
 #include "Display.hpp"
 #include <queue>
 
