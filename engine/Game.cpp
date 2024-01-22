@@ -11,7 +11,7 @@ namespace engine {
 
 	const void Game::gameLoop() {
 		while (running) {
-			if (getTargetFrameRate() > 0 && Game::getTime() - lastFrameTime < (long long)TIME_CONVERSION_FACTOR / getTargetFrameRate()) {
+			if (getTargetFrameRate() > 0 && Game::getTime() - lastFrameTime < TIME_CONVERSION_FACTOR / (long long)getTargetFrameRate()) {
 				continue;
 			}
 

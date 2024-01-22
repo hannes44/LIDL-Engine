@@ -18,7 +18,7 @@ namespace engine
 		Display& getDisplay();
 
 	protected:
-		~Bootstrap() {};
+		Bootstrap() {};
 
 	private:
 		Display* display = new DisplayTerminal();

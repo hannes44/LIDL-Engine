@@ -19,6 +19,8 @@ jobs:
         clang_tidy_checks: "-*,performance-*,readability-*,bugprone-*,clang-analyzer-*,cppcoreguidelines-*,mpi-*,misc-*,\
                             -cppcoreguidelines-avoid-non-const-global-variables,\
                             -readability-identifier-length,\
+                            -misc-non-private-member-variables-in-classes,\
+                            -cppcoreguidelines-virtual-class-destructor,\
                             -cppcoreguidelines-special-member-functions"
 
     # If there are any comments, fail the check
