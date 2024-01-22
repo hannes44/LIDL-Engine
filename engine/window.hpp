@@ -8,12 +8,18 @@ namespace engine
 	class Window
 	{
 	public:
+		// Non cloneable
+		Window(Window& other) = delete;
+
+		// Non copyable
+		void operator=(const Window&) = delete;
+
 		Window(Window const&) = delete;
 		~Window() {};
 
 		static Window& getInstance();
 
-		void createWindow(int width, int height, const std::string title);
+		void createWindow(int width, int height, std::string title);
 
 		void cleanup();
 

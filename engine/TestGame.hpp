@@ -5,6 +5,7 @@ namespace engine {
 	public:
 		void update() override;
 		void initialize() override;
+		~TestGame() {};
 
 	protected:
 		double getTargetFrameRate() override;

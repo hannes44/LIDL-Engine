@@ -9,18 +9,17 @@ namespace engine {
 	}
 
 	void TestGame::update() {
-		Display* display = Bootstrap::getInstance().getDisplay();
-		display->clear();
+		Bootstrap::getInstance().getDisplay().clear();
 
 		if (frameCount % 2 == 0) {
-			display->drawText("Frame: " + std::to_string(frameCount), 0, 0, Color::WHITE);
+			Bootstrap::getInstance().getDisplay().drawText("Frame: " + std::to_string(frameCount), 0, 0, Color::WHITE);
 		}
 		else {
-			std::string size = std::to_string(display->getWidth()) + "x" + std::to_string(display->getHeight());
-			display->drawText("Terminal size: " + size, 0, 1, Color::RED);
+			std::string size = std::to_string(Bootstrap::getInstance().getDisplay().getWidth()) + "x" + std::to_string(Bootstrap::getInstance().getDisplay().getHeight());
+			Bootstrap::getInstance().getDisplay().drawText("Terminal size: " + size, 0, 1, Color::RED);
 		}
 
-		Bootstrap::getInstance().getDisplay()->show();
+		Bootstrap::getInstance().getDisplay().show();
 	}
 
 	void TestGame::initialize() {

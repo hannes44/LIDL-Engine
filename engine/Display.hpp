@@ -31,5 +31,6 @@ namespace engine
 		virtual void clear() = 0;
 
 		virtual void drawText(std::string text, int x, int y, Color color) = 0;
+		virtual ~Display() {};
 	};
 }

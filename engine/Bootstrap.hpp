@@ -7,11 +7,11 @@ namespace engine
 	class Bootstrap
 	{
 	private:
-		inline static Display* display = new DisplayTerminal();
+		Display* display = new DisplayTerminal();
 	protected:
 		Bootstrap() {};
 
-		inline static Bootstrap* instance;
+		inline static Bootstrap* instance = nullptr;
 	public:
 		// Non cloneable
 		Bootstrap(Bootstrap& other) = delete;
@@ -21,6 +21,6 @@ namespace engine
 
 		static Bootstrap& getInstance();
 
-		static Display* getDisplay();
+		Display& getDisplay();
 	};
 }
