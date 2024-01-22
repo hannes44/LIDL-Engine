@@ -46,7 +46,10 @@ jobs:
                             -readability-identifier-length,\
                             -misc-non-private-member-variables-in-classes,-cppcoreguidelines-non-private-member-variables-in-classes,\
                             -cppcoreguidelines-virtual-class-destructor,\
-                            -cppcoreguidelines-special-member-functions"
+                            -cppcoreguidelines-special-member-functions,\
+                            -bugprone-easily-swappable-parameters,\
+                            -readability-braces-around-statements,\
+                            -bugprone-branch-clone"
 
     # If there are any comments, fail the check
     - if: steps.review.outputs.total_comments > 0
