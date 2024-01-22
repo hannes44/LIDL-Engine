@@ -23,7 +23,7 @@ namespace engine {
 		void drawText(std::string text, int x, int y, Color color) override;
 
 	private:
-		std::queue<DisplayContent> queue;
+		std::queue<DisplayContent> queue = std::queue<DisplayContent>();
 		COORD getSize();
 	};
 }
