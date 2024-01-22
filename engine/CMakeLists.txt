@@ -18,6 +18,8 @@ target_sources(Engine PRIVATE
 	DisplayTerminal.cpp
 	Bootstrap.hpp
 	Bootstrap.cpp
+	logger.hpp
+	logger.cpp
 	window.hpp
 	window.cpp
 )
