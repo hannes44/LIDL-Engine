@@ -16,7 +16,8 @@ jobs:
     - uses: ZedThree/clang-tidy-review@v0.14.0
       id: review
       with:
-        lgtm_comment_body: "
+        lgtm_comment_body: |
+            &nbsp;
                        ⬛⬛⬛⬛⬛⬛<br>
                     ⬛🟥🟥🟥🟥🟥🟥⬛<br>
                    ⬛🟥🟥🟥🟥🟥🟥🟥🟥⬛<br>
@@ -38,7 +39,7 @@ jobs:
                     ⬛🟥🟥🟥⬛     ⬛🟥🟥🟥⬛<br>
                     ⬛🟥🟥🟥⬛     ⬛🟥🟥🟥⬛<br>
                        ⬛⬛⬛          ⬛⬛⬛<br>
-            glhf"
+            glhf
         
             
         clang_tidy_checks: "-*,performance-*,readability-*,bugprone-*,clang-analyzer-*,cppcoreguidelines-*,mpi-*,misc-*,\
