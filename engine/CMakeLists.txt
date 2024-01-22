@@ -1,14 +1,21 @@
 add_executable(Engine)
+
+source_group("Components" FILES
+	Component.hpp
+	PointLightComponent.hpp
+	PhysicsComponent.hpp
+)
+
 target_sources(Engine PRIVATE 
 	main.cpp
-	transform.hpp
-	transform.cpp
-	game_object.hpp
-	game_object_manager.hpp
-	game_object_manager.cpp
-	component.hpp
-	point_light_component.hpp
-	physics_component.hpp
+	Transform.hpp
+	Transform.cpp
+	GameObject.hpp
+	GameObjectManager.hpp
+	GameObjectManager.cpp
+	Component.hpp
+	PointLightComponent.hpp
+	PhysicsComponent.hpp
 	Game.hpp
 	Game.cpp
 	TestGame.hpp
@@ -18,9 +25,9 @@ target_sources(Engine PRIVATE
 	DisplayTerminal.cpp
 	Bootstrap.hpp
 	Bootstrap.cpp
-	logger.hpp
-	logger.cpp
-	window.hpp
-	window.cpp
+	Logger.hpp
+	Logger.cpp
+	Window.hpp
+	Window.cpp
 )
 target_link_libraries(Engine PRIVATE vendor)

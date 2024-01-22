@@ -1,5 +1,5 @@
 #include "Game.hpp"
-#include "game_object_manager.hpp"
+#include "GameObjectManager.hpp"
 #include <chrono>
 
 namespace engine {
