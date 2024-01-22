@@ -14,8 +14,6 @@ namespace engine
 		// Non copyable
 		void operator=(const Window&) = delete;
 
-		Window(Window const&) = delete;
-
 		static Window& getInstance();
 
 		void createWindow(int width, int height, std::string title);

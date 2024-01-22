@@ -8,10 +8,11 @@ namespace engine
 	{
 	private:
 		Display* display = new DisplayTerminal();
+		inline static Bootstrap* instance = nullptr;
+
 	protected:
 		Bootstrap() {};
 
-		inline static Bootstrap* instance = nullptr;
 	public:
 		// Non cloneable
 		Bootstrap(Bootstrap& other) = delete;
