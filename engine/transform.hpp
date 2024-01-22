@@ -8,8 +8,6 @@ namespace engine
 	public:
 		Transform();
 
-		glm::mat4 transformMatrix {0};
-
 		glm::vec3 getPosition();
 		void setPosition(glm::vec3 position);
 
@@ -18,5 +16,8 @@ namespace engine
 
 		glm::vec3 getScale();
 		void setScale(glm::vec3 scale);
+
+	private:
+		glm::mat4 transformMatrix{ 0 };
 	};
 }

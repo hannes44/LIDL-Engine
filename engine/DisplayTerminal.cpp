@@ -26,7 +26,7 @@ namespace engine {
 	}
 
 	void DisplayTerminal::show() {
-		while(!queue.empty()) {
+		while (!queue.empty()) {
 			auto content = queue.front();
 
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), content.color);

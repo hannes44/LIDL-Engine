@@ -1,0 +1,53 @@
+name: linter-review
+
+on: 
+    pull_request:
+        paths:
+            - "engine/**.cpp"
+            - "engine/**.hpp"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: ZedThree/clang-tidy-review@v0.14.0
+      id: review
+      with:
+        lgtm_comment_body: |1
+                            ⬛⬛⬛⬛⬛⬛
+                         ⬛🟥🟥🟥🟥🟥🟥⬛
+                       ⬛🟥🟥🟥🟥🟥🟥🟥🟥⬛
+                       ⬛🟥🟥🟥🟥⬛⬛⬛⬛⬛⬛
+                       ⬛🟥🟥🟥⬛🟦🟦⬜⬜⬜⬜⬛
+                       ⬛🟥🟥⬛🟪🟦🟦🟦⬜⬜⬜🟦⬛
+                  ⬛⬛⬛🟥🟥⬛🟪🟦🟦🟦🟦🟦🟦🟦⬛
+                ⬛🟥🟥⬛🟥🟥⬛🟪🟪🟪🟦🟦🟦🟦🟪⬛
+                ⬛🟥🟥⬛🟥🟥🟥⬛🟪🟪🟪🟪🟪🟪⬛
+                ⬛🟥🟥⬛🟥🟥🟥🟥⬛⬛⬛⬛⬛⬛⬛
+                ⬛🟥🟥⬛🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥⬛
+                ⬛🟥🟥⬛🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥⬛
+                ⬛🟥🟥⬛🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥⬛
+                ⬛🟥🟥⬛🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥⬛
+                ⬛🟥🟥⬛🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥⬛
+                ⬛🟥🟥⬛🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥⬛
+                  ⬛⬛⬛🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥⬛
+                       ⬛🟥🟥🟥⬛⬛⬛⬛🟥🟥🟥⬛
+                       ⬛🟥🟥🟥⬛     ⬛🟥🟥🟥⬛
+                       ⬛🟥🟥🟥⬛     ⬛🟥🟥🟥⬛
+                          ⬛⬛⬛          ⬛⬛⬛
+                glhf
+        
+            
+        clang_tidy_checks: "-*,performance-*,readability-*,bugprone-*,clang-analyzer-*,cppcoreguidelines-*,mpi-*,misc-*,\
+                            -cppcoreguidelines-avoid-non-const-global-variables,\
+                            -readability-identifier-length,\
+                            -misc-non-private-member-variables-in-classes,-cppcoreguidelines-non-private-member-variables-in-classes,\
+                            -cppcoreguidelines-virtual-class-destructor,\
+                            -cppcoreguidelines-special-member-functions"
+
+    # If there are any comments, fail the check
+    - if: steps.review.outputs.total_comments > 0
+      run: exit 1
