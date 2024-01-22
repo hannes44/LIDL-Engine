@@ -18,7 +18,11 @@ target_sources(Engine PRIVATE
 	DisplayTerminal.cpp
 	Bootstrap.hpp
 	Bootstrap.cpp
-	Uuid.cpp
+	logger.hpp
+	logger.cpp
+	window.hpp
+	window.cpp
+	Uuid.ccp
 	Uuid.hpp
 )
 target_link_libraries(Engine PRIVATE vendor)
