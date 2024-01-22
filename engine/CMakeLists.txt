@@ -29,5 +29,7 @@ target_sources(Engine PRIVATE
 	Logger.cpp
 	Window.hpp
 	Window.cpp
+	Uuid.hpp
+	Uuid.cpp
 )
 target_link_libraries(Engine PRIVATE vendor)
