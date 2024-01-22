@@ -15,7 +15,6 @@ namespace engine
 		void operator=(const Window&) = delete;
 
 		Window(Window const&) = delete;
-		~Window() {};
 
 		static Window& getInstance();
 
@@ -24,13 +23,13 @@ namespace engine
 		void cleanup();
 
 		void getWindowSize(int* width, int* height);
-		void setWindowTitle(const std::string title);
+		void setWindowTitle(std::string title);
 
 		void closeWindow();
 
 		void newFrame();
 
-	protected:
+	private:
 		inline static Window* instance = nullptr;
 		Window() {};
 
