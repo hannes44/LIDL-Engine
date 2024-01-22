@@ -15,13 +15,13 @@ namespace engine
 
 		const void gameLoop();
 
-    protected:
-        // 0 is uncapped
-        virtual double getTargetFrameRate() = 0;
+	protected:
+		// 0 is uncapped
+		virtual double getTargetFrameRate() = 0;
 
-        int frameCount = 0;
-        long long lastFrameTime = 0;
+		int frameCount = 0;
+		long long lastFrameTime = 0;
 
-        static long long getTime();
+		static long long getTime();
 	};
 }
