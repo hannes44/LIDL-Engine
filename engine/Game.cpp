@@ -2,6 +2,8 @@
 #include "GameObjectManager.hpp"
 #include <chrono>
 
+constexpr auto TIME_CONVERSION_FACTOR = 1000000000;
+
 namespace engine {
 	long long Game::getTime() {
 		return std::chrono::high_resolution_clock::now().time_since_epoch().count();
@@ -9,7 +11,7 @@ namespace engine {
 
 	const void Game::gameLoop() {
 		while (running) {
-			if (getTargetFrameRate() > 0 && Game::getTime() - lastFrameTime < 1000000000 / getTargetFrameRate()) {
+			if (getTargetFrameRate() > 0 && Game::getTime() - lastFrameTime < (long long)TIME_CONVERSION_FACTOR / getTargetFrameRate()) {
 				continue;
 			}
 
