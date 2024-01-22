@@ -22,7 +22,5 @@ target_sources(Engine PRIVATE
 	logger.cpp
 	window.hpp
 	window.cpp
-	Uuid.ccp
-	Uuid.hpp
 )
 target_link_libraries(Engine PRIVATE vendor)

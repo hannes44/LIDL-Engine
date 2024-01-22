@@ -10,3 +10,6 @@
 [submodule "vendor/spdlog"]
 	path = vendor/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "vendor/uuid_v4"]
+	path = vendor/uuid_v4
+	url = https://github.com/crashoz/uuid_v4.git
