@@ -9,6 +9,7 @@
 #include <memory>
 #include "Shader.hpp"
 #include "Camera.hpp"
+#include <vector>
 
 int main(int argc, char* argv[])
 {
@@ -26,24 +27,31 @@ int main(int argc, char* argv[])
 
 	engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
 	
-	//engine::MeshComponent meshComponent = engine::MeshComponent::createPrimative(engine::PrimativeMeshType::CUBE);
-	engine::MeshComponent meshComponent = engine::MeshComponent::loadMeshFromOBJFile("amugus.obj");
+	engine::MeshComponent meshComponent1 = engine::MeshComponent::loadMeshFromOBJFile("amugus.obj");
+	engine::MeshComponent meshComponent2 = engine::MeshComponent::loadMeshFromOBJFile("amugus.obj");
 
-	engine::GameObject gameObject = engine::GameObject();
+	engine::GameObject gameObject1 = engine::GameObject();
+	gameObject1.transform.setScale(glm::vec3(5,5,5));
 
-	gameObject.transform.setScale(glm::vec3(5,5,5));
+	engine::GameObject gameObject2 = engine::GameObject();
+	gameObject2.transform.setScale(glm::vec3(5, 5, 5));
+	gameObject2.transform.setPosition(glm::vec3(15, 0, 0));
+
 
 	engine::Camera camera = engine::Camera();
-	camera.translation = glm::vec3(15, 15, 15);
+	camera.translation = glm::vec3(30, 30, 30);
 	camera.direction = glm::normalize(glm::vec3(-1, -1, -1));
 
-	std::vector<engine::Vertex> vertices{};
-	std::vector<uint32_t> indices{};
-	gameObject.components.push_back(std::make_unique<engine::MeshComponent>(meshComponent));
+	gameObject1.components.push_back(std::make_unique<engine::MeshComponent>(meshComponent1));
+	gameObject2.components.push_back(std::make_unique<engine::MeshComponent>(meshComponent2));
 
 	engine::Shader* shader = engine::Shader::create("", "simple.vert", "simple.frag");
 
 	engine::Renderer::baseShader = std::unique_ptr<engine::Shader>(shader);
+
+	std::vector<engine::GameObject*> gameObjects{};
+	gameObjects.push_back(&gameObject1);
+	gameObjects.push_back(&gameObject2);
 
 	while (true)
 	{
@@ -53,7 +61,7 @@ int main(int argc, char* argv[])
 		}
 		
 
-	    engine::Renderer::renderGame(gameObject, camera);
+	    engine::Renderer::renderGame(gameObjects, camera);
 
 
 		SDL_GL_SwapWindow(engine::Window::getInstance().window);

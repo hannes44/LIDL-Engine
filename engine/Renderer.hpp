@@ -4,13 +4,14 @@
 #include "GameObject.hpp"
 #include "Shader.hpp"
 #include "Camera.hpp"
+#include <vector>
 
 namespace engine
 {
 	class Renderer
 	{
 	public:
-		static void renderGame(GameObject& gameObject, Camera& camera);
+		static void renderGame(std::vector<GameObject*> gameObjects, Camera& camera);
 
 		static void initGraphicsAPI(GraphicsAPIType type);
 
