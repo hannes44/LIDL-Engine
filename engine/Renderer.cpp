@@ -11,7 +11,7 @@
 
 namespace engine
 {
-	void Renderer::renderGame(GameObject& gameObject)
+	void Renderer::renderGame(GameObject& gameObject, Camera& camera)
 	{
 		graphicsAPI->setClearColor(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
@@ -37,30 +37,8 @@ namespace engine
 			return;
 		}
 
-		float fov = 90;
-		float nearPlane = 0.1f;
-		float farPlane = 100.0f;
-
-		int width;
-		int height;
-		Window::getInstance().getWindowSize(&width, &height);
-
-
-		float aspectRatio = float(width) / float(height);
-
-		glm::mat4 projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
-
-		glm::vec3 direction = glm::normalize(glm::vec3(-1,-1,-1));
-
-		glm::vec3 translation = glm::vec3(15, 15 ,15);
-
-		glm::vec3 worldUp = glm::vec3(0, 1, 0);
-		glm::vec3 cameraRight = glm::normalize(glm::cross(direction, worldUp));
-		glm::vec3 cameraUp = glm::normalize(glm::cross(cameraRight, direction));
-
-		glm::mat3 cameraBaseVectorsWorldSpace(cameraRight, cameraUp, -direction);
-		glm::mat4 cameraRotation = glm::mat4(transpose(cameraBaseVectorsWorldSpace));
-		glm::mat4 viewMatrix = cameraRotation * glm::translate(-translation);
+		glm::mat4 projectionMatrix = camera.getProjectionMatrix();
+		glm::mat4 viewMatrix = camera.getViewMatrix();
 
 		//for (auto& model : scene->models)
 	//	{

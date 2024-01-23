@@ -8,6 +8,7 @@
 #include "MeshComponent.hpp"
 #include <memory>
 #include "Shader.hpp"
+#include "Camera.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -32,6 +33,10 @@ int main(int argc, char* argv[])
 
 	gameObject.transform.setScale(glm::vec3(5,5,5));
 
+	engine::Camera camera = engine::Camera();
+	camera.translation = glm::vec3(15, 15, 15);
+	camera.direction = glm::normalize(glm::vec3(-1, -1, -1));
+
 	std::vector<engine::Vertex> vertices{};
 	std::vector<uint32_t> indices{};
 	gameObject.components.push_back(std::make_unique<engine::MeshComponent>(meshComponent));
@@ -48,7 +53,7 @@ int main(int argc, char* argv[])
 		}
 		
 
-	    engine::Renderer::renderGame(gameObject);
+	    engine::Renderer::renderGame(gameObject, camera);
 
 
 		SDL_GL_SwapWindow(engine::Window::getInstance().window);
