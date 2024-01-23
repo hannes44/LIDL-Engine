@@ -6,6 +6,8 @@
 #include <vector>
 #include <string>
 
+#include "Buffer.hpp"
+
 namespace engine
 {
 	enum PrimativeMeshType
@@ -24,8 +26,12 @@ namespace engine
 		std::vector<Vertex> vertices{};
 		std::vector<uint32_t> indices{};
 
+		std::shared_ptr<VertexArray> vertexArray = nullptr;
+
 		static MeshComponent loadMeshFromOBJFile(const std::string& filename);
 		
 		static MeshComponent createPrimative(PrimativeMeshType type);
+	private:
+		static MeshComponent createCube();
 	};
 }

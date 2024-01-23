@@ -12,6 +12,7 @@ namespace engine
 	public:
 		GameObject() = default;
 		// Called every frame
+
 		void update();
 
 		// Called at initialization
@@ -21,7 +22,6 @@ namespace engine
 
 		bool isVisible = true;
 
-	private:
 		// TODO: Should limit each component to one of each type
 		std::vector<std::shared_ptr<Component>> components{};
 	};

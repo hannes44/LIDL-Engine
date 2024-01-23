@@ -26,11 +26,11 @@ namespace engine
 		void closeWindow();
 
 		void newFrame();
-
+		SDL_Window* window = nullptr;
 	private:
 		inline static Window* instance = nullptr;
 		Window() {};
 
-		SDL_Window* window = nullptr;
+
 	};
 } // namespace engine
