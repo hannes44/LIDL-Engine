@@ -79,6 +79,7 @@
         "fstream": "cpp",
         "regex": "cpp",
         "span": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "set": "cpp"
     }
 }

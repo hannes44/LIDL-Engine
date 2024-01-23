@@ -55,7 +55,7 @@ namespace engine {
 	}
 
 	void DisplayTerminal::drawText(std::string text, int x, int y, Color color = Color::WHITE) {
-		auto content = new DisplayTextContent(text, x, y, 0, color);
+		auto *content = new DisplayTextContent(text, x, y, 0, color);
 		objects.push_back(content);
 	}
 

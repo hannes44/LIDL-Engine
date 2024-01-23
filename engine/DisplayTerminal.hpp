@@ -1,13 +1,15 @@
 #pragma once
 #include <string>
-#include <Windows.h>
 #include "Display.hpp"
 #include "GameObject.hpp"
 #include <vector>
 #include <map>
 #include <iostream>
+#include <Windows.h>
 
 namespace engine {
+
+    constexpr auto TERMINAL_GAMEOBJECT_CHAR = 219U;
 
 	struct Point {
 		int x;
@@ -50,8 +52,7 @@ namespace engine {
 			return map;
 		}
 
-		DisplayTextContent(std::string text, int x, int y, int z, Color color) {
-			this->text = text;
+		DisplayTextContent(std::string text, int x, int y, int z, Color color) : DisplayContent(), text(std::move(text)) {
 			this->x = x;
 			this->y = y;
 			this->z = z;
@@ -66,15 +67,14 @@ namespace engine {
 
 			for (int i = 0; i < gameObject->transform.getScale().y; i++) {
 				for (int j = 0; j < gameObject->transform.getScale().x; j++) {
-					map.insert(std::pair<Point, char>({ x + j, y + i }, (char)219u));
+					map.insert(std::pair<Point, char>({ x + j, y + i }, (char)TERMINAL_GAMEOBJECT_CHAR));
 				}
 			}
 
 			return map;
 		}
 
-		DisplayGameObjectContent(GameObject* gameObject, int x, int y, int z, Color color) {
-			this->gameObject = gameObject;
+		DisplayGameObjectContent(GameObject* gameObject, int x, int y, int z, Color color) : DisplayContent(), gameObject(gameObject) {
 			this->x = x;
 			this->y = y;
 			this->z = z;
