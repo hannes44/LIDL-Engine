@@ -15,8 +15,6 @@ namespace engine
 		virtual void setData(const void* data, int size) = 0;
 
 		static VertexBuffer* create(float* vertices, int size);
-
-		GLuint openglID = 0; // TODO abstract aways
 	};
 
 	class IndexBuffer
@@ -45,6 +43,6 @@ namespace engine
 		virtual std::shared_ptr<IndexBuffer> getIndexBuffer() const = 0;
 
 		static VertexArray* create();
-		GLuint vertexArrayId;
+		GLuint vertexArrayId; // TODO abstract away
 	};
 }

@@ -5,10 +5,6 @@
 #include "Window.hpp"
 namespace engine
 {
-	Camera::Camera()
-	{
-	}
-
 	void Camera::translate(float x, float y, float z)
 	{
 		translation += glm::vec3(x, y, z);

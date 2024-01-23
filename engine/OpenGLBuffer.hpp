@@ -15,6 +15,8 @@ namespace engine
 		void bind() const;
 		void unbind() const;
 		void setData(const void* data, int size);
+	private:
+		GLuint openglID = 0; 
 	};
 
 	class OpenGLIndexBuffer : public IndexBuffer

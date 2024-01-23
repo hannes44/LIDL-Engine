@@ -24,7 +24,6 @@ namespace engine
 		// TODO: Abstract mesh creation
 
 		// Parsing the vertex data into a format that OpenGL expects
-		// Vulkan can use the vertex data directly
 		std::vector<glm::vec3> positions{};
 		std::vector<glm::vec3> colors{};
 		std::vector<glm::vec3> normals{};
@@ -248,7 +247,7 @@ namespace engine
 		indices.push_back(20); indices.push_back(21); indices.push_back(22);
 		indices.push_back(22); indices.push_back(23); indices.push_back(20);
 
-		MeshComponent model = MeshComponent(vertices, indices);
-		return model;
+		MeshComponent cube = MeshComponent(vertices, indices);
+		return cube;
 	}
 }

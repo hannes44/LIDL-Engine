@@ -4,13 +4,10 @@
 
 namespace engine
 {
-
 	// Could add the camera as a component to allow for multiple cameras and more control for the game creator
 	class Camera
 	{
 	public:
-		Camera();
-
 		void translate(float x, float y, float z);
 		void rotate(float angle, float x, float y, float z);
 
