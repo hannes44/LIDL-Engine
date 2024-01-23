@@ -22,9 +22,9 @@ namespace engine
             });
     }
 
-    void InputSystem::dispatchEvent(const InputEvent& e) {
+    void InputSystem::dispatchEvent(const InputEvent& e, std::string EventType) {
         for (const InputListener& l : listeners) {
-            l.handleInput(e);
+            l.handleInput(e, EventType);
         }
     }
 

@@ -14,7 +14,7 @@ namespace engine
         std::string getInstance() const;
 
         // Function to handle input events
-        void handleInput(const InputEvent& event) const;
+        virtual void handleInput(const InputEvent& event, std::string EventType) const;
 
     private:
         std::string instance;

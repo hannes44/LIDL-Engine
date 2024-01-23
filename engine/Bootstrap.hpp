@@ -19,6 +19,8 @@ namespace engine
         // Non copyable
         void operator=(const Bootstrap&) = delete;
 
+        static double getDeltaTime();
+
         static Bootstrap& getInstance();
 
         static Display* getDisplay();

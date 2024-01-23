@@ -12,11 +12,11 @@ namespace engine
 	public:
 		void initialize();
 
-		static void addListener(InputListener listener);
+		static void addListener(const InputListener& listener);
 
 		static void removeListener(InputListener listener);
 
-		static void dispatchEvent(const InputEvent& e);
+		static void dispatchEvent(const InputEvent& e, std::string EventType);
 
 		virtual void getInput() = 0;
 	};

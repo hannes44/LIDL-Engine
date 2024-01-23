@@ -1,16 +1,17 @@
 #include "InputFramework.hpp"
+#include "InputEvent.hpp"
 #include <SDL.h>
+#include "Bootstrap.hpp"
 
-namespace engine
-{
+namespace engine {
+
     // Constructor
     InputFramework::InputFramework() : tick(0), timeInterval(1.0 / 60.0) {}
 
     // Override getInput from InputSystem
     void InputFramework::getInput() {
         SDL_Event ev;
-        int res;
-        InputEvent ie;
+        InputEvent ie(0, 0, 0, 0, "");  // Initialize with default values
 
         tick += Bootstrap::getDeltaTime();
 
@@ -18,75 +19,50 @@ namespace engine
             return;
         }
 
-        while (tick >= timeInterval) {
-            res = SDL_PollEvent(&ev);
-
-            if (res != 1) {
-                return;
-            }
-
-            ie = InputEvent();  // Assuming InputEvent has a default constructor
-
+        while (SDL_PollEvent(&ev)) {
             if (ev.type == SDL_MOUSEMOTION) {
-                ie.setX(ev.motion.x);
-                ie.setY(ev.motion.y);
+                SDL_MouseMotionEvent mot = ev.motion;
+                ie.setX(mot.x);
+                ie.setY(mot.y);
                 dispatchEvent(ie, "MouseMotion");
             }
 
-            if (ev.type == SDL.SDL_EventType.SDL_MOUSEBUTTONDOWN)
-            {
-                SDL.SDL_MouseButtonEvent butt;
-
-                butt = ev.button;
-
-                ie.Button = (int)butt.button;
-                ie.X = butt.x;
-                ie.Y = butt.y;
-
-                informListeners(ie, "MouseDown");
+            if (ev.type == SDL_MOUSEBUTTONDOWN) {
+                SDL_MouseButtonEvent butt = ev.button;
+                ie.setButton(static_cast<int>(butt.button));
+                ie.setX(butt.x);
+                ie.setY(butt.y);
+                dispatchEvent(ie, "MouseDown");
             }
 
-            if (ev.type == SDL.SDL_EventType.SDL_MOUSEBUTTONUP)
-            {
-                SDL.SDL_MouseButtonEvent butt;
-
-                butt = ev.button;
-
-                ie.Button = (int)butt.button;
-                ie.X = butt.x;
-                ie.Y = butt.y;
-
-                informListeners(ie, "MouseUp");
+            if (ev.type == SDL_MOUSEBUTTONUP) {
+                SDL_MouseButtonEvent butt = ev.button;
+                ie.setButton(static_cast<int>(butt.button));
+                ie.setX(butt.x);
+                ie.setY(butt.y);
+                dispatchEvent(ie, "MouseUp");
             }
 
-            if (ev.type == SDL.SDL_EventType.SDL_MOUSEWHEEL)
-            {
-                SDL.SDL_MouseWheelEvent wh;
-
-                wh = ev.wheel;
-
-                ie.X = (int)wh.direction * wh.x;
-                ie.Y = (int)wh.direction * wh.y;
-
-                informListeners(ie, "MouseWheel");
+            if (ev.type == SDL_MOUSEWHEEL) {
+                SDL_MouseWheelEvent wh = ev.wheel;
+                ie.setX(static_cast<int>(wh.direction) * wh.x);
+                ie.setY(static_cast<int>(wh.direction) * wh.y);
+                dispatchEvent(ie, "MouseWheel");
             }
 
-
-            if (ev.type == SDL.SDL_EventType.SDL_KEYDOWN)
-            {
-                ie.Key = (int)ev.key.keysym.scancode;
-                Debug.getInstance().log("Keydown: " + ie.Key);
-                informListeners(ie, "KeyDown");
+            if (ev.type == SDL_KEYDOWN) {
+                ie.setKey(static_cast<int>(ev.key.keysym.scancode));
+                //Debug::getInstance().log("Keydown: " + std::to_string(ie.getKey()));
+                dispatchEvent(ie, "KeyDown");
             }
 
-            if (ev.type == SDL.SDL_EventType.SDL_KEYUP)
-            {
-                ie.Key = (int)ev.key.keysym.scancode;
-                informListeners(ie, "KeyUp");
+            if (ev.type == SDL_KEYUP) {
+                ie.setKey(static_cast<int>(ev.key.keysym.scancode));
+                dispatchEvent(ie, "KeyUp");
             }
-
-            tick -= timeInterval;
         }
+
+        tick -= timeInterval;
     }
 
     // Override initialize from InputSystem
@@ -94,7 +70,5 @@ namespace engine
         tick = 0;
         timeInterval = 1.0 / 60.0;
     }
-
-}
 
 }

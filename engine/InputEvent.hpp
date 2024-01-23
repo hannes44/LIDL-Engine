@@ -20,6 +20,13 @@ namespace engine {
         int getKey() const;
         const std::string& getClassification() const;
 
+        // Setter functions
+        void setX(int x);
+        void setY(int y);
+        void setButton(int button);
+        void setKey(int key);
+        void setClassification(const std::string& classification);
+
     private:
         int x;
         int y;
