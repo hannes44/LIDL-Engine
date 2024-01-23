@@ -1,13 +1,14 @@
 #pragma once
 #include "GraphicsAPI.hpp"
 #include <memory>
+#include "GameObject.hpp"
 
 namespace engine
 {
 	class Renderer
 	{
 	public:
-		static void renderGame();
+		static void renderGame(GameObject& gameObject);
 
 		static void initGraphicsAPI(GraphicsAPIType type);
 
