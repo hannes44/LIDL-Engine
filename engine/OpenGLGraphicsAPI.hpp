@@ -16,7 +16,7 @@ namespace engine
 
 		void setDrawTriangleOutline(bool enabled) override;
 
-		virtual GraphicsAPIType getType() override;
+		GraphicsAPIType getType() override;
 
 	private:
 		GraphicsAPIType type = GraphicsAPIType::OpenGL;
