@@ -50,6 +50,7 @@ jobs:
                 glhf
         
             
+        include: 'engine/*.[ch]pp'
         config_file: '.clang-tidy'
 
     # If there are any comments, fail the check
