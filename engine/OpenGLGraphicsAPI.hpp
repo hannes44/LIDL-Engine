@@ -5,14 +5,14 @@ namespace engine
 {
 	class OpenGLGraphicsAPI : public GraphicsAPI
 	{
-		void drawIndexed();
+		void drawIndexed(VertexArray* vertexArray, int indexCount);
 
-		void setClearColor();
+		void setClearColor(const glm::vec4& color);
 
-		void setCullFace();
+		void setCullFace(bool enabled);
 
-		void setDepthTest();
+		void setDepthTest(bool enabled);
 
-		void setDrawTriangleOutline();
+		void setDrawTriangleOutline(bool enabled);
 	};
 }
