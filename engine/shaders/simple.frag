@@ -50,7 +50,7 @@ uniform Material material;
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
-    
+   // return vec3(1,0,0);
     vec3 lightDir = normalize(light.position - fragPos);
     // diffuse shading
     float diff = max(dot(normal, lightDir), 0.0);
@@ -87,8 +87,6 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 // https://en.wikipedia.org/wiki/Blinn–Phong_reflection_model
 void main()
 {
-    fragmentColor = vec4(1,0,0, 1.0);
-    return;
 
    // properties
     vec3 norm = normalize(worldNormal);

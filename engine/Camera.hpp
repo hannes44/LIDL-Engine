@@ -15,13 +15,13 @@ namespace engine
 		glm::mat4 getViewMatrix();
 		glm::mat4 getProjectionMatrix();
 
-		glm::vec3 translation {30, 30, 30};
+		glm::vec3 translation {20, 20, 20};
 		glm::vec3 rotation {0, 0, 0};
 		glm::vec3 direction {-1, -1, -1};
 		
 		float fov = 50;
-		float nearPlane = 0.1f;
-		float farPlane = 100.0f;
-		float cameraSpeed = 100.f;
+		float nearPlane = 0.1;
+		float farPlane = 100;
+		float cameraSpeed = 100;
 	};
 }
