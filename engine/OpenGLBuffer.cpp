@@ -31,12 +31,11 @@ namespace engine
 		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
 	}
 
-	OpenGLIndexBuffer::OpenGLIndexBuffer(unsigned int* indices, int count)
+	OpenGLIndexBuffer::OpenGLIndexBuffer(unsigned int* indices, int count) : count(count)
 	{
 		glGenBuffers(1, &openglBufferID);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, openglBufferID);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(float), indices, GL_STATIC_DRAW);
-		this->count = count;
 	}
 
 	OpenGLIndexBuffer::~OpenGLIndexBuffer()

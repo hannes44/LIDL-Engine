@@ -8,18 +8,18 @@ namespace engine
 	class OpenGLShader : public Shader
 	{
 	public:
-		OpenGLShader(std::string vert, std::string frag);
-		~OpenGLShader();
+		OpenGLShader(const std::string& vertName, const std::string& fragNameg);
+		~OpenGLShader() override;
 
-		void bind();
-		void unbind();
+		void bind() override;
+		void unbind() override;
 
-		void setInt(const std::string& name, int value);
-		void setFloat(const std::string& name, float value);
-		void setVec2(const std::string& name, float x, float y);
-		void setVec3(const std::string& name, float x, float y, float z);
-		void setVec4(const std::string& name, float x, float y, float z, float w);
-		void setMat4(const std::string& name, float* value);
+		void setInt(const std::string& name, int value) override;
+		void setFloat(const std::string& name, float value) override;
+		void setVec2(const std::string& name, float x, float y) override;
+		void setVec3(const std::string& name, float x, float y, float z) override;
+		void setVec4(const std::string& name, float x, float y, float z, float w) override;
+		void setMat4(const std::string& name, float* value) override;
 
 	private:
 		int openglShaderID = 0;

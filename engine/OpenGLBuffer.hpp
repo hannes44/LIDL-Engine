@@ -9,12 +9,12 @@ namespace engine
 	{
 	public:
 		OpenGLVertexBuffer(float* vertices, int size);
-		~OpenGLVertexBuffer();
+		~OpenGLVertexBuffer() override;
 
 
-		void bind() const;
-		void unbind() const;
-		void setData(const void* data, int size);
+		void bind() const override;
+		void unbind() const override;
+		void setData(const void* data, int size) override;
 	private:
 		GLuint openglID = 0; 
 	};
@@ -23,11 +23,11 @@ namespace engine
 	{
 	public:
 		OpenGLIndexBuffer(unsigned int* indices, int count);
-		~OpenGLIndexBuffer();
-		int getCount() const;
+		~OpenGLIndexBuffer() override;
+		int getCount() const override;
 
-		void bind() const;
-		void unbind() const;
+		void bind() const override;
+		void unbind() const override;
 	private:
 		GLuint openglBufferID;
 		int count;
@@ -37,14 +37,14 @@ namespace engine
 	{
 	public:
 		OpenGLVertexArray();
-		~OpenGLVertexArray();
-		void bind() const;
-		void unbind() const;
-		void addVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer);
-		void setIndexBuffer(std::shared_ptr<IndexBuffer> indexBuffer);
+		~OpenGLVertexArray() override;
+		void bind() const override;
+		void unbind() const override;
+		void addVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer) override;
+		void setIndexBuffer(std::shared_ptr<IndexBuffer> indexBuffer) override;
 
-		std::vector<std::shared_ptr<VertexBuffer>> getVertexBuffers() const;
-		std::shared_ptr<IndexBuffer> getIndexBuffer() const;
+		std::vector<std::shared_ptr<VertexBuffer>> getVertexBuffers() const override;
+		std::shared_ptr<IndexBuffer> getIndexBuffer() const override;
 	private:
 		std::vector<std::shared_ptr<VertexBuffer>> vertexBuffers;
 		std::shared_ptr<IndexBuffer> indexBuffer;

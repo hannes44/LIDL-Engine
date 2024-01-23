@@ -13,4 +13,10 @@ Checks: >
     -misc-const-correctness,
     -cppcoreguidelines-owning-memory,
     -cppcoreguidelines-avoid-magic-numbers,
-    -readability-magic-numbers
+    -readability-magic-numbers,
+    -clang-diagnostic-error,
+    --cppcoreguidelines-pro-type-member-init
+    -readability-convert-member-functions-to-static
+    -cppcoreguidelines-macro-usage
+    -cppcoreguidelines-prefer-member-initializer
+    -readability-implicit-bool-conversion

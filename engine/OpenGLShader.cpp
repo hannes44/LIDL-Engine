@@ -5,15 +5,13 @@
 #include <fstream>
 #include <iostream>
 
-namespace fs = std::filesystem;
-
 namespace engine
 {
 	#define SHADERS_PATH "../../engine/shaders/"
 
-	OpenGLShader::OpenGLShader(std::string vertPath, std::string fragPath)
+	OpenGLShader::OpenGLShader(const std::string& vertName, const std::string& fragName)
 	{
-		openglShaderID = loadShaderProgram(vertPath, fragPath);
+		openglShaderID = loadShaderProgram(vertName, fragName);
 	}
 
 	OpenGLShader::~OpenGLShader()
