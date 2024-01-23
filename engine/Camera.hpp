@@ -4,6 +4,8 @@
 
 namespace engine
 {
+
+	// Could add the camera as a component to allow for multiple cameras and more control for the game creator
 	class Camera
 	{
 	public:
@@ -20,9 +22,9 @@ namespace engine
 		glm::vec3 rotation {0, 0, 0};
 		glm::vec3 direction {-1, -1, -1};
 		
-		float fov = 90;
+		float fov = 50;
 		float nearPlane = 0.1f;
 		float farPlane = 100.0f;
-		float cameraSpeed = 10.f;
+		float cameraSpeed = 100.f;
 	};
 }
