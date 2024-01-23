@@ -4,6 +4,8 @@ source_group("Components" FILES
 	Component.hpp
 	PointLightComponent.hpp
 	PhysicsComponent.hpp
+	MeshComponent.hpp
+	MeshComponent.cpp
 )
 
 target_sources(Engine PRIVATE 
@@ -11,6 +13,7 @@ target_sources(Engine PRIVATE
 	Transform.hpp
 	Transform.cpp
 	GameObject.hpp
+	GameObject.cpp
 	GameObjectManager.hpp
 	GameObjectManager.cpp
 	Component.hpp
@@ -29,5 +32,9 @@ target_sources(Engine PRIVATE
 	Logger.cpp
 	Window.hpp
 	Window.cpp
+	MeshComponent.hpp
+	MeshComponent.cpp
+	Vertex.hpp
+	../vendor/tinyobjloader/tiny_obj_loader.h
 )
 target_link_libraries(Engine PRIVATE vendor)

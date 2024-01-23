@@ -18,7 +18,7 @@ namespace engine
 
 #define ENABLE_TRACE_LOGGING
 
-// Core log macros
+	// Core log macros
 #if defined(_DEBUG) && defined(ENABLE_TRACE_LOGGING)
 #define LOG_TRACE(...) Logger::getCoreLogger()->trace("Trace: " __VA_ARGS__ ) // Only log trace in debug mode
 #else

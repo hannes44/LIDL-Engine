@@ -6,23 +6,26 @@ namespace engine
 {
 	class Bootstrap
 	{
-    private:
-        inline static Display* display = new DisplayTerminal();
-    protected:
-        Bootstrap() {};
-
-        inline static Bootstrap* instance;
 	public:
-        // Non cloneable
-        Bootstrap(Bootstrap& other) = delete;
+		// Non cloneable
+		Bootstrap(Bootstrap& other) = delete;
 
-        // Non copyable
-        void operator=(const Bootstrap&) = delete;
+		// Non copyable
+		void operator=(const Bootstrap&) = delete;
 
-        static double getDeltaTime();
+		static Bootstrap& getInstance();
 
-        static Bootstrap& getInstance();
+		Display& getDisplay();
 
-        static Display* getDisplay();
+    static double getDeltaTime();
+
+    static Bootstrap& getInstance();
+    
+	protected:
+		Bootstrap() {};
+
+	private:
+		Display* display = new DisplayTerminal();
+		inline static Bootstrap* instance = nullptr;
 	};
 }
