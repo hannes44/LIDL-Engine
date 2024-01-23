@@ -19,6 +19,6 @@ namespace engine
 		virtual void setVec4(const std::string& name, float x, float y, float z, float w) = 0;
 		virtual void setMat4(const std::string& name, float* value) = 0;
 
-		static Shader* create(std::string name, std::string vert, std::string frag);
+		static Shader* create(std::string vert, std::string frag);
 	};
 }

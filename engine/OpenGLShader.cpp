@@ -11,7 +11,7 @@ namespace engine
 {
 	#define SHADERS_PATH "../../engine/shaders/"
 
-	OpenGLShader::OpenGLShader(std::string name, std::string vertPath, std::string fragPath)
+	OpenGLShader::OpenGLShader(std::string vertPath, std::string fragPath)
 	{
 		openglShaderID = loadShaderProgram(vertPath, fragPath);
 	}

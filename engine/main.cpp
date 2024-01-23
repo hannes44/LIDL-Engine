@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 
 	engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
 
-	engine::Shader* shader = engine::Shader::create("", "simple.vert", "simple.frag");
+	engine::Shader* shader = engine::Shader::create("simple.vert", "simple.frag");
 
 	engine::Renderer::baseShader = std::unique_ptr<engine::Shader>(shader);
 

@@ -11,4 +11,6 @@ Checks: >
     -bugprone-branch-clone,
     -cppcoreguidelines-init-variables,
     -misc-const-correctness,
-    -cppcoreguidelines-owning-memory
+    -cppcoreguidelines-owning-memory,
+    -cppcoreguidelines-avoid-magic-numbers,
+    -readability-magic-numbers

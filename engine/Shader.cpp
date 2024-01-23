@@ -4,12 +4,12 @@
 
 namespace engine
 {
-	Shader* Shader::create(std::string name, std::string vert, std::string frag)
+	Shader* Shader::create(std::string vert, std::string frag)
 	{
 		switch (Renderer::getAPIType())
 		{
 		case GraphicsAPIType::OpenGL:
-			return new OpenGLShader(name, vert, frag);
+			return new OpenGLShader(vert, frag);
 		default:
 			return nullptr;
 		}

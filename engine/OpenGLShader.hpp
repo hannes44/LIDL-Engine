@@ -8,7 +8,7 @@ namespace engine
 	class OpenGLShader : public Shader
 	{
 	public:
-		OpenGLShader(std::string name, std::string vert, std::string frag);
+		OpenGLShader(std::string vert, std::string frag);
 		~OpenGLShader();
 
 		void bind();
