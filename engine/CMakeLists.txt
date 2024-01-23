@@ -11,6 +11,7 @@ target_sources(Engine PRIVATE
 	Transform.hpp
 	Transform.cpp
 	GameObject.hpp
+	GameObject.cpp
 	GameObjectManager.hpp
 	GameObjectManager.cpp
 	Component.hpp

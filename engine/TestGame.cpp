@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Game.hpp"
+#include "GameObject.hpp"
 #include "TestGame.hpp"
 #include "Bootstrap.hpp"
 
@@ -10,6 +11,10 @@ namespace engine {
 
 	void TestGame::update() {
 		Bootstrap::getInstance().getDisplay().clear();
+
+		for (auto gameObject : gameObjects) {
+			Bootstrap::getInstance().getDisplay().drawGameObject(gameObject);
+		}
 
 		if (frameCount % 2 == 0) {
 			Bootstrap::getInstance().getDisplay().drawText("Frame: " + std::to_string(frameCount), 0, 0, Color::WHITE);
@@ -23,5 +28,14 @@ namespace engine {
 	}
 
 	void TestGame::initialize() {
+		GameObject* sphere1 = new GameObject();
+		sphere1->transform.setScale(glm::vec3(2, 2, 2));
+		sphere1->transform.setPosition(glm::vec3(10, 10, 0));
+		gameObjects.push_back(sphere1);
+
+		GameObject* sphere2 = new GameObject();
+		sphere2->transform.setScale(glm::vec3(1, 1, 1));
+		sphere2->transform.setPosition(glm::vec3(15, 10, 0));
+		gameObjects.push_back(sphere2);
 	}
 }

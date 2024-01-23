@@ -10,7 +10,9 @@ namespace engine
 	// to improve performance caused by bad memory locality
 	class Component
 	{
-		virtual void onUpdate() {};
+	public:
+		virtual void initialize() {};
+		virtual void update() {};
 
 		// TODO: store UUID to entity
 	};
