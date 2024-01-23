@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <iostream>
+#include <algorithm>
 
 namespace engine {
 
@@ -25,16 +26,28 @@ namespace engine {
 		return getSize().X;
 	}
 
+	void DisplayTerminal::setCursorPosition(short x, short y) {
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), {x, y});
+	}
+
 	void DisplayTerminal::show() {
-		while(!queue.empty()) {
-			auto content = queue.front();
+		std::sort(objects.begin(), objects.end());
+		
+		while (!objects.empty()) {
+			auto content = objects.back();
 
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), content.color);
-			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { (short)content.x, (short)content.y });
-			std::cout << content.text << std::endl;
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), content->color);
+			
+			auto repr = content->getRepresentation();
+			for(auto it = repr.begin(); it != repr.end(); it++) {
+				setCursorPosition(it->first.x, it->first.y);
+				std::cout << it->second;
+			}
 
-			queue.pop();
+			objects.pop_back();
 		}
+
+		setCursorPosition(0, 0);
 	}
 
 	void DisplayTerminal::clear() {
@@ -42,6 +55,12 @@ namespace engine {
 	}
 
 	void DisplayTerminal::drawText(std::string text, int x, int y, Color color = Color::WHITE) {
-		queue.push({ text, x, y, color });
+		auto *content = new DisplayTextContent(text, x, y, 0, color);
+		objects.push_back(content);
+	}
+
+	void DisplayTerminal::drawGameObject(GameObject *gameObject) {
+		auto content = new DisplayGameObjectContent(gameObject, gameObject->transform.getPosition().x, gameObject->transform.getPosition().y, gameObject->transform.getPosition().z, Color::BLUE);
+		objects.push_back(content);
 	}
 }

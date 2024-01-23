@@ -1,4 +1,4 @@
-#include "transform.hpp"
+#include "Transform.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 engine::Transform::Transform()
@@ -7,7 +7,7 @@ engine::Transform::Transform()
 
 glm::vec3 engine::Transform::getPosition()
 {
-    return glm::vec3(transformMatrix[3]);
+	return glm::vec3(transformMatrix[3]);
 }
 
 void engine::Transform::setPosition(glm::vec3 position)
@@ -22,5 +22,7 @@ glm::vec3 engine::Transform::getScale()
 
 void engine::Transform::setScale(glm::vec3 scale)
 {
-	transformMatrix = glm::scale(transformMatrix, scale);
+	transformMatrix[0][0] = scale.x;
+	transformMatrix[1][1] = scale.y;
+	transformMatrix[2][2] = scale.z;
 }
