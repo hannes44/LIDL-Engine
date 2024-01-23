@@ -14,10 +14,14 @@ source_group("Renderer" FILES
 	GraphicsAPI.hpp
 	Buffer.hpp
 	Buffer.cpp
+	Shader.hpp
+	Shader.cpp
 )
 
 source_group("OpenGL" FILES
 	OpenGLGraphicsAPI.hpp
+	OpenGLShader.hpp
+	OpenGLShader.cpp
 )
 
 target_sources(Engine PRIVATE 
@@ -50,8 +54,14 @@ target_sources(Engine PRIVATE
 	Renderer.cpp
 	GraphicsAPI.hpp
 	OpenGLGraphicsAPI.hpp
+	OpenGLShader.hpp
+	OpenGLShader.cpp
 	Buffer.hpp
 	Buffer.cpp
+	Shader.hpp
+	Shader.cpp
+	Utils.hpp
+	Utils.cpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 )
 target_link_libraries(Engine PRIVATE vendor)

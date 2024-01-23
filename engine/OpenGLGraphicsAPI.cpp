@@ -1,4 +1,5 @@
 #include "OpenGLGraphicsAPI.hpp"
+#include "OpenGLGraphicsAPI.hpp"
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
@@ -35,6 +36,10 @@ namespace engine
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		else
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+	GraphicsAPIType engine::OpenGLGraphicsAPI::getType()
+	{
+		return type;
 	}
 }
 

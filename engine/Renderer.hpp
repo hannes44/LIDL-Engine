@@ -1,9 +1,18 @@
 #pragma once
+#include "GraphicsAPI.hpp"
+#include <memory>
 
 namespace engine
 {
 	class Renderer
 	{
-		void renderGame();
+	public:
+		static void renderGame();
+
+		static void initGraphicsAPI(GraphicsAPIType type);
+
+		static std::unique_ptr<GraphicsAPI> graphicsAPI;
+
+		static GraphicsAPIType getAPIType();
 	};
 }

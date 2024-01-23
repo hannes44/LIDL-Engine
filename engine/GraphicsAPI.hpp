@@ -4,6 +4,11 @@
 
 namespace engine
 {
+	enum class GraphicsAPIType
+	{
+		OpenGL,
+	};
+
 	class GraphicsAPI
 	{
 	public: 
@@ -16,5 +21,7 @@ namespace engine
 		virtual void setDepthTest(bool enabled) = 0;
 		
 		virtual void setDrawTriangleOutline(bool enabled) = 0;
+
+		virtual GraphicsAPIType getType() = 0;
 	};
 }
