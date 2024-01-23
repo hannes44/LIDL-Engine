@@ -7,6 +7,7 @@ namespace engine
 {
 	class VertexBuffer
 	{
+	public:
 		virtual ~VertexBuffer() = default;
 
 		virtual void bind() const = 0;

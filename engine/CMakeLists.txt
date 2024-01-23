@@ -22,6 +22,8 @@ source_group("OpenGL" FILES
 	OpenGLGraphicsAPI.hpp
 	OpenGLShader.hpp
 	OpenGLShader.cpp
+	OpenGLBuffer.hpp
+	OpenGLBuffer.cpp
 )
 
 target_sources(Engine PRIVATE 
@@ -54,6 +56,8 @@ target_sources(Engine PRIVATE
 	Renderer.cpp
 	GraphicsAPI.hpp
 	OpenGLGraphicsAPI.hpp
+	OpenGLBuffer.hpp
+	OpenGLBuffer.cpp
 	OpenGLShader.hpp
 	OpenGLShader.cpp
 	Buffer.hpp
