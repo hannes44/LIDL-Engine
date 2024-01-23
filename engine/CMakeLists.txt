@@ -8,6 +8,16 @@ source_group("Components" FILES
 	MeshComponent.cpp
 )
 
+source_group("Renderer" FILES
+	Renderer.hpp
+	Renderer.cpp
+	GraphicsAPI.hpp
+)
+
+source_group("OpenGL" FILES
+	OpenGLGraphicsAPI.hpp
+)
+
 target_sources(Engine PRIVATE 
 	main.cpp
 	Transform.hpp
@@ -34,6 +44,10 @@ target_sources(Engine PRIVATE
 	MeshComponent.hpp
 	MeshComponent.cpp
 	Vertex.hpp
+	Renderer.hpp
+	Renderer.cpp
+	GraphicsAPI.hpp
+	OpenGLGraphicsAPI.hpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 )
 target_link_libraries(Engine PRIVATE vendor)
