@@ -12,10 +12,11 @@ namespace engine
 	public:
 		GameObject() = default;
 		// Called every frame
-		void update() {};
+
+		void update();
 
 		// Called at initialization
-		void initialize() {};
+		void initialize();
 
 		Transform transform;
 

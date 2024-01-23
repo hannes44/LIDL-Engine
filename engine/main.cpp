@@ -18,11 +18,9 @@ int main(int argc, char* argv[])
 {
 	engine::Logger::init();
 
-	/*
 	auto game = engine::TestGame();
 	game.initialize();
 	game.gameLoop();
-	*/
 
 	engine::Window::getInstance().createWindow(800, 600, "Sweddes MAMMA PÅ PIZZA");
 
