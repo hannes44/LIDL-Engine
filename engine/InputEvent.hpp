@@ -11,27 +11,27 @@ namespace engine {
 	class InputEvent {
     public:
         // Constructor
-        InputEvent(int x, int y, int button, int key, const std::string& classification);
+        InputEvent(float x, float y, float button, std::string key, const std::string& classification);
 
         // Getter functions
-        int getX() const;
-        int getY() const;
-        int getButton() const;
-        int getKey() const;
+        float getX() const;
+        float getY() const;
+        float getButton() const;
+        std::string getKey() const;
         const std::string& getClassification() const;
 
         // Setter functions
-        void setX(int x);
-        void setY(int y);
-        void setButton(int button);
-        void setKey(int key);
+        void setX(float x);
+        void setY(float y);
+        void setButton(float button);
+        void setKey(std::string key);
         void setClassification(const std::string& classification);
 
     private:
-        int x;
-        int y;
-        int button;
-        int key;
+        float x;
+        float y;
+        float button;
+        std::string key;
         std::string classification;
 
     };

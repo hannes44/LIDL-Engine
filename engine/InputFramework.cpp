@@ -29,7 +29,7 @@ namespace engine {
 
             if (ev.type == SDL_MOUSEBUTTONDOWN) {
                 SDL_MouseButtonEvent butt = ev.button;
-                ie.setButton(static_cast<int>(butt.button));
+                ie.setButton(butt.button);
                 ie.setX(butt.x);
                 ie.setY(butt.y);
                 dispatchEvent(ie, "MouseDown");
@@ -37,7 +37,7 @@ namespace engine {
 
             if (ev.type == SDL_MOUSEBUTTONUP) {
                 SDL_MouseButtonEvent butt = ev.button;
-                ie.setButton(static_cast<int>(butt.button));
+                ie.setButton(butt.button);
                 ie.setX(butt.x);
                 ie.setY(butt.y);
                 dispatchEvent(ie, "MouseUp");
@@ -45,19 +45,19 @@ namespace engine {
 
             if (ev.type == SDL_MOUSEWHEEL) {
                 SDL_MouseWheelEvent wh = ev.wheel;
-                ie.setX(static_cast<int>(wh.direction) * wh.x);
-                ie.setY(static_cast<int>(wh.direction) * wh.y);
+                ie.setX(wh.direction * wh.x);
+                ie.setY(wh.direction * wh.y);
                 dispatchEvent(ie, "MouseWheel");
             }
 
             if (ev.type == SDL_KEYDOWN) {
-                ie.setKey(static_cast<int>(ev.key.keysym.scancode));
+                ie.setKey(SDL_GetKeyName(ev.key.keysym.sym));
                 //Debug::getInstance().log("Keydown: " + std::to_string(ie.getKey()));
                 dispatchEvent(ie, "KeyDown");
             }
 
             if (ev.type == SDL_KEYUP) {
-                ie.setKey(static_cast<int>(ev.key.keysym.scancode));
+                ie.setKey(SDL_GetKeyName(ev.key.keysym.sym));
                 dispatchEvent(ie, "KeyUp");
             }
         }

@@ -28,5 +28,8 @@ namespace engine
         }
     }
 
+    void initialize() {
+    }
+
 	void getInput();
 }

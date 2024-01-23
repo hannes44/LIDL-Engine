@@ -10,7 +10,7 @@ namespace engine
 		static std::list<InputListener> listeners;
 
 	public:
-		void initialize();
+		virtual void initialize();
 
 		static void addListener(const InputListener& listener);
 

@@ -2,38 +2,38 @@
 
 namespace engine {
 
-    InputEvent::InputEvent(int x, int y, int button, int key, const std::string& classification)
+    InputEvent::InputEvent(float x, float y, float button, std::string key, const std::string& classification)
         : x(x), y(y), button(button), key(key), classification(classification) {}
 
-    int InputEvent::getX() const {
+    float InputEvent::getX() const {
         return x;
     }
 
-    void InputEvent::setX(int x) {
+    void InputEvent::setX(float x) {
         this->x = x;
     }
 
-    int InputEvent::getY() const {
+    float InputEvent::getY() const {
         return y;
     }
 
-    void InputEvent::setY(int y) {
+    void InputEvent::setY(float y) {
         this->y = y;
     }
 
-    int InputEvent::getButton() const {
+    float InputEvent::getButton() const {
         return button;
     }
 
-    void InputEvent::setButton(int button) {
+    void InputEvent::setButton(float button) {
         this->button = button;
     }
 
-    int InputEvent::getKey() const {
+    std::string InputEvent::getKey() const {
         return key;
     }
 
-    void InputEvent::setKey(int key) {
+    void InputEvent::setKey(std::string key) {
         this->key = key;
     }
 
