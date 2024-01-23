@@ -7,6 +7,7 @@
 #include "GameObject.hpp"
 #include "MeshComponent.hpp"
 #include <memory>
+#include "Shader.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -18,18 +19,26 @@ int main(int argc, char* argv[])
 	game.gameLoop();
 	*/
 
-	engine::Window::getInstance().createWindow(800, 600, "Test Window");
+	engine::Window::getInstance().createWindow(800, 600, "Sweddes MAMMA PÅ PIZZA");
 
 	glewInit();
 
 	engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
 	
+	//engine::MeshComponent meshComponent = engine::MeshComponent::createPrimative(engine::PrimativeMeshType::CUBE);
 	engine::MeshComponent meshComponent = engine::MeshComponent::loadMeshFromOBJFile("amugus.obj");
+
 	engine::GameObject gameObject = engine::GameObject();
+
+	gameObject.transform.setScale(glm::vec3(5,5,5));
 
 	std::vector<engine::Vertex> vertices{};
 	std::vector<uint32_t> indices{};
 	gameObject.components.push_back(std::make_unique<engine::MeshComponent>(meshComponent));
+
+	engine::Shader* shader = engine::Shader::create("", "simple.vert", "simple.frag");
+
+	engine::Renderer::baseShader = std::unique_ptr<engine::Shader>(shader);
 
 	while (true)
 	{
@@ -39,7 +48,7 @@ int main(int argc, char* argv[])
 		}
 		
 
-		engine::Renderer::renderGame(gameObject);
+	    engine::Renderer::renderGame(gameObject);
 
 
 		SDL_GL_SwapWindow(engine::Window::getInstance().window);

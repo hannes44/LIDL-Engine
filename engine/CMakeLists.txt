@@ -27,6 +27,14 @@ source_group("OpenGL" FILES
 	OpenGLBuffer.cpp
 )
 
+# Find *all* shaders.
+file(GLOB_RECURSE SHADERS
+    "${CMAKE_CURRENT_SOURCE_DIR}/shaders/*.vert"
+    "${CMAKE_CURRENT_SOURCE_DIR}/shaders/*.frag"
+)
+# Separate filter for shaders.
+source_group("Shaders" FILES ${SHADERS})
+
 target_sources(Engine PRIVATE 
 	main.cpp
 	Transform.hpp

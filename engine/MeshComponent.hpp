@@ -31,5 +31,7 @@ namespace engine
 		static MeshComponent loadMeshFromOBJFile(const std::string& filename);
 		
 		static MeshComponent createPrimative(PrimativeMeshType type);
+	private:
+		static MeshComponent createCube();
 	};
 }

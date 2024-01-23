@@ -17,8 +17,8 @@ namespace engine
 		if (indices.size() < 3)
 			LOG_WARN("MeshComponent: indices size is less than 3");
 
-		vertices = vertices;
-		indices = indices;
+		this->vertices = vertices;
+		this->indices = indices;
 
 		// The mesh creation is currently not abstracted from OpenGL
 		// TODO: Abstract mesh creation
@@ -175,7 +175,7 @@ namespace engine
 		case PrimativeMeshType::PLANE:
 			break;
 		case PrimativeMeshType::CUBE:
-			break;
+			return createCube();
 		case PrimativeMeshType::CYLINDER:
 			break;
 		case PrimativeMeshType::SPHERE:
@@ -185,5 +185,70 @@ namespace engine
 
 			return MeshComponent(vertices, indices);
 		}
+	}
+	MeshComponent MeshComponent::createCube()
+	{
+		LOG_INFO("Creating cube mesh");
+		std::vector<Vertex> vertices{};
+		std::vector<uint32_t> indices{};
+
+		// Front
+		vertices.push_back({ glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec3(1, 0, 0), glm::vec3(0, 0, 1), glm::vec2(0, 0) });
+		vertices.push_back({ glm::vec3(0.5f, -0.5f, 0.5f), glm::vec3(0, 1, 0), glm::vec3(0, 0, 1), glm::vec2(1, 0) });
+		vertices.push_back({ glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 0, 1), glm::vec3(0, 0, 1), glm::vec2(1, 1) });
+		vertices.push_back({ glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec3(1, 1, 0), glm::vec3(0, 0, 1), glm::vec2(0, 1) });
+
+		indices.push_back(0); indices.push_back(1); indices.push_back(2);
+		indices.push_back(2); indices.push_back(3); indices.push_back(0);
+
+
+		// Back
+		vertices.push_back({ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(1, 0, 0), glm::vec3(0, 0, -1), glm::vec2(0, 0) });
+		vertices.push_back({ glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0, 1, 0), glm::vec3(0, 0, -1), glm::vec2(1, 0) });
+		vertices.push_back({ glm::vec3(0.5f, 0.5f, -0.5f), glm::vec3(0, 0, 1), glm::vec3(0, 0, -1), glm::vec2(1, 1) });
+		vertices.push_back({ glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec3(1, 1, 0), glm::vec3(0, 0, -1), glm::vec2(0, 1) });
+
+		indices.push_back(6); indices.push_back(5); indices.push_back(4);
+		indices.push_back(4); indices.push_back(7); indices.push_back(6);
+
+
+		// Left
+		vertices.push_back({ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(1, 0, 0), glm::vec3(-1, 0, 0), glm::vec2(0, 0) });
+		vertices.push_back({ glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec3(0, 1, 0), glm::vec3(-1, 0, 0), glm::vec2(1, 0) });
+		vertices.push_back({ glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec3(0, 0, 1), glm::vec3(-1, 0, 0), glm::vec2(1, 1) });
+		vertices.push_back({ glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec3(1, 1, 0), glm::vec3(-1, 0, 0), glm::vec2(0, 1) });
+
+		indices.push_back(8); indices.push_back(9); indices.push_back(10);
+		indices.push_back(10); indices.push_back(11); indices.push_back(8);
+
+		// Right
+		vertices.push_back({ glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(1, 0, 0), glm::vec3(1, 0, 0), glm::vec2(0, 0) });
+		vertices.push_back({ glm::vec3(0.5f, -0.5f, 0.5f), glm::vec3(0, 1, 0), glm::vec3(1, 0, 0), glm::vec2(1, 0) });
+		vertices.push_back({ glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 0, 1), glm::vec3(1, 0, 0), glm::vec2(1, 1) });
+		vertices.push_back({ glm::vec3(0.5f, 0.5f, -0.5f), glm::vec3(1, 1, 0), glm::vec3(1, 0, 0), glm::vec2(0, 1) });
+
+		indices.push_back(14); indices.push_back(13); indices.push_back(12);
+		indices.push_back(12); indices.push_back(15); indices.push_back(14);
+
+		// Top
+		vertices.push_back({ glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec3(1, 0, 0), glm::vec3(0, 1, 0), glm::vec2(0, 0) });
+		vertices.push_back({ glm::vec3(0.5f, 0.5f, -0.5f), glm::vec3(0, 1, 0), glm::vec3(0, 1, 0), glm::vec2(1, 0) });
+		vertices.push_back({ glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0, 0, 1), glm::vec3(0, 1, 0), glm::vec2(1, 1) });
+		vertices.push_back({ glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec3(1, 1, 0), glm::vec3(0, 1, 0), glm::vec2(0, 1) });
+
+		indices.push_back(18); indices.push_back(17); indices.push_back(16);
+		indices.push_back(16); indices.push_back(19); indices.push_back(18);
+
+		// Bottom
+		vertices.push_back({ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(1, 0, 0), glm::vec3(0, -1, 0), glm::vec2(0, 0) });
+		vertices.push_back({ glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0, 1, 0), glm::vec3(0, -1, 0), glm::vec2(1, 0) });
+		vertices.push_back({ glm::vec3(0.5f, -0.5f, 0.5f), glm::vec3(0, 0, 1), glm::vec3(0, -1, 0), glm::vec2(1, 1) });
+		vertices.push_back({ glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec3(1, 1, 0), glm::vec3(0, -1, 0), glm::vec2(0, 1) });
+
+		indices.push_back(20); indices.push_back(21); indices.push_back(22);
+		indices.push_back(22); indices.push_back(23); indices.push_back(20);
+
+		MeshComponent model = MeshComponent(vertices, indices);
+		return model;
 	}
 }

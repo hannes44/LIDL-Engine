@@ -9,6 +9,8 @@ namespace fs = std::filesystem;
 
 namespace engine
 {
+	#define SHADERS_PATH "../../engine/shaders/"
+
 	OpenGLShader::OpenGLShader(std::string name, std::string vertPath, std::string fragPath)
 	{
 		openglShaderID = loadShaderProgram(vertPath, fragPath);
@@ -66,16 +68,20 @@ namespace engine
 		glUniformMatrix4fv(location, 1, GL_FALSE, value);
 	}
 
-	GLuint OpenGLShader::loadShaderProgram(const std::string& vertexShader, const std::string& fragmentShader)
+	GLuint OpenGLShader::loadShaderProgram(const std::string& vertexShaderName, const std::string& fragmentShaderName)
 	{
+		LOG_INFO("Loading shader program: {}, {}", vertexShaderName.c_str(), fragmentShaderName.c_str());
 		GLuint vShader = glCreateShader(GL_VERTEX_SHADER);
 		GLuint fShader = glCreateShader(GL_FRAGMENT_SHADER);
 
-		std::ifstream vs_file(vertexShader);
+		std::ifstream vs_file(SHADERS_PATH + vertexShaderName);
 		std::string vs_src((std::istreambuf_iterator<char>(vs_file)), std::istreambuf_iterator<char>());
 
-		std::ifstream fs_file(fragmentShader);
+		std::ifstream fs_file(SHADERS_PATH + fragmentShaderName);
 		std::string fs_src((std::istreambuf_iterator<char>(fs_file)), std::istreambuf_iterator<char>());
+
+		if (vs_src.length() == 0 || fs_src.length() == 0)
+			LOG_FATAL("Shader file not found");
 
 		const char* vs = vs_src.c_str();
 		const char* fs = fs_src.c_str();
@@ -90,7 +96,7 @@ namespace engine
 		if (!compileOk)
 		{
 			std::string err = getShaderInfoLog(vShader);
-			std::cout << vertexShader << " error: " << err << std::endl;
+			std::cout << vertexShaderName << " error: " << err << std::endl;
 			throw std::runtime_error(err);
 			return 0;
 		}
@@ -100,7 +106,7 @@ namespace engine
 		if (!compileOk)
 		{
 			std::string err = getShaderInfoLog(fShader);
-			std::cout << fragmentShader << " error " << err << std::endl;
+			std::cout << fragmentShaderName << " error " << err << std::endl;
 			throw std::runtime_error(err);
 			return 0;
 		}
@@ -119,6 +125,8 @@ namespace engine
 		{
 			return 0;
 		}
+
+		LOG_INFO("Shader program loaded successfully");
 
 		return shaderProgram;
 	}

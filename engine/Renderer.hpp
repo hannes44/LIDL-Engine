@@ -2,6 +2,7 @@
 #include "GraphicsAPI.hpp"
 #include <memory>
 #include "GameObject.hpp"
+#include "Shader.hpp"
 
 namespace engine
 {
@@ -15,5 +16,7 @@ namespace engine
 		static std::unique_ptr<GraphicsAPI> graphicsAPI;
 
 		static GraphicsAPIType getAPIType();
+
+		static std::unique_ptr<Shader> baseShader;
 	};
 }
