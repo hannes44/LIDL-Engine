@@ -1,4 +1,6 @@
 #pragma once
+#include "Camera.hpp"
+
 
 namespace engine
 {
@@ -14,6 +16,9 @@ namespace engine
 		bool running = true;
 
 		const void gameLoop();
+
+		// Currenly limit the game to only one camera
+		Camera camera{};
 
 	protected:
 		// 0 is uncapped

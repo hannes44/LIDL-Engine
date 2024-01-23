@@ -77,6 +77,8 @@ target_sources(Engine PRIVATE
 	Shader.cpp
 	Utils.hpp
 	Utils.cpp
+	Camera.hpp
+	Camera.cpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 )
 target_link_libraries(Engine PRIVATE vendor)
