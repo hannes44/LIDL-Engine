@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.hpp"
 #include "InputListener.hpp"
+#include "Bootstrap.hpp"
 
 namespace engine {
 

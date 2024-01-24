@@ -55,8 +55,8 @@ namespace engine {
 		InputFramework::getInstance().initialize();
 		InputSystem::initialize();
 
-		Cube cube;
-		InputSystem::addListener(&cube);
+		Cube* cube = new Cube();
+		InputSystem::addListener(cube);
 
 		engine::MeshComponent meshComponent1 = engine::MeshComponent::loadMeshFromOBJFile("amugus.obj");
 		engine::MeshComponent meshComponent2 = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);

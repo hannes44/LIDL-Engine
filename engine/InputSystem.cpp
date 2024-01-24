@@ -19,7 +19,9 @@ namespace engine {
 
     void InputSystem::dispatchEvent(const InputEvent& e, std::string EventType) {
         for (auto listener : listeners) {
-            listener->handleInput(e, EventType);
+            if (listener) {
+                listener->handleInput(e, EventType);
+            }
         }
     }
 

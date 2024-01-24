@@ -9,7 +9,7 @@ namespace engine {
 
     void Cube::handleInput(const InputEvent& event, std::string EventType) const {
         // Handle input for the Cube
-        std::cout << event.getKey() << std::endl;
+        Bootstrap::getInstance().getDisplay().drawText(event.getKey(), 0, 2, Color::RED);
         // You can add more specific input handling logic for the Cube
     }
 
