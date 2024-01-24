@@ -35,6 +35,17 @@ target_sources(Engine PRIVATE
 	MeshComponent.hpp
 	MeshComponent.cpp
 	Vertex.hpp
+	Vertex.cpp
+	InputEvent.hpp
+	InputEvent.cpp
+	InputListener.hpp
+	InputListener.cpp
+	InputSystem.hpp
+	InputSystem.cpp
+	InputFramework.hpp
+	InputFramework.cpp
+	Cube.hpp
+	Cube.cpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 )
 target_link_libraries(Engine PRIVATE vendor)

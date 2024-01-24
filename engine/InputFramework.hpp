@@ -1,20 +1,31 @@
 #pragma once
 #include "InputSystem.hpp"
+#include "InputEvent.hpp"
 
-namespace engine
-{
-	class InputFramework : public InputSystem
-	{
+namespace engine {
+
+    class InputFramework : public InputSystem {
     private:
-        double tick, timeInterval;
+        double tick;
+        double timeInterval;
 
-    public:
-        // Constructor
+        // Private constructor to prevent external instantiation
         InputFramework();
 
-        // Override functions from InputSystem
-        void getInput() override;
-        void initialize() override;
+    public:
+        // Non cloneable
+        InputFramework(InputFramework& other) = delete;
 
-	};
+        // Non copyable
+        void operator=(const InputFramework&) = delete;
+
+        static InputFramework& getInstance();
+
+        // Override function from InputSystem
+        void getInput() override;
+
+        // Function to initialize the input framework
+        void initialize();
+    };
+
 }

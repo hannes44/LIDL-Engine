@@ -1,14 +1,9 @@
 #pragma once
 #include <string>
 
-/* 
- * InputEvent.hpp
- * Simple container with information about a key or mouse event.
- * Created on: Oct 5, 2018
-*/
-
 namespace engine {
-	class InputEvent {
+
+    class InputEvent {
     public:
         // Constructor
         InputEvent(float x, float y, float button, std::string key, const std::string& classification);
@@ -33,6 +28,6 @@ namespace engine {
         float button;
         std::string key;
         std::string classification;
-
     };
+
 }
