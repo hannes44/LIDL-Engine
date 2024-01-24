@@ -1,10 +1,10 @@
 name: linter-review
 
 on: 
-    pull_request:
-        paths:
-            - "engine/**.cpp"
-            - "engine/**.hpp"
+  pull_request:
+      paths:
+          - "engine/**.cpp"
+          - "engine/**.hpp"
 
 jobs:
   clangtidy:
@@ -12,11 +12,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-
-    # Create dummy files for missing files that cause compile errors
-    - name: Create Windows.h file
-      run: 'echo "" > Windows.h'
-      shell: bash
 
     - uses: ZedThree/clang-tidy-review@v0.14.0
       id: review
@@ -46,7 +41,7 @@ jobs:
                 glhf
         
             
-        exclude: 'Windows.h'
+        include: 'engine/*.[ch]pp'
         config_file: '.clang-tidy'
 
     # If there are any comments, fail the check

@@ -7,8 +7,8 @@ namespace engine
 	class PointLightComponent : public Component
 	{
 	public:
-		glm::vec3 color;
+		glm::vec3 color{1, 1, 1};
 
-		float intensity;
+		float intensity = 10;
 	};
 }
