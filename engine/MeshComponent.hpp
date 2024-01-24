@@ -8,6 +8,8 @@
 
 #include "Buffer.hpp"
 
+#include "Material.hpp"
+
 namespace engine
 {
 	enum PrimativeMeshType
@@ -31,6 +33,9 @@ namespace engine
 		static MeshComponent loadMeshFromOBJFile(const std::string& filename);
 		
 		static MeshComponent createPrimative(PrimativeMeshType type);
+
+		Material material{};
+
 	private:
 		static MeshComponent createCube();
 	};
