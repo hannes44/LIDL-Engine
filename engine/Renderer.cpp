@@ -77,6 +77,12 @@ namespace engine
 			Renderer::baseShader->setMat4("modelViewProjectionMatrix", &modelViewProjectionMatrix[0].x);
 			Renderer::baseShader->setMat4("modelMatrix", &gameObject->transform.transformMatrix[0].x);
 
+			// Material
+			Renderer::baseShader->setFloat("material.shininess", meshComponent->material.shininess);
+			Renderer::baseShader->setVec3("material.baseColor", meshComponent->material.baseColor.x, meshComponent->material.baseColor.y, meshComponent->material.baseColor.z);
+			Renderer::baseShader->setInt("material.hasDiffuseTexture", 0);
+			Renderer::baseShader->setInt("material.hasSpecularTexture", 0);
+
 			graphicsAPI->drawIndexed(meshComponent->vertexArray.get(), meshComponent->indices.size());
 		}
 

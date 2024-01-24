@@ -82,6 +82,7 @@ target_sources(Engine PRIVATE
 	Camera.hpp
 	Camera.cpp
 	Texture.hpp
+	Material.hpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 	${SHADERS}
 )
