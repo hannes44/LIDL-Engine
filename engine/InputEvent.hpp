@@ -1,6 +1,13 @@
 #pragma once
 #include <string>
 
+/*
+    InputEvent class
+    Stores information about an input event (e.g., mouse click, key press, etc.)
+    Used by the InputSystem class to dispatch events to listeners (e.g., GameObjects)
+*/
+
+
 namespace engine {
 
     class InputEvent {
@@ -23,6 +30,7 @@ namespace engine {
         void setClassification(const std::string& classification);
 
     private:
+        // Data members
         float x;
         float y;
         float button;

@@ -1,5 +1,10 @@
 #include "InputEvent.hpp"
 
+/*
+	This is the functionallity for the InputEvent class.
+    It consists of a constructor, getters and setters.
+*/
+
 namespace engine {
 
     // Constructor

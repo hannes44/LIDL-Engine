@@ -20,6 +20,7 @@ namespace engine {
 	}
 
 	void TestGame::update() {
+
 		InputFramework::getInstance().getInput();
 	
 		// ----------------------------------------------------------
@@ -53,7 +54,6 @@ namespace engine {
 	void TestGame::initialize() {
 		// Initialize the InputFramework and InputSystem
 		InputFramework::getInstance().initialize();
-		InputSystem::initialize();
 
 		Cube* cube = new Cube();
 		InputSystem::addListener(cube);

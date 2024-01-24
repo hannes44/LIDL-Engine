@@ -2,12 +2,16 @@
 #include "InputListener.hpp"
 #include <list>
 
+/*
+    InputSystem class
+    - This class is an abstract class that defines the interface between the input framework and the game objects
+    - The InputSystem class is responsible for dispatching input events to all listeners
+    - The InputSystem class is also responsible for adding and removing listeners (subscribers)
+*/
+
 namespace engine {
 
     class InputSystem {
-    private:
-        static std::list<InputListener*> listeners;
-
     public:
         // Function to initialize the input system
         static void initialize();
@@ -24,8 +28,13 @@ namespace engine {
         // Function to get input (to be implemented by derived classes)
         virtual void getInput() = 0;
 
-        // Function to clean up resources (to be implemented by derived classes)
+        // Function to clean up resources
         virtual void cleanup() = 0;
+
+    private:
+        // Data members
+        static std::list<InputListener*> listeners;
+
     };
 
 }

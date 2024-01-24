@@ -2,16 +2,16 @@
 #include "InputSystem.hpp"
 #include "InputEvent.hpp"
 
+/*
+    InputFramework class
+	- This class is a singleton that inherits from InputSystem
+	- The InputFramework class is responsible for reading input from the keyboard and mouse
+    - It then dispatches the input events to all listeners though the InputSystem class
+*/
+
 namespace engine {
 
     class InputFramework : public InputSystem {
-    private:
-        double tick;
-        double timeInterval;
-
-        // Private constructor to prevent external instantiation
-        InputFramework();
-
     public:
         // Non cloneable
         InputFramework(const InputFramework& other) = delete;
@@ -29,6 +29,15 @@ namespace engine {
 
         // Function to clean up resources
         void cleanup() override;
+
+    private:
+        // Data members
+        double tick;
+        double timeInterval;
+
+        // Private constructor to prevent external instantiation
+        InputFramework();
+
     };
 
 }

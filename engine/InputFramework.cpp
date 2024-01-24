@@ -2,27 +2,35 @@
 #include "Bootstrap.hpp"
 #include <SDL.h>
 
+/*
+    This is the implementation of the InputFramework class
+    Please refer to the header for more information.
+*/
+
 namespace engine {
 
+    // Constructor
     InputFramework::InputFramework() : tick(0), timeInterval(1.0 / 60.0) {}
 
+    // Singleton
     InputFramework& InputFramework::getInstance() {
         static InputFramework instance;
         return instance;
     }
 
+    // Read input from the SDL window
     void InputFramework::getInput() {
         SDL_Event ev;
         InputEvent ie(0, 0, 0, "", "");  // Initialize with default values
 
-        tick += Bootstrap::getDeltaTime();
+        tick += Bootstrap::getInstance().getDeltaTime();
 
         if (tick < timeInterval) {
             return;
         }
 
         if (SDL_PollEvent(&ev) != 0) {
-            // Handle events
+            // Check if there are any events to process
             while (SDL_PollEvent(&ev)) {
                 // Handle different types of input events and dispatch them
                 // to registered listeners using InputSystem::dispatchEvent.
@@ -70,13 +78,17 @@ namespace engine {
         tick -= timeInterval;
     }
 
+    // Initialize the input framework
     void InputFramework::initialize() {
         tick = 0;
         timeInterval = 1.0 / 60.0;
         // Additional initialization logic can be added here
+        InputSystem::initialize();
     }
 
+    // Clean up resources
     void InputFramework::cleanup() {
+        InputSystem::cleanup();
         // Implement cleanup logic if needed
     }
 
