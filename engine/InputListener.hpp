@@ -19,7 +19,7 @@ namespace engine {
         InputListener();
 
         // Function to handle input events
-        virtual void handleInput(const InputEvent& event, std::string EventType) const;
+        virtual void handleInput(const InputEvent& event, const std::string& EventType) const;
 
         // Getter for instance
         std::string getInstance() const;

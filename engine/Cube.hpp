@@ -10,7 +10,7 @@ namespace engine {
         Cube();
 
         // Implement the handleInput function
-        void handleInput(const InputEvent& event, std::string EventType) const override;
+        void handleInput(const InputEvent& event, const std::string& EventType) const override;
     };
 
 }

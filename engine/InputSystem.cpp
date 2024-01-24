@@ -26,8 +26,8 @@ namespace engine {
     }
 
     // Function to dispatch captured event to all listeners
-    void InputSystem::dispatchEvent(const InputEvent& e, std::string EventType) {
-        for (auto listener : listeners) {
+    void InputSystem::dispatchEvent(const InputEvent& e, const std::string& EventType) {
+        for (auto *listener : listeners) {
             if (listener) {
                 listener->handleInput(e, EventType);
             }

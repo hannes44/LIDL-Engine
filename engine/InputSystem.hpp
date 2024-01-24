@@ -23,7 +23,7 @@ namespace engine {
         static void removeListener(InputListener* listener);
 
         // Function to dispatch an event to all listeners
-        static void dispatchEvent(const InputEvent& e, std::string EventType);
+        static void dispatchEvent(const InputEvent& e, const std::string& EventType);
 
         // Function to get input (to be implemented by derived classes)
         virtual void getInput() = 0;
