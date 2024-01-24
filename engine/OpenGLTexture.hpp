@@ -9,6 +9,8 @@ namespace engine
 	public:
 		OpenGLTexture(const std::string& textureFileName);
 
+		~OpenGLTexture();
+
 		void bind() const override;
 
 		void unbind() const override;

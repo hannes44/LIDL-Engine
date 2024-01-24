@@ -87,6 +87,7 @@ target_sources(Engine PRIVATE
 	Texture.cpp
 	Material.hpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
+	../vendor/stb/stb_image.h
 	${SHADERS}
 )
 target_link_libraries(Engine PRIVATE vendor)
