@@ -44,7 +44,7 @@ namespace engine
 		}
 		else
 		{
-			LOG_ERROR("Failed to load texture" + textureFilename);
+			LOG_ERROR("Failed to load texture " + textureFilename);
 			throw std::runtime_error("Failed to load texture");
 		}
 		stbi_image_free(data);

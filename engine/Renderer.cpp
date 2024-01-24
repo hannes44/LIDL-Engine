@@ -79,8 +79,21 @@ namespace engine
 			// Material
 			Renderer::baseShader->setFloat("material.shininess", meshComponent->material.shininess);
 			Renderer::baseShader->setVec3("material.baseColor", meshComponent->material.baseColor.x, meshComponent->material.baseColor.y, meshComponent->material.baseColor.z);
-			Renderer::baseShader->setInt("material.hasDiffuseTexture", 0);
-			Renderer::baseShader->setInt("material.hasSpecularTexture", 0);
+			Renderer::baseShader->setInt("material.hasDiffuseTexture", !meshComponent->material.diffuseTexture.expired());
+			Renderer::baseShader->setInt("material.hasSpecularTexture", !meshComponent->material.specularTexture.expired());
+
+			if (!meshComponent->material.diffuseTexture.expired())
+			{
+				Renderer::baseShader->setInt("material.diffuseTexture", 0);
+				glActiveTexture(GL_TEXTURE0);
+				glBindTexture(GL_TEXTURE_2D, meshComponent->material.diffuseTexture.lock()->textureIDOpenGL);
+			}
+			if (!meshComponent->material.specularTexture.expired())
+			{
+				Renderer::baseShader->setInt("material.specularTexture", 1);
+				glActiveTexture(GL_TEXTURE1);
+				glBindTexture(GL_TEXTURE_2D, meshComponent->material.specularTexture.lock()->textureIDOpenGL);
+			}
 
 			graphicsAPI->drawIndexed(meshComponent->vertexArray.get(), meshComponent->indices.size());
 		}

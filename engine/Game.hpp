@@ -1,6 +1,10 @@
 #pragma once
 #include "Camera.hpp"
-
+#include <memory>
+#include <vector>
+#include "Texture.hpp"
+#include <string>
+#include <map>
 
 namespace engine
 {
@@ -19,6 +23,10 @@ namespace engine
 
 		// Currenly limit the game to only one camera
 		Camera camera{};
+
+		std::map<std::string, std::shared_ptr<Texture>> textures{};
+
+		std::shared_ptr<Texture> loadTexture(const std::string& textureFileName);
 
 	protected:
 		// 0 is uncapped
