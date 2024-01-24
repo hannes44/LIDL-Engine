@@ -20,7 +20,7 @@ namespace engine {
 	}
 
 	void TestGame::update() {
-		//InputFramework::getInstance().getInput();
+		InputFramework::getInstance().getInput();
 	
 		// ----------------------------------------------------------
 		// CONSOLE OUTPUT
@@ -57,8 +57,6 @@ namespace engine {
 
 		Cube cube;
 		InputSystem::addListener(&cube);
-
-		Window::getInstance().createWindow(800, 600, "Test Game");
 
 		engine::MeshComponent meshComponent1 = engine::MeshComponent::loadMeshFromOBJFile("amugus.obj");
 		engine::MeshComponent meshComponent2 = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
