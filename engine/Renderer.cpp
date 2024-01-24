@@ -64,14 +64,13 @@ namespace engine
 				if (dynamic_cast<MeshComponent*>(component.get()))
 				{
 					meshComponent = dynamic_cast<MeshComponent*>(component.get());
+					break;
 				}
 			}
 
 			if (meshComponent == nullptr)
-			{
-				LOG_INFO("No mesh component found!");
-				return;
-			}
+				continue;
+			
 
 			glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * gameObject->transform.transformMatrix;
 			Renderer::baseShader->setMat4("modelViewProjectionMatrix", &modelViewProjectionMatrix[0].x);
