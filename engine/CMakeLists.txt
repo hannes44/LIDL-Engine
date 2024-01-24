@@ -35,7 +35,6 @@ target_sources(Engine PRIVATE
 	MeshComponent.hpp
 	MeshComponent.cpp
 	Vertex.hpp
-	Vertex.cpp
 	InputEvent.hpp
 	InputEvent.cpp
 	InputListener.hpp
@@ -48,4 +47,5 @@ target_sources(Engine PRIVATE
 	Cube.cpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 )
+
 target_link_libraries(Engine PRIVATE vendor)

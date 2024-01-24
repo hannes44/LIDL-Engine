@@ -14,10 +14,10 @@ namespace engine {
 
     public:
         // Non cloneable
-        InputFramework(InputFramework& other) = delete;
+        InputFramework(const InputFramework& other) = delete;
 
         // Non copyable
-        void operator=(const InputFramework&) = delete;
+        void operator=(const InputFramework& other) = delete;
 
         static InputFramework& getInstance();
 
@@ -26,6 +26,9 @@ namespace engine {
 
         // Function to initialize the input framework
         void initialize();
+
+        // Function to clean up resources
+        void cleanup() override;
     };
 
 }

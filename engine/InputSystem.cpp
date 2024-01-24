@@ -6,6 +6,7 @@ namespace engine {
 
     void InputSystem::initialize() {
         // Additional initialization logic can be added here
+        listeners = std::list<InputListener*>();
     }
 
     void InputSystem::addListener(InputListener* listener) {

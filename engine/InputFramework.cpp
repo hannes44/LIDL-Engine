@@ -21,18 +21,50 @@ namespace engine {
             return;
         }
 
-        while (SDL_PollEvent(&ev)) {
-            // Handle different types of input events and dispatch them
-            // to registered listeners using InputSystem::dispatchEvent.
+        if (SDL_PollEvent(&ev) != 0) {
+            // Handle events
+            while (SDL_PollEvent(&ev)) {
+                // Handle different types of input events and dispatch them
+                // to registered listeners using InputSystem::dispatchEvent.
 
-            // Example:
-            // if (ev.type == SDL_MOUSEMOTION) {
-            //     ie.setX(ev.motion.x);
-            //     ie.setY(ev.motion.y);
-            //     dispatchEvent(ie, "MouseMotion");
-            // }
-
-            // Add similar blocks for other types of input events.
+                if (ev.type == SDL_EVENT_MOUSE_MOTION) {
+                    SDL_MouseMotionEvent mot = ev.motion;
+                    ie.setX(mot.x);
+                    ie.setY(mot.y);
+                    dispatchEvent(ie, "MouseMotion");
+                }
+                else if (ev.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
+                    SDL_MouseButtonEvent but = ev.button;
+                    ie.setX(but.x);
+                    ie.setY(but.y);
+                    ie.setButton(but.button);
+                    dispatchEvent(ie, "MouseButtonDown");
+                }
+                else if (ev.type == SDL_EVENT_MOUSE_BUTTON_UP) {
+                    SDL_MouseButtonEvent but = ev.button;
+                    ie.setX(but.x);
+                    ie.setY(but.y);
+                    ie.setButton(but.button);
+                    dispatchEvent(ie, "MouseButtonUp");
+                }
+                else if (ev.type == SDL_EVENT_KEY_DOWN) {
+                    SDL_KeyboardEvent key = ev.key;
+                    ie.setKey(SDL_GetKeyName(key.keysym.sym));
+                    dispatchEvent(ie, "KeyDown");
+                }
+                else if (ev.type == SDL_EVENT_KEY_UP) {
+                    SDL_KeyboardEvent key = ev.key;
+                    ie.setKey(SDL_GetKeyName(key.keysym.sym));
+                    dispatchEvent(ie, "KeyUp");
+                }
+                else if (ev.type == SDL_EVENT_QUIT) {
+                    dispatchEvent(ie, "Quit");
+                }
+            }
+        }
+        else {
+            // Error retrieving event
+            std::cerr << "SDL_PollEvent error: " << SDL_GetError() << std::endl;
         }
 
         tick -= timeInterval;
@@ -42,6 +74,10 @@ namespace engine {
         tick = 0;
         timeInterval = 1.0 / 60.0;
         // Additional initialization logic can be added here
+    }
+
+    void InputFramework::cleanup() {
+        // Implement cleanup logic if needed
     }
 
 }
