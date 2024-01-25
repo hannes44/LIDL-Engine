@@ -5,9 +5,16 @@
 
 namespace engine
 {
+	enum WindowBackend
+	{
+		SDL3
+	};
+
 	class Window
 	{
 	public:
+		Window() = default;
+
 		// Non cloneable
 		Window(Window& other) = delete;
 
@@ -16,21 +23,20 @@ namespace engine
 
 		static Window& getInstance();
 
-		void createWindow(int width, int height, std::string title);
+		virtual void createWindow(int width, int height, std::string title) = 0;
 
-		void cleanup();
+		virtual void cleanup() = 0;
 
-		void getWindowSize(int* width, int* height);
-		void setWindowTitle(std::string title);
+		virtual void getWindowSize(int* width, int* height) = 0;
+		virtual void setWindowTitle(std::string title) = 0;
 
-		void closeWindow();
+		virtual void closeWindow() = 0;
 
-		void newFrame();
-		SDL_Window* window = nullptr;
+		virtual void newFrame() = 0;
+
 	private:
 		inline static Window* instance = nullptr;
-		Window() {};
 
-
+		inline static WindowBackend backend = WindowBackend::SDL3;
 	};
 } // namespace engine

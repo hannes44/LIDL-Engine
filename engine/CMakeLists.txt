@@ -29,6 +29,11 @@ source_group("OpenGL" FILES
 	OpenGLTexture.cpp
 )
 
+source_group("SDL" FILES
+	SDLWindow.hpp
+	SDLWindow.cpp
+)
+
 # Find *all* shaders.
 file(GLOB_RECURSE SHADERS
     "${CMAKE_CURRENT_SOURCE_DIR}/shaders/*.vert"
@@ -96,6 +101,8 @@ target_sources(Engine PRIVATE
 	Texture.hpp
 	Texture.cpp
 	Material.hpp
+	SDLWindow.hpp
+	SDLWindow.cpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 	../vendor/stb/stb_image.h
 	${SHADERS}
