@@ -29,6 +29,11 @@ source_group("OpenGL" FILES
 	OpenGLTexture.cpp
 )
 
+source_group("Serializer" FILES
+	GameSerializer.hpp
+	GameSerializer.cpp
+)
+
 # Find *all* shaders.
 file(GLOB_RECURSE SHADERS
     "${CMAKE_CURRENT_SOURCE_DIR}/shaders/*.vert"
@@ -86,6 +91,9 @@ target_sources(Engine PRIVATE
 	Texture.hpp
 	Texture.cpp
 	Material.hpp
+	GameConfig.hpp
+	GameSerializer.hpp
+	GameSerializer.cpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 	../vendor/stb/stb_image.h
 	${SHADERS}

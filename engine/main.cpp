@@ -13,11 +13,17 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
+#include "GameSerializer.hpp"
 
 int main(int argc, char* argv[])
 {
 	engine::Logger::init();
 
+	auto game = engine::TestGame();
+
+	engine::GameSerializer::SerializeGame(game);
+
+	/*
 	engine::Window::getInstance().createWindow(800, 600, "Sweddes MAMMA PÅ PIZZA");
 
 	glewInit();
@@ -28,9 +34,10 @@ int main(int argc, char* argv[])
 
 	engine::Renderer::baseShader = std::unique_ptr<engine::Shader>(shader);
 
-	auto game = engine::TestGame();
+
 	game.initialize();
 	game.gameLoop();
+		*/
 
 	return 0;
 }

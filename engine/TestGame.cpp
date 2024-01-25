@@ -20,6 +20,8 @@ namespace engine {
 		// ----------------------------------------------------------
 		// CONSOLE OUTPUT
 		// ----------------------------------------------------------
+		/*
+
 		Bootstrap::getInstance().getDisplay().clear();
 
 		for (auto gameObject : gameObjects) {
@@ -35,7 +37,7 @@ namespace engine {
 		}
 
 		Bootstrap::getInstance().getDisplay().show();
-
+				*/
 		// ----------------------------------------------------------
 		// SDL WINDOW OUTPUT
 		// ----------------------------------------------------------

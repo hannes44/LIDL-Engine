@@ -5,6 +5,7 @@
 #include "Texture.hpp"
 #include <string>
 #include <map>
+#include "GameConfig.hpp"
 
 namespace engine
 {
@@ -27,6 +28,10 @@ namespace engine
 		std::map<std::string, std::shared_ptr<Texture>> textures{};
 
 		std::shared_ptr<Texture> loadTexture(const std::string& textureFileName);
+
+		std::string name = "Giga Game";
+
+		GameConfig config{};
 
 	protected:
 		// 0 is uncapped
