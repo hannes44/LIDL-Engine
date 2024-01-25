@@ -7,11 +7,9 @@
 
 namespace engine {
 
-    // Constructor
     InputEvent::InputEvent(float x, float y, float button, std::string key, const std::string& classification)
         : x(x), y(y), button(button), key(key), classification(classification) {}
 
-    // Getter functions
     float InputEvent::getX() const {
         return x;
     }
@@ -32,7 +30,6 @@ namespace engine {
         return classification;
     }
 
-    // Setter functions
     void InputEvent::setX(float x) {
         this->x = x;
     }

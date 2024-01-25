@@ -10,10 +10,8 @@ namespace engine {
 
     int InputListener::instanceCount = 0;
 
-    // Constructor
     InputListener::InputListener() : instance(instanceCount++) {}
 
-    // Getter for instance
     std::string InputListener::getInstance() const {
         return "Listener_" + std::to_string(instance);
     }

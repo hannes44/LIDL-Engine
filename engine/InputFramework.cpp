@@ -9,10 +9,8 @@
 
 namespace engine {
 
-    // Constructor
     InputFramework::InputFramework() : tick(0), timeInterval(1.0 / 60.0) {}
 
-    // Singleton
     InputFramework& InputFramework::getInstance() {
         static InputFramework instance;
         return instance;

@@ -15,17 +15,13 @@ namespace engine {
 
     class InputListener {
     public:
-        // Constructor
         InputListener();
 
-        // Function to handle input events
         virtual void handleInput(const InputEvent& event, const std::string& EventType) const;
 
-        // Getter for instance
         std::string getInstance() const;
 
     private:
-        // Data members
         static int instanceCount;
         int instance;
 
