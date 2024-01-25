@@ -12,7 +12,7 @@ namespace engine {
 
     class InputEvent {
     public:
-        InputEvent(float x, float y, float button, std::string key, const std::string& classification);
+        InputEvent(float x, float y, float button, const std::string key, const std::string& classification);
 
         float getX() const;
         float getY() const;
@@ -23,7 +23,7 @@ namespace engine {
         void setX(float x);
         void setY(float y);
         void setButton(float button);
-        void setKey(std::string key);
+        void setKey(const std::string key);
         void setClassification(const std::string& classification);
 
     private:
