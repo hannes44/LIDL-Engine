@@ -21,17 +21,13 @@ namespace engine {
 
         static InputFramework& getInstance();
 
-        // Override function from InputSystem
         void getInput() override;
 
-        // Function to initialize the input framework
         void initialize();
 
-        // Function to clean up resources
         void cleanup() override;
 
     private:
-        // Data members
         double tick;
         double timeInterval;
 
