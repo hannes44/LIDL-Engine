@@ -7,7 +7,7 @@
 
 namespace engine {
 
-    InputEvent::InputEvent(float x, float y, float button, const std::string key, const std::string& classification)
+    InputEvent::InputEvent(float x, float y, float button, const std::string& key, const std::string& classification)
         : x(x), y(y), button(button), key(key), classification(classification) {}
 
     float InputEvent::getX() const {
@@ -22,7 +22,7 @@ namespace engine {
         return button;
     }
 
-    std::string InputEvent::getKey() const {
+    const std::string& InputEvent::getKey() const {
         return key;
     }
 
@@ -42,7 +42,7 @@ namespace engine {
         this->button = button;
     }
 
-    void InputEvent::setKey(const std::string key) {
+    void InputEvent::setKey(const std::string& key) {
         this->key = key;
     }
 
