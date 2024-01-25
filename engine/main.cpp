@@ -27,17 +27,13 @@ int main(int argc, char* argv[])
 
 	auto game = engine::TestGame();
 	engine::GameSerializer::SerializeGame(game);
-	/*
 
-
-	engine::Shader* shader = engine::Shader::create("simple.vert", "simple.frag");
-
-	engine::Renderer::baseShader = std::unique_ptr<engine::Shader>(shader);
+	engine::Renderer::baseShader = engine::Shader::create("simple.vert", "simple.frag");
 
 
 	game.initialize();
 	game.gameLoop();
-			*/
+			
 
 	return 0;
 }

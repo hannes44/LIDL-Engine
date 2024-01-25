@@ -14,7 +14,7 @@ namespace engine
 		virtual void unbind() const = 0;
 		virtual void setData(const void* data, int size) = 0;
 
-		static VertexBuffer* create(float* vertices, int size);
+		static std::unique_ptr<VertexBuffer> create(float* vertices, int size);
 	};
 
 	class IndexBuffer
@@ -27,7 +27,7 @@ namespace engine
 		virtual void unbind() const = 0;
 		virtual int getCount() const = 0;
 
-		static IndexBuffer* create(unsigned int* indices, int count);
+		static std::unique_ptr<IndexBuffer> create(unsigned int* indices, int count);
 	};
 
 	class VertexArray
@@ -42,7 +42,7 @@ namespace engine
 		virtual std::vector<std::shared_ptr<VertexBuffer>> getVertexBuffers() const = 0;
 		virtual std::shared_ptr<IndexBuffer> getIndexBuffer() const = 0;
 
-		static VertexArray* create();
+		static std::unique_ptr<VertexArray> create();
 		GLuint vertexArrayId; // TODO abstract away
 	};
 }
