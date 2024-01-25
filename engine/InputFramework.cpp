@@ -19,7 +19,7 @@ namespace engine {
     // Read input from the SDL window
     void InputFramework::getInput() {
         SDL_Event ev;
-        InputEvent ie(0, 0, 0, "", "");  // Initialize with default values
+        InputEvent ie(0, 0, 0, "");  // Initialize with default values
 
         tick += Bootstrap::getInstance().getDeltaTime();
 
