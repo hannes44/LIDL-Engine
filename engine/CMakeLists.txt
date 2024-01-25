@@ -64,6 +64,16 @@ target_sources(Engine PRIVATE
 	MeshComponent.hpp
 	MeshComponent.cpp
 	Vertex.hpp
+	InputEvent.hpp
+	InputEvent.cpp
+	InputListener.hpp
+	InputListener.cpp
+	InputSystem.hpp
+	InputSystem.cpp
+	InputFramework.hpp
+	InputFramework.cpp
+	Cube.hpp
+	Cube.cpp
 	Renderer.hpp
 	Renderer.cpp
 	GraphicsAPI.hpp
@@ -90,4 +100,5 @@ target_sources(Engine PRIVATE
 	../vendor/stb/stb_image.h
 	${SHADERS}
 )
+
 target_link_libraries(Engine PRIVATE vendor)
