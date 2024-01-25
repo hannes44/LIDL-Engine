@@ -26,6 +26,7 @@ source_group("OpenGL" FILES
 	OpenGLBuffer.hpp
 	OpenGLBuffer.cpp
 	OpenGLTexture.hpp
+	OpenGLTexture.cpp
 )
 
 # Find *all* shaders.
@@ -73,6 +74,7 @@ target_sources(Engine PRIVATE
 	OpenGLShader.hpp
 	OpenGLShader.cpp
 	OpenGLTexture.hpp
+	OpenGLTexture.cpp
 	Buffer.hpp
 	Buffer.cpp
 	Shader.hpp
@@ -82,8 +84,10 @@ target_sources(Engine PRIVATE
 	Camera.hpp
 	Camera.cpp
 	Texture.hpp
+	Texture.cpp
 	Material.hpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
+	../vendor/stb/stb_image.h
 	${SHADERS}
 )
 target_link_libraries(Engine PRIVATE vendor)

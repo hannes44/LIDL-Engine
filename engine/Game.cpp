@@ -21,4 +21,13 @@ namespace engine {
 			GameObjectManager::getInstance().update();
 		}
 	}
+	std::shared_ptr<Texture> Game::loadTexture(const std::string& textureFileName)
+	{
+		if (textures.count(textureFileName))
+			return textures[textureFileName];
+
+		std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(Texture::create(textureFileName));
+		textures[textureFileName] = texture;
+		return texture;
+	}
 }

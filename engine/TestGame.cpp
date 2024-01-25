@@ -50,6 +50,8 @@ namespace engine {
 		engine::MeshComponent meshComponent2 = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
 		engine::PointLightComponent pointLightComponent = engine::PointLightComponent();
 
+		meshComponent2.material.diffuseTexture = loadTexture("bompaspy.png");
+
 		GameObject* sphere1 = new GameObject();
 		sphere1->transform.setScale(glm::vec3(2, 2, 2));
 		sphere1->transform.setPosition(glm::vec3(10, 10, 0));
@@ -57,7 +59,7 @@ namespace engine {
 		gameObjects.push_back(sphere1);
 
 		GameObject* sphere2 = new GameObject();
-		sphere2->transform.setScale(glm::vec3(1, 1, 1));
+		sphere2->transform.setScale(glm::vec3(15, 15, 15));
 		sphere2->transform.setPosition(glm::vec3(15, 10, 0));
 		sphere2->components.push_back(std::make_unique<engine::MeshComponent>(meshComponent2));
 		gameObjects.push_back(sphere2);

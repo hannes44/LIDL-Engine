@@ -15,3 +15,6 @@
 	path = vendor/glew-cmake
 	url = https://github.com/Perlmint/glew-cmake.git
 
+[submodule "vendor/stb"]
+	path = vendor/stb
+	url = https://github.com/nothings/stb.git
