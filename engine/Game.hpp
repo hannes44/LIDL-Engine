@@ -6,6 +6,8 @@
 #include <string>
 #include <map>
 #include "GameConfig.hpp"
+#include "Material.hpp"
+#include "GameObject.hpp"
 
 namespace engine
 {
@@ -25,7 +27,14 @@ namespace engine
 		// Currenly limit the game to only one camera
 		Camera camera{};
 
+		// Texture Id to Texture
 		std::map<std::string, std::shared_ptr<Texture>> textures{};
+
+		// GameObject Id to GameObject
+		std::map<std::string, std::shared_ptr<GameObject>> gameObjects{};
+
+		// Material Id to Material
+		std::map<std::string, std::shared_ptr<Material>> materials{};
 
 		std::shared_ptr<Texture> loadTexture(const std::string& textureFileName);
 

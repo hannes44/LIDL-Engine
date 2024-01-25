@@ -1,5 +1,20 @@
 GameObjects:
-  - name: GameObject1
-    position: 1,1,1
-  - name: GameObject1
-    position: 1,1,1
+  - name: GameObject
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+    isVisible: true
+    Id: ID TODO Add when implemented
+  - name: GameObject
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+    isVisible: true
+    Id: ID TODO Add when implemented
+Textures:
+  - name: bompaspy
+    fileName: bompaspy.png
+    Id: ID TODO Add when implemented
+Materials:
+  - name: Default Material
+    transparency: 1
+    emission: 0
+    roughness: 0
+    shininess: 0.5
+    Id: ID TODO Add when implemented

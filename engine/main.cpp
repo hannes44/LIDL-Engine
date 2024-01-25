@@ -19,16 +19,16 @@ int main(int argc, char* argv[])
 {
 	engine::Logger::init();
 
-	auto game = engine::TestGame();
-
-	engine::GameSerializer::SerializeGame(game);
-
-	/*
 	engine::Window::getInstance().createWindow(800, 600, "Sweddes MAMMA PÅ PIZZA");
 
+	engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
+	
 	glewInit();
 
-	engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
+	auto game = engine::TestGame();
+	engine::GameSerializer::SerializeGame(game);
+	/*
+
 
 	engine::Shader* shader = engine::Shader::create("simple.vert", "simple.frag");
 
@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 
 	game.initialize();
 	game.gameLoop();
-		*/
+			*/
 
 	return 0;
 }
