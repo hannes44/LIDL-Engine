@@ -51,7 +51,7 @@ namespace engine {
 
 		gui.renderNewFrame();
 
-		Renderer::renderGame(this, &camera);
+		Renderer::renderGame(this, &camera, &renderingSettings);
 		
 		gui.endFrame();
 

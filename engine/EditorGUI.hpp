@@ -5,6 +5,7 @@
 #include "Window.hpp"
 #include "Game.hpp"
 #include "../vendor/ImGuizmo/ImGuizmo.h"
+#include "RendererSettings.hpp"
 
 namespace engine
 {
@@ -50,6 +51,8 @@ namespace engine
 
 		void drawInspectorSelectedGameObject();
 
+		void drawGameSettingsTab();	
+
 		Window& window;
 
 		std::weak_ptr<Selectable> selectedObject;
@@ -63,5 +66,7 @@ namespace engine
 		ActiveViewPort activeViewPort = ActiveViewPort::Scene;
 
 		Camera* getActiveCamera();
+
+		RendererSettings rendererSettings{};
 	};
 }

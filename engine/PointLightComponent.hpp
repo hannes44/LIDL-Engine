@@ -10,5 +10,7 @@ namespace engine
 		glm::vec3 color{1, 1, 1};
 
 		float intensity = 10;
+
+		std::string getName() override { return "PointLight"; };
 	};
 }

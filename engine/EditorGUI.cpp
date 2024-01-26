@@ -7,6 +7,7 @@
 #include "TestGame.hpp"
 #include "Renderer.hpp"
 #include "Logger.hpp"
+#include "RendererSettings.hpp"
 
 namespace engine
 {
@@ -42,7 +43,7 @@ namespace engine
 			renderNewFrame();
 			InputFramework::getInstance().getInput();
 
-			Renderer::renderGame(game, getActiveCamera());
+			Renderer::renderGame(game, getActiveCamera(), &rendererSettings);
 
 			endFrame();
 			window.newFrame();
@@ -163,6 +164,10 @@ namespace engine
 					drawInspectorSelectedGameObject();
 				}
 
+			}
+			else
+			{
+				drawGameSettingsTab();
 			}
 
 			ImGui::EndTabBar();
@@ -429,23 +434,55 @@ namespace engine
 		if (auto lockedSelectedObject = selectedObject.lock())
 		{
 			if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
-			{
+			{ 
 				ImGui::Text("Name: ");
-
-				float matrixTranslation[3], matrixRotation[3], matrixScale[3];
-				ImGuizmo::DecomposeMatrixToComponents(&(lockedGameObject->transform.transformMatrix[0][0]), matrixTranslation, matrixRotation, matrixScale);
-
-				ImGui::InputFloat3("Translation", matrixTranslation);
-				ImGui::InputFloat3("Rotation", matrixRotation);
-				ImGui::InputFloat3("Scale", matrixScale);
-
-				ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, &(lockedGameObject->transform.transformMatrix[0][0]));
 				//	ImGui::SameLine();
 				//	strcpy(selectedItemNameBuffer, selectedItem.lock()->getName().c_str());
 				//	ImGui::InputText("##selectedItemNameInput", selectedItemNameBuffer, 255);
 				//	selectedItemNameBuffer, selectedItem.lock()->getName() = selectedItemNameBuffer;
+
+				// Since all gameobjects have a transform, we can always draw the transform
+				if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
+				{
+					float matrixTranslation[3], matrixRotation[3], matrixScale[3];
+					ImGuizmo::DecomposeMatrixToComponents(&(lockedGameObject->transform.transformMatrix[0][0]), matrixTranslation, matrixRotation, matrixScale);
+
+					ImGui::InputFloat3("Translation", matrixTranslation);
+					ImGui::InputFloat3("Rotation", matrixRotation);
+					ImGui::InputFloat3("Scale", matrixScale);
+
+					ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, &(lockedGameObject->transform.transformMatrix[0][0]));
+				}
+
+			
+				for (auto component : lockedGameObject->components)
+				{
+					if (ImGui::CollapsingHeader(component->getName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+					{
+					}
+				}
+			
+			
 			}
 		}	
+	}
+	void EditorGUI::drawGameSettingsTab()
+	{
+		ImGui::Text("Application FPS: %.1f", ImGui::GetIO().Framerate);
+		ImGui::Separator();
+		ImGui::Text("Editor Settings");
+		ImGui::Text("RENDERING SETTINGS");
+		ImGui::Checkbox("Multisampling", &rendererSettings.useMultiSampling);
+		ImGui::Checkbox("Show Triangle outlines", &rendererSettings.drawWireframe);
+		ImGui::Checkbox("Depth Test", &rendererSettings.enableDepthTest);
+		ImGui::Checkbox("Face Culling", &rendererSettings.enableFaceCulling);
+		ImGui::Separator();
+
+
+		ImGui::Text("Game Settings");
+		ImGui::Separator();
+
+		ImGui::Text("Game Name: ");
 	}
 	Camera* EditorGUI::getActiveCamera()
 	{

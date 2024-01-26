@@ -14,13 +14,20 @@
 
 namespace engine
 {
-	void Renderer::renderGame(Game* game, Camera* camera)
+	void Renderer::renderGame(Game* game, Camera* camera, RendererSettings* renderingSettings)
 	{
 		graphicsAPI->setClearColor(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
-		graphicsAPI->setCullFace(false);
+		graphicsAPI->setCullFace(renderingSettings->enableFaceCulling);
 
-		graphicsAPI->setDepthTest(true);
+		graphicsAPI->setDepthTest(renderingSettings->enableDepthTest);
+
+		graphicsAPI->setDrawTriangleOutline(renderingSettings->drawWireframe);
+
+		if (renderingSettings->useMultiSampling)
+			glEnable(GL_MULTISAMPLE);
+		else 
+			glDisable(GL_MULTISAMPLE);
 
 		baseShader->bind();
 
