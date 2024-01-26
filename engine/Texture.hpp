@@ -18,8 +18,8 @@ namespace engine
 		// TODO: abstract away
 		GLuint textureIDOpenGL;
 
-		std::string name;
+		std::string name = "Texture";
 
-		std::string filename;
+		std::string filename = "";
 	};
 }

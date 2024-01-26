@@ -29,6 +29,12 @@ source_group("OpenGL" FILES
 	OpenGLTexture.cpp
 )
 
+
+source_group("Serializer" FILES
+	GameSerializer.hpp
+	GameSerializer.cpp
+)
+
 source_group("SDL" FILES
 	SDLWindow.hpp
 	SDLWindow.cpp
@@ -101,6 +107,9 @@ target_sources(Engine PRIVATE
 	Texture.hpp
 	Texture.cpp
 	Material.hpp
+	GameConfig.hpp
+	GameSerializer.hpp
+	GameSerializer.cpp
 	SDLWindow.hpp
 	SDLWindow.cpp
 	../vendor/tinyobjloader/tiny_obj_loader.h

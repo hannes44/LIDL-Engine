@@ -4,12 +4,12 @@
 
 namespace engine
 {
-	Shader* Shader::create(const std::string& vertName, const std::string& fragName)
+	std::unique_ptr<Shader> Shader::create(const std::string& vertName, const std::string& fragName)
 	{
 		switch (Renderer::getAPIType())
 		{
 		case GraphicsAPIType::OpenGL:
-			return new OpenGLShader(vertName, fragName);
+			return std::make_unique<OpenGLShader>(vertName, fragName);
 		default:
 			return nullptr;
 		}
