@@ -43,8 +43,6 @@ source_group("SDL" FILES
 source_group("Editor" FILES
 	EditorGUI.hpp
 	EditorGUI.cpp
-	Editor.hpp
-	Editor.cpp
 )
 
 # Find *all* shaders.
@@ -121,8 +119,6 @@ target_sources(Engine PRIVATE
 	SDLWindow.cpp
 	EditorGUI.hpp
 	EditorGUI.cpp
-	Editor.hpp
-	Editor.cpp
 	Uuid.hpp
 	Uuid.cpp
 	../vendor/tinyobjloader/tiny_obj_loader.h

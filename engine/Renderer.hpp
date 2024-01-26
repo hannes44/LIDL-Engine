@@ -10,7 +10,7 @@ namespace engine
 	class Renderer
 	{
 	public:
-		static void renderGame(Game* game, Camera& camera);
+		static void renderGame(Game* game, Camera* camera);
 
 		static void initGraphicsAPI(GraphicsAPIType type);
 

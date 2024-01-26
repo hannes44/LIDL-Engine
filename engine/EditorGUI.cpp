@@ -3,6 +3,10 @@
 #include "Game.hpp"
 #include "../vendor/ImGuizmo/ImGuizmo.h"
 #include <glm/gtc/type_ptr.hpp>
+#include "InputFramework.hpp"
+#include "TestGame.hpp"
+#include "Renderer.hpp"
+#include "Logger.hpp"
 
 namespace engine
 {
@@ -16,7 +20,33 @@ namespace engine
 
 	void EditorGUI::start()
 	{
+		engine::Logger::init();
+		LOG_INFO("Starting Editor");
 
+		Window& window = Window::getInstance();
+		window.createWindow(1280, 720, "Editor");
+
+		glewInit();
+
+		engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
+
+		game = new TestGame();
+
+		game->initialize(); // Temporary for testing, should not be called when serialization works
+		game->camera.translate(0, 0, 5);
+
+		engine::Renderer::baseShader = engine::Shader::create("simple.vert", "simple.frag");
+
+		while (true)
+		{
+			renderNewFrame();
+			InputFramework::getInstance().getInput();
+
+			Renderer::renderGame(game, getActiveCamera());
+
+			endFrame();
+			window.newFrame();
+		}
 	}
 
 	void EditorGUI::renderNewFrame()
@@ -304,29 +334,54 @@ namespace engine
 		{
 			if (ImGui::BeginTabItem("Scene"))
 			{
+				activeViewPort = ActiveViewPort::Scene;
 				ImGui::EndTabItem();
 			}
+
 			if (ImGui::BeginTabItem("Game"))
 			{
+				activeViewPort = ActiveViewPort::Game;
 				ImGui::EndTabItem();
 			}
 
 			ImGui::EndTabBar();
 		}
+
 		ImGui::SameLine();
 		ImGui::Dummy(ImVec2(150.0f, 20.0f));
 		ImGui::SameLine();
 
+		bool pushedStyleColor = false;
+		if (sceneState == EditorSceneState::Play)
+		{
+			ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 0, 100, 255));
+			pushedStyleColor = true;
+		}
 		if (ImGui::Button("Play"))
 		{
-			
+			sceneState = EditorSceneState::Play;
+
+		}
+		if (sceneState == EditorSceneState::Play && pushedStyleColor)
+		{
+			ImGui::PopStyleColor();
 		}
 
 		ImGui::SameLine();
 
+		pushedStyleColor = false;
+		if (sceneState == EditorSceneState::Scene)
+		{
+			ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 0, 100, 255));
+			pushedStyleColor = true;
+		}
 		if (ImGui::Button("Stop"))
 		{
-
+			sceneState = EditorSceneState::Scene;
+		}
+		if (sceneState == EditorSceneState::Scene && pushedStyleColor)
+		{
+			ImGui::PopStyleColor();
 		}
 
 		ImGui::End();
@@ -334,6 +389,10 @@ namespace engine
 
 	void EditorGUI::drawGuizmos()
 	{
+		// Only draw guizmos in scene view
+		if (activeViewPort != ActiveViewPort::Scene)
+			return;
+
 		bool shouldDrawGuizmos = false;
 
 		float* modelMatrixPtr = nullptr;
@@ -355,11 +414,11 @@ namespace engine
 			window.getWindowSize(&windowWidth, &windowHeight);
 			ImGuizmo::SetRect(0, 0, windowWidth, windowHeight);
 
-			glm::mat4 cameraView = game->camera.getViewMatrix();
+			glm::mat4 cameraView = getActiveCamera()->getViewMatrix();
 
 			float aspectRatio = float(windowWidth) / float(windowHeight);
 
-			glm::mat4 projectionMatrix = game->camera.getProjectionMatrix();
+			glm::mat4 projectionMatrix = getActiveCamera()->getProjectionMatrix();
 
 			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(projectionMatrix), guizmoOperation, ImGuizmo::WORLD, modelMatrixPtr);
 		}
@@ -387,5 +446,13 @@ namespace engine
 				//	selectedItemNameBuffer, selectedItem.lock()->getName() = selectedItemNameBuffer;
 			}
 		}	
+	}
+	Camera* EditorGUI::getActiveCamera()
+	{
+		if (activeViewPort == ActiveViewPort::Scene)
+			return &editorCamera;
+		else 
+			return &game->camera;
+
 	}
 }

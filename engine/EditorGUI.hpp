@@ -8,6 +8,19 @@
 
 namespace engine
 {
+	enum class EditorSceneState
+	{
+		Scene, // While in scene state, run no game logic
+		Play,  // While in play state, run all game logic
+		Pause  // While in pause state, pause the active game loop
+	};
+
+	enum class ActiveViewPort
+	{
+		Scene,
+		Game
+	};
+
 	class EditorGUI
 	{
 	public:
@@ -42,5 +55,13 @@ namespace engine
 		std::weak_ptr<Selectable> selectedObject;
 
 		ImGuizmo::OPERATION guizmoOperation = ImGuizmo::TRANSLATE;
+
+		Camera editorCamera{};
+
+		EditorSceneState sceneState = EditorSceneState::Scene;
+
+		ActiveViewPort activeViewPort = ActiveViewPort::Scene;
+
+		Camera* getActiveCamera();
 	};
 }
