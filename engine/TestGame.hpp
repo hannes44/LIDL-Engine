@@ -1,6 +1,7 @@
 #include "Game.hpp"
 #include "GameObject.hpp"
 #include <vector>
+#include "EditorGUI.hpp"
 
 namespace engine {
 	class TestGame : public Game {
@@ -11,5 +12,7 @@ namespace engine {
 	protected:
 		double getTargetFrameRate() override;
 		std::vector<GameObject*> gameObjects{};
+
+		EditorGUI gui {};
 	};
 }

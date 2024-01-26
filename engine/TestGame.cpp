@@ -14,9 +14,10 @@
 #include <glm/gtx/transform.hpp>
 #include "PointLightComponent.hpp"
 
+
 namespace engine {
 	double TestGame::getTargetFrameRate() {
-		return 1;
+		return 0;
 	}
 
 	void TestGame::update() {
@@ -48,8 +49,12 @@ namespace engine {
 		// SDL WINDOW OUTPUT
 		// ----------------------------------------------------------
 
+		gui.renderNewFrame();
+
 		Renderer::renderGame(gameObjects, camera);
 		
+		gui.endFrame();
+
 		Window::getInstance().newFrame();
 	}
 
