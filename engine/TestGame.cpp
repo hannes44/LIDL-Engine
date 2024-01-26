@@ -1,5 +1,8 @@
 #include <iostream>
+#include "InputFramework.hpp"
+#include "Window.hpp"
 #include "Game.hpp"
+#include "Cube.hpp"
 #include "GameObject.hpp"
 #include "TestGame.hpp"
 #include "Bootstrap.hpp"
@@ -17,6 +20,9 @@ namespace engine {
 	}
 
 	void TestGame::update() {
+
+		InputFramework::getInstance().getInput();
+	
 		// ----------------------------------------------------------
 		// CONSOLE OUTPUT
 		// ----------------------------------------------------------
@@ -48,6 +54,10 @@ namespace engine {
 	}
 
 	void TestGame::initialize() {
+		// Initialize the InputFramework and InputSystem
+		InputFramework::getInstance().initialize();
+
+
 		engine::MeshComponent meshComponent1 = engine::MeshComponent::loadMeshFromOBJFile("amugus.obj");
 		engine::MeshComponent meshComponent2 = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
 		engine::PointLightComponent pointLightComponent = engine::PointLightComponent();
