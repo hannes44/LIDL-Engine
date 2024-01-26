@@ -1,6 +1,7 @@
 #include "EditorGUI.hpp"
 #include "Window.hpp"
 #include "Game.hpp"
+#include "../vendor/ImGuizmo/ImGuizmo.h"
 
 
 namespace engine
@@ -18,6 +19,7 @@ namespace engine
 		ImGui_ImplSDL3_NewFrame();
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
 
 		#if defined(_DEBUG) && IMGUI_SHOW_DEMO_WINDOWS 
 			ImGui::ShowDemoWindow();
@@ -282,10 +284,19 @@ namespace engine
 
 	void EditorGUI::drawInspectorSelectedGameObject()
 	{
-//		GameObject* gameObject = dynamic_cast<GameObject*>(selectedObject.lock());
+		GameObject* gameObject = dynamic_cast<GameObject*>(selectedObject.lock().get());
 
 
 		ImGui::Text("Name: ");
+
+		float matrixTranslation[3], matrixRotation[3], matrixScale[3];
+		ImGuizmo::DecomposeMatrixToComponents(&(gameObject->transform.transformMatrix[0][0]), matrixTranslation, matrixRotation, matrixScale);
+
+		ImGui::InputFloat3("Translation", matrixTranslation);
+		ImGui::InputFloat3("Rotation", matrixRotation);
+		ImGui::InputFloat3("Scale", matrixScale);
+
+		ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, &(gameObject->transform.transformMatrix[0][0]));
 	//	ImGui::SameLine();
 	//	strcpy(selectedItemNameBuffer, selectedItem.lock()->getName().c_str());
 	//	ImGui::InputText("##selectedItemNameInput", selectedItemNameBuffer, 255);

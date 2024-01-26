@@ -127,6 +127,8 @@ target_sources(Engine PRIVATE
 	Uuid.cpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 	../vendor/stb/stb_image.h
+	../vendor/ImGuizmo/ImGuizmo.h
+	../vendor/ImGuizmo/ImGuizmo.cpp
 	${SHADERS}
 )
 

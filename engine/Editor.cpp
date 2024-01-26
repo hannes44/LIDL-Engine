@@ -32,6 +32,8 @@ namespace engine
 
 		engine::Renderer::baseShader = engine::Shader::create("simple.vert", "simple.frag");
 
+
+
 		while (true)
 		{
 			gui.renderNewFrame();
