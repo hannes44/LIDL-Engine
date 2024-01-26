@@ -17,6 +17,8 @@
 #include <imgui.h>
 #include <stdio.h>
 #include <SDL3/SDL.h>
+#include <imgui_impl_sdl3.h>
+#include <imgui_impl_opengl3.h>
 
 
 int main(int argc, char* argv[])
