@@ -14,6 +14,11 @@ namespace engine
 		
 	}
 
+	void EditorGUI::start()
+	{
+
+	}
+
 	void EditorGUI::renderNewFrame()
 	{
 		ImGui_ImplSDL3_NewFrame();
@@ -36,7 +41,7 @@ namespace engine
 			drawRightSidePanel();
 			drawLeftSidePanel();
 			drawTopMenu();
-			drawGuizmos();
+			drawPlayButtonToolbar();
 		}
 	}
 
@@ -71,10 +76,9 @@ namespace engine
 	{
 		int w, h;
 		window.getWindowSize(&w, &h);
-		ImGui::SetNextWindowPos({ 0, 0 });
-		ImGui::SetNextWindowSize(ImVec2(w, h));
 
 		ImGuiWindowFlags windowFlags = 0;
+
 		windowFlags |= ImGuiWindowFlags_NoBackground;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 		windowFlags |= ImGuiWindowFlags_NoMove;
@@ -277,6 +281,55 @@ namespace engine
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
+	}
+
+	// TODO: Style this, only for functionality currently
+	void EditorGUI::drawPlayButtonToolbar()
+	{
+		int w, h;
+		window.getWindowSize(&w, &h);
+		int panelWidth = w / 5;
+		ImGui::SetNextWindowPos(ImVec2(panelWidth, IMGUI_TOP_MENU_HEIGHT));
+		ImGui::SetNextWindowSize(ImVec2(w - panelWidth * 2, 30));
+
+		ImGuiWindowFlags windowFlags = 0;
+		windowFlags |= ImGuiWindowFlags_NoMove;
+		windowFlags |= ImGuiWindowFlags_NoResize;
+		windowFlags |= ImGuiWindowFlags_NoScrollbar;
+		windowFlags |= ImGuiWindowFlags_NoTitleBar;
+
+		ImGui::Begin("##Playbutton", nullptr, windowFlags);
+
+		if (ImGui::BeginTabBar("##BottomTabs", ImGuiTabBarFlags_None))
+		{
+			if (ImGui::BeginTabItem("Scene"))
+			{
+				ImGui::EndTabItem();
+			}
+			if (ImGui::BeginTabItem("Game"))
+			{
+				ImGui::EndTabItem();
+			}
+
+			ImGui::EndTabBar();
+		}
+		ImGui::SameLine();
+		ImGui::Dummy(ImVec2(150.0f, 20.0f));
+		ImGui::SameLine();
+
+		if (ImGui::Button("Play"))
+		{
+			
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Stop"))
+		{
+
+		}
+
+		ImGui::End();
 	}
 
 	void EditorGUI::drawGuizmos()

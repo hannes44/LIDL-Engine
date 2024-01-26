@@ -13,6 +13,8 @@ namespace engine
 	public:
 		EditorGUI();
 
+		void start();
+
 		void renderNewFrame();
 
 		void endFrame();
@@ -29,6 +31,8 @@ namespace engine
 
 		void drawTopMenu();
 
+		void drawPlayButtonToolbar();
+
 		void drawGuizmos();
 
 		void drawInspectorSelectedGameObject();
@@ -38,6 +42,5 @@ namespace engine
 		std::weak_ptr<Selectable> selectedObject;
 
 		ImGuizmo::OPERATION guizmoOperation = ImGuizmo::TRANSLATE;
-
 	};
 }
