@@ -14,7 +14,7 @@
 
 namespace engine
 {
-	void Renderer::renderGame(Game* game)
+	void Renderer::renderGame(Game* game, Camera& camera)
 	{
 		graphicsAPI->setClearColor(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
@@ -24,8 +24,8 @@ namespace engine
 
 		baseShader->bind();
 
-		glm::mat4 projectionMatrix = game->camera.getProjectionMatrix();
-		glm::mat4 viewMatrix = game->camera.getViewMatrix();
+		glm::mat4 projectionMatrix = camera.getProjectionMatrix();
+		glm::mat4 viewMatrix = camera.getViewMatrix();
 
 
 		int lightIndex = 0;
@@ -53,7 +53,7 @@ namespace engine
 		}
 
 		baseShader->setInt("numLights", lightIndex);
-		baseShader->setVec3("viewPos", game->camera.translation.x, game->camera.translation.y, game->camera.translation.z);
+		baseShader->setVec3("viewPos", camera.translation.x, game->camera.translation.y, game->camera.translation.z);
 
 
 		for (const auto& [gameObjectId, gameObject] : game->gameObjects)

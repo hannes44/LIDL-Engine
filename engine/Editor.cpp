@@ -39,7 +39,7 @@ namespace engine
 			gui.renderNewFrame();
 			InputFramework::getInstance().getInput();
 
-			Renderer::renderGame(game);
+			Renderer::renderGame(game, editorCamera);
 
 			gui.endFrame();
 			window.newFrame();

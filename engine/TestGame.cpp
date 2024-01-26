@@ -51,7 +51,7 @@ namespace engine {
 
 		gui.renderNewFrame();
 
-		Renderer::renderGame(this);
+		Renderer::renderGame(this, camera);
 		
 		gui.endFrame();
 
@@ -73,17 +73,20 @@ namespace engine {
 		sphere1->transform.setScale(glm::vec3(2, 2, 2));
 		sphere1->transform.setPosition(glm::vec3(10, 10, 0));
 		sphere1->components.push_back(std::make_unique<engine::MeshComponent>(meshComponent1));
+		sphere1->name = "SIGMA AMUGUS";
 		addGameObject(std::unique_ptr<GameObject>(sphere1));
 
 		GameObject* sphere2 = new GameObject();
 		sphere2->transform.setScale(glm::vec3(15, 15, 15));
 		sphere2->transform.setPosition(glm::vec3(15, 10, 0));
 		sphere2->components.push_back(std::make_unique<engine::MeshComponent>(meshComponent2));
+		sphere2->name = "BOMPASPY";
 		addGameObject(std::unique_ptr<GameObject>(sphere2));
 
 		GameObject* light = new GameObject();
 		light->transform.setPosition(glm::vec3(0, 20, 0));
 		light->components.push_back(std::make_unique<engine::PointLightComponent>(pointLightComponent));
+		light->name = "Light";
 		addGameObject(std::unique_ptr<GameObject>(light));
 	}
 }

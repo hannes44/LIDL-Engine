@@ -4,6 +4,7 @@
 #include <imgui_impl_sdl3.h>
 #include "Window.hpp"
 #include "Game.hpp"
+#include "../vendor/ImGuizmo/ImGuizmo.h"
 
 namespace engine
 {
@@ -35,6 +36,8 @@ namespace engine
 		Window& window;
 
 		std::weak_ptr<Selectable> selectedObject;
+
+		ImGuizmo::OPERATION guizmoOperation = ImGuizmo::TRANSLATE;
 
 	};
 }

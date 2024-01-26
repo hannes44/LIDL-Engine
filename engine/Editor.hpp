@@ -1,4 +1,5 @@
 #pragma once
+#include "Camera.hpp"
 
 namespace engine
 {
@@ -8,5 +9,7 @@ namespace engine
 		Editor();
 
 		void start();
+
+		Camera editorCamera{};
 	};
 }

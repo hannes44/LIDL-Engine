@@ -2,12 +2,12 @@
 #include "Window.hpp"
 #include "Game.hpp"
 #include "../vendor/ImGuizmo/ImGuizmo.h"
-
+#include <glm/gtc/type_ptr.hpp>
 
 namespace engine
 {
 #define IMGUI_TOP_MENU_HEIGHT 18
-#define IMGUI_SHOW_DEMO_WINDOWS true
+#define IMGUI_SHOW_DEMO_WINDOWS false
 
 	EditorGUI::EditorGUI() : window(Window::getInstance())
 	{
@@ -36,6 +36,7 @@ namespace engine
 			drawRightSidePanel();
 			drawLeftSidePanel();
 			drawTopMenu();
+			drawGuizmos();
 		}
 	}
 
@@ -280,6 +281,35 @@ namespace engine
 
 	void EditorGUI::drawGuizmos()
 	{
+		bool shouldDrawGuizmos = false;
+
+		float* modelMatrixPtr = nullptr;
+		if (auto lockedSelectedObject = selectedObject.lock())
+		{
+			if (dynamic_cast<GameObject*>(lockedSelectedObject.get()))
+			{
+				shouldDrawGuizmos = true;
+				modelMatrixPtr = &(dynamic_cast<GameObject*>(lockedSelectedObject.get())->transform.transformMatrix[0][0]);
+			}
+		}
+
+		if (shouldDrawGuizmos)
+		{
+			ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetDrawlist();
+
+			int windowWidth, windowHeight;
+			window.getWindowSize(&windowWidth, &windowHeight);
+			ImGuizmo::SetRect(0, 0, windowWidth, windowHeight);
+
+			glm::mat4 cameraView = game->camera.getViewMatrix();
+
+			float aspectRatio = float(windowWidth) / float(windowHeight);
+
+			glm::mat4 projectionMatrix = game->camera.getProjectionMatrix();
+
+			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(projectionMatrix), guizmoOperation, ImGuizmo::WORLD, modelMatrixPtr);
+		}
 	}
 
 	void EditorGUI::drawInspectorSelectedGameObject()
