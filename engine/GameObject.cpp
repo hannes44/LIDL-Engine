@@ -8,6 +8,11 @@ namespace engine {
 		}
 	}
 
+	UUID GameObject::getUUID()
+	{
+		return uuid;
+	}
+
 	void GameObject::update() {
 		for (auto& component : components) {
 			component->update();

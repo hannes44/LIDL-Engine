@@ -36,11 +36,13 @@ namespace engine
 		// Material Id to Material
 		std::map<std::string, std::shared_ptr<Material>> materials{};
 
-		std::shared_ptr<Texture> loadTexture(const std::string& textureFileName);
+		std::weak_ptr<Texture> loadTexture(const std::string& textureFileName);
 
 		std::string name = "Giga Game";
 
 		GameConfig config{};
+
+		void addGameObject(std::unique_ptr<GameObject> gameObject);
 
 	protected:
 		// 0 is uncapped

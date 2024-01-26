@@ -4,13 +4,29 @@
 #include <imgui_impl_sdl3.h>
 #include "Window.hpp"
 #include "Game.hpp"
+#include "../vendor/ImGuizmo/ImGuizmo.h"
 
 namespace engine
 {
+	enum class EditorSceneState
+	{
+		Scene, // While in scene state, run no game logic
+		Play,  // While in play state, run all game logic
+		Pause  // While in pause state, pause the active game loop
+	};
+
+	enum class ActiveViewPort
+	{
+		Scene,
+		Game
+	};
+
 	class EditorGUI
 	{
 	public:
 		EditorGUI();
+
+		void start();
 
 		void renderNewFrame();
 
@@ -28,11 +44,24 @@ namespace engine
 
 		void drawTopMenu();
 
+		void drawPlayButtonToolbar();
+
 		void drawGuizmos();
+
+		void drawInspectorSelectedGameObject();
 
 		Window& window;
 
-		GameObject* selectedObject = nullptr;
+		std::weak_ptr<Selectable> selectedObject;
 
+		ImGuizmo::OPERATION guizmoOperation = ImGuizmo::TRANSLATE;
+
+		Camera editorCamera{};
+
+		EditorSceneState sceneState = EditorSceneState::Scene;
+
+		ActiveViewPort activeViewPort = ActiveViewPort::Scene;
+
+		Camera* getActiveCamera();
 	};
 }

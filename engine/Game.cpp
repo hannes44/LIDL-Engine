@@ -21,7 +21,7 @@ namespace engine {
 			GameObjectManager::getInstance().update();
 		}
 	}
-	std::shared_ptr<Texture> Game::loadTexture(const std::string& textureFileName)
+	std::weak_ptr<Texture> Game::loadTexture(const std::string& textureFileName)
 	{
 		if (textures.count(textureFileName))
 			return textures[textureFileName];
@@ -29,5 +29,10 @@ namespace engine {
 		std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(Texture::create(textureFileName));
 		textures[textureFileName] = texture;
 		return texture;
+	}
+
+	void Game::addGameObject(std::unique_ptr<GameObject> gameObject)
+	{
+		gameObjects[gameObject->uuid.id] = std::move(gameObject);
 	}
 }
