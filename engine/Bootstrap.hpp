@@ -17,6 +17,9 @@ namespace engine
 
 		Display& getDisplay();
 
+		static double getDeltaTime();
+
+    
 	protected:
 		Bootstrap() {};
 

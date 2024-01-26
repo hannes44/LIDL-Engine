@@ -29,6 +29,11 @@ source_group("OpenGL" FILES
 	OpenGLTexture.cpp
 )
 
+source_group("SDL" FILES
+	SDLWindow.hpp
+	SDLWindow.cpp
+)
+
 # Find *all* shaders.
 file(GLOB_RECURSE SHADERS
     "${CMAKE_CURRENT_SOURCE_DIR}/shaders/*.vert"
@@ -64,6 +69,16 @@ target_sources(Engine PRIVATE
 	MeshComponent.hpp
 	MeshComponent.cpp
 	Vertex.hpp
+	InputEvent.hpp
+	InputEvent.cpp
+	InputListener.hpp
+	InputListener.cpp
+	InputSystem.hpp
+	InputSystem.cpp
+	InputFramework.hpp
+	InputFramework.cpp
+	Cube.hpp
+	Cube.cpp
 	Renderer.hpp
 	Renderer.cpp
 	GraphicsAPI.hpp
@@ -86,6 +101,8 @@ target_sources(Engine PRIVATE
 	Texture.hpp
 	Texture.cpp
 	Material.hpp
+	SDLWindow.hpp
+	SDLWindow.cpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 	../vendor/stb/stb_image.h
 	${SHADERS}
@@ -102,4 +119,6 @@ target_link_libraries(imguilib PRIVATE
 	imgui
 	SDL3::SDL3
 )
+
+target_link_libraries(Engine PRIVATE vendor)
 
