@@ -124,7 +124,7 @@ namespace engine
 			{
 				ImGui::Text(lockedSelectedObject->getUUID().id.c_str());
 
-				if (dynamic_cast<GameObject*>(lockedSelectedObject.get()))
+				if (dynamic_pointer_cast<GameObject>(lockedSelectedObject))
 				{
 					drawInspectorSelectedGameObject();
 				}
@@ -286,10 +286,10 @@ namespace engine
 		float* modelMatrixPtr = nullptr;
 		if (auto lockedSelectedObject = selectedObject.lock())
 		{
-			if (dynamic_cast<GameObject*>(lockedSelectedObject.get()))
+			if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
 			{
 				shouldDrawGuizmos = true;
-				modelMatrixPtr = &(dynamic_cast<GameObject*>(lockedSelectedObject.get())->transform.transformMatrix[0][0]);
+				modelMatrixPtr = &(lockedGameObject->transform.transformMatrix[0][0]);
 			}
 		}
 
@@ -314,23 +314,25 @@ namespace engine
 
 	void EditorGUI::drawInspectorSelectedGameObject()
 	{
-		GameObject* gameObject = dynamic_cast<GameObject*>(selectedObject.lock().get());
+		if (auto lockedSelectedObject = selectedObject.lock())
+		{
+			if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
+			{
+				ImGui::Text("Name: ");
 
+				float matrixTranslation[3], matrixRotation[3], matrixScale[3];
+				ImGuizmo::DecomposeMatrixToComponents(&(lockedGameObject->transform.transformMatrix[0][0]), matrixTranslation, matrixRotation, matrixScale);
 
-		ImGui::Text("Name: ");
+				ImGui::InputFloat3("Translation", matrixTranslation);
+				ImGui::InputFloat3("Rotation", matrixRotation);
+				ImGui::InputFloat3("Scale", matrixScale);
 
-		float matrixTranslation[3], matrixRotation[3], matrixScale[3];
-		ImGuizmo::DecomposeMatrixToComponents(&(gameObject->transform.transformMatrix[0][0]), matrixTranslation, matrixRotation, matrixScale);
-
-		ImGui::InputFloat3("Translation", matrixTranslation);
-		ImGui::InputFloat3("Rotation", matrixRotation);
-		ImGui::InputFloat3("Scale", matrixScale);
-
-		ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, &(gameObject->transform.transformMatrix[0][0]));
-	//	ImGui::SameLine();
-	//	strcpy(selectedItemNameBuffer, selectedItem.lock()->getName().c_str());
-	//	ImGui::InputText("##selectedItemNameInput", selectedItemNameBuffer, 255);
-	//	selectedItemNameBuffer, selectedItem.lock()->getName() = selectedItemNameBuffer;
+				ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, &(lockedGameObject->transform.transformMatrix[0][0]));
+				//	ImGui::SameLine();
+				//	strcpy(selectedItemNameBuffer, selectedItem.lock()->getName().c_str());
+				//	ImGui::InputText("##selectedItemNameInput", selectedItemNameBuffer, 255);
+				//	selectedItemNameBuffer, selectedItem.lock()->getName() = selectedItemNameBuffer;
+			}
+		}	
 	}
-
 }
