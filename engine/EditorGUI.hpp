@@ -30,9 +30,11 @@ namespace engine
 
 		void drawGuizmos();
 
+		void drawInspectorSelectedGameObject();
+
 		Window& window;
 
-		GameObject* selectedObject = nullptr;
+		std::weak_ptr<Selectable> selectedObject;
 
 	};
 }

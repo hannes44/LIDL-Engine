@@ -1,5 +1,7 @@
 #include "EditorGUI.hpp"
 #include "Window.hpp"
+#include "Game.hpp"
+
 
 namespace engine
 {
@@ -115,7 +117,16 @@ namespace engine
 		ImGui::Begin("##RightPanel", nullptr, windowFlags);
 		if (ImGui::BeginTabBar("##RightPanelTabs", ImGuiTabBarFlags_AutoSelectNewTabs))
 		{
-			ImGui::Text("Right Panel");
+			if (auto lockedSelectedObject = selectedObject.lock())
+			{
+				ImGui::Text(lockedSelectedObject->getUUID().id.c_str());
+
+				if (dynamic_cast<GameObject*>(lockedSelectedObject.get()))
+				{
+					drawInspectorSelectedGameObject();
+				}
+
+			}
 
 			ImGui::EndTabBar();
 		}
@@ -146,10 +157,10 @@ namespace engine
 				for (const auto& [gameObjectId, gameObject] : game->gameObjects)
 				{
 					ImGui::PushID(gameObjectId.c_str());
-			//		if (ImGui::Selectable(gameObject->name.c_str(), selectedGameObject == gameObjectId))
-			//		{
-			//			selectedGameObject = gameObjectId;
-			//		}
+					if (ImGui::Selectable(gameObject->name.c_str(), selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID())))
+					{
+						selectedObject = gameObject;
+					}
 					ImGui::PopID();
 
 
@@ -225,6 +236,7 @@ namespace engine
 		{
 			if (ImGui::MenuItem("Create Empty"))
 			{
+				game->addGameObject(std::make_unique<GameObject>());
 			}
 			if (ImGui::BeginMenu("3D Object"))
 			{
@@ -266,6 +278,18 @@ namespace engine
 
 	void EditorGUI::drawGuizmos()
 	{
+	}
+
+	void EditorGUI::drawInspectorSelectedGameObject()
+	{
+//		GameObject* gameObject = dynamic_cast<GameObject*>(selectedObject.lock());
+
+
+		ImGui::Text("Name: ");
+	//	ImGui::SameLine();
+	//	strcpy(selectedItemNameBuffer, selectedItem.lock()->getName().c_str());
+	//	ImGui::InputText("##selectedItemNameInput", selectedItemNameBuffer, 255);
+	//	selectedItemNameBuffer, selectedItem.lock()->getName() = selectedItemNameBuffer;
 	}
 
 }

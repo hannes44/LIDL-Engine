@@ -5,10 +5,12 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include "Uuid.hpp"
+#include "Selectable.hpp"
 
 namespace engine
 {
-	class GameObject
+	class GameObject : public Selectable
 	{
 	public:
 		GameObject() = default;
@@ -27,5 +29,9 @@ namespace engine
 
 		// TODO: Should limit each component to one of each type
 		std::vector<std::shared_ptr<Component>> components{};
+
+		UUID uuid{};
+
+		UUID getUUID() override;
 	};
 }
