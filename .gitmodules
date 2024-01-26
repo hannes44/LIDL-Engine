@@ -14,7 +14,10 @@
 [submodule "vendor/glew-cmake"]
 	path = vendor/glew-cmake
 	url = https://github.com/Perlmint/glew-cmake.git
-
+	
 [submodule "vendor/stb"]
 	path = vendor/stb
 	url = https://github.com/nothings/stb.git
+[submodule "vendor/imgui"]
+	path = vendor/imgui
+	url = https://github.com/ocornut/imgui.git

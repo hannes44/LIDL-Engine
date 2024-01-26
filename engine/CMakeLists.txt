@@ -90,4 +90,16 @@ target_sources(Engine PRIVATE
 	../vendor/stb/stb_image.h
 	${SHADERS}
 )
-target_link_libraries(Engine PRIVATE vendor)
+
+target_link_libraries(Engine PRIVATE 
+	imgui
+	imguilib
+	SDL3::SDL3
+	vendor
+)
+
+target_link_libraries(imguilib PRIVATE 
+	imgui
+	SDL3::SDL3
+)
+
