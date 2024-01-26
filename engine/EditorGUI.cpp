@@ -139,7 +139,25 @@ namespace engine
 		ImGui::Begin("##LeftPanel", nullptr, windowFlags);
 		if (ImGui::BeginTabBar("##LeftPanelTabs", ImGuiTabBarFlags_AutoSelectNewTabs))
 		{
-			ImGui::Text("Left Panel");
+			if (ImGui::CollapsingHeader("Scene Hierarchy", ImGuiTreeNodeFlags_DefaultOpen))
+			{
+				ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 0, 0));
+				ImGui::BeginListBox("##2", ImVec2(500, 500));
+				for (const auto& [gameObjectId, gameObject] : game->gameObjects)
+				{
+					ImGui::PushID(gameObjectId.c_str());
+			//		if (ImGui::Selectable(gameObject->name.c_str(), selectedGameObject == gameObjectId))
+			//		{
+			//			selectedGameObject = gameObjectId;
+			//		}
+					ImGui::PopID();
+
+
+				}
+
+				ImGui::EndListBox();
+				ImGui::PopStyleColor();
+			}
 
 			ImGui::EndTabBar();
 		}

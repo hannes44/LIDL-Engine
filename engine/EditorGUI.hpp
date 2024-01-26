@@ -32,6 +32,7 @@ namespace engine
 
 		Window& window;
 
+		GameObject* selectedObject = nullptr;
 
 	};
 }
