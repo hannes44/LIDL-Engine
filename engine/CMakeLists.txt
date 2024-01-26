@@ -40,6 +40,13 @@ source_group("SDL" FILES
 	SDLWindow.cpp
 )
 
+source_group("Editor" FILES
+	EditorGUI.hpp
+	EditorGUI.cpp
+	Editor.hpp
+	Editor.cpp
+)
+
 # Find *all* shaders.
 file(GLOB_RECURSE SHADERS
     "${CMAKE_CURRENT_SOURCE_DIR}/shaders/*.vert"
@@ -112,6 +119,10 @@ target_sources(Engine PRIVATE
 	GameSerializer.cpp
 	SDLWindow.hpp
 	SDLWindow.cpp
+	EditorGUI.hpp
+	EditorGUI.cpp
+	Editor.hpp
+	Editor.cpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 	../vendor/stb/stb_image.h
 	${SHADERS}

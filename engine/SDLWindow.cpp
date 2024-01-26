@@ -1,8 +1,14 @@
 #include "SDLWindow.hpp"
 #include "Logger.hpp"
 
+#include <imgui.h>
+#include <imgui_impl_opengl3.h>
+#include <imgui_impl_sdl3.h>
+
 namespace engine
 {
+#define EDITOR
+
 	void SDLWindow::createWindow(int width, int height, std::string title)
 	{
 		if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -39,6 +45,14 @@ namespace engine
 		void* glContext = SDL_GL_CreateContext(window);
 
 		SDL_GL_MakeCurrent(window, glContext);
+
+		// Only initialize ImGui if the editor is enabled
+		#ifdef EDITOR
+			ImGui::CreateContext();
+			ImGui::SetCurrentContext(ImGui::GetCurrentContext());
+			ImGui_ImplOpenGL3_Init();
+			ImGui_ImplSDL3_InitForOpenGL(window, glContext);
+		#endif 
 	}
 	void SDLWindow::cleanup()
 	{

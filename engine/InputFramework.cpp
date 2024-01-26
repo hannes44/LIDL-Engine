@@ -1,6 +1,7 @@
 #include "InputFramework.hpp"
 #include "Bootstrap.hpp"
 #include <SDL.h>
+#include <imgui_impl_sdl3.h>
 
 /*
     This is the implementation of the InputFramework class
@@ -21,57 +22,48 @@ namespace engine {
         SDL_Event ev;
         InputEvent ie(0, 0, 0, "");  // Initialize with default values
 
-        tick += Bootstrap::getInstance().getDeltaTime();
+        while (SDL_PollEvent(&ev)) {
+            // Handle different types of input events and dispatch them
+            // to registered listeners using InputSystem::dispatchEvent.
 
-        if (tick < timeInterval) {
-            return;
-        }
-
-        if (SDL_PollEvent(&ev) != 0) {
-            // Check if there are any events to process
-            while (SDL_PollEvent(&ev)) {
-                // Handle different types of input events and dispatch them
-                // to registered listeners using InputSystem::dispatchEvent.
-
-                if (ev.type == SDL_EVENT_MOUSE_MOTION) {
-                    SDL_MouseMotionEvent mot = ev.motion;
-                    ie.setX(mot.x);
-                    ie.setY(mot.y);
-                    dispatchEvent(ie, "MouseMotion");
-                }
-                else if (ev.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
-                    SDL_MouseButtonEvent but = ev.button;
-                    ie.setX(but.x);
-                    ie.setY(but.y);
-                    ie.setButton(but.button);
-                    dispatchEvent(ie, "MouseButtonDown");
-                }
-                else if (ev.type == SDL_EVENT_MOUSE_BUTTON_UP) {
-                    SDL_MouseButtonEvent but = ev.button;
-                    ie.setX(but.x);
-                    ie.setY(but.y);
-                    ie.setButton(but.button);
-                    dispatchEvent(ie, "MouseButtonUp");
-                }
-                else if (ev.type == SDL_EVENT_KEY_DOWN) {
-                    SDL_KeyboardEvent key = ev.key;
-                    ie.setKey(SDL_GetKeyName(key.keysym.sym));
-                    dispatchEvent(ie, "KeyDown");
-                }
-                else if (ev.type == SDL_EVENT_KEY_UP) {
-                    SDL_KeyboardEvent key = ev.key;
-                    ie.setKey(SDL_GetKeyName(key.keysym.sym));
-                    dispatchEvent(ie, "KeyUp");
-                }
-                else if (ev.type == SDL_EVENT_QUIT) {
-                    dispatchEvent(ie, "Quit");
-                }
+            ImGui_ImplSDL3_ProcessEvent(&ev);
+                
+            if (ev.type == SDL_EVENT_MOUSE_MOTION) {
+                SDL_MouseMotionEvent mot = ev.motion;
+                ie.setX(mot.x);
+                ie.setY(mot.y);
+                dispatchEvent(ie, "MouseMotion");
             }
+            else if (ev.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
+                SDL_MouseButtonEvent but = ev.button;
+                ie.setX(but.x);
+                ie.setY(but.y);
+                ie.setButton(but.button);
+                dispatchEvent(ie, "MouseButtonDown");
+            }
+            else if (ev.type == SDL_EVENT_MOUSE_BUTTON_UP) {
+                SDL_MouseButtonEvent but = ev.button;
+                ie.setX(but.x);
+                ie.setY(but.y);
+                ie.setButton(but.button);
+                dispatchEvent(ie, "MouseButtonUp");
+            }
+            else if (ev.type == SDL_EVENT_KEY_DOWN) {
+                SDL_KeyboardEvent key = ev.key;
+                ie.setKey(SDL_GetKeyName(key.keysym.sym));
+                dispatchEvent(ie, "KeyDown");
+            }
+            else if (ev.type == SDL_EVENT_KEY_UP) {
+                SDL_KeyboardEvent key = ev.key;
+                ie.setKey(SDL_GetKeyName(key.keysym.sym));
+                dispatchEvent(ie, "KeyUp");
+            }
+            else if (ev.type == SDL_EVENT_QUIT) {
+                dispatchEvent(ie, "Quit");
+            }
+           
         }
-        else {
-            // Error retrieving event
-            std::cerr << "SDL_PollEvent error: " << SDL_GetError() << std::endl;
-        }
+
 
         tick -= timeInterval;
     }
