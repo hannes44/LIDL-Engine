@@ -123,6 +123,8 @@ target_sources(Engine PRIVATE
 	EditorGUI.cpp
 	Editor.hpp
 	Editor.cpp
+	Uuid.hpp
+	Uuid.cpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 	../vendor/stb/stb_image.h
 	${SHADERS}
