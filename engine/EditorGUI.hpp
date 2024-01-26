@@ -3,6 +3,7 @@
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_sdl3.h>
 #include "Window.hpp"
+#include "Game.hpp"
 
 namespace engine
 {
@@ -15,7 +16,10 @@ namespace engine
 
 		void endFrame();
 		
+		Game* game = nullptr;
 	private:
+		void drawMainMenu();
+
 		void drawViewPort();
 
 		void drawRightSidePanel();
@@ -27,5 +31,7 @@ namespace engine
 		void drawGuizmos();
 
 		Window& window;
+
+
 	};
 }

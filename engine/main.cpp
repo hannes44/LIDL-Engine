@@ -19,35 +19,12 @@
 #include <SDL3/SDL.h>
 #include <imgui_impl_sdl3.h>
 #include <imgui_impl_opengl3.h>
-
+#include "Editor.hpp"
 
 int main(int argc, char* argv[])
 {
-	engine::Logger::init();
-
-	engine::Window::getInstance().createWindow(800, 600, "Sweddes MAMMA P� PIZZA");
-
-	engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
-	
-	glewInit();
-
-	auto game = engine::TestGame();
-	engine::GameSerializer::SerializeGame(game);
-
-	engine::Renderer::baseShader = engine::Shader::create("simple.vert", "simple.frag");
-
-
-	game.initialize();
-	game.gameLoop();
-			
-
-	/*
-	auto game = engine::TestGame();
-	game.initialize();
-	game.gameLoop();
-	*/
-
-	//ImGui::Text("Hello, world");
+	engine::Editor editor{};
+	editor.start();
 
 	return 0;
 }

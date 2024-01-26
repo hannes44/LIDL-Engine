@@ -11,7 +11,6 @@ namespace engine {
 
 	protected:
 		double getTargetFrameRate() override;
-		std::vector<GameObject*> gameObjects{};
 
 		EditorGUI gui {};
 	};

@@ -4,6 +4,7 @@
 namespace engine
 {
 #define IMGUI_TOP_MENU_HEIGHT 18
+#define IMGUI_SHOW_DEMO_WINDOWS false
 
 	EditorGUI::EditorGUI() : window(Window::getInstance())
 	{
@@ -16,21 +17,49 @@ namespace engine
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui::NewFrame();
 
-		#ifdef _DEBUG
+		#if defined(_DEBUG) && IMGUI_SHOW_DEMO_WINDOWS 
 			ImGui::ShowDemoWindow();
 			ImGui::ShowStyleEditor();
 		#endif 
 
-		drawViewPort();
-		drawRightSidePanel();
-		drawLeftSidePanel();
-		drawTopMenu();
+		if (game == nullptr)
+		{
+			drawMainMenu();
+		}
+		else
+		{
+			drawViewPort();
+			drawRightSidePanel();
+			drawLeftSidePanel();
+			drawTopMenu();
+		}
 	}
 
 	void EditorGUI::endFrame()
 	{
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	}
+
+	void EditorGUI::drawMainMenu()
+	{
+		int w, h;
+		window.getWindowSize(&w, &h);
+		ImGui::SetNextWindowPos({ 0, 0 });
+		ImGui::SetNextWindowSize(ImVec2(w, h));
+
+		ImGuiWindowFlags windowFlags = 0;
+		windowFlags |= ImGuiWindowFlags_NoTitleBar;
+		windowFlags |= ImGuiWindowFlags_NoMove;
+		windowFlags |= ImGuiWindowFlags_NoResize;
+		windowFlags |= ImGuiWindowFlags_NoScrollbar;
+		windowFlags |= ImGuiWindowFlags_NoScrollWithMouse;
+		windowFlags |= ImGuiWindowFlags_NoCollapse;
+		windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
+
+		ImGui::Begin("ViewPort", nullptr, windowFlags);
+		ImGui::Text("Hello, world!");
+		ImGui::End();
 	}
 
 	void EditorGUI::drawViewPort()
