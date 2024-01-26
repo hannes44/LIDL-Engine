@@ -4,7 +4,7 @@
 namespace engine
 {
 #define IMGUI_TOP_MENU_HEIGHT 18
-#define IMGUI_SHOW_DEMO_WINDOWS false
+#define IMGUI_SHOW_DEMO_WINDOWS true
 
 	EditorGUI::EditorGUI() : window(Window::getInstance())
 	{
@@ -171,11 +171,96 @@ namespace engine
 
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::MenuItem("New Scene"))
+			if (ImGui::BeginMenu("New"))
+			{
+				if (ImGui::MenuItem("Project"))
+				{
+				}
+				ImGui::EndMenu();
+			}
+			if (ImGui::MenuItem("Open"))
 			{
 			}
+			if (ImGui::BeginMenu("Open Recent"))
+			{
+				if (ImGui::MenuItem("Temporary"))
+				{
+				}
+				ImGui::EndMenu();
+			}
+			if (ImGui::MenuItem("Save", "Ctrl+S"))
+			{
+			}
+			if (ImGui::MenuItem("Save As"))
+			{
+			}
+			ImGui::Separator();
+			if (ImGui::MenuItem("Exit", "Alt+F4"))
+			{
+				ImGui::End();
+			}
+			ImGui::EndMenu();
 		}
-
+		if (ImGui::BeginMenu("Edit"))
+		{
+			if (ImGui::MenuItem("Undo", "Ctrl+Z"))
+			{
+			}
+			if (ImGui::MenuItem("Redo", "Ctrl+Y"))
+			{
+			}
+			ImGui::Separator();
+			if (ImGui::MenuItem("Cut", "Ctrl+X"))
+			{
+			}
+			if (ImGui::MenuItem("Copy", "Ctrl+C"))
+			{
+			}
+			if (ImGui::MenuItem("Paste", "Ctrl+P"))
+			{
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("GameObject"))
+		{
+			if (ImGui::MenuItem("Create Empty"))
+			{
+			}
+			if (ImGui::BeginMenu("3D Object"))
+			{
+				if (ImGui::MenuItem("Cube"))
+				{
+				}
+				if (ImGui::MenuItem("Sphere"))
+				{
+				}
+				if (ImGui::MenuItem("Plane"))
+				{
+				}
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("View"))
+		{
+			if (ImGui::MenuItem("Hierarchy"))
+			{
+			}
+			if (ImGui::MenuItem("Inspector"))
+			{
+			}
+			if (ImGui::MenuItem("Game"))
+			{
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Help"))
+		{
+			if (ImGui::MenuItem("About"))
+			{
+			}
+			ImGui::EndMenu();
+		}
 		ImGui::EndMainMenuBar();
 	}
 
