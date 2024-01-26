@@ -14,12 +14,16 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include "GameSerializer.hpp"
+#include <imgui.h>
+#include <stdio.h>
+#include <SDL3/SDL.h>
+
 
 int main(int argc, char* argv[])
 {
 	engine::Logger::init();
 
-	engine::Window::getInstance().createWindow(800, 600, "Sweddes MAMMA PÅ PIZZA");
+	engine::Window::getInstance().createWindow(800, 600, "Sweddes MAMMA Pï¿½ PIZZA");
 
 	engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
 	
@@ -34,6 +38,14 @@ int main(int argc, char* argv[])
 	game.initialize();
 	game.gameLoop();
 			
+
+	/*
+	auto game = engine::TestGame();
+	game.initialize();
+	game.gameLoop();
+	*/
+
+	//ImGui::Text("Hello, world");
 
 	return 0;
 }
