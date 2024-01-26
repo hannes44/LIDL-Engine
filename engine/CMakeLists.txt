@@ -108,4 +108,17 @@ target_sources(Engine PRIVATE
 	${SHADERS}
 )
 
+target_link_libraries(Engine PRIVATE 
+	imgui
+	imguilib
+	SDL3::SDL3
+	vendor
+)
+
+target_link_libraries(imguilib PRIVATE 
+	imgui
+	SDL3::SDL3
+)
+
 target_link_libraries(Engine PRIVATE vendor)
+
