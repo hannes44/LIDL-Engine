@@ -128,6 +128,3 @@ target_link_libraries(imguilib PRIVATE
 	imgui
 	SDL3::SDL3
 )
-
-target_link_libraries(Engine PRIVATE vendor)
-

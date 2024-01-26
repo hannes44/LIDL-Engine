@@ -16,6 +16,8 @@ set(imgui_src
 	imgui-cmake/backends/imgui_impl_opengl3.h
 )
 add_library(imguilib ${imgui_src})
+target_include_directories(imguilib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/imgui-cmake/backends)
+
 
 add_library(vendor INTERFACE)
 
@@ -23,11 +25,5 @@ target_link_libraries(vendor INTERFACE
 	glm::glm
 	spdlog::spdlog
 	libglew_static
+	yaml-cpp
 )
-
-target_link_libraries(vendor INTERFACE SDL3::SDL3)
-target_link_libraries(vendor INTERFACE glm::glm)
-target_link_libraries(vendor INTERFACE spdlog::spdlog)
-target_link_libraries(vendor INTERFACE libglew_static)
-target_link_libraries(vendor INTERFACE yaml-cpp)
-
