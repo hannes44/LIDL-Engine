@@ -6,6 +6,7 @@
 #include "Game.hpp"
 #include "../vendor/ImGuizmo/ImGuizmo.h"
 #include "RendererSettings.hpp"
+#include "EditorSettings.hpp"
 
 namespace engine
 {
@@ -53,6 +54,8 @@ namespace engine
 
 		void drawGameSettingsTab();	
 
+		bool defaultCheckBox(const std::string& label, bool* value);
+
 		Window& window;
 
 		std::weak_ptr<Selectable> selectedObject;
@@ -60,6 +63,7 @@ namespace engine
 		ImGuizmo::OPERATION guizmoOperation = ImGuizmo::TRANSLATE;
 
 		Camera editorCamera{};
+		float editorCameraSensitivity = 1;
 
 		EditorSceneState sceneState = EditorSceneState::Scene;
 
@@ -67,6 +71,6 @@ namespace engine
 
 		Camera* getActiveCamera();
 
-		RendererSettings rendererSettings{};
+		EditorSettings editorSettings{};
 	};
 }

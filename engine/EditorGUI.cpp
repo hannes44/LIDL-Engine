@@ -12,7 +12,7 @@
 namespace engine
 {
 #define IMGUI_TOP_MENU_HEIGHT 18
-#define IMGUI_SHOW_DEMO_WINDOWS false
+#define IMGUI_SHOW_DEMO_WINDOWS true
 
 	EditorGUI::EditorGUI() : window(Window::getInstance())
 	{
@@ -43,7 +43,7 @@ namespace engine
 			renderNewFrame();
 			InputFramework::getInstance().getInput();
 
-			Renderer::renderGame(game, getActiveCamera(), &rendererSettings);
+			Renderer::renderGame(game, getActiveCamera(), &editorSettings.rendererSettings);
 
 			endFrame();
 			window.newFrame();
@@ -56,6 +56,7 @@ namespace engine
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui::NewFrame();
 		ImGuizmo::BeginFrame();
+
 
 		#if defined(_DEBUG) && IMGUI_SHOW_DEMO_WINDOWS 
 			ImGui::ShowDemoWindow();
@@ -395,7 +396,7 @@ namespace engine
 	void EditorGUI::drawGuizmos()
 	{
 		// Only draw guizmos in scene view
-		if (activeViewPort != ActiveViewPort::Scene)
+		if (!editorSettings.showGizmos || activeViewPort != ActiveViewPort::Scene)
 			return;
 
 		bool shouldDrawGuizmos = false;
@@ -470,20 +471,47 @@ namespace engine
 	{
 		ImGui::Text("Application FPS: %.1f", ImGui::GetIO().Framerate);
 		ImGui::Separator();
-		ImGui::Text("Editor Settings");
-		ImGui::Text("RENDERING SETTINGS");
-		ImGui::Checkbox("Multisampling", &rendererSettings.useMultiSampling);
-		ImGui::Checkbox("Show Triangle outlines", &rendererSettings.drawWireframe);
-		ImGui::Checkbox("Depth Test", &rendererSettings.enableDepthTest);
-		ImGui::Checkbox("Face Culling", &rendererSettings.enableFaceCulling);
+		if (ImGui::CollapsingHeader("Editor Settings", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::Text("RENDERING SETTINGS");
+			defaultCheckBox("Multisampling", &editorSettings.rendererSettings.useMultiSampling);
+			defaultCheckBox("Show Triangle outlines", &editorSettings.rendererSettings.drawWireframe);
+			defaultCheckBox("Depth Test", &editorSettings.rendererSettings.enableDepthTest);
+			defaultCheckBox("Face Culling", &editorSettings.rendererSettings.enableFaceCulling);
+			defaultCheckBox("Show Gizmos", &editorSettings.showGizmos);
+
+			bool savedUseDarkTheme = editorSettings.useDarkTheme;
+			if (defaultCheckBox("Use Dark Mode", &editorSettings.useDarkTheme))
+			{
+				if (savedUseDarkTheme != editorSettings.useDarkTheme)
+					ImGui::StyleColorsDark();
+			}
+			else if (!editorSettings.useDarkTheme)
+			{
+				ImGui::StyleColorsLight();
+			}
+
+			ImGui::Text("Camera Settings");
+			ImGui::SliderFloat("Camera Speed", &editorCamera.cameraSpeed, 0.1f, 10.0f);
+			ImGui::SliderFloat("Camera Sensitivity", &editorCameraSensitivity, 0.1f, 10.0f); 
+			ImGui::SliderFloat("Camera FOV", &editorCamera.fov, 0.1f, 120.0f);
+			
+		}
 		ImGui::Separator();
 
-
-		ImGui::Text("Game Settings");
+		if (ImGui::CollapsingHeader("Game Settings", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::Text("Game Name: ");
+		}
 		ImGui::Separator();
 
-		ImGui::Text("Game Name: ");
 	}
+
+	bool EditorGUI::defaultCheckBox(const std::string& label, bool* value)
+	{
+		return ImGui::Checkbox(label.c_str(), value);
+	}
+
 	Camera* EditorGUI::getActiveCamera()
 	{
 		if (activeViewPort == ActiveViewPort::Scene)
