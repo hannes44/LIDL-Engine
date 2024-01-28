@@ -7,6 +7,7 @@
 #include "../vendor/ImGuizmo/ImGuizmo.h"
 #include "RendererSettings.hpp"
 #include "EditorSettings.hpp"
+#include "AssetManager.hpp"
 
 namespace engine
 {
@@ -54,6 +55,12 @@ namespace engine
 
 		void drawGameSettingsTab();	
 
+		void drawBottomPanel();
+
+		void drawAssetsSection();
+
+		void drawAssetItem(std::shared_ptr<AssetNode> assetNode);
+
 		bool defaultCheckBox(const std::string& label, bool* value);
 
 		Window& window;
@@ -72,5 +79,9 @@ namespace engine
 		Camera* getActiveCamera();
 
 		EditorSettings editorSettings{};
+
+		std::weak_ptr<AssetNode> selectedAssetNodeFolder;
+
+		std::unique_ptr<AssetManager> assetManager;
 	};
 }

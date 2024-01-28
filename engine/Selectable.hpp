@@ -8,6 +8,6 @@ namespace engine
 	public:
 		virtual UUID getUUID() = 0;
 		
-
+		virtual std::string getName() = 0;
 	};
 }

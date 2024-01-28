@@ -3,6 +3,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 #include "Window.hpp"
+#include "Logger.hpp"
+
 namespace engine
 {
 	void Camera::translate(float x, float y, float z)

@@ -33,5 +33,7 @@ namespace engine
 		UUID uuid{};
 
 		UUID getUUID() override;
+
+		std::string getName() override { return name; };
 	};
 }

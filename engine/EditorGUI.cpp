@@ -38,6 +38,12 @@ namespace engine
 
 		engine::Renderer::baseShader = engine::Shader::create("simple.vert", "simple.frag");
 
+		assetManager = std::make_unique<AssetManager>(game);
+
+		assetManager->buildAssetTree();
+
+		selectedAssetNodeFolder = assetManager->rootNode;
+
 		while (true)
 		{
 			renderNewFrame();
@@ -74,6 +80,7 @@ namespace engine
 			drawLeftSidePanel();
 			drawTopMenu();
 			drawPlayButtonToolbar();
+			drawBottomPanel();
 		}
 	}
 
@@ -149,6 +156,7 @@ namespace engine
 		ImGui::SetNextWindowSize(ImVec2(panelWidth, h));
 
 		ImGuiWindowFlags windowFlags = 0;
+		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 		windowFlags |= ImGuiWindowFlags_NoMove;
 		windowFlags |= ImGuiWindowFlags_NoResize;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
@@ -186,6 +194,7 @@ namespace engine
 		ImGui::SetNextWindowSize(ImVec2(panelWidth, h));
 
 		ImGuiWindowFlags windowFlags = 0;
+		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 		windowFlags |= ImGuiWindowFlags_NoMove;
 		windowFlags |= ImGuiWindowFlags_NoResize;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
@@ -422,8 +431,6 @@ namespace engine
 
 			glm::mat4 cameraView = getActiveCamera()->getViewMatrix();
 
-			float aspectRatio = float(windowWidth) / float(windowHeight);
-
 			glm::mat4 projectionMatrix = getActiveCamera()->getProjectionMatrix();
 
 			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(projectionMatrix), guizmoOperation, ImGuizmo::WORLD, modelMatrixPtr);
@@ -505,6 +512,98 @@ namespace engine
 		}
 		ImGui::Separator();
 
+	}
+
+	void EditorGUI::drawBottomPanel()
+	{
+		int w, h;
+		window.getWindowSize(&w, &h);
+		int panelWidth = w / 5;
+
+		ImGuiWindowFlags windowFlags = 0;
+		windowFlags |= ImGuiWindowFlags_NoMove;
+		windowFlags |= ImGuiWindowFlags_NoResize;
+		windowFlags |= ImGuiWindowFlags_NoScrollbar;
+		windowFlags |= ImGuiWindowFlags_NoTitleBar;
+
+
+		ImGui::SetNextWindowPos(ImVec2(panelWidth, h - 300));
+		ImGui::SetNextWindowSize(ImVec2(w - panelWidth * 2, 300));
+		ImGui::Begin("##BottomPanel", nullptr, windowFlags);
+
+		if (ImGui::BeginTabBar("##BottomTabs", ImGuiTabBarFlags_None))
+		{
+			if (ImGui::BeginTabItem("Assets"))
+			{
+				drawAssetsSection();
+				ImGui::EndTabItem();
+			}
+			if (ImGui::BeginTabItem("Console"))
+			{
+				ImGui::EndTabItem();
+			}
+			ImGui::EndTabBar();
+		}
+
+		ImGui::End();
+	}
+
+	void EditorGUI::drawAssetsSection()
+	{
+		if (auto lockedSelectedAssetNodeFolder = selectedAssetNodeFolder.lock())
+		{
+			std::vector<std::weak_ptr<AssetNode>> parents = lockedSelectedAssetNodeFolder->getEntireParentage();
+			std::reverse(parents.begin(), parents.end());
+
+			for (auto parent : parents)
+			{
+				if (auto lockedParent = parent.lock())
+				{
+					ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 0, 0, 0));
+					if (ImGui::Button(lockedParent->name.c_str()))
+					{
+						selectedAssetNodeFolder = lockedParent;
+						ImGui::PopStyleColor();
+						break;
+					}
+
+					ImGui::PopStyleColor();
+
+
+					ImGui::SameLine();
+					ImGui::Text(">");
+					ImGui::SameLine();
+				}
+			}
+
+
+			ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 0, 0, 0));
+			ImGui::Button(lockedSelectedAssetNodeFolder->name.c_str());
+			ImGui::PopStyleColor();
+
+			ImGui::Separator();
+
+
+
+			// draw the assets in the selected folder
+			for (auto& child : lockedSelectedAssetNodeFolder->children)
+			{
+				if (child == NULL)
+					continue;
+
+				drawAssetItem(child);
+				ImGui::SameLine();
+			}
+		}
+	}
+
+	void EditorGUI::drawAssetItem(std::shared_ptr<AssetNode> assetNode)
+	{
+		if (ImGui::Button(assetNode->name.c_str()))
+		{
+			if (assetNode->isFolder)
+				selectedAssetNodeFolder = assetNode;
+		}
 	}
 
 	bool EditorGUI::defaultCheckBox(const std::string& label, bool* value)
