@@ -12,7 +12,7 @@
 namespace engine
 {
 #define IMGUI_TOP_MENU_HEIGHT 18
-#define IMGUI_SHOW_DEMO_WINDOWS true
+#define IMGUI_SHOW_DEMO_WINDOWS false
 
 	EditorGUI::EditorGUI() : window(Window::getInstance())
 	{
