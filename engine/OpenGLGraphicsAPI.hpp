@@ -16,6 +16,8 @@ namespace engine
 
 		void setDrawTriangleOutline(bool enabled) override;
 
+		void setViewport(int x, int y, int width, int height) override;
+
 		GraphicsAPIType getType() override;
 
 	private:

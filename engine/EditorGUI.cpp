@@ -8,6 +8,7 @@
 #include "Renderer.hpp"
 #include "Logger.hpp"
 #include "RendererSettings.hpp"
+#include "EditorSerializer.hpp"
 
 namespace engine
 {
@@ -36,6 +37,8 @@ namespace engine
 		game->initialize(); // Temporary for testing, should not be called when serialization works
 		game->camera.translate(0, 0, 5);
 
+		editorCamera.translate(0, 0, 15);
+
 		engine::Renderer::baseShader = engine::Shader::create("simple.vert", "simple.frag");
 
 		assetManager = std::make_unique<AssetManager>(game);
@@ -43,6 +46,8 @@ namespace engine
 		assetManager->buildAssetTree();
 
 		selectedAssetNodeFolder = assetManager->rootNode;
+
+		editorSettings = EditorSerializer::deSerializeEditorSettings();
 
 		while (true)
 		{
@@ -54,6 +59,8 @@ namespace engine
 			endFrame();
 			window.newFrame();
 		}
+
+		EditorSerializer::serializeEditorSettings(editorSettings);
 	}
 
 	void EditorGUI::renderNewFrame()
@@ -115,6 +122,8 @@ namespace engine
 	{
 		int w, h;
 		window.getWindowSize(&w, &h);
+		ImGui::SetNextWindowPos({ 0, 0 });
+		ImGui::SetNextWindowSize(ImVec2(w, h));
 
 		ImGuiWindowFlags windowFlags = 0;
 
@@ -253,6 +262,7 @@ namespace engine
 			}
 			if (ImGui::MenuItem("Save", "Ctrl+S"))
 			{
+				EditorSerializer::serializeEditorSettings(editorSettings);
 			}
 			if (ImGui::MenuItem("Save As"))
 			{
@@ -416,7 +426,7 @@ namespace engine
 			if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
 			{
 				shouldDrawGuizmos = true;
-				modelMatrixPtr = &(lockedGameObject->transform.transformMatrix[0][0]);
+				modelMatrixPtr = glm::value_ptr(lockedGameObject->transform.transformMatrix);
 			}
 		}
 
@@ -485,6 +495,8 @@ namespace engine
 			defaultCheckBox("Show Triangle outlines", &editorSettings.rendererSettings.drawWireframe);
 			defaultCheckBox("Depth Test", &editorSettings.rendererSettings.enableDepthTest);
 			defaultCheckBox("Face Culling", &editorSettings.rendererSettings.enableFaceCulling);
+
+			ImGui::Text("EDITOR SETTINGS");
 			defaultCheckBox("Show Gizmos", &editorSettings.showGizmos);
 
 			bool savedUseDarkTheme = editorSettings.useDarkTheme;
