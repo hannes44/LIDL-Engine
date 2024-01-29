@@ -16,6 +16,7 @@ source_group("Renderer" FILES
 	Buffer.cpp
 	Shader.hpp
 	Shader.cpp
+	RendererSettings.hpp
 )
 
 source_group("OpenGL" FILES
@@ -43,6 +44,9 @@ source_group("SDL" FILES
 source_group("Editor" FILES
 	EditorGUI.hpp
 	EditorGUI.cpp
+	AssetManager.hpp
+	AssetManager.cpp
+	AssetNode.hpp
 )
 
 # Find *all* shaders.
@@ -121,6 +125,10 @@ target_sources(Engine PRIVATE
 	EditorGUI.cpp
 	Uuid.hpp
 	Uuid.cpp
+	RendererSettings.hpp
+	AssetManager.hpp
+	AssetManager.cpp
+	AssetNode.hpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 	../vendor/stb/stb_image.h
 	../vendor/ImGuizmo/ImGuizmo.h

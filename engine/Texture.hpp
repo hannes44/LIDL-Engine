@@ -3,10 +3,12 @@
 #include <string>
 
 #include <GL/glew.h>
+#include "Selectable.hpp"
+#include "Uuid.hpp"
 
 namespace engine
 {
-	class Texture
+	class Texture : public Selectable
 	{
 	public:
 		virtual void bind() const = 0;
@@ -21,5 +23,11 @@ namespace engine
 		std::string name = "Texture";
 
 		std::string filename = "";
+
+		std::string getName() override { return name; };
+
+		UUID uuid{};
+
+		UUID getUUID() override { return uuid; };
 	};
 }

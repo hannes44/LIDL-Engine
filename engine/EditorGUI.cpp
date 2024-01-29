@@ -7,6 +7,7 @@
 #include "TestGame.hpp"
 #include "Renderer.hpp"
 #include "Logger.hpp"
+#include "RendererSettings.hpp"
 
 namespace engine
 {
@@ -37,12 +38,18 @@ namespace engine
 
 		engine::Renderer::baseShader = engine::Shader::create("simple.vert", "simple.frag");
 
+		assetManager = std::make_unique<AssetManager>(game);
+
+		assetManager->buildAssetTree();
+
+		selectedAssetNodeFolder = assetManager->rootNode;
+
 		while (true)
 		{
 			renderNewFrame();
 			InputFramework::getInstance().getInput();
 
-			Renderer::renderGame(game, getActiveCamera());
+			Renderer::renderGame(game, getActiveCamera(), &editorSettings.rendererSettings);
 
 			endFrame();
 			window.newFrame();
@@ -55,6 +62,7 @@ namespace engine
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui::NewFrame();
 		ImGuizmo::BeginFrame();
+
 
 		#if defined(_DEBUG) && IMGUI_SHOW_DEMO_WINDOWS 
 			ImGui::ShowDemoWindow();
@@ -72,6 +80,7 @@ namespace engine
 			drawLeftSidePanel();
 			drawTopMenu();
 			drawPlayButtonToolbar();
+			drawBottomPanel();
 		}
 	}
 
@@ -147,6 +156,7 @@ namespace engine
 		ImGui::SetNextWindowSize(ImVec2(panelWidth, h));
 
 		ImGuiWindowFlags windowFlags = 0;
+		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 		windowFlags |= ImGuiWindowFlags_NoMove;
 		windowFlags |= ImGuiWindowFlags_NoResize;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
@@ -164,6 +174,10 @@ namespace engine
 				}
 
 			}
+			else
+			{
+				drawGameSettingsTab();
+			}
 
 			ImGui::EndTabBar();
 		}
@@ -180,6 +194,7 @@ namespace engine
 		ImGui::SetNextWindowSize(ImVec2(panelWidth, h));
 
 		ImGuiWindowFlags windowFlags = 0;
+		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 		windowFlags |= ImGuiWindowFlags_NoMove;
 		windowFlags |= ImGuiWindowFlags_NoResize;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
@@ -390,7 +405,7 @@ namespace engine
 	void EditorGUI::drawGuizmos()
 	{
 		// Only draw guizmos in scene view
-		if (activeViewPort != ActiveViewPort::Scene)
+		if (!editorSettings.showGizmos || activeViewPort != ActiveViewPort::Scene)
 			return;
 
 		bool shouldDrawGuizmos = false;
@@ -416,8 +431,6 @@ namespace engine
 
 			glm::mat4 cameraView = getActiveCamera()->getViewMatrix();
 
-			float aspectRatio = float(windowWidth) / float(windowHeight);
-
 			glm::mat4 projectionMatrix = getActiveCamera()->getProjectionMatrix();
 
 			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(projectionMatrix), guizmoOperation, ImGuizmo::WORLD, modelMatrixPtr);
@@ -429,24 +442,175 @@ namespace engine
 		if (auto lockedSelectedObject = selectedObject.lock())
 		{
 			if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
-			{
+			{ 
 				ImGui::Text("Name: ");
-
-				float matrixTranslation[3], matrixRotation[3], matrixScale[3];
-				ImGuizmo::DecomposeMatrixToComponents(&(lockedGameObject->transform.transformMatrix[0][0]), matrixTranslation, matrixRotation, matrixScale);
-
-				ImGui::InputFloat3("Translation", matrixTranslation);
-				ImGui::InputFloat3("Rotation", matrixRotation);
-				ImGui::InputFloat3("Scale", matrixScale);
-
-				ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, &(lockedGameObject->transform.transformMatrix[0][0]));
 				//	ImGui::SameLine();
 				//	strcpy(selectedItemNameBuffer, selectedItem.lock()->getName().c_str());
 				//	ImGui::InputText("##selectedItemNameInput", selectedItemNameBuffer, 255);
 				//	selectedItemNameBuffer, selectedItem.lock()->getName() = selectedItemNameBuffer;
+
+				// Since all gameobjects have a transform, we can always draw the transform
+				if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
+				{
+					float matrixTranslation[3], matrixRotation[3], matrixScale[3];
+					ImGuizmo::DecomposeMatrixToComponents(&(lockedGameObject->transform.transformMatrix[0][0]), matrixTranslation, matrixRotation, matrixScale);
+
+					ImGui::InputFloat3("Translation", matrixTranslation);
+					ImGui::InputFloat3("Rotation", matrixRotation);
+					ImGui::InputFloat3("Scale", matrixScale);
+
+					ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, &(lockedGameObject->transform.transformMatrix[0][0]));
+				}
+
+			
+				for (auto component : lockedGameObject->components)
+				{
+					if (ImGui::CollapsingHeader(component->getName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+					{
+					}
+				}
+			
+			
 			}
 		}	
 	}
+	void EditorGUI::drawGameSettingsTab()
+	{
+		ImGui::Text("Application FPS: %.1f", ImGui::GetIO().Framerate);
+		ImGui::Separator();
+		if (ImGui::CollapsingHeader("Editor Settings", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::Text("RENDERING SETTINGS");
+			defaultCheckBox("Multisampling", &editorSettings.rendererSettings.useMultiSampling);
+			defaultCheckBox("Show Triangle outlines", &editorSettings.rendererSettings.drawWireframe);
+			defaultCheckBox("Depth Test", &editorSettings.rendererSettings.enableDepthTest);
+			defaultCheckBox("Face Culling", &editorSettings.rendererSettings.enableFaceCulling);
+			defaultCheckBox("Show Gizmos", &editorSettings.showGizmos);
+
+			bool savedUseDarkTheme = editorSettings.useDarkTheme;
+			if (defaultCheckBox("Use Dark Mode", &editorSettings.useDarkTheme))
+			{
+				if (savedUseDarkTheme != editorSettings.useDarkTheme)
+					ImGui::StyleColorsDark();
+			}
+			else if (!editorSettings.useDarkTheme)
+			{
+				ImGui::StyleColorsLight();
+			}
+
+			ImGui::Text("Camera Settings");
+			ImGui::SliderFloat("Camera Speed", &editorCamera.cameraSpeed, 0.1f, 10.0f);
+			ImGui::SliderFloat("Camera Sensitivity", &editorCameraSensitivity, 0.1f, 10.0f); 
+			ImGui::SliderFloat("Camera FOV", &editorCamera.fov, 0.1f, 120.0f);
+			
+		}
+		ImGui::Separator();
+
+		if (ImGui::CollapsingHeader("Game Settings", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::Text("Game Name: ");
+		}
+		ImGui::Separator();
+
+	}
+
+	void EditorGUI::drawBottomPanel()
+	{
+		int w, h;
+		window.getWindowSize(&w, &h);
+		int panelWidth = w / 5;
+
+		ImGuiWindowFlags windowFlags = 0;
+		windowFlags |= ImGuiWindowFlags_NoMove;
+		windowFlags |= ImGuiWindowFlags_NoResize;
+		windowFlags |= ImGuiWindowFlags_NoScrollbar;
+		windowFlags |= ImGuiWindowFlags_NoTitleBar;
+
+
+		ImGui::SetNextWindowPos(ImVec2(panelWidth, h - 300));
+		ImGui::SetNextWindowSize(ImVec2(w - panelWidth * 2, 300));
+		ImGui::Begin("##BottomPanel", nullptr, windowFlags);
+
+		if (ImGui::BeginTabBar("##BottomTabs", ImGuiTabBarFlags_None))
+		{
+			if (ImGui::BeginTabItem("Assets"))
+			{
+				drawAssetsSection();
+				ImGui::EndTabItem();
+			}
+			if (ImGui::BeginTabItem("Console"))
+			{
+				ImGui::EndTabItem();
+			}
+			ImGui::EndTabBar();
+		}
+
+		ImGui::End();
+	}
+
+	void EditorGUI::drawAssetsSection()
+	{
+		if (auto lockedSelectedAssetNodeFolder = selectedAssetNodeFolder.lock())
+		{
+			std::vector<std::weak_ptr<AssetNode>> parents = lockedSelectedAssetNodeFolder->getEntireParentage();
+			std::reverse(parents.begin(), parents.end());
+
+			for (auto parent : parents)
+			{
+				if (auto lockedParent = parent.lock())
+				{
+					ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 0, 0, 0));
+					if (ImGui::Button(lockedParent->name.c_str()))
+					{
+						selectedAssetNodeFolder = lockedParent;
+						ImGui::PopStyleColor();
+						break;
+					}
+
+					ImGui::PopStyleColor();
+
+
+					ImGui::SameLine();
+					ImGui::Text(">");
+					ImGui::SameLine();
+				}
+			}
+
+
+			ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 0, 0, 0));
+			ImGui::Button(lockedSelectedAssetNodeFolder->name.c_str());
+			ImGui::PopStyleColor();
+
+			ImGui::Separator();
+
+
+
+			// draw the assets in the selected folder
+			for (auto& child : lockedSelectedAssetNodeFolder->children)
+			{
+				if (child == NULL)
+					continue;
+
+				drawAssetItem(child);
+				ImGui::SameLine();
+			}
+		}
+	}
+
+	void EditorGUI::drawAssetItem(std::shared_ptr<AssetNode> assetNode)
+	{
+		if (ImGui::Button(assetNode->name.c_str()))
+		{
+			if (assetNode->isFolder)
+				selectedAssetNodeFolder = assetNode;
+		}
+	}
+
+	bool EditorGUI::defaultCheckBox(const std::string& label, bool* value)
+	{
+		return ImGui::Checkbox(label.c_str(), value);
+	}
+
 	Camera* EditorGUI::getActiveCamera()
 	{
 		if (activeViewPort == ActiveViewPort::Scene)

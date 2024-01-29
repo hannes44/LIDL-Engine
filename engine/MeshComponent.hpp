@@ -36,6 +36,8 @@ namespace engine
 
 		Material material{};
 
+		std::string getName() override { return "Mesh"; };
+
 	private:
 		static MeshComponent createCube();
 	};

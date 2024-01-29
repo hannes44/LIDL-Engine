@@ -8,6 +8,7 @@
 #include "GameConfig.hpp"
 #include "Material.hpp"
 #include "GameObject.hpp"
+#include "RendererSettings.hpp"
 
 namespace engine
 {
@@ -43,6 +44,8 @@ namespace engine
 		GameConfig config{};
 
 		void addGameObject(std::unique_ptr<GameObject> gameObject);
+
+		RendererSettings renderingSettings{};
 
 	protected:
 		// 0 is uncapped
