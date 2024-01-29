@@ -1,6 +1,7 @@
 #pragma once
 #include "InputSystem.hpp"
 #include "InputEvent.hpp"
+#include <SDL.h>
 
 /*
     InputFramework class
@@ -27,12 +28,14 @@ namespace engine {
 
         void cleanup() override;
 
-    private:
-        double tick;
-        double timeInterval;
+        bool isKeyPressed(const char* key);
 
+        void handleContinousInput();
+
+    private:
         // Private constructor to prevent external instantiation
         InputFramework();
+        SDL_Event ev;
 
     };
 

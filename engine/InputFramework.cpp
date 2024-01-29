@@ -1,6 +1,6 @@
 #include "InputFramework.hpp"
 #include "Bootstrap.hpp"
-#include <SDL.h>
+#include "Logger.hpp"
 
 /*
     This is the implementation of the InputFramework class
@@ -9,79 +9,91 @@
 
 namespace engine {
 
-    InputFramework::InputFramework() : tick(0), timeInterval(1.0 / 60.0) {}
+    InputFramework::InputFramework() {
+    }
 
     InputFramework& InputFramework::getInstance() {
         static InputFramework instance;
         return instance;
     }
 
+    bool InputFramework::isKeyPressed(const char* key) {
+        SDL_Keycode keycode = SDL_GetKeyFromName(key);
+        const Uint8* keystates = SDL_GetKeyboardState(NULL);
+        return keystates[SDL_GetScancodeFromKey(keycode)];
+    }
+
+    // Handle continuous input
+    void InputFramework::handleContinousInput() {
+        // Initialize with default values
+        InputEvent ie(0, 0, 0, Key::LAST);
+        
+        const Uint8* keystates = SDL_GetKeyboardState(NULL);
+        for (int keyInt = (int)Key::A; (int)keyInt != (int)Key::LAST; keyInt++) {
+            Key key = static_cast<Key>(keyInt);
+            if (keystates[keyInt]) {
+				ie.setKey(key);
+                if (key == Key::LSHIFT) LOG_INFO("LSHIFT");
+				dispatchEvent(ie, "KeyHold");
+			}
+        }
+    }
+
     // Read input from the SDL window
     void InputFramework::getInput() {
-        SDL_Event ev;
-        InputEvent ie(0, 0, 0, "");  // Initialize with default values
+        // Initialize with default values
+        InputEvent ie(0, 0, 0, Key::LAST);
+        //float x, y;
+        Uint32 buttons;
 
-        tick += Bootstrap::getInstance().getDeltaTime();
+        SDL_PumpEvents();
+        handleContinousInput();
 
-        if (tick < timeInterval) {
-            return;
-        }
+        // Poll for events and dispatch them
+        while (SDL_PollEvent(&ev)) {
 
-        if (SDL_PollEvent(&ev) != 0) {
-            // Check if there are any events to process
-            while (SDL_PollEvent(&ev)) {
-                // Handle different types of input events and dispatch them
-                // to registered listeners using InputSystem::dispatchEvent.
-
-                if (ev.type == SDL_EVENT_MOUSE_MOTION) {
-                    SDL_MouseMotionEvent mot = ev.motion;
-                    ie.setX(mot.x);
-                    ie.setY(mot.y);
-                    dispatchEvent(ie, "MouseMotion");
-                }
-                else if (ev.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
-                    SDL_MouseButtonEvent but = ev.button;
-                    ie.setX(but.x);
-                    ie.setY(but.y);
-                    ie.setButton(but.button);
-                    dispatchEvent(ie, "MouseButtonDown");
-                }
-                else if (ev.type == SDL_EVENT_MOUSE_BUTTON_UP) {
-                    SDL_MouseButtonEvent but = ev.button;
-                    ie.setX(but.x);
-                    ie.setY(but.y);
-                    ie.setButton(but.button);
-                    dispatchEvent(ie, "MouseButtonUp");
-                }
-                else if (ev.type == SDL_EVENT_KEY_DOWN) {
-                    SDL_KeyboardEvent key = ev.key;
-                    ie.setKey(SDL_GetKeyName(key.keysym.sym));
-                    dispatchEvent(ie, "KeyDown");
-                }
-                else if (ev.type == SDL_EVENT_KEY_UP) {
-                    SDL_KeyboardEvent key = ev.key;
-                    ie.setKey(SDL_GetKeyName(key.keysym.sym));
-                    dispatchEvent(ie, "KeyUp");
-                }
-                else if (ev.type == SDL_EVENT_QUIT) {
-                    dispatchEvent(ie, "Quit");
-                }
+            if (ev.type == SDL_EVENT_MOUSE_MOTION) {
+                SDL_MouseMotionEvent mot = ev.motion;
+                ie.setX(mot.xrel);
+                ie.setY(mot.yrel);
+                dispatchEvent(ie, "MouseMotion");
+            }
+            else if (ev.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
+                SDL_MouseButtonEvent but = ev.button;
+                ie.setX(but.x);
+                ie.setY(but.y);
+                ie.setButton(but.button);
+                dispatchEvent(ie, "MouseButtonDown");
+            }
+            else if (ev.type == SDL_EVENT_MOUSE_BUTTON_UP) {
+                SDL_MouseButtonEvent but = ev.button;
+                ie.setX(but.x);
+                ie.setY(but.y);
+                ie.setButton(but.button);
+                dispatchEvent(ie, "MouseButtonUp");
+            }
+            else if (ev.type == SDL_EVENT_KEY_DOWN && ev.key.repeat == 0) {
+                SDL_KeyboardEvent key = ev.key;
+                ie.setKey((Key)key.keysym.scancode);
+                dispatchEvent(ie, "KeyDown");
+            }
+            else if (ev.type == SDL_EVENT_KEY_UP) {
+                SDL_KeyboardEvent key = ev.key;
+                ie.setKey((Key)key.keysym.scancode);
+                dispatchEvent(ie, "KeyUp");
+            }
+            else if (ev.type == SDL_EVENT_QUIT) {
+                dispatchEvent(ie, "Quit");
             }
         }
-        else {
-            // Error retrieving event
-            std::cerr << "SDL_PollEvent error: " << SDL_GetError() << std::endl;
-        }
 
-        tick -= timeInterval;
     }
 
     // Initialize the input framework
     void InputFramework::initialize() {
-        tick = 0;
-        timeInterval = 1.0 / 60.0;
         // Additional initialization logic can be added here
         InputSystem::initialize();
+        SDL_SetRelativeMouseMode(SDL_TRUE);
     }
 
     // Clean up resources

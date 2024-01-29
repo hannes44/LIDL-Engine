@@ -7,6 +7,7 @@
 #include "GameObject.hpp"
 #include "MeshComponent.hpp"
 #include <memory>
+#include "InputFramework.hpp"
 #include "Shader.hpp"
 #include "Camera.hpp"
 #include <vector>
@@ -21,6 +22,8 @@ int main(int argc, char* argv[])
 	engine::Window::getInstance().createWindow(800, 600, "Sweddes MAMMA PÅ PIZZA");
 
 	glewInit();
+
+	engine::InputFramework::getInstance().initialize();
 
 	engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
 

@@ -2,7 +2,6 @@
 #include "InputFramework.hpp"
 #include "Window.hpp"
 #include "Game.hpp"
-#include "Cube.hpp"
 #include "GameObject.hpp"
 #include "TestGame.hpp"
 #include "Bootstrap.hpp"
@@ -16,7 +15,7 @@
 
 namespace engine {
 	double TestGame::getTargetFrameRate() {
-		return 1;
+		return 0;
 	}
 
 	void TestGame::update() {
@@ -26,7 +25,7 @@ namespace engine {
 		// ----------------------------------------------------------
 		// CONSOLE OUTPUT
 		// ----------------------------------------------------------
-		Bootstrap::getInstance().getDisplay().clear();
+		/*Bootstrap::getInstance().getDisplay().clear();
 
 		for (auto gameObject : gameObjects) {
 			Bootstrap::getInstance().getDisplay().drawGameObject(gameObject);
@@ -40,21 +39,19 @@ namespace engine {
 			Bootstrap::getInstance().getDisplay().drawText("Terminal size: " + size, 0, 1, Color::RED);
 		}
 
-		Bootstrap::getInstance().getDisplay().show();
+		Bootstrap::getInstance().getDisplay().show();*/
 
 		// ----------------------------------------------------------
 		// SDL WINDOW OUTPUT
 		// ----------------------------------------------------------
 
 		Renderer::renderGame(gameObjects, camera);
+		camera.update();
 		
 		Window::getInstance().newFrame();
 	}
 
 	void TestGame::initialize() {
-		// Initialize the InputFramework and InputSystem
-		InputFramework::getInstance().initialize();
-
 
 		engine::MeshComponent meshComponent1 = engine::MeshComponent::loadMeshFromOBJFile("amugus.obj");
 		engine::MeshComponent meshComponent2 = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);

@@ -77,8 +77,6 @@ target_sources(Engine PRIVATE
 	InputSystem.cpp
 	InputFramework.hpp
 	InputFramework.cpp
-	Cube.hpp
-	Cube.cpp
 	Renderer.hpp
 	Renderer.cpp
 	GraphicsAPI.hpp
