@@ -16,8 +16,9 @@ namespace engine
 	}
 	void EditorSerializer::createYAMLFile(const std::string& filePath, const std::string& fileName)
 	{
-		LOG_INFO("Creating YAML file: " + filePath + fileName + EDITOR_CONFIG_FILE_EXTENSION);
-		std::ofstream outfile(filePath + fileName + EDITOR_CONFIG_FILE_EXTENSION);
+		const std::string fullPath = filePath + fileName + EDITOR_CONFIG_FILE_EXTENSION;
+		LOG_INFO("Creating YAML file: " + fullPath);
+		std::ofstream outfile(fullPath);
 		outfile.close();
 	}
 	void EditorSerializer::serializeEditorSettings(EditorSettings& settings)
@@ -40,8 +41,6 @@ namespace engine
 		std::ofstream fout(EDITOR_FOLDER_PATH + fileName + EDITOR_CONFIG_FILE_EXTENSION);
 		fout << out.c_str();
 
-		std::cout << "Here's the output YAML:\n" << out.c_str();
-
 		LOG_INFO("Serialized editor settings: ");
 	}
 	EditorSettings EditorSerializer::deSerializeEditorSettings()
@@ -49,7 +48,6 @@ namespace engine
 		LOG_INFO("Deserializing editor settings: ");
 
 		std::string fileName = EDITOR_CONFIG_FILE_NAME;
-		//std::ifstream fin(EDITOR_FOLDER_PATH + fileName + EDITOR_CONFIG_FILE_EXTENSION);
 		
 		YAML::Node config = YAML::LoadFile(EDITOR_FOLDER_PATH + fileName + EDITOR_CONFIG_FILE_EXTENSION);
 
@@ -61,7 +59,7 @@ namespace engine
 		}
 		catch(const std::exception& e)
 		{
-			// Id there is problems with deserialization, return default settings
+			// If there is problems with deserialization, return default settings
 			LOG_WARN("Failed to deserialize editor settings: " + std::string(e.what()));
 			return EditorSettings();
 		}
