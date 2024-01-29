@@ -46,12 +46,13 @@ namespace engine {
         // Initialize with default values
         InputEvent ie(0, 0, 0, Key::LAST);
 
-        ImGui_ImplSDL3_ProcessEvent(&ev);
         SDL_PumpEvents();
         handleContinousInput();
 
         // Poll for events and dispatch them
         while (SDL_PollEvent(&ev)) {
+
+            ImGui_ImplSDL3_ProcessEvent(&ev);
 
             if (ev.type == SDL_EVENT_MOUSE_MOTION) {
                 SDL_MouseMotionEvent mot = ev.motion;
@@ -86,9 +87,7 @@ namespace engine {
             else if (ev.type == SDL_EVENT_QUIT) {
                 dispatchEvent(ie, "Quit");
             }
-           
         }
-
     }
 
     // Initialize the input framework
