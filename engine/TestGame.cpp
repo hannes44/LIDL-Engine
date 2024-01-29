@@ -33,8 +33,14 @@ namespace engine {
 		engine::MeshComponent meshComponent2 = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
 		engine::PointLightComponent pointLightComponent = engine::PointLightComponent();
 		engine::PhysicsComponent physicsComponentWithGravity = engine::PhysicsComponent();
+		physicsComponentWithGravity.setVelocity(glm::vec3(0, 10, 0));
+		
 		engine::PhysicsComponent physicsComponentWithoutGravity = engine::PhysicsComponent(true);
+		physicsComponentWithoutGravity.setVelocity(glm::vec3(0, 0, 0));
+		
 		engine::PhysicsComponent physicsComponentWithHigherGravity = engine::PhysicsComponent();
+		physicsComponentWithHigherGravity.setVelocity(glm::vec3(0, 10, 0));
+		
 		physicsComponentWithHigherGravity.overrideGravityCoefficient = true;
 		physicsComponentWithHigherGravity.gravityCoefficient *= 1.2f;
 
@@ -66,7 +72,6 @@ namespace engine {
 		ball1->transform.setPosition(glm::vec3(0, 0, 0));
 		ball1->components.push_back(std::make_unique<engine::MeshComponent>(meshComponent2));
 		ball1->name = "Ball with gravity";
-		ball1->transform.setVelocity(glm::vec3(0, 10, 0));
 
 		ball1->components.push_back(std::make_unique<engine::PhysicsComponent>(physicsComponentWithGravity));
 
@@ -77,7 +82,7 @@ namespace engine {
 		ball2->transform.setPosition(glm::vec3(-10, 0, 0));
 		ball2->components.push_back(std::make_unique<engine::MeshComponent>(meshComponent2));
 		ball2->name = "Ball without gravity";
-		ball2->transform.setVelocity(glm::vec3(0, 0, 0));
+		
 
 		ball2->components.push_back(std::make_unique<engine::PhysicsComponent>(physicsComponentWithoutGravity));
 
@@ -88,7 +93,6 @@ namespace engine {
 		ball3->transform.setPosition(glm::vec3(-20, 0, 0));
 		ball3->components.push_back(std::make_unique<engine::MeshComponent>(meshComponent2));
 		ball3->name = "Ball with higher gravity";
-		ball3->transform.setVelocity(glm::vec3(0, 10, 0));
 
 		ball3->components.push_back(std::make_unique<engine::PhysicsComponent>(physicsComponentWithHigherGravity));
 

@@ -30,7 +30,7 @@ namespace engine {
                 continue;
             }
 
-            glm::vec3 velocity = gameObject->transform.getVelocity();
+            glm::vec3 velocity = physicsComponent->getVelocity();
 
             // Apply gravity
             if (!physicsComponent->disableGravity) {

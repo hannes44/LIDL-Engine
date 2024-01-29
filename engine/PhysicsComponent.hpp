@@ -15,6 +15,11 @@ namespace engine
 		float gravityCoefficient = 9.82f;
 		float mass = 0;
 
+		glm::vec3 currentVelocity { 0 };
+
+		glm::vec3 getVelocity() { return currentVelocity; };
+		void setVelocity(glm::vec3 velocity) { currentVelocity = velocity; };
+
 		std::string getName() override { return "Physics"; };
 	};
 }
