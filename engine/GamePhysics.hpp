@@ -22,7 +22,7 @@ namespace engine
 
 		inline static GamePhysics* instance;
         GamePhysicsSettings settings;
-        long long lastFrameTime = 0;
+        long long lastPhysicsUpdateTimestamp = 0;
 
         /** 
          * The scale of the fixed update to correctly scale the physics.
@@ -30,7 +30,6 @@ namespace engine
          * If the fixed update is twice a second, the scale will be 0.5 since a cube with the velocity 1 unit per second should only move 0.5 units each update.
         */
         float getFixedUpdateScale();
-        static long long getTime();
 
 	public:
 		// Non cloneable

@@ -53,7 +53,5 @@ namespace engine
 
 		int frameCount = 0;
 		long long lastFrameTime = 0;
-
-		static long long getTime();
 	};
 }

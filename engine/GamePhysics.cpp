@@ -4,6 +4,7 @@
 #include <string>
 #include <chrono>
 #include "PhysicsComponent.hpp"
+#include "Utils.hpp"
 
 namespace engine {
 
@@ -13,10 +14,6 @@ namespace engine {
 			instance = new GamePhysics();
 
 		return *instance;
-	}
-
-    long long GamePhysics::getTime() {
-		return std::chrono::high_resolution_clock::now().time_since_epoch().count();
 	}
 
     float GamePhysics::getFixedUpdateScale() {
@@ -43,11 +40,11 @@ namespace engine {
 	}
 
     void GamePhysics::run(Game *game) {
-        if (GamePhysics::getTime() - lastFrameTime < PHYSICS_TIME_CONVERSION_FACTOR * settings.fixedUpdateIntervalMS) {
+        if (Utils::getTimestampNS() - lastPhysicsUpdateTimestamp < PHYSICS_TIME_CONVERSION_FACTOR * settings.fixedUpdateIntervalMS) {
             return;
         }
 
-        lastFrameTime = GamePhysics::getTime();
+        lastPhysicsUpdateTimestamp = Utils::getTimestampNS();
         fixedUpdate(game->gameObjects);
     }
 }

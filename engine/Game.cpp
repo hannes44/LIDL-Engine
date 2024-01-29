@@ -1,20 +1,16 @@
 #include "Game.hpp"
-#include <chrono>
+#include "Utils.hpp"
 
 constexpr auto TIME_CONVERSION_FACTOR = 1000000000;
 
 namespace engine {
-	long long Game::getTime() {
-		return std::chrono::high_resolution_clock::now().time_since_epoch().count();
-	}
-
 	const void Game::run() {
-		if (getTargetFrameRate() > 0 && Game::getTime() - lastFrameTime < TIME_CONVERSION_FACTOR / (long long)getTargetFrameRate()) {
+		if (getTargetFrameRate() > 0 && Utils::getTimestampNS() - lastFrameTime < TIME_CONVERSION_FACTOR / (long long)getTargetFrameRate()) {
 			return;
 		}
 
 		frameCount++;
-		lastFrameTime = Game::getTime();
+		lastFrameTime = Utils::getTimestampNS();
 		update();
 	}
 	std::weak_ptr<Texture> Game::loadTexture(const std::string& textureFileName)
