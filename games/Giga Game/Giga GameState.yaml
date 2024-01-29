@@ -1,0 +1,25 @@
+GameObjects:
+  - name: BOMPASPY
+    transform: [15, 0, 0, 0, 0, 15, 0, 0, 0, 0, 15, 0, 15, 10, 0, 1]
+    isVisible: true
+    Id: 0INtObD72aLNPNlCPMYH9BP8pD97X7f6
+    Components:
+      - name: Mesh
+  - name: Light
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1]
+    isVisible: true
+    Id: XYHMS1ALHu7EGZHqUy1vhWXUkiu0Aaa5
+    Components:
+      - name: PointLight
+  - name: SIGMA AMUGUS
+    transform: [2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 10, 10, 0, 1]
+    isVisible: true
+    Id: cWxAnjfLVuhCQEX8am8E8b8HSBOyVZI1
+    Components:
+      - name: Mesh
+Textures:
+  - name: bompaspy
+    fileName: bompaspy.png
+    Id: h4banbq5Y58XPQBPYo3CmIuC9jZFwYLb
+Materials:
+  []

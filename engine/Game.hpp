@@ -43,7 +43,7 @@ namespace engine
 
 		GameConfig config{};
 
-		void addGameObject(std::unique_ptr<GameObject> gameObject);
+		void addGameObject(std::shared_ptr<GameObject> gameObject);
 
 		RendererSettings renderingSettings{};
 

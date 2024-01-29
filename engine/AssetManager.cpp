@@ -47,4 +47,9 @@ namespace engine
 		
 
 	}
+	void AssetManager::changeGame(Game* game)
+	{
+		this->game = game;
+		buildAssetTree();
+	}
 }
