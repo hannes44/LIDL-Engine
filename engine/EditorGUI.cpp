@@ -33,9 +33,9 @@ namespace engine
 
 		engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
 
-		game = std::make_shared<TestGame>();
-		game->initialize(); // Temporary for testing, should not be called when serialization works
-		game->camera.translate(0, 0, 5);
+	//	game = std::make_shared<TestGame>();
+	//	game->initialize(); // Temporary for testing, should not be called when serialization works
+	//	game->camera.translate(0, 0, 5);
 
 		editorCamera.translate(0, 0, 15);
 		editorCamera.rotate(10, 0, 1, 0);

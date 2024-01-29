@@ -46,6 +46,9 @@ namespace engine
 		static void deserializeMaterials(YAML::Node node, Game* game);
 
 		static void deserializeGameObjects(YAML::Node node, Game* game);
+		static void deserializeComponents(YAML::Node node, GameObject* gameObject);
+
+		static void deserializeComponent(YAML::Node node, GameObject* gameObject);
 
 	};
 }

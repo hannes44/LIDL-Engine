@@ -139,6 +139,7 @@ namespace engine
 
 		out << YAML::EndSeq;
 	}
+
 	void GameSerializer::serializeComponent(std::shared_ptr<Component> component, YAML::Emitter& out)
 	{
 		out << YAML::BeginMap;
@@ -318,6 +319,7 @@ namespace engine
 				gameObject->isVisible = gameObjectNode["isVisible"].as<bool>();
 				game->addGameObject(gameObject);
 				gameObject->uuid.id = gameObjectNode["Id"].as<std::string>();
+				deserializeComponents(gameObjectNode, gameObject.get());
 			}
 			catch (const std::exception& e)
 			{
@@ -326,5 +328,60 @@ namespace engine
 
 		}
 
+	}
+
+	void GameSerializer::deserializeComponents(YAML::Node node, GameObject* gameObject)
+	{
+		YAML::Node componentsNode;
+		try
+		{
+			componentsNode = node["Components"];
+		}
+		catch (const std::exception& e)
+		{
+			LOG_WARN("Failed to deserialize components: " + std::string(e.what()));
+			return;
+		}
+
+		for (YAML::const_iterator it = componentsNode.begin(); it != componentsNode.end(); ++it)
+		{
+			try
+			{
+				YAML::Node componentNode = *it;
+				deserializeComponent(componentNode, gameObject);
+			}
+			catch (const std::exception& e)
+			{
+				LOG_WARN("Failed to deserialize component: " + std::string(e.what()));
+			}
+		}
+	}
+
+	void GameSerializer::deserializeComponent(YAML::Node node, GameObject* gameObject)
+	{
+		try 
+		{
+			std::string componentName = node["name"].as<std::string>();
+			if (componentName == MeshComponent::componentName)
+			{
+				if (node["primativeType"])
+				{
+					std::string primativeType = node["primativeType"].as<std::string>();
+					PrimativeMeshType type = MeshComponent::stringToPrimativeType(primativeType);
+					std::shared_ptr<MeshComponent> meshComponent = MeshComponent::createPrimative(type);
+					gameObject->components.push_back(meshComponent);
+				}
+				else if (node["objFileName"])
+				{
+					std::string objFileName = node["objFileName"].as<std::string>();
+					std::shared_ptr<MeshComponent> meshComponent = MeshComponent::loadMeshFromOBJFile(objFileName);
+					gameObject->components.push_back(meshComponent);
+				}
+			}
+		}
+		catch (const std::exception& e)
+		{
+			LOG_WARN("Failed to deserialize component: " + std::string(e.what()));
+		}
 	}
 }

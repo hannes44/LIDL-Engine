@@ -63,23 +63,23 @@ namespace engine {
 		InputFramework::getInstance().initialize();
 
 
-		engine::MeshComponent meshComponent1 = engine::MeshComponent::loadMeshFromOBJFile("amugus.obj");
-		engine::MeshComponent meshComponent2 = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
+		std::shared_ptr<MeshComponent> meshComponent1 = engine::MeshComponent::loadMeshFromOBJFile("amugus.obj");
+		std::shared_ptr<MeshComponent> meshComponent2 = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
 		engine::PointLightComponent pointLightComponent = engine::PointLightComponent();
 
-		meshComponent2.material.diffuseTexture = loadTexture("bompaspy.png");
+		meshComponent2->material.diffuseTexture = loadTexture("bompaspy.png");
 
 		GameObject* sphere1 = new GameObject();
 		sphere1->transform.setScale(glm::vec3(2, 2, 2));
 		sphere1->transform.setPosition(glm::vec3(10, 10, 0));
-		sphere1->components.push_back(std::make_unique<engine::MeshComponent>(meshComponent1));
+		sphere1->components.push_back(meshComponent1);
 		sphere1->name = "SIGMA AMUGUS";
 		addGameObject(std::unique_ptr<GameObject>(sphere1));
 
 		GameObject* sphere2 = new GameObject();
 		sphere2->transform.setScale(glm::vec3(15, 15, 15));
 		sphere2->transform.setPosition(glm::vec3(15, 10, 0));
-		sphere2->components.push_back(std::make_unique<engine::MeshComponent>(meshComponent2));
+		sphere2->components.push_back(meshComponent2);
 		sphere2->name = "BOMPASPY";
 		addGameObject(std::unique_ptr<GameObject>(sphere2));
 

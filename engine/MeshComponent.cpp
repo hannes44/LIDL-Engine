@@ -104,7 +104,7 @@ namespace engine
 		LOG_INFO("MeshComponent: Created mesh with {0} vertices and {1} indices", vertices.size(), indices.size());
 	}
 
-	MeshComponent MeshComponent::loadMeshFromOBJFile(const std::string& filename)
+	std::shared_ptr<MeshComponent> MeshComponent::loadMeshFromOBJFile(const std::string& filename)
 	{
 		LOG_INFO("Loading mesh from file: {0}", filename);
 
@@ -161,10 +161,10 @@ namespace engine
 
 		LOG_INFO("Created mesh from file: {0}", filename);
 
-		return mesh;
+		return std::make_shared<MeshComponent>(mesh);
 	}
 
-	MeshComponent MeshComponent::createPrimative(PrimativeMeshType type)
+	std::shared_ptr<MeshComponent> MeshComponent::createPrimative(PrimativeMeshType type)
 	{
 		std::vector<Vertex> vertices{};
 		std::vector<uint32_t> indices{};
@@ -183,7 +183,7 @@ namespace engine
 		default:
 			LOG_ERROR("PrimativeMeshType: {0} is not a valid primative mesh type", type);
 
-			return MeshComponent(vertices, indices);
+			return nullptr;
 		}
 	}
 	std::string MeshComponent::primativeTypeToString(PrimativeMeshType type)
@@ -219,7 +219,7 @@ namespace engine
 			return PrimativeMeshType::CUBE;
 		}
 	}
-	MeshComponent MeshComponent::createCube()
+	std::shared_ptr<MeshComponent> MeshComponent::createCube()
 	{
 		LOG_INFO("Creating cube mesh");
 		std::vector<Vertex> vertices{};
@@ -283,6 +283,6 @@ namespace engine
 
 		MeshComponent cube = MeshComponent(vertices, indices);
 		cube.primativeType = PrimativeMeshType::CUBE;
-		return cube;
+		return std::make_shared<MeshComponent>(cube);
 	}
 }
