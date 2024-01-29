@@ -9,6 +9,7 @@ namespace engine
 
 	OpenGLTexture::OpenGLTexture(const std::string& textureFilename)
 	{
+		LOG_INFO("Creating texture " + textureFilename);
 		filename = textureFilename;
 
 		std::string filenameNoExtension = textureFilename.substr(0, textureFilename.find_last_of("."));
@@ -22,6 +23,7 @@ namespace engine
 		unsigned char* data = stbi_load((PATH_TO_TEXTURES + textureFilename).c_str(), &width, &height, &nrChannels, 0);
 		if (data)
 		{
+
 			// Generate the texture
 			if (nrChannels == 3)
 			{
@@ -48,6 +50,8 @@ namespace engine
 			throw std::runtime_error("Failed to load texture");
 		}
 		stbi_image_free(data);
+
+		LOG_INFO("Texture " + textureFilename + " created");
 	}
 	OpenGLTexture::~OpenGLTexture()
 	{

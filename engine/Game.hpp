@@ -5,6 +5,10 @@
 #include "Texture.hpp"
 #include <string>
 #include <map>
+#include "GameConfig.hpp"
+#include "Material.hpp"
+#include "GameObject.hpp"
+#include "RendererSettings.hpp"
 
 namespace engine
 {
@@ -24,9 +28,24 @@ namespace engine
 		// Currenly limit the game to only one camera
 		Camera camera{};
 
+		// Texture Id to Texture
 		std::map<std::string, std::shared_ptr<Texture>> textures{};
 
-		std::shared_ptr<Texture> loadTexture(const std::string& textureFileName);
+		// GameObject Id to GameObject
+		std::map<std::string, std::shared_ptr<GameObject>> gameObjects{};
+
+		// Material Id to Material
+		std::map<std::string, std::shared_ptr<Material>> materials{};
+
+		std::weak_ptr<Texture> loadTexture(const std::string& textureFileName);
+
+		std::string name = "Giga Game";
+
+		GameConfig config{};
+
+		void addGameObject(std::unique_ptr<GameObject> gameObject);
+
+		RendererSettings renderingSettings{};
 
 	protected:
 		// 0 is uncapped

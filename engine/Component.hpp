@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 namespace engine
 {
@@ -14,6 +15,9 @@ namespace engine
 		virtual void initialize() {};
 		virtual void update() {};
 
+		virtual std::string getName() { return ""; };
+
+		virtual std::string getDescription() { return ""; };
 		// TODO: store UUID to entity
 	};
 }

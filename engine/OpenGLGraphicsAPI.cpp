@@ -1,11 +1,19 @@
 #include "OpenGLGraphicsAPI.hpp"
 #include <glm/glm.hpp>
 #include <GL/glew.h>
+#include "Logger.hpp"
 
 namespace engine
 {
 	void OpenGLGraphicsAPI::drawIndexed(VertexArray* vertexArray, int indexCount)
 	{
+		if (vertexArray == nullptr)
+		{
+			LOG_ERROR("drawIndexed: vertexArray is null");
+			return;
+		}
+
+
 		glBindVertexArray(vertexArray->vertexArrayId);
 
 		glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
@@ -35,6 +43,10 @@ namespace engine
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		else
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+	void OpenGLGraphicsAPI::setViewport(int x, int y, int width, int height)
+	{
+		glViewport(x, y, width, height);
 	}
 	GraphicsAPIType engine::OpenGLGraphicsAPI::getType()
 	{

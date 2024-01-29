@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <memory>
 
 namespace engine
 {
@@ -19,6 +20,6 @@ namespace engine
 		virtual void setVec4(const std::string& name, float x, float y, float z, float w) = 0;
 		virtual void setMat4(const std::string& name, float* value) = 0;
 
-		static Shader* create(const std::string& vertName, const std::string& fragName);
+		static std::unique_ptr<Shader> create(const std::string& vertName, const std::string& fragName);
 	};
 }

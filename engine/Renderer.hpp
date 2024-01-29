@@ -1,17 +1,17 @@
 #pragma once
 #include "GraphicsAPI.hpp"
 #include <memory>
-#include "GameObject.hpp"
 #include "Shader.hpp"
-#include "Camera.hpp"
 #include <vector>
+#include "Game.hpp"
+#include "RendererSettings.hpp"
 
 namespace engine
 {
 	class Renderer
 	{
 	public:
-		static void renderGame(std::vector<GameObject*> gameObjects, Camera& camera);
+		static void renderGame(Game* game, Camera* camera, RendererSettings* renderingSettings);
 
 		static void initGraphicsAPI(GraphicsAPIType type);
 

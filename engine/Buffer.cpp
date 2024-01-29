@@ -5,12 +5,12 @@
 
 namespace engine
 {
-	VertexBuffer* VertexBuffer::create(float* vertices, int size)
+	std::unique_ptr<VertexBuffer> VertexBuffer::create(float* vertices, int size)
 	{
 		switch (Renderer::getAPIType())
 		{
 			case GraphicsAPIType::OpenGL:
-				return new OpenGLVertexBuffer(vertices, size);
+				return std::make_unique<OpenGLVertexBuffer>(vertices, size);
 			default:
 				LOG_FATAL("ERROR creating vertex buffer, Unknown Graphics API");
 				abort();
@@ -19,12 +19,12 @@ namespace engine
 		return nullptr;
 	}
 
-	IndexBuffer* IndexBuffer::create(unsigned int* indices, int count)
+	std::unique_ptr<IndexBuffer> IndexBuffer::create(unsigned int* indices, int count)
 	{
 		switch (Renderer::getAPIType())
 		{
 		case GraphicsAPIType::OpenGL:
-			return new OpenGLIndexBuffer(indices, count);
+			return std::make_unique<OpenGLIndexBuffer>(indices, count);
 		default:
 			LOG_FATAL("ERROR creating index buffer, Unknown Graphics API");
 			abort();
@@ -33,12 +33,12 @@ namespace engine
 		return nullptr;
 	}
 
-	VertexArray* VertexArray::create()
+	std::unique_ptr<VertexArray> VertexArray::create()
 	{
 		switch (Renderer::getAPIType())
 		{
 		case GraphicsAPIType::OpenGL:
-			return new OpenGLVertexArray();
+			return std::make_unique<OpenGLVertexArray>();
 		default:
 			LOG_FATAL("ERROR creating vertex array, Unknown Graphics API");
 			abort();

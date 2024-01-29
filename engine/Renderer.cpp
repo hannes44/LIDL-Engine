@@ -5,6 +5,8 @@
 #include "MeshComponent.hpp"
 #include "Window.hpp"
 #include "PointLightComponent.hpp"
+#include "Game.hpp"
+#include "Camera.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
@@ -12,23 +14,35 @@
 
 namespace engine
 {
-	void Renderer::renderGame(std::vector<GameObject*> gameObjects, Camera& camera)
+	void Renderer::renderGame(Game* game, Camera* camera, RendererSettings* renderingSettings)
 	{
+		int width, height;
+		Window::getInstance().getWindowSize(&width, &height);
+
+		graphicsAPI->setViewport(0, 0, width, height);
+
 		graphicsAPI->setClearColor(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
-		graphicsAPI->setCullFace(false);
+		graphicsAPI->setCullFace(renderingSettings->enableFaceCulling);
 
-		graphicsAPI->setDepthTest(true);
+		graphicsAPI->setDepthTest(renderingSettings->enableDepthTest);
+
+		graphicsAPI->setDrawTriangleOutline(renderingSettings->drawWireframe);
+
+		if (renderingSettings->useMultiSampling)
+			glEnable(GL_MULTISAMPLE);
+		else 
+			glDisable(GL_MULTISAMPLE);
 
 		baseShader->bind();
 
-		glm::mat4 projectionMatrix = camera.getProjectionMatrix();
-		glm::mat4 viewMatrix = camera.getViewMatrix();
+		glm::mat4 projectionMatrix = camera->getProjectionMatrix();
+		glm::mat4 viewMatrix = camera->getViewMatrix();
 
 
 		int lightIndex = 0;
 		// TODO: There should be a list of all the lights in the game to avoid this loop
-		for (auto gameObject : gameObjects)
+		for (const auto& [gameObjectId, gameObject] : game->gameObjects) 
 		{
 			for (auto component : gameObject->components)
 			{
@@ -51,10 +65,10 @@ namespace engine
 		}
 
 		baseShader->setInt("numLights", lightIndex);
-		baseShader->setVec3("viewPos", camera.translation.x, camera.translation.y, camera.translation.z);
+		baseShader->setVec3("viewPos", camera->translation.x, camera->translation.y, camera->translation.z);
 
 
-		for (auto& gameObject : gameObjects)
+		for (const auto& [gameObjectId, gameObject] : game->gameObjects)
 		{
 			MeshComponent* meshComponent = nullptr;
 

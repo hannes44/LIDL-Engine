@@ -16,6 +16,7 @@ source_group("Renderer" FILES
 	Buffer.cpp
 	Shader.hpp
 	Shader.cpp
+	RendererSettings.hpp
 )
 
 source_group("OpenGL" FILES
@@ -29,9 +30,26 @@ source_group("OpenGL" FILES
 	OpenGLTexture.cpp
 )
 
+
+source_group("Serializer" FILES
+	GameSerializer.hpp
+	GameSerializer.cpp
+)
+
 source_group("SDL" FILES
 	SDLWindow.hpp
 	SDLWindow.cpp
+)
+
+source_group("Editor" FILES
+	EditorGUI.hpp
+	EditorGUI.cpp
+	AssetManager.hpp
+	AssetManager.cpp
+	AssetNode.hpp
+	EditorSerializer.hpp
+	EditorSerializer.cpp
+	EditorSettings.hpp
 )
 
 # Find *all* shaders.
@@ -99,11 +117,37 @@ target_sources(Engine PRIVATE
 	Texture.hpp
 	Texture.cpp
 	Material.hpp
+	GameConfig.hpp
+	GameSerializer.hpp
+	GameSerializer.cpp
 	SDLWindow.hpp
 	SDLWindow.cpp
+	EditorGUI.hpp
+	EditorGUI.cpp
+	Uuid.hpp
+	Uuid.cpp
+	RendererSettings.hpp
+	AssetManager.hpp
+	AssetManager.cpp
+	AssetNode.hpp
+	EditorSerializer.hpp
+	EditorSerializer.cpp
+	EditorSettings.hpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 	../vendor/stb/stb_image.h
+	../vendor/ImGuizmo/ImGuizmo.h
+	../vendor/ImGuizmo/ImGuizmo.cpp
 	${SHADERS}
 )
 
-target_link_libraries(Engine PRIVATE vendor)
+target_link_libraries(Engine PRIVATE 
+	imgui
+	imguilib
+	SDL3::SDL3
+	vendor
+)
+
+target_link_libraries(imguilib PRIVATE 
+	imgui
+	SDL3::SDL3
+)

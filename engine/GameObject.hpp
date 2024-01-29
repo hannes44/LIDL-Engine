@@ -4,10 +4,13 @@
 #include "Component.hpp"
 #include <vector>
 #include <memory>
+#include <string>
+#include "Uuid.hpp"
+#include "Selectable.hpp"
 
 namespace engine
 {
-	class GameObject
+	class GameObject : public Selectable
 	{
 	public:
 		GameObject() = default;
@@ -22,7 +25,15 @@ namespace engine
 
 		bool isVisible = true;
 
+		std::string name = "GameObject";
+
 		// TODO: Should limit each component to one of each type
 		std::vector<std::shared_ptr<Component>> components{};
+
+		UUID uuid{};
+
+		UUID getUUID() override;
+
+		std::string getName() override { return name; };
 	};
 }

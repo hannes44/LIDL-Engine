@@ -1,6 +1,8 @@
 #include "InputFramework.hpp"
 #include "Bootstrap.hpp"
 #include "Logger.hpp"
+#include <SDL.h>
+#include <imgui_impl_sdl3.h>
 
 /*
     This is the implementation of the InputFramework class
@@ -43,9 +45,8 @@ namespace engine {
     void InputFramework::getInput() {
         // Initialize with default values
         InputEvent ie(0, 0, 0, Key::LAST);
-        //float x, y;
-        Uint32 buttons;
 
+        ImGui_ImplSDL3_ProcessEvent(&ev);
         SDL_PumpEvents();
         handleContinousInput();
 
@@ -85,6 +86,7 @@ namespace engine {
             else if (ev.type == SDL_EVENT_QUIT) {
                 dispatchEvent(ie, "Quit");
             }
+           
         }
 
     }

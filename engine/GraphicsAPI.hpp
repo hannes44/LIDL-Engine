@@ -22,6 +22,8 @@ namespace engine
 		
 		virtual void setDrawTriangleOutline(bool enabled) = 0;
 
+		virtual void setViewport(int x, int y, int width, int height) = 0;
+
 		virtual GraphicsAPIType getType() = 0;
 	};
 }

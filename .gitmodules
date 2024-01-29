@@ -14,10 +14,14 @@
 [submodule "vendor/glew-cmake"]
 	path = vendor/glew-cmake
 	url = https://github.com/Perlmint/glew-cmake.git
-
+	
 [submodule "vendor/stb"]
 	path = vendor/stb
 	url = https://github.com/nothings/stb.git
 [submodule "vendor/yaml-cpp"]
 	path = vendor/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp.git
+
+[submodule "vendor/ImGuizmo"]
+	path = vendor/ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo.git

@@ -14,26 +14,20 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
+#include "GameSerializer.hpp"
+#include <imgui.h>
+#include <stdio.h>
+#include <SDL3/SDL.h>
+#include <imgui_impl_sdl3.h>
+#include <imgui_impl_opengl3.h>
+#include "EditorGUI.hpp"
 
 int main(int argc, char* argv[])
 {
-	engine::Logger::init();
 
-	engine::Window::getInstance().createWindow(800, 600, "Sweddes MAMMA PÅ PIZZA");
+	engine::EditorGUI editor{};
+	editor.start();
 
-	glewInit();
-
-	engine::InputFramework::getInstance().initialize();
-
-	engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
-
-	engine::Shader* shader = engine::Shader::create("simple.vert", "simple.frag");
-
-	engine::Renderer::baseShader = std::unique_ptr<engine::Shader>(shader);
-
-	auto game = engine::TestGame();
-	game.initialize();
-	game.gameLoop();
 
 	return 0;
 }
