@@ -34,9 +34,20 @@ namespace engine
 		
 		static MeshComponent createPrimative(PrimativeMeshType type);
 
-		Material material{};
+		static std::string primativeTypeToString(PrimativeMeshType type);
+
+		static PrimativeMeshType stringToPrimativeType(const std::string& type);
 
 		std::string getName() override { return "Mesh"; };
+
+		
+		// -Serialized properties-
+		Material material{};
+
+		std::string objFileName = "";
+
+		PrimativeMeshType primativeType;
+		//--------------------------------------
 
 	private:
 		static MeshComponent createCube();

@@ -16,7 +16,7 @@ namespace engine
 		glm::mat4 getProjectionMatrix();
 
 		glm::vec3 translation {20, 20, 20};
-		glm::vec3 rotation {0, 0, 0};
+		glm::vec3 rotation {90, 0, 0};
 		glm::vec3 direction {-1, -1, -1};
 		
 		float fov = 50;

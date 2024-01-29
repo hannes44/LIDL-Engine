@@ -38,6 +38,7 @@ namespace engine
 		game->camera.translate(0, 0, 5);
 
 		editorCamera.translate(0, 0, 15);
+		editorCamera.rotate(10, 0, 1, 0);
 
 		engine::Renderer::baseShader = engine::Shader::create("simple.vert", "simple.frag");
 
@@ -52,6 +53,7 @@ namespace engine
 
 		while (true)
 		{
+			editorCamera.rotate(1, 0, 1, 0);
 			renderNewFrame();
 			InputFramework::getInstance().getInput();
 

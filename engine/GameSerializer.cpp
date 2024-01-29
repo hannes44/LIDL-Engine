@@ -145,9 +145,18 @@ namespace engine
 		out << YAML::Key << "name";
 		out << YAML::Value << component->getName();
 
-		if (std::dynamic_pointer_cast<MeshComponent>(component))
+		if (auto mesh = std::dynamic_pointer_cast<MeshComponent>(component))
 		{
-
+			if (mesh->objFileName != "")
+			{
+				out << YAML::Key << "objFileName";
+				out << YAML::Value << mesh->objFileName;
+			}
+			else if (MeshComponent::primativeTypeToString(mesh->primativeType) != "")
+			{
+				out << YAML::Key << "primativeType";
+				out << YAML::Value << MeshComponent::primativeTypeToString(mesh->primativeType);
+			}
 		}
 
 

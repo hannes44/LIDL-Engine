@@ -2,24 +2,26 @@ GameObjects:
   - name: BOMPASPY
     transform: [15, 0, 0, 0, 0, 15, 0, 0, 0, 0, 15, 0, 15, 10, 0, 1]
     isVisible: true
-    Id: 0INtObD72aLNPNlCPMYH9BP8pD97X7f6
+    Id: 1Sq9l6iLxaRT41o6Nnw2YI845dga8Clv
     Components:
       - name: Mesh
+        primativeType: CUBE
   - name: Light
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1]
     isVisible: true
-    Id: XYHMS1ALHu7EGZHqUy1vhWXUkiu0Aaa5
+    Id: 7a8elUwsoXRekCP0oA9uSbQTim0SUW3D
     Components:
       - name: PointLight
   - name: SIGMA AMUGUS
     transform: [2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 10, 10, 0, 1]
     isVisible: true
-    Id: cWxAnjfLVuhCQEX8am8E8b8HSBOyVZI1
+    Id: q7B5b9UITMkOnXtvL6IxVXtBz82FMfRE
     Components:
       - name: Mesh
+        objFileName: amugus.obj
 Textures:
   - name: bompaspy
     fileName: bompaspy.png
-    Id: h4banbq5Y58XPQBPYo3CmIuC9jZFwYLb
+    Id: AQerIbILedc6tPRWNySMUIfJTWBA0R7s
 Materials:
   []
