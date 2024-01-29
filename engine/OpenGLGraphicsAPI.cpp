@@ -44,6 +44,10 @@ namespace engine
 		else
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
+	void OpenGLGraphicsAPI::setViewport(int x, int y, int width, int height)
+	{
+		glViewport(x, y, width, height);
+	}
 	GraphicsAPIType engine::OpenGLGraphicsAPI::getType()
 	{
 		return type;

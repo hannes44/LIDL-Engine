@@ -16,6 +16,11 @@ namespace engine
 {
 	void Renderer::renderGame(Game* game, Camera* camera, RendererSettings* renderingSettings)
 	{
+		int width, height;
+		Window::getInstance().getWindowSize(&width, &height);
+
+		graphicsAPI->setViewport(0, 0, width, height);
+
 		graphicsAPI->setClearColor(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
 		graphicsAPI->setCullFace(renderingSettings->enableFaceCulling);

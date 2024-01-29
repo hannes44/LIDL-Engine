@@ -47,6 +47,9 @@ source_group("Editor" FILES
 	AssetManager.hpp
 	AssetManager.cpp
 	AssetNode.hpp
+	EditorSerializer.hpp
+	EditorSerializer.cpp
+	EditorSettings.hpp
 )
 
 # Find *all* shaders.
@@ -129,6 +132,9 @@ target_sources(Engine PRIVATE
 	AssetManager.hpp
 	AssetManager.cpp
 	AssetNode.hpp
+	EditorSerializer.hpp
+	EditorSerializer.cpp
+	EditorSettings.hpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 	../vendor/stb/stb_image.h
 	../vendor/ImGuizmo/ImGuizmo.h
