@@ -15,9 +15,24 @@ void engine::Transform::setPosition(glm::vec3 position)
 	transformMatrix[3] = glm::vec4(position, 1.0f);
 }
 
+void engine::Transform::setVelocity(glm::vec3 velocity)
+{
+	currentVelocity = velocity;
+}
+
+void engine::Transform::shiftPosition(glm::vec3 offset)
+{
+	engine::Transform::setPosition(engine::Transform::getPosition() + offset);
+}
+
 glm::vec3 engine::Transform::getScale()
 {
 	return glm::vec3(transformMatrix[0][0], transformMatrix[1][1], transformMatrix[2][2]);
+}
+
+glm::vec3 engine::Transform::getVelocity()
+{
+	return currentVelocity;
 }
 
 void engine::Transform::setScale(glm::vec3 scale)

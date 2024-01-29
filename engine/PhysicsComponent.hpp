@@ -4,12 +4,16 @@
 
 namespace engine
 {
-	#define GRAVITY 9.8f
 	class PhysicsComponent : public Component
 	{
 	public:
-		float gravity = GRAVITY;
-		float mass;
+		PhysicsComponent(bool disableGravity = false) : disableGravity(disableGravity) {};
+		
+		bool disableGravity = false;
+		bool overrideGravityCoefficient = false;
+
+		float gravityCoefficient = 9.82f;
+		float mass = 0;
 
 		std::string getName() override { return "Physics"; };
 	};

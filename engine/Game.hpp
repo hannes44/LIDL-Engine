@@ -23,7 +23,7 @@ namespace engine
 
 		bool running = true;
 
-		const void gameLoop();
+		const void run();
 
 		// Currenly limit the game to only one camera
 		Camera camera{};

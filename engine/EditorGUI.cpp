@@ -9,6 +9,7 @@
 #include "Logger.hpp"
 #include "RendererSettings.hpp"
 #include "EditorSerializer.hpp"
+#include "GamePhysics.hpp"
 
 namespace engine
 {
@@ -54,6 +55,8 @@ namespace engine
 			renderNewFrame();
 			InputFramework::getInstance().getInput();
 
+			GamePhysics::getInstance().run(game);
+			game->run();
 			Renderer::renderGame(game, getActiveCamera(), &editorSettings.rendererSettings);
 
 			endFrame();

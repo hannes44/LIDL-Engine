@@ -80,6 +80,10 @@
         "regex": "cpp",
         "span": "cpp",
         "variant": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "any": "cpp",
+        "stack": "cpp",
+        "unordered_set": "cpp",
+        "valarray": "cpp"
     }
 }

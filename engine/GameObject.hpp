@@ -34,6 +34,20 @@ namespace engine
 
 		UUID getUUID() override;
 
+		template<typename T> std::shared_ptr<T> getComponent() {
+			for (auto& component : components) {
+				if (std::dynamic_pointer_cast<T>(component)) {
+					return std::dynamic_pointer_cast<T>(component);
+				}
+			}
+			
+			return nullptr;
+		}
+
+		template<typename T> bool hasComponent() {
+			return getComponent<T>() != nullptr;
+		}
+
 		std::string getName() override { return name; };
 	};
 }
