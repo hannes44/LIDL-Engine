@@ -25,7 +25,7 @@ namespace engine {
         return keystates[SDL_GetScancodeFromKey(keycode)];
     }
 
-    // Handle continuous input
+    // Handle continuous input for keys
     void InputFramework::handleContinousInput() {
         // Initialize with default values
         InputEvent ie(0, 0, 0, Key::LAST);
@@ -35,7 +35,6 @@ namespace engine {
             Key key = static_cast<Key>(keyInt);
             if (keystates[keyInt]) {
 				ie.setKey(key);
-                if (key == Key::LSHIFT) LOG_INFO("LSHIFT");
 				dispatchEvent(ie, "KeyHold");
 			}
         }
@@ -56,35 +55,37 @@ namespace engine {
 
             if (ev.type == SDL_EVENT_MOUSE_MOTION) {
                 SDL_MouseMotionEvent mot = ev.motion;
+                SDL_MouseButtonEvent but = ev.button;
+                ie.setButton(but.button);
                 ie.setX(mot.xrel);
                 ie.setY(mot.yrel);
                 dispatchEvent(ie, "MouseMotion");
             }
-            else if (ev.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
+            if (ev.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
                 SDL_MouseButtonEvent but = ev.button;
                 ie.setX(but.x);
                 ie.setY(but.y);
                 ie.setButton(but.button);
                 dispatchEvent(ie, "MouseButtonDown");
             }
-            else if (ev.type == SDL_EVENT_MOUSE_BUTTON_UP) {
+            if (ev.type == SDL_EVENT_MOUSE_BUTTON_UP) {
                 SDL_MouseButtonEvent but = ev.button;
                 ie.setX(but.x);
                 ie.setY(but.y);
                 ie.setButton(but.button);
                 dispatchEvent(ie, "MouseButtonUp");
             }
-            else if (ev.type == SDL_EVENT_KEY_DOWN && ev.key.repeat == 0) {
+            if (ev.type == SDL_EVENT_KEY_DOWN && ev.key.repeat == 0) {
                 SDL_KeyboardEvent key = ev.key;
                 ie.setKey((Key)key.keysym.scancode);
                 dispatchEvent(ie, "KeyDown");
             }
-            else if (ev.type == SDL_EVENT_KEY_UP) {
+            if (ev.type == SDL_EVENT_KEY_UP) {
                 SDL_KeyboardEvent key = ev.key;
                 ie.setKey((Key)key.keysym.scancode);
                 dispatchEvent(ie, "KeyUp");
             }
-            else if (ev.type == SDL_EVENT_QUIT) {
+            if (ev.type == SDL_EVENT_QUIT) {
                 dispatchEvent(ie, "Quit");
             }
         }

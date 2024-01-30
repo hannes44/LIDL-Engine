@@ -28,9 +28,9 @@ namespace engine
 		float fov = 50;
 		float nearPlane = 0.1;
 		float farPlane = 100;
-		float cameraSpeed = 100;
+		float cameraSpeed = 100; // Unused?
 		float rotationSpeed = 0.005f;
-		float movementSpeed = 0.1f;
-
+		float movementSpeed = 0.1f;	
+		bool isMouseDragging;
 	};
 }

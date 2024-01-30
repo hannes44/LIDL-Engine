@@ -8,6 +8,7 @@
 #include "Window.hpp"
 #include <iostream>
 #include "Bootstrap.hpp"
+#include <imgui_impl_sdl3.h>
 
 namespace engine
 {
@@ -67,36 +68,53 @@ namespace engine
 	}
 
 	void Camera::handleInput(const InputEvent& event, const std::string& EventType) {
-		if (EventType == "KeyUp" || EventType == "KeyDown" || EventType == "KeyHold" || EventType == "MouseMotion") {
-			// Handle key and mouse input here
-			if (EventType == "KeyDown" || EventType == "KeyHold") {
-				if (event.getKey() == Key::W) {
-					translate(direction.x * movementSpeed, direction.y * movementSpeed, direction.z * movementSpeed);
-				}
-				else if (event.getKey() == Key::A) {
-					glm::vec3 cameraRight = glm::normalize(glm::cross(direction, worldUp));
-					translate(cameraRight.x * -movementSpeed, cameraRight.y * -movementSpeed, cameraRight.z * -movementSpeed);
-				}
-				else if (event.getKey() == Key::S) {
-					translate(direction.x * -movementSpeed, direction.y * -movementSpeed, direction.z * -movementSpeed);
-				}
-				else if (event.getKey() == Key::D) {
-					glm::vec3 cameraRight = glm::normalize(glm::cross(direction, worldUp));
-					translate(cameraRight.x * movementSpeed, cameraRight.y * movementSpeed, cameraRight.z * movementSpeed);
-				}
-				else if (event.getKey() == Key::SPACE) {
-					translate(worldUp.x * movementSpeed, worldUp.y * movementSpeed, worldUp.z * movementSpeed);
-				}
-				else if (event.getKey() == Key::LSHIFT) {
-					translate(worldUp.x * -movementSpeed, worldUp.y * -movementSpeed, worldUp.z * -movementSpeed);
-				}
-			}
-			else if (EventType == "MouseMotion") {
+
+		// Handle key and mouse input here
+		// If mouse button is pressed we want to control the camera
+		if (EventType == "MouseButtonDown" && (Key)event.getButton() == Key::MOUSE_LEFT && !(ImGui::GetIO().WantCaptureMouse)) {
+			isMouseDragging = true;
+		}
+		// If mouse button is released we want to stop controlling the camera
+		if (!(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT))) {
+			isMouseDragging = false;
+		}
+
+		if ((EventType == "MouseMotion" || EventType == "KeyDown" || EventType == "KeyHold")
+			&& isMouseDragging && !(ImGui::GetIO().WantCaptureMouse)) {
+
+			if (SDL_BUTTON(SDL_BUTTON_LEFT)) {
 				glm::mat4 yaw = glm::rotate(rotationSpeed * -event.getX(), worldUp);
-				glm::mat4 pitch = glm::rotate(rotationSpeed * -event.getY(), normalize(cross(direction, worldUp)));
+				glm::mat4 pitch = glm::rotate(rotationSpeed * -event.getY(), glm::normalize(glm::cross(direction, worldUp)));
 				direction = glm::vec3(pitch * yaw * glm::vec4(direction, 0.0f));
+
+				if (!ImGui::GetIO().WantCaptureKeyboard) {
+					if (event.getKey() == Key::W) {
+						translate(direction.x * movementSpeed, direction.y * movementSpeed, direction.z * movementSpeed);
+					}
+
+					else if (event.getKey() == Key::A) {
+						glm::vec3 cameraRight = glm::normalize(glm::cross(direction, worldUp));
+						translate(cameraRight.x * -movementSpeed, cameraRight.y * -movementSpeed, cameraRight.z * -movementSpeed);
+					}
+
+					else if (event.getKey() == Key::S) {
+						translate(direction.x * -movementSpeed, direction.y * -movementSpeed, direction.z * -movementSpeed);
+					}
+
+					else if (event.getKey() == Key::D) {
+						glm::vec3 cameraRight = glm::normalize(glm::cross(direction, worldUp));
+						translate(cameraRight.x * movementSpeed, cameraRight.y * movementSpeed, cameraRight.z * movementSpeed);
+					}
+
+					else if (event.getKey() == Key::SPACE) {
+						translate(worldUp.x * movementSpeed, worldUp.y * movementSpeed, worldUp.z * movementSpeed);
+					}
+
+					else if (event.getKey() == Key::LSHIFT) {
+						translate(worldUp.x * -movementSpeed, worldUp.y * -movementSpeed, worldUp.z * -movementSpeed);
+					}
+				}
 			}
-			// Add more conditions for other input events
 		}
 	}
 }
