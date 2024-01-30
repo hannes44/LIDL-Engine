@@ -7,6 +7,7 @@
 #include "GameObject.hpp"
 #include "MeshComponent.hpp"
 #include <memory>
+#include "InputFramework.hpp"
 #include "Shader.hpp"
 #include "Camera.hpp"
 #include <vector>
@@ -26,6 +27,7 @@ int main(int argc, char* argv[])
 
 	engine::EditorGUI editor{};
 	editor.start();
+
 
 	return 0;
 }

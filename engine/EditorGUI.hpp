@@ -72,7 +72,6 @@ namespace engine
 		ImGuizmo::OPERATION guizmoOperation = ImGuizmo::TRANSLATE;
 
 		Camera editorCamera{};
-		float editorCameraSensitivity = 1;
 
 		EditorSceneState sceneState = EditorSceneState::Scene;
 
