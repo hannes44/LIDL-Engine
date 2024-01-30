@@ -4,6 +4,7 @@
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_sdl3.h>
+#include "../vendor/stb/stb_image.h"
 
 namespace engine
 {
@@ -53,6 +54,9 @@ namespace engine
 			ImGui_ImplOpenGL3_Init();
 			ImGui_ImplSDL3_InitForOpenGL(window, glContext);
 		#endif 
+
+		// flip textures
+		stbi_set_flip_vertically_on_load(true);
 	}
 	void SDLWindow::cleanup()
 	{

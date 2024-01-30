@@ -2,6 +2,7 @@
 
 #include <string>
 #include "EditorSettings.hpp"
+#include <vector>
 
 namespace engine
 {
@@ -16,5 +17,7 @@ namespace engine
 			static void serializeEditorSettings(EditorSettings& settings);
 
 			static EditorSettings deSerializeEditorSettings();
+
+			static std::vector<std::string> getAllGameNamesInGamesFolder();
 	};
 }

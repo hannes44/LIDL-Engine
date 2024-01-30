@@ -17,6 +17,7 @@ namespace engine
 
 		std::shared_ptr<AssetNode> rootNode;
 	
+		void changeGame(Game* game);
 	private:
 		std::unordered_map<std::string, std::weak_ptr<AssetNode>> assetNodes;
 

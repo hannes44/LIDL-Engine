@@ -23,7 +23,7 @@ namespace engine {
 		return texture;
 	}
 
-	void Game::addGameObject(std::unique_ptr<GameObject> gameObject)
+	void Game::addGameObject(std::shared_ptr<GameObject> gameObject)
 	{
 		gameObjects[gameObject->uuid.id] = std::move(gameObject);
 	}

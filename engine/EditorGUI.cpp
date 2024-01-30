@@ -9,6 +9,7 @@
 #include "Logger.hpp"
 #include "RendererSettings.hpp"
 #include "EditorSerializer.hpp"
+#include "GameSerializer.hpp"
 #include "GamePhysics.hpp"
 
 namespace engine
@@ -33,18 +34,19 @@ namespace engine
 
 		engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
 
-		game = new TestGame();
-
+		game = std::make_shared<TestGame>();
 		game->initialize(); // Temporary for testing, should not be called when serialization works
 		game->camera.translate(0, 0, 5);
 
 		editorCamera.translate(0, 0, 15);
+		editorCamera.rotate(10, 0, 1, 0);
 
 		engine::Renderer::baseShader = engine::Shader::create("simple.vert", "simple.frag");
 
-		assetManager = std::make_unique<AssetManager>(game);
+		assetManager = std::make_unique<AssetManager>(game.get());
 
-		assetManager->buildAssetTree();
+		if (game)
+			assetManager->buildAssetTree();
 
 		selectedAssetNodeFolder = assetManager->rootNode;
 
@@ -52,12 +54,18 @@ namespace engine
 
 		while (true)
 		{
+			editorCamera.rotate(1, 0, 1, 0);
 			renderNewFrame();
 			InputFramework::getInstance().getInput();
 
-			GamePhysics::getInstance().run(game);
-			game->run();
-			Renderer::renderGame(game, getActiveCamera(), &editorSettings.rendererSettings);
+
+			if (game)
+				Renderer::renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
+
+			// GamePhysics::getInstance().run(game);
+			// game->run();
+			// Renderer::renderGame(game, getActiveCamera(), &editorSettings.rendererSettings);
+
 
 			endFrame();
 			window.newFrame();
@@ -116,8 +124,30 @@ namespace engine
 		windowFlags |= ImGuiWindowFlags_NoCollapse;
 		windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 
-		ImGui::Begin("ViewPort", nullptr, windowFlags);
-		ImGui::Text("Hello, world!");
+		ImGui::Begin("MainMenu", nullptr, windowFlags);
+		std::string editorName = "GIGA Editor";
+		auto windowWidth = ImGui::GetWindowSize().x;
+		auto textWidth = ImGui::CalcTextSize(editorName.c_str()).x;
+
+		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
+		ImGui::Text(editorName.c_str());
+
+		ImGui::Button("New Project");
+		ImGui::SameLine();
+		ImGui::Button("Open Project");
+
+
+		ImGui::Text("Projects: ");
+		for (auto gameName : EditorSerializer::getAllGameNamesInGamesFolder())
+		{
+			if (ImGui::Button(gameName.c_str()))
+			{
+				std::shared_ptr<Game> game = GameSerializer::deserializeGame(gameName);
+				changeGame(game);
+			}
+		}
+			
+
 		ImGui::End();
 	}
 
@@ -266,6 +296,7 @@ namespace engine
 			if (ImGui::MenuItem("Save", "Ctrl+S"))
 			{
 				EditorSerializer::serializeEditorSettings(editorSettings);
+				GameSerializer::serializeGame(game.get());
 			}
 			if (ImGui::MenuItem("Save As"))
 			{
@@ -633,5 +664,11 @@ namespace engine
 		else 
 			return &game->camera;
 
+	}
+	void EditorGUI::changeGame(std::shared_ptr<Game> game)
+	{
+		this->game = game;
+
+		assetManager->changeGame(game.get());
 	}
 }

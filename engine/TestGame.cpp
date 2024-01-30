@@ -29,8 +29,8 @@ namespace engine {
 		InputFramework::getInstance().initialize();
 
 
-		engine::MeshComponent meshComponent1 = engine::MeshComponent::loadMeshFromOBJFile("amugus.obj");
-		engine::MeshComponent meshComponent2 = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
+		std::shared_ptr<MeshComponent> meshComponent1 = engine::MeshComponent::loadMeshFromOBJFile("amugus.obj");
+		std::shared_ptr<MeshComponent> meshComponent2 = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
 		engine::PointLightComponent pointLightComponent = engine::PointLightComponent();
 		engine::PhysicsComponent physicsComponentWithGravity = engine::PhysicsComponent();
 		physicsComponentWithGravity.setVelocity(glm::vec3(0, 10, 0));
@@ -44,20 +44,23 @@ namespace engine {
 		physicsComponentWithHigherGravity.overrideGravityCoefficient = true;
 		physicsComponentWithHigherGravity.gravityCoefficient *= 1.2f;
 
-		meshComponent2.material.diffuseTexture = loadTexture("bompaspy.png");
+		meshComponent2->material.diffuseTexture = loadTexture("glocken.png");
 
 		/*
 		GameObject* sphere1 = new GameObject();
 		sphere1->transform.setScale(glm::vec3(2, 2, 2));
 		sphere1->transform.setPosition(glm::vec3(10, 10, 0));
-		sphere1->components.push_back(std::make_unique<engine::MeshComponent>(meshComponent1));
+		sphere1->components.push_back(meshComponent1);
 		sphere1->name = "SIGMA AMUGUS";
 		addGameObject(std::unique_ptr<GameObject>(sphere1));
 
 		GameObject* sphere2 = new GameObject();
-		sphere2->transform.setScale(glm::vec3(15, 15, 15));
+		float width = 5;
+		float height = width / 0.52f;
+		float depth = width / 2.f;
+		sphere2->transform.setScale(glm::vec3(width, height, depth));
 		sphere2->transform.setPosition(glm::vec3(15, 10, 0));
-		sphere2->components.push_back(std::make_unique<engine::MeshComponent>(meshComponent2));
+		sphere2->components.push_back(meshComponent2);
 		sphere2->name = "BOMPASPY";
 		addGameObject(std::unique_ptr<GameObject>(sphere2));
 
