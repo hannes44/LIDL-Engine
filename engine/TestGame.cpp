@@ -64,16 +64,18 @@ namespace engine {
 		sphere2->name = "BOMPASPY";
 		addGameObject(std::unique_ptr<GameObject>(sphere2));
 
+
+		*/
 		GameObject* light = new GameObject();
 		light->transform.setPosition(glm::vec3(0, 20, 0));
 		light->components.push_back(std::make_unique<engine::PointLightComponent>(pointLightComponent));
 		light->name = "Light";
 		addGameObject(std::unique_ptr<GameObject>(light));
-		*/
+
 
 		GameObject* ball1 = new GameObject();
 		ball1->transform.setPosition(glm::vec3(0, 0, 0));
-		ball1->components.push_back(std::make_unique<engine::MeshComponent>(meshComponent2));
+		ball1->components.push_back(meshComponent2);
 		ball1->name = "Ball with gravity";
 
 		ball1->components.push_back(std::make_unique<engine::PhysicsComponent>(physicsComponentWithGravity));
@@ -83,7 +85,7 @@ namespace engine {
 
 		GameObject* ball2 = new GameObject();
 		ball2->transform.setPosition(glm::vec3(-10, 0, 0));
-		ball2->components.push_back(std::make_unique<engine::MeshComponent>(meshComponent2));
+		ball2->components.push_back(meshComponent2);
 		ball2->name = "Ball without gravity";
 		
 
@@ -94,7 +96,7 @@ namespace engine {
 
 		GameObject* ball3 = new GameObject();
 		ball3->transform.setPosition(glm::vec3(-20, 0, 0));
-		ball3->components.push_back(std::make_unique<engine::MeshComponent>(meshComponent2));
+		ball3->components.push_back(meshComponent2);
 		ball3->name = "Ball with higher gravity";
 
 		ball3->components.push_back(std::make_unique<engine::PhysicsComponent>(physicsComponentWithHigherGravity));
