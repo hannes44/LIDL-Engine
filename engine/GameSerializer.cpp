@@ -7,6 +7,7 @@
 #include <iostream>
 #include <memory>
 #include "MeshComponent.hpp"
+#include "PointLightComponent.hpp"
 
 namespace engine
 {
@@ -278,16 +279,47 @@ namespace engine
 		LOG_TRACE("Loading file: " + gameStateFilePath);
 		YAML::Node state = YAML::LoadFile(gameStateFilePath);
 
-		deserializeGameObjects(state, game);
+
 		deserializeTextures(state, game);
 		deserializeMaterials(state, game);
+		deserializeGameObjects(state, game);
 
 		LOG_INFO("Deserialized game state: " + game->name);
 	}
 
 	void GameSerializer::deserializeTextures(YAML::Node node, Game* game)
 	{
-		
+		YAML::Node texturesNode;
+		try
+		{
+			texturesNode = node["Textures"];
+		}
+		catch (const std::exception& e)
+		{
+			LOG_ERROR("Failed to deserialize textures: " + std::string(e.what()));
+			return;
+		}
+
+		for (YAML::const_iterator it = texturesNode.begin(); it != texturesNode.end(); ++it)
+		{
+			try
+			{
+
+				YAML::Node textureNode = *it;
+				std::string name = textureNode["name"].as<std::string>();
+				std::string filename = textureNode["fileName"].as<std::string>();
+
+				std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(Texture::create(filename));
+				texture->uuid.id = textureNode["Id"].as<std::string>();
+				game->textures[texture->uuid.id] = texture;
+
+			}
+			catch (const std::exception& e)
+			{
+				LOG_WARN("Failed to deserialize texture: " + std::string(e.what()));
+			}
+
+		}
 	}
 	
 	void GameSerializer::deserializeMaterials(YAML::Node node, Game* game)
@@ -377,6 +409,10 @@ namespace engine
 					std::shared_ptr<MeshComponent> meshComponent = MeshComponent::loadMeshFromOBJFile(objFileName);
 					gameObject->components.push_back(meshComponent);
 				}
+			}
+			else if (componentName == PointLightComponent::name)
+			{
+				gameObject->components.push_back(std::make_shared<PointLightComponent>());
 			}
 		}
 		catch (const std::exception& e)

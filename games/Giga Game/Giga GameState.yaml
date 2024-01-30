@@ -1,27 +1,27 @@
 GameObjects:
-  - name: BOMPASPY
-    transform: [15, 0, 0, 0, 0, 15, 0, 0, 0, 0, 15, 0, 15, 10, 0, 1]
-    isVisible: true
-    Id: 1Sq9l6iLxaRT41o6Nnw2YI845dga8Clv
-    Components:
-      - name: Mesh
-        primativeType: CUBE
   - name: Light
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1]
     isVisible: true
-    Id: 7a8elUwsoXRekCP0oA9uSbQTim0SUW3D
+    Id: 7Kneu92r9TfedHKmIJk5TFKmaZFBCXBV
     Components:
       - name: PointLight
   - name: SIGMA AMUGUS
     transform: [2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 10, 10, 0, 1]
     isVisible: true
-    Id: q7B5b9UITMkOnXtvL6IxVXtBz82FMfRE
+    Id: BFRIdY66P7ViUBmVNipI9V7bTb0EDeQA
     Components:
       - name: Mesh
         objFileName: amugus.obj
+  - name: BOMPASPY
+    transform: [5, 0, 0, 0, 0, 9.61538506, 0, 0, 0, 0, 2.5, 0, 11.3104258, 15.5336094, 28.0999413, 1]
+    isVisible: true
+    Id: p9aPG7HeFHIa127EB98coJaf1BaToh5b
+    Components:
+      - name: Mesh
+        primativeType: CUBE
 Textures:
-  - name: bompaspy
-    fileName: bompaspy.png
-    Id: AQerIbILedc6tPRWNySMUIfJTWBA0R7s
+  - name: glocken
+    fileName: glocken.png
+    Id: HA9BQN8Kw5JywTFlc8XUreGH9IbIKT8f
 Materials:
   []

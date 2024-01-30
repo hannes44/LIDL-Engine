@@ -11,6 +11,8 @@ namespace engine
 
 		float intensity = 10;
 
-		std::string getName() override { return "PointLight"; };
+		std::string getName() override { return name; };
+
+		inline static const std::string name = "PointLight";
 	};
 }
