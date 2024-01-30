@@ -1,67 +1,4 @@
-add_executable(Engine)
-
-source_group("Components" FILES
-	Component.hpp
-	PointLightComponent.hpp
-	PhysicsComponent.hpp
-	MeshComponent.hpp
-	MeshComponent.cpp
-)
-
-source_group("Renderer" FILES
-	Renderer.hpp
-	Renderer.cpp
-	GraphicsAPI.hpp
-	Buffer.hpp
-	Buffer.cpp
-	Shader.hpp
-	Shader.cpp
-	RendererSettings.hpp
-)
-
-source_group("OpenGL" FILES
-	OpenGLGraphicsAPI.hpp
-	OpenGLGraphicsAPI.cpp
-	OpenGLShader.hpp
-	OpenGLShader.cpp
-	OpenGLBuffer.hpp
-	OpenGLBuffer.cpp
-	OpenGLTexture.hpp
-	OpenGLTexture.cpp
-)
-
-
-source_group("Serializer" FILES
-	GameSerializer.hpp
-	GameSerializer.cpp
-)
-
-source_group("SDL" FILES
-	SDLWindow.hpp
-	SDLWindow.cpp
-)
-
-source_group("Editor" FILES
-	EditorGUI.hpp
-	EditorGUI.cpp
-	AssetManager.hpp
-	AssetManager.cpp
-	AssetNode.hpp
-	EditorSerializer.hpp
-	EditorSerializer.cpp
-	EditorSettings.hpp
-)
-
-# Find *all* shaders.
-file(GLOB_RECURSE SHADERS
-    "${CMAKE_CURRENT_SOURCE_DIR}/shaders/*.vert"
-    "${CMAKE_CURRENT_SOURCE_DIR}/shaders/*.frag"
-)
-# Separate filter for shaders.
-source_group("Shaders" FILES ${SHADERS})
-
-target_sources(Engine PRIVATE 
-	main.cpp
+add_library(engine
 	Transform.hpp
 	Transform.cpp
 	GameObject.hpp
@@ -71,8 +8,6 @@ target_sources(Engine PRIVATE
 	PhysicsComponent.hpp
 	Game.hpp
 	Game.cpp
-	TestGame.hpp
-	TestGame.cpp
 	Display.hpp
 	DisplayTerminal.hpp
 	DisplayTerminal.cpp
@@ -122,17 +57,9 @@ target_sources(Engine PRIVATE
 	GameSerializer.cpp
 	SDLWindow.hpp
 	SDLWindow.cpp
-	EditorGUI.hpp
-	EditorGUI.cpp
 	Uuid.hpp
 	Uuid.cpp
 	RendererSettings.hpp
-	AssetManager.hpp
-	AssetManager.cpp
-	AssetNode.hpp
-	EditorSerializer.hpp
-	EditorSerializer.cpp
-	EditorSettings.hpp
 	GamePhysics.hpp
 	GamePhysics.cpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
@@ -141,12 +68,64 @@ target_sources(Engine PRIVATE
 	../vendor/ImGuizmo/ImGuizmo.cpp
 	${SHADERS}
 )
+target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_link_libraries(Engine PRIVATE 
+source_group("Components" FILES
+	Component.hpp
+	PointLightComponent.hpp
+	PhysicsComponent.hpp
+	MeshComponent.hpp
+	MeshComponent.cpp
+)
+
+source_group("Renderer" FILES
+	Renderer.hpp
+	Renderer.cpp
+	GraphicsAPI.hpp
+	Buffer.hpp
+	Buffer.cpp
+	Shader.hpp
+	Shader.cpp
+	RendererSettings.hpp
+)
+
+source_group("OpenGL" FILES
+	OpenGLGraphicsAPI.hpp
+	OpenGLGraphicsAPI.cpp
+	OpenGLShader.hpp
+	OpenGLShader.cpp
+	OpenGLBuffer.hpp
+	OpenGLBuffer.cpp
+	OpenGLTexture.hpp
+	OpenGLTexture.cpp
+)
+
+source_group("Serializer" FILES
+	GameSerializer.hpp
+	GameSerializer.cpp
+)
+
+source_group("SDL" FILES
+	SDLWindow.hpp
+	SDLWindow.cpp
+)
+
+# Find *all* shaders.
+file(GLOB_RECURSE SHADERS
+    "${CMAKE_CURRENT_SOURCE_DIR}/shaders/*.vert"
+    "${CMAKE_CURRENT_SOURCE_DIR}/shaders/*.frag"
+)
+# Separate filter for shaders.
+source_group("Shaders" FILES ${SHADERS})
+
+# Link libraries
+target_link_libraries(engine PRIVATE 
+	vendor	
 	imgui
 	imguilib
 	SDL3::SDL3
-	vendor
+	gamelib
+	editorlib
 )
 
 target_link_libraries(imguilib PRIVATE 
