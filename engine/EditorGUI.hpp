@@ -35,7 +35,7 @@ namespace engine
 
 		void endFrame();
 		
-		Game* game = nullptr;
+		std::shared_ptr<Game> game = nullptr;
 	private:
 		void drawMainMenu();
 
@@ -62,6 +62,8 @@ namespace engine
 		void drawAssetItem(std::shared_ptr<AssetNode> assetNode);
 
 		bool defaultCheckBox(const std::string& label, bool* value);
+
+		void changeGame(std::shared_ptr<Game> game);
 
 		Window& window;
 

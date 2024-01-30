@@ -1,25 +1,17 @@
 #include "Game.hpp"
-#include "GameObjectManager.hpp"
-#include <chrono>
+#include "Utils.hpp"
 
 constexpr auto TIME_CONVERSION_FACTOR = 1000000000;
 
 namespace engine {
-	long long Game::getTime() {
-		return std::chrono::high_resolution_clock::now().time_since_epoch().count();
-	}
-
-	const void Game::gameLoop() {
-		while (running) {
-			if (getTargetFrameRate() > 0 && Game::getTime() - lastFrameTime < TIME_CONVERSION_FACTOR / (long long)getTargetFrameRate()) {
-				continue;
-			}
-
-			frameCount++;
-			lastFrameTime = Game::getTime();
-			update();
-			GameObjectManager::getInstance().update();
+	const void Game::run() {
+		if (getTargetFrameRate() > 0 && Utils::getTimestampNS() - lastFrameTime < TIME_CONVERSION_FACTOR / (long long)getTargetFrameRate()) {
+			return;
 		}
+
+		frameCount++;
+		lastFrameTime = Utils::getTimestampNS();
+		update();
 	}
 	std::weak_ptr<Texture> Game::loadTexture(const std::string& textureFileName)
 	{
@@ -31,7 +23,7 @@ namespace engine {
 		return texture;
 	}
 
-	void Game::addGameObject(std::unique_ptr<GameObject> gameObject)
+	void Game::addGameObject(std::shared_ptr<GameObject> gameObject)
 	{
 		gameObjects[gameObject->uuid.id] = std::move(gameObject);
 	}

@@ -30,15 +30,27 @@ namespace engine
 
 		std::shared_ptr<VertexArray> vertexArray = nullptr;
 
-		static MeshComponent loadMeshFromOBJFile(const std::string& filename);
+		static std::shared_ptr<MeshComponent> loadMeshFromOBJFile(const std::string& filename);
 		
-		static MeshComponent createPrimative(PrimativeMeshType type);
+		static std::shared_ptr<MeshComponent> createPrimative(PrimativeMeshType type);
 
+		static std::string primativeTypeToString(PrimativeMeshType type);
+
+		static PrimativeMeshType stringToPrimativeType(const std::string& type);
+
+		std::string getName() override { return componentName; };
+
+		inline const static std::string componentName = "Mesh";
+		
+		// -Serialized properties-
 		Material material{};
 
-		std::string getName() override { return "Mesh"; };
+		std::string objFileName = "";
+
+		PrimativeMeshType primativeType;
+		//--------------------------------------
 
 	private:
-		static MeshComponent createCube();
+		static std::shared_ptr<MeshComponent> createCube();
 	};
 }

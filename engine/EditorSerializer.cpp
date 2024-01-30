@@ -4,6 +4,10 @@
 #include <string>
 #include <yaml-cpp/yaml.h>
 #include "Logger.hpp"
+#include <filesystem>
+#include "GameSerializer.hpp"
+namespace fs = std::filesystem;
+
 
 namespace engine
 {
@@ -66,5 +70,16 @@ namespace engine
 		
 		LOG_INFO("Deserialized editor settings: ");
 		return settings;
+	}
+	std::vector<std::string> EditorSerializer::getAllGameNamesInGamesFolder()
+	{
+		std::string path = GAME_FOLDER_PATH;
+		std::vector<std::string> gameNames{};
+
+		for (const auto& entry : fs::directory_iterator(path))
+			gameNames.push_back(entry.path().filename().string());
+			
+
+		return gameNames;
 	}
 }

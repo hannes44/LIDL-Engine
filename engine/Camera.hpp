@@ -20,7 +20,7 @@ namespace engine
 		glm::mat4 getProjectionMatrix();
 
 		glm::vec3 translation {20, 20, 20};
-		glm::vec3 rotation {0, 0, 0};
+		glm::vec3 rotation {90, 0, 0};
 		glm::vec3 direction {-1, -1, -1};
 		glm::vec3 worldUp {0.0f, 1.0f, 0.0f};
 
@@ -32,5 +32,6 @@ namespace engine
 		float rotationSpeed = 0.005f;
 		float movementSpeed = 0.1f;	
 		bool isMouseDragging;
+
 	};
 }
