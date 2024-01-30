@@ -23,7 +23,7 @@ namespace engine
 
 		bool running = true;
 
-		const void gameLoop();
+		const void run();
 
 		// Currenly limit the game to only one camera
 		Camera camera{};
@@ -53,7 +53,5 @@ namespace engine
 
 		int frameCount = 0;
 		long long lastFrameTime = 0;
-
-		static long long getTime();
 	};
 }

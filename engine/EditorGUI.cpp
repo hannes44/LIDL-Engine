@@ -10,6 +10,7 @@
 #include "RendererSettings.hpp"
 #include "EditorSerializer.hpp"
 #include "GameSerializer.hpp"
+#include "GamePhysics.hpp"
 
 namespace engine
 {
@@ -57,8 +58,14 @@ namespace engine
 			renderNewFrame();
 			InputFramework::getInstance().getInput();
 
+
 			if (game)
 				Renderer::renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
+
+			// GamePhysics::getInstance().run(game);
+			// game->run();
+			// Renderer::renderGame(game, getActiveCamera(), &editorSettings.rendererSettings);
+
 
 			endFrame();
 			window.newFrame();

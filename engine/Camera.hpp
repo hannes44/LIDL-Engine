@@ -21,7 +21,7 @@ namespace engine
 		
 		float fov = 50;
 		float nearPlane = 0.1;
-		float farPlane = 100;
+		float farPlane = 1000;
 		float cameraSpeed = 100;
 	};
 }

@@ -66,8 +66,6 @@ target_sources(Engine PRIVATE
 	Transform.cpp
 	GameObject.hpp
 	GameObject.cpp
-	GameObjectManager.hpp
-	GameObjectManager.cpp
 	Component.hpp
 	PointLightComponent.hpp
 	PhysicsComponent.hpp
@@ -135,6 +133,8 @@ target_sources(Engine PRIVATE
 	EditorSerializer.hpp
 	EditorSerializer.cpp
 	EditorSettings.hpp
+	GamePhysics.hpp
+	GamePhysics.cpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 	../vendor/stb/stb_image.h
 	../vendor/ImGuizmo/ImGuizmo.h

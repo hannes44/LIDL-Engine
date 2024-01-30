@@ -10,6 +10,7 @@ namespace engine
 
 		glm::vec3 getPosition();
 		void setPosition(glm::vec3 position);
+		void shiftPosition(glm::vec3 offset);
 
 		glm::vec3 getRotation();
 		void setRotation(glm::vec3 rotation);
