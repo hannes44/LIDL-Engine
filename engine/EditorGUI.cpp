@@ -545,8 +545,8 @@ namespace engine
 			}
 
 			ImGui::Text("Camera Settings");
-			ImGui::SliderFloat("Camera Speed", &editorCamera.cameraSpeed, 0.1f, 10.0f);
-			ImGui::SliderFloat("Camera Sensitivity", &editorCameraSensitivity, 0.1f, 10.0f); 
+			ImGui::SliderFloat("Camera Speed", &editorCamera.movementSpeed, 0.001f, 1.0f);
+			ImGui::SliderFloat("Camera Sensitivity", &editorCamera.rotationSpeed, 0.001f, 0.1f); 
 			ImGui::SliderFloat("Camera FOV", &editorCamera.fov, 0.1f, 120.0f);
 			
 		}
