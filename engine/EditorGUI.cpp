@@ -34,8 +34,12 @@ namespace engine
 
 		assetManager = std::make_unique<AssetManager>(game.get());
 
-		assetManager->buildAssetTree();
 
+		InputFramework& inputFramework = InputFramework::getInstance();
+		inputFramework.addListener(this);
+
+		assetManager->buildAssetTree();
+   
 		selectedAssetNodeFolder = assetManager->rootNode;
 
 		editorSettings = EditorSerializer::deSerializeEditorSettings();
@@ -44,9 +48,11 @@ namespace engine
 		{
 			editorCamera.rotate(1, 0, 1, 0);
 			renderNewFrame();
-			InputFramework::getInstance().getInput();
+
+			inputFramework.getInput();
 
 			Renderer::renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
+
 
 			// GamePhysics::getInstance().run(game.get());
 			// game->run();
@@ -91,6 +97,23 @@ namespace engine
 	{
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	}
+
+	void EditorGUI::handleInput(const InputEvent& event, const std::string& EventType)
+	{
+		if (EventType == "KeyDown")
+		{
+			if ((Key)event.getKey() == Key::DELETE)
+			{
+				if (auto lockedSelectedObject = selectedObject.lock())
+				{
+					if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
+					{
+						game->deleteGameObject(lockedGameObject->getUUID().id);
+					}
+				}
+			}
+		}
 	}
 
 	void EditorGUI::drawMainMenu()
