@@ -24,7 +24,7 @@
 
 int main(int argc, char* argv[])
 {
-
+	
 	engine::EditorGUI editor{};
 	editor.start();
 
