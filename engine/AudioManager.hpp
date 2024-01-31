@@ -30,8 +30,8 @@ namespace engine {
 
 			SDL_AudioDeviceID audio_device;
 
-			Uint8* wavBuffer;
+			Uint8* wavBuffer = 0;
 
-			Uint32 wavLength;
+			Uint32 wavLength = 0;
 	};
 }

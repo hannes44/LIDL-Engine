@@ -100,6 +100,8 @@ target_sources(Engine PRIVATE
 	InputSystem.cpp
 	InputFramework.hpp
 	InputFramework.cpp
+	AudioManager.cpp
+	AudioManager.hpp
 	Renderer.hpp
 	Renderer.cpp
 	GraphicsAPI.hpp
