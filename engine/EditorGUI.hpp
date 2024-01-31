@@ -8,6 +8,7 @@
 #include "RendererSettings.hpp"
 #include "EditorSettings.hpp"
 #include "AssetManager.hpp"
+#include "Project.hpp"
 
 namespace engine
 {
@@ -27,7 +28,7 @@ namespace engine
 	class EditorGUI
 	{
 	public:
-		EditorGUI();
+		EditorGUI(std::shared_ptr<Project> project);
 
 		void start();
 
@@ -84,5 +85,7 @@ namespace engine
 		std::weak_ptr<AssetNode> selectedAssetNodeFolder;
 
 		std::unique_ptr<AssetManager> assetManager;
+
+		std::shared_ptr<Project> project;
 	};
 }
