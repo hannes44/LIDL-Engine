@@ -71,18 +71,18 @@ namespace engine
 
 		// Handle key and mouse input here
 		// If mouse button is pressed we want to control the camera
-		if (EventType == "MouseButtonDown" && (Key)event.getButton() == Key::MOUSE_LEFT && !(ImGui::GetIO().WantCaptureMouse)) {
+		if (EventType == "MouseButtonDown" && (Key)event.getButton() == Key::MOUSE_RIGHT && !(ImGui::GetIO().WantCaptureMouse)) {
 			isMouseDragging = true;
 		}
 		// If mouse button is released we want to stop controlling the camera
-		if (!(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT))) {
+		if (!(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT))) {
 			isMouseDragging = false;
 		}
 
 		if ((EventType == "MouseMotion" || EventType == "KeyDown" || EventType == "KeyHold")
 			&& isMouseDragging && !(ImGui::GetIO().WantCaptureMouse)) {
 
-			if (SDL_BUTTON(SDL_BUTTON_LEFT)) {
+			if (SDL_BUTTON(SDL_BUTTON_RIGHT)) {
 				glm::mat4 yaw = glm::rotate(rotationSpeed * -event.getX(), worldUp);
 				glm::mat4 pitch = glm::rotate(rotationSpeed * -event.getY(), glm::normalize(glm::cross(direction, worldUp)));
 				direction = glm::vec3(pitch * yaw * glm::vec4(direction, 0.0f));
