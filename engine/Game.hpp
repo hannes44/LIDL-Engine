@@ -45,6 +45,8 @@ namespace engine
 
 		void addGameObject(std::shared_ptr<GameObject> gameObject);
 
+		void deleteGameObject(const std::string& id);
+
 		RendererSettings renderingSettings{};
 
 	protected:

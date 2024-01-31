@@ -17,24 +17,13 @@ namespace engine
 #define IMGUI_TOP_MENU_HEIGHT 18
 #define IMGUI_SHOW_DEMO_WINDOWS false
 
-	EditorGUI::EditorGUI() : window(Window::getInstance())
+	EditorGUI::EditorGUI(std::shared_ptr<Project> project) :  window(Window::getInstance()), project(project)
 	{
-		
+		game = project->game;
 	}
 
 	void EditorGUI::start()
 	{
-		engine::Logger::init();
-		LOG_INFO("Starting Editor");
-
-		Window& window = Window::getInstance();
-		window.createWindow(1280, 720, "Editor");
-
-		glewInit();
-
-		engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
-
-		game = std::make_shared<TestGame>();
 		game->initialize(); // Temporary for testing, should not be called when serialization works
 		game->camera.translate(0, 0, 5);
 
@@ -45,9 +34,12 @@ namespace engine
 
 		assetManager = std::make_unique<AssetManager>(game.get());
 
-		if (game)
-			assetManager->buildAssetTree();
 
+		InputFramework& inputFramework = InputFramework::getInstance();
+		inputFramework.addListener(this);
+
+		assetManager->buildAssetTree();
+   
 		selectedAssetNodeFolder = assetManager->rootNode;
 
 		editorSettings = EditorSerializer::deSerializeEditorSettings();
@@ -56,16 +48,15 @@ namespace engine
 		{
 			editorCamera.rotate(1, 0, 1, 0);
 			renderNewFrame();
-			InputFramework::getInstance().getInput();
+
+			inputFramework.getInput();
+
+			Renderer::renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 
 
-			if (game)
-				Renderer::renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
-
-			// GamePhysics::getInstance().run(game);
+			// GamePhysics::getInstance().run(game.get());
 			// game->run();
 			// Renderer::renderGame(game, getActiveCamera(), &editorSettings.rendererSettings);
-
 
 			endFrame();
 			window.newFrame();
@@ -108,47 +99,26 @@ namespace engine
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
-	void EditorGUI::drawMainMenu()
+	void EditorGUI::handleInput(const InputEvent& event, const std::string& EventType)
 	{
-		int w, h;
-		window.getWindowSize(&w, &h);
-		ImGui::SetNextWindowPos({ 0, 0 });
-		ImGui::SetNextWindowSize(ImVec2(w, h));
-
-		ImGuiWindowFlags windowFlags = 0;
-		windowFlags |= ImGuiWindowFlags_NoTitleBar;
-		windowFlags |= ImGuiWindowFlags_NoMove;
-		windowFlags |= ImGuiWindowFlags_NoResize;
-		windowFlags |= ImGuiWindowFlags_NoScrollbar;
-		windowFlags |= ImGuiWindowFlags_NoScrollWithMouse;
-		windowFlags |= ImGuiWindowFlags_NoCollapse;
-		windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-
-		ImGui::Begin("MainMenu", nullptr, windowFlags);
-		std::string editorName = "GIGA Editor";
-		auto windowWidth = ImGui::GetWindowSize().x;
-		auto textWidth = ImGui::CalcTextSize(editorName.c_str()).x;
-
-		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
-		ImGui::Text(editorName.c_str());
-
-		ImGui::Button("New Project");
-		ImGui::SameLine();
-		ImGui::Button("Open Project");
-
-
-		ImGui::Text("Projects: ");
-		for (auto gameName : EditorSerializer::getAllGameNamesInGamesFolder())
+		if (EventType == "KeyDown")
 		{
-			if (ImGui::Button(gameName.c_str()))
+			if ((Key)event.getKey() == Key::DELETE)
 			{
-				std::shared_ptr<Game> game = GameSerializer::deserializeGame(gameName);
-				changeGame(game);
+				if (auto lockedSelectedObject = selectedObject.lock())
+				{
+					if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
+					{
+						game->deleteGameObject(lockedGameObject->getUUID().id);
+					}
+				}
 			}
 		}
-			
+	}
 
-		ImGui::End();
+	void EditorGUI::drawMainMenu()
+	{
+
 	}
 
 	void EditorGUI::drawViewPort()

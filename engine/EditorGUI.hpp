@@ -8,6 +8,8 @@
 #include "RendererSettings.hpp"
 #include "EditorSettings.hpp"
 #include "AssetManager.hpp"
+#include "InputListener.hpp"
+#include "Project.hpp"
 
 namespace engine
 {
@@ -24,16 +26,18 @@ namespace engine
 		Game
 	};
 
-	class EditorGUI
+	class EditorGUI : public InputListener
 	{
 	public:
-		EditorGUI();
+		EditorGUI(std::shared_ptr<Project> project);
 
 		void start();
 
 		void renderNewFrame();
 
 		void endFrame();
+
+		void handleInput(const InputEvent& event, const std::string& EventType) override;
 		
 		std::shared_ptr<Game> game = nullptr;
 	private:
@@ -84,5 +88,7 @@ namespace engine
 		std::weak_ptr<AssetNode> selectedAssetNodeFolder;
 
 		std::unique_ptr<AssetManager> assetManager;
+
+		std::shared_ptr<Project> project;
 	};
 }

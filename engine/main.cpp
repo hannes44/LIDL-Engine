@@ -21,13 +21,12 @@
 #include <imgui_impl_sdl3.h>
 #include <imgui_impl_opengl3.h>
 #include "EditorGUI.hpp"
+#include "Editor.hpp"
 
 int main(int argc, char* argv[])
 {
-	
-	engine::EditorGUI editor{};
+	engine::Editor editor{};
 	editor.start();
-
 
 	return 0;
 }
