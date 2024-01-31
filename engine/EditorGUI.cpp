@@ -24,16 +24,6 @@ namespace engine
 
 	void EditorGUI::start()
 	{
-		engine::Logger::init();
-		LOG_INFO("Starting Editor");
-
-		Window& window = Window::getInstance();
-		window.createWindow(1280, 720, "Editor");
-
-		glewInit();
-
-		engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
-
 		game = std::make_shared<TestGame>();
 		game->initialize(); // Temporary for testing, should not be called when serialization works
 		game->camera.translate(0, 0, 5);
@@ -110,45 +100,7 @@ namespace engine
 
 	void EditorGUI::drawMainMenu()
 	{
-		int w, h;
-		window.getWindowSize(&w, &h);
-		ImGui::SetNextWindowPos({ 0, 0 });
-		ImGui::SetNextWindowSize(ImVec2(w, h));
 
-		ImGuiWindowFlags windowFlags = 0;
-		windowFlags |= ImGuiWindowFlags_NoTitleBar;
-		windowFlags |= ImGuiWindowFlags_NoMove;
-		windowFlags |= ImGuiWindowFlags_NoResize;
-		windowFlags |= ImGuiWindowFlags_NoScrollbar;
-		windowFlags |= ImGuiWindowFlags_NoScrollWithMouse;
-		windowFlags |= ImGuiWindowFlags_NoCollapse;
-		windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-
-		ImGui::Begin("MainMenu", nullptr, windowFlags);
-		std::string editorName = "GIGA Editor";
-		auto windowWidth = ImGui::GetWindowSize().x;
-		auto textWidth = ImGui::CalcTextSize(editorName.c_str()).x;
-
-		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
-		ImGui::Text(editorName.c_str());
-
-		ImGui::Button("New Project");
-		ImGui::SameLine();
-		ImGui::Button("Open Project");
-
-
-		ImGui::Text("Projects: ");
-		for (auto gameName : EditorSerializer::getAllGameNamesInGamesFolder())
-		{
-			if (ImGui::Button(gameName.c_str()))
-			{
-				std::shared_ptr<Game> game = GameSerializer::deserializeGame(gameName);
-				changeGame(game);
-			}
-		}
-			
-
-		ImGui::End();
 	}
 
 	void EditorGUI::drawViewPort()

@@ -50,6 +50,13 @@ source_group("Editor" FILES
 	EditorSerializer.hpp
 	EditorSerializer.cpp
 	EditorSettings.hpp
+	Editor.hpp
+	Editor.cpp
+	MainMenuGUI.hpp
+	MainMenuGUI.cpp
+	GUIHelper.hpp
+	GUIHelper.cpp
+	Project.hpp
 )
 
 # Find *all* shaders.
@@ -133,6 +140,13 @@ target_sources(Engine PRIVATE
 	EditorSettings.hpp
 	GamePhysics.hpp
 	GamePhysics.cpp
+	Editor.hpp
+	Editor.cpp
+	MainMenuGUI.hpp
+	MainMenuGUI.cpp
+	GUIHelper.hpp
+	GUIHelper.cpp
+	Project.hpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 	../vendor/stb/stb_image.h
 	../vendor/ImGuizmo/ImGuizmo.h

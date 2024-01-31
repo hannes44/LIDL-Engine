@@ -19,5 +19,15 @@ namespace engine
 			static EditorSettings deSerializeEditorSettings();
 
 			static std::vector<std::string> getAllGameNamesInGamesFolder();
+
+			static bool isPathValid(const std::string& path);
+
+			static bool isNameValid(const std::string& name);
+
+			static void createFolder(const std::string& path);
+
+			static std::string getFolderPathFromFileExplorer();
+
+			static std::string getPathToEditorGamesFolder();
 	};
 }
