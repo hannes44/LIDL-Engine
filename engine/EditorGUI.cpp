@@ -17,14 +17,13 @@ namespace engine
 #define IMGUI_TOP_MENU_HEIGHT 18
 #define IMGUI_SHOW_DEMO_WINDOWS false
 
-	EditorGUI::EditorGUI() : window(Window::getInstance())
+	EditorGUI::EditorGUI(std::shared_ptr<Project> project) :  window(Window::getInstance()), project(project)
 	{
-		
+		game = project->game;
 	}
 
 	void EditorGUI::start()
 	{
-		game = std::make_shared<TestGame>();
 		game->initialize(); // Temporary for testing, should not be called when serialization works
 		game->camera.translate(0, 0, 5);
 
@@ -35,8 +34,7 @@ namespace engine
 
 		assetManager = std::make_unique<AssetManager>(game.get());
 
-		if (game)
-			assetManager->buildAssetTree();
+		assetManager->buildAssetTree();
 
 		selectedAssetNodeFolder = assetManager->rootNode;
 
@@ -48,14 +46,11 @@ namespace engine
 			renderNewFrame();
 			InputFramework::getInstance().getInput();
 
+			Renderer::renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 
-			if (game)
-				Renderer::renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
-
-			// GamePhysics::getInstance().run(game);
+			// GamePhysics::getInstance().run(game.get());
 			// game->run();
 			// Renderer::renderGame(game, getActiveCamera(), &editorSettings.rendererSettings);
-
 
 			endFrame();
 			window.newFrame();

@@ -163,10 +163,10 @@ namespace engine
 		ImGui::InputText("##projectPath", projectPath, inputBufferSize, flags);
 		ImGui::SameLine();
 
-		bool isProjectNameValid = EditorSerializer::isNameValid(projectName);
-		bool isProjectPathValid = EditorSerializer::isPathValid(projectPath);
+		bool isProjectNameValid = EditorSerializer::isProjectNameValid(projectName);
+		bool isProjectPathValid = EditorSerializer::isProjectPathValid(projectPath);
 
-		if (ImGui::Button("Browse"))
+		if (ImGui::Button("Browse (Gunilla)"))
 		{
 			LOG_INFO("Getting path from windows file explorer");
 			// TODO: Do this on another thread to avoid blocking the main thread

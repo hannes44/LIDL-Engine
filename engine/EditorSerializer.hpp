@@ -20,13 +20,13 @@ namespace engine
 
 			static std::vector<std::string> getAllGameNamesInGamesFolder();
 
-			static bool isPathValid(const std::string& path);
+			static bool isProjectPathValid(const std::string& path);
 
-			static bool isNameValid(const std::string& name);
+			static bool isProjectNameValid(const std::string& name);
 
 			static void createFolder(const std::string& path);
 
-			static std::string getFolderPathFromFileExplorer();
+			static std::string getFolderPathFromFileExplorer(const std::string initialPath = "");
 
 			static std::string getPathToEditorGamesFolder();
 	};

@@ -89,13 +89,19 @@ namespace engine
 		return gameNames;
 	}
 
-	bool EditorSerializer::isPathValid(const std::string& path)
+	bool EditorSerializer::isProjectPathValid(const std::string& path)
 	{
+		if (path.empty())
+			return false;
+
 		return true;
 	}
 
-	bool EditorSerializer::isNameValid(const std::string& name)
+	bool EditorSerializer::isProjectNameValid(const std::string& name)
 	{
+		if (name.empty())
+			return false;
+
 		return true;
 	}
 
@@ -108,7 +114,7 @@ namespace engine
 
 	// Gets the path to the folder that the user selected in the file explorer (Windows only)
 	// This function is blocking until the user selects a folder
-	std::string EditorSerializer::getFolderPathFromFileExplorer()
+	std::string EditorSerializer::getFolderPathFromFileExplorer(const std::string initialPath)
 	{
 		const int bufferSize = 100;
 		char folderPath[bufferSize];
@@ -124,6 +130,17 @@ namespace engine
 			{
 				pfd->SetOptions(dwOptions | FOS_PICKFOLDERS);
 			}
+
+			IShellItem* psi;
+
+			// TODO: Use initialPath as the default folder
+			GUID folderId = FOLDERID_RecycleBinFolder;
+
+			SHGetKnownFolderItem(folderId,
+				KF_FLAG_DEFAULT, nullptr, IID_PPV_ARGS(&psi));
+
+			pfd->SetFolder(psi);
+			psi->Release();
 
 			// If the explorer window is opened successfully
 			if (SUCCEEDED(pfd->Show(NULL)))

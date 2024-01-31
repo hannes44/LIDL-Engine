@@ -11,7 +11,5 @@ namespace engine {
 
 	protected:
 		double getTargetFrameRate() override;
-
-		EditorGUI gui {};
 	};
 }

@@ -5,6 +5,8 @@
 #include "EditorGui.hpp"
 #include "MainMenuGUI.hpp"
 #include "EditorSerializer.hpp"
+#include "Project.hpp"
+#include "TestGame.hpp"
 
 namespace engine
 {
@@ -20,11 +22,18 @@ namespace engine
 
 		engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
 
+		// Comment out this to access the main menu, temporary for development
+		project = std::make_shared<Project>();
+		project->game = std::make_shared<TestGame>();
 		
-		MainMenuGUI mainMenuGui{};
-		mainMenuGui.MainMenu();
+		if (!project)
+		{
+			MainMenuGUI mainMenuGui{};
+			mainMenuGui.MainMenu();
 
-		EditorGUI editorGui{};
+		}
+
+		EditorGUI editorGui{project};
 		editorGui.start();
 	}
 
@@ -33,6 +42,12 @@ namespace engine
 		LOG_INFO("Creating new project: {0} at {1}", name, path);
 
 		EditorSerializer::createFolder(path + "/" + name);
+
+		EditorSerializer::createFolder(path + "/" + name + "/assets");
+
+		EditorSerializer::createFolder(path + "/" + name + "/scripts");
+
+
 	}
 	
 
