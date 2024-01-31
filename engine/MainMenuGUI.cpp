@@ -52,9 +52,6 @@ namespace engine
 	void MainMenuGUI::renderMainMenu()
 	{
 
-		ImGui::ShowDemoWindow();
-		ImGui::ShowStyleEditor();
-
 		int w, h;
 		window.getWindowSize(&w, &h);
 		ImGui::SetNextWindowPos({ 0, 0 });
@@ -149,8 +146,6 @@ namespace engine
 
 	void MainMenuGUI::renderNewProjectTab()
 	{
-
-		
 		// flags
 		ImGuiInputTextFlags flags = 0;
 
@@ -217,7 +212,5 @@ namespace engine
 
 			}
 		}
-
 	}
-
 }

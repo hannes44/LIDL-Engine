@@ -11,9 +11,5 @@ namespace engine
 		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
 		ImGui::Text(text.c_str());
 	}
-	void GUIHelper::drawTextInput(const std::string& label, std::string& text)
-	{
-
-	}
 }
 

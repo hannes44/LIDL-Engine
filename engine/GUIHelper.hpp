@@ -9,7 +9,5 @@ namespace engine
 	{
 	public:
 		static void drawCenteredText(const std::string& text);
-
-		static void drawTextInput(const std::string& label, std::string& text);
 	};
 }
