@@ -12,6 +12,13 @@ target_sources(Editor PRIVATE
 	EditorSerializer.hpp
 	EditorSerializer.cpp
 	EditorSettings.hpp
+	Editor.hpp
+	Editor.cpp
+	MainMenuGUI.hpp
+	MainMenuGUI.cpp
+	GUIHelper.hpp
+	GUIHelper.cpp
+	Project.hpp
 )
 
 # Link libraries
