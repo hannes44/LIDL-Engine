@@ -4,7 +4,7 @@
 #include "../vendor/ImGuizmo/ImGuizmo.h"
 #include <glm/gtc/type_ptr.hpp>
 #include "InputFramework.hpp"
-#include "TestGame.hpp"
+#include <TestGame.hpp>
 #include "Renderer.hpp"
 #include "Logger.hpp"
 #include "RendererSettings.hpp"

@@ -124,8 +124,6 @@ target_link_libraries(engine PRIVATE
 	imgui
 	imguilib
 	SDL3::SDL3
-	gamelib
-	editorlib
 )
 
 target_link_libraries(imguilib PRIVATE 

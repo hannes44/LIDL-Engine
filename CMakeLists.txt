@@ -8,5 +8,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_subdirectory(vendor)
 add_subdirectory(engine)
-add_subdirectory(editor)
 add_subdirectory(game)
+add_subdirectory(editor)

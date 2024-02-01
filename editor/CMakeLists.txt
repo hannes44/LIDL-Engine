@@ -1,7 +1,9 @@
 project(Editor, VERSION 0.01)
 
-# Create library
-add_library(editorlib
+# Create executable
+add_executable(Editor)
+target_sources(Editor PRIVATE 
+	main.cpp
 	EditorGUI.hpp
 	EditorGUI.cpp
 	AssetManager.hpp
@@ -11,11 +13,6 @@ add_library(editorlib
 	EditorSerializer.cpp
 	EditorSettings.hpp
 )
-target_include_directories(editorlib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-
-# Create executable
-add_executable(Editor)
-target_sources(Editor PRIVATE main.cpp)
 
 # Link libraries
 target_link_libraries(Editor PRIVATE

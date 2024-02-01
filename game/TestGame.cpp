@@ -1,6 +1,7 @@
 #include <iostream>
+
+#include <Window.hpp>
 #include "InputFramework.hpp"
-#include "Window.hpp"
 #include "Game.hpp"
 #include "Cube.hpp"
 #include "GameObject.hpp"

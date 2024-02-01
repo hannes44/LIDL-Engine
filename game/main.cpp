@@ -19,9 +19,17 @@
 #include <SDL3/SDL.h>
 #include <imgui_impl_sdl3.h>
 #include <imgui_impl_opengl3.h>
+#include <Logger.hpp>
+
+
 
 int main(int argc, char* argv[])
 {
+	std::cout << "Hello World!" << std::endl;
+	engine::Logger::init();
+
+	engine::LOG_INFO("dfjkghldkhf");
+
 	return 0;
 }
 

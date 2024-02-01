@@ -1,5 +1,4 @@
 #include "GameSerializer.hpp"
-#include "TestGame.hpp"
 #include "Logger.hpp"
 #include <fstream>
 #include <Windows.h>
@@ -241,8 +240,9 @@ namespace engine
 
 	std::shared_ptr<Game> GameSerializer::deserializeGame(const std::string& gameName)
 	{
-		std::shared_ptr<TestGame> game = std::make_shared<TestGame>();
-
+		/*
+		 
+		
 		LOG_INFO("Deserializing game: {}", gameName);
 		std::string gameConfigFilePath = GAME_FOLDER_PATH + gameName + "/" + gameName + "Config" + GAME_CONFIG_FILE_EXTENSION;
 		LOG_TRACE("Loading file: " + gameConfigFilePath);
@@ -265,6 +265,8 @@ namespace engine
 
 		LOG_INFO("Deserialized game: {}", gameName);
 		return game;
+		 */
+		return nullptr;
 	}
 
 
