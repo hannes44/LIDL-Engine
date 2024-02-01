@@ -705,13 +705,30 @@ namespace engine
 
 	void EditorGUI::drawAssetItem(std::shared_ptr<AssetNode> assetNode)
 	{
-		int openGLTextureId = assetNode->iconTexture != nullptr ? assetNode->iconTexture->textureIDOpenGL : 0;
-
-		if (ImGui::ImageButton(("##"+assetNode->uuid.id).c_str(), (void*)(intptr_t)openGLTextureId, ImVec2(70, 70), {0, 1}, {1, 0}))
+		ImGui::BeginGroup();
 		{
-			if (assetNode->isFolder)
-				selectedAssetNodeFolder = assetNode;
+			int openGLTextureId = assetNode->iconTexture != nullptr ? assetNode->iconTexture->textureIDOpenGL : 0;
+
+			if (ImGui::ImageButton(("##" + assetNode->uuid.id).c_str(), (void*)(intptr_t)openGLTextureId, ImVec2(70, 70), { 0, 1 }, { 1, 0 }))
+			{
+				if (assetNode->isFolder)
+					selectedAssetNodeFolder = assetNode;
+			}
+
+
+			float currentX = ImGui::GetCursorPosX();
+			std::string name = assetNode->name;
+
+			if (name.size() > 10)
+				name = name.substr(0, 8) + "...";
+
+			auto textWidth = ImGui::CalcTextSize(name.c_str()).x;
+
+			ImGui::SetCursorPosX(currentX + (75 - textWidth) / 2);
+
+			ImGui::Text(name.c_str());
 		}
+		ImGui::EndGroup();
 	}
 
 	bool EditorGUI::defaultCheckBox(const std::string& label, bool* value)
