@@ -63,6 +63,8 @@ namespace engine
 
 		void drawAssetsSection();
 
+		void drawGuizmoOperationsWindow();
+
 		void drawAssetItem(std::shared_ptr<AssetNode> assetNode);
 
 		bool defaultCheckBox(const std::string& label, bool* value);
@@ -74,6 +76,8 @@ namespace engine
 		std::weak_ptr<Selectable> selectedObject;
 
 		ImGuizmo::OPERATION guizmoOperation = ImGuizmo::TRANSLATE;
+
+		bool isGuizmoOperationInWorldSpace = true;
 
 		Camera editorCamera{};
 
@@ -90,5 +94,15 @@ namespace engine
 		std::unique_ptr<AssetManager> assetManager;
 
 		std::shared_ptr<Project> project;
+
+		std::shared_ptr<Texture> rotateIconTexture;
+
+		std::shared_ptr<Texture> translateIconTexture;
+
+		std::shared_ptr<Texture> scaleIconTexture;
+
+		std::shared_ptr<Texture> worldIconTexture;
+
+		std::shared_ptr<Texture> folderIconTexture;
 	};
 }

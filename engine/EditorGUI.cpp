@@ -44,6 +44,16 @@ namespace engine
 
 		editorSettings = EditorSerializer::deSerializeEditorSettings();
 
+		rotateIconTexture = std::shared_ptr<Texture>(Texture::create("rotation_icon.png"));
+
+		scaleIconTexture = std::shared_ptr<Texture>(Texture::create("scale_icon.png"));
+
+		translateIconTexture = std::shared_ptr<Texture>(Texture::create("translation_icon.png"));
+
+		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png"));
+
+		folderIconTexture = std::shared_ptr<Texture>(Texture::create("folder_icon.png"));
+
 		while (true)
 		{
 			editorCamera.rotate(1, 0, 1, 0);
@@ -90,6 +100,8 @@ namespace engine
 			drawTopMenu();
 			drawPlayButtonToolbar();
 			drawBottomPanel();
+
+
 		}
 	}
 
@@ -155,6 +167,9 @@ namespace engine
 		}
 
 		drawGuizmos();
+
+		if (std::dynamic_pointer_cast<GameObject>(selectedObject.lock()))
+			drawGuizmoOperationsWindow();
 
 		ImGui::End();
 	}
@@ -447,7 +462,7 @@ namespace engine
 
 			glm::mat4 projectionMatrix = getActiveCamera()->getProjectionMatrix();
 
-			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(projectionMatrix), guizmoOperation, ImGuizmo::WORLD, modelMatrixPtr);
+			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(projectionMatrix), guizmoOperation, isGuizmoOperationInWorldSpace ? ImGuizmo::WORLD : ImGuizmo::LOCAL, modelMatrixPtr);
 		}
 	}
 
@@ -611,6 +626,83 @@ namespace engine
 				ImGui::SameLine();
 			}
 		}
+	}
+
+	void EditorGUI::drawGuizmoOperationsWindow()
+	{
+		ImGuiWindowFlags windowFlags = 0;
+		windowFlags |= ImGuiWindowFlags_NoTitleBar;
+		windowFlags |= ImGuiWindowFlags_NoResize;
+		windowFlags |= ImGuiWindowFlags_NoScrollbar;
+
+		ImGui::SetNextWindowSize(ImVec2(50, 170));
+		ImGui::Begin("Gizmo Operation", nullptr, windowFlags);
+
+		bool pushedStyleColor = false;
+		if (guizmoOperation == ImGuizmo::ROTATE)
+		{
+			ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered]);
+			pushedStyleColor = true;
+		}
+
+		if (ImGui::ImageButton("##rotateOperationButton", (void*)(intptr_t)rotateIconTexture->textureIDOpenGL, ImVec2(25, 25), { 0, 1 }, { 1, 0 }))
+		{
+			guizmoOperation = ImGuizmo::ROTATE;
+		}
+		if (pushedStyleColor)
+			ImGui::PopStyleColor();
+
+		pushedStyleColor = false;
+
+
+		if (guizmoOperation == ImGuizmo::TRANSLATE)
+		{
+			ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered]);
+			pushedStyleColor = true;
+		}
+
+		if (ImGui::ImageButton("##translateOperationButton", (void*)(intptr_t)translateIconTexture->textureIDOpenGL, ImVec2(25, 25), { 0, 1 }, { 1, 0 }))
+		{
+			guizmoOperation = ImGuizmo::TRANSLATE;
+		}
+		if (pushedStyleColor)
+			ImGui::PopStyleColor();
+
+
+		pushedStyleColor = false;
+
+		if (guizmoOperation == ImGuizmo::SCALE)
+		{
+			ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered]);
+			pushedStyleColor = true;
+		}
+
+		if (ImGui::ImageButton("##scaleOperationButton", (void*)(intptr_t)scaleIconTexture->textureIDOpenGL, ImVec2(25, 25), { 0, 1 }, { 1, 0 }))
+		{
+			guizmoOperation = ImGuizmo::SCALE;
+		}
+		if (pushedStyleColor)
+			ImGui::PopStyleColor();
+
+
+		pushedStyleColor = false;
+
+		ImGui::NewLine();
+
+		if (isGuizmoOperationInWorldSpace)
+		{
+			ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered]);
+			pushedStyleColor = true;
+		}
+
+		if (ImGui::ImageButton("##worldOperationButton", (void*)(intptr_t)worldIconTexture->textureIDOpenGL, ImVec2(25, 25), { 0, 1 }, { 1, 0 }))
+		{
+			isGuizmoOperationInWorldSpace = !isGuizmoOperationInWorldSpace;
+		}
+		if (pushedStyleColor)
+			ImGui::PopStyleColor();
+
+		ImGui::End();
 	}
 
 	void EditorGUI::drawAssetItem(std::shared_ptr<AssetNode> assetNode)
