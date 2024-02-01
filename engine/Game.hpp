@@ -10,6 +10,7 @@
 #include "GameObject.hpp"
 #include "RendererSettings.hpp"
 
+
 namespace engine
 {
 	class Game
@@ -24,6 +25,8 @@ namespace engine
 		bool running = true;
 
 		const void run();
+
+		const void gameLoop();
 
 		// Currenly limit the game to only one camera
 		Camera camera{};
@@ -56,4 +59,6 @@ namespace engine
 		int frameCount = 0;
 		long long lastFrameTime = 0;
 	};
+
+	Game * createGame();
 }

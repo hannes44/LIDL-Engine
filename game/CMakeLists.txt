@@ -3,13 +3,11 @@ project(Game, VERSION 0.01)
 # Create executable
 add_executable(Game)
 target_sources(Game PRIVATE 
-	main.cpp
 	TestGame.hpp
 	TestGame.cpp
 )
 
 add_library(gamelib 
-	main.cpp
 	TestGame.hpp
 	TestGame.cpp
 )

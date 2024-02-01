@@ -1,5 +1,8 @@
 #include "Game.hpp"
 #include "Utils.hpp"
+#include "Renderer.hpp"
+#include "InputFramework.hpp"
+#include "Window.hpp"
 
 constexpr auto TIME_CONVERSION_FACTOR = 1000000000;
 
@@ -11,7 +14,20 @@ namespace engine {
 
 		frameCount++;
 		lastFrameTime = Utils::getTimestampNS();
+
+		InputFramework::getInstance().getInput();
+
+		Renderer::renderGame(this, &camera, &renderingSettings);
+
+		Window::getInstance().newFrame();
 		update();
+	}
+	const void Game::gameLoop()
+	{
+		while (true)
+		{
+			run();
+		}
 	}
 	std::weak_ptr<Texture> Game::loadTexture(const std::string& textureFileName)
 	{

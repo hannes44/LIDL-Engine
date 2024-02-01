@@ -101,4 +101,10 @@ namespace engine {
 
 		addGameObject(std::unique_ptr<GameObject>(ball3));
 	}
+
+}
+
+engine::Game* engine::createGame() {
+
+	return new TestGame();
 }

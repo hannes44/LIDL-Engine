@@ -1,4 +1,5 @@
 add_library(engine
+	main.cpp
 	Transform.hpp
 	Transform.cpp
 	GameObject.hpp
