@@ -52,8 +52,6 @@ namespace engine
 
 		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png"));
 
-		folderIconTexture = std::shared_ptr<Texture>(Texture::create("folder_icon.png"));
-
 		while (true)
 		{
 			editorCamera.rotate(1, 0, 1, 0);
@@ -707,7 +705,9 @@ namespace engine
 
 	void EditorGUI::drawAssetItem(std::shared_ptr<AssetNode> assetNode)
 	{
-		if (ImGui::Button(assetNode->name.c_str()))
+		int openGLTextureId = assetNode->iconTexture != nullptr ? assetNode->iconTexture->textureIDOpenGL : 0;
+
+		if (ImGui::ImageButton(("##"+assetNode->uuid.id).c_str(), (void*)(intptr_t)openGLTextureId, ImVec2(70, 70), {0, 1}, {1, 0}))
 		{
 			if (assetNode->isFolder)
 				selectedAssetNodeFolder = assetNode;
