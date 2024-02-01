@@ -8,6 +8,8 @@
 #include "RendererSettings.hpp"
 #include "EditorSettings.hpp"
 #include "AssetManager.hpp"
+#include "InputListener.hpp"
+#include "Project.hpp"
 
 namespace engine
 {
@@ -24,16 +26,18 @@ namespace engine
 		Game
 	};
 
-	class EditorGUI
+	class EditorGUI : public InputListener
 	{
 	public:
-		EditorGUI();
+		EditorGUI(std::shared_ptr<Project> project);
 
 		void start();
 
 		void renderNewFrame();
 
 		void endFrame();
+
+		void handleInput(const InputEvent& event, const std::string& EventType) override;
 		
 		std::shared_ptr<Game> game = nullptr;
 	private:
@@ -59,6 +63,8 @@ namespace engine
 
 		void drawAssetsSection();
 
+		void drawGuizmoOperationsWindow();
+
 		void drawAssetItem(std::shared_ptr<AssetNode> assetNode);
 
 		bool defaultCheckBox(const std::string& label, bool* value);
@@ -71,8 +77,9 @@ namespace engine
 
 		ImGuizmo::OPERATION guizmoOperation = ImGuizmo::TRANSLATE;
 
+		bool isGuizmoOperationInWorldSpace = true;
+
 		Camera editorCamera{};
-		float editorCameraSensitivity = 1;
 
 		EditorSceneState sceneState = EditorSceneState::Scene;
 
@@ -85,5 +92,15 @@ namespace engine
 		std::weak_ptr<AssetNode> selectedAssetNodeFolder;
 
 		std::unique_ptr<AssetManager> assetManager;
+
+		std::shared_ptr<Project> project;
+
+		std::shared_ptr<Texture> rotateIconTexture;
+
+		std::shared_ptr<Texture> translateIconTexture;
+
+		std::shared_ptr<Texture> scaleIconTexture;
+
+		std::shared_ptr<Texture> worldIconTexture;
 	};
 }

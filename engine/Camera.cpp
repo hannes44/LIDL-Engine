@@ -1,12 +1,25 @@
 #include "Camera.hpp"
+#include "InputSystem.hpp"
+#include "Logger.hpp"
 #define GLM_ENABLE_EXPERIMENTAL
+#include "InputFramework.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 #include "Window.hpp"
-#include "Logger.hpp"
+#include <iostream>
+#include "Bootstrap.hpp"
+#include <imgui_impl_sdl3.h>
 
 namespace engine
 {
+	Camera::Camera()
+	{
+		InputSystem::addListener(this);
+	}
+
+	void Camera::update() {
+	}
+
 	void Camera::translate(float x, float y, float z)
 	{
 		translation += glm::vec3(x, y, z);
@@ -52,5 +65,56 @@ namespace engine
 		glm::mat4 projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
 
 		return projectionMatrix;
+	}
+
+	void Camera::handleInput(const InputEvent& event, const std::string& EventType) {
+
+		// Handle key and mouse input here
+		// If mouse button is pressed we want to control the camera
+		if (EventType == "MouseButtonDown" && (Key)event.getButton() == Key::MOUSE_RIGHT && !(ImGui::GetIO().WantCaptureMouse)) {
+			isMouseDragging = true;
+		}
+		// If mouse button is released we want to stop controlling the camera
+		if (!(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT))) {
+			isMouseDragging = false;
+		}
+
+		if ((EventType == "MouseMotion" || EventType == "KeyDown" || EventType == "KeyHold")
+			&& isMouseDragging && !(ImGui::GetIO().WantCaptureMouse)) {
+
+			if (SDL_BUTTON(SDL_BUTTON_RIGHT)) {
+				glm::mat4 yaw = glm::rotate(rotationSpeed * -event.getX(), worldUp);
+				glm::mat4 pitch = glm::rotate(rotationSpeed * -event.getY(), glm::normalize(glm::cross(direction, worldUp)));
+				direction = glm::vec3(pitch * yaw * glm::vec4(direction, 0.0f));
+
+				if (!ImGui::GetIO().WantCaptureKeyboard) {
+					if (event.getKey() == Key::W) {
+						translate(direction.x * movementSpeed, direction.y * movementSpeed, direction.z * movementSpeed);
+					}
+
+					else if (event.getKey() == Key::A) {
+						glm::vec3 cameraRight = glm::normalize(glm::cross(direction, worldUp));
+						translate(cameraRight.x * -movementSpeed, cameraRight.y * -movementSpeed, cameraRight.z * -movementSpeed);
+					}
+
+					else if (event.getKey() == Key::S) {
+						translate(direction.x * -movementSpeed, direction.y * -movementSpeed, direction.z * -movementSpeed);
+					}
+
+					else if (event.getKey() == Key::D) {
+						glm::vec3 cameraRight = glm::normalize(glm::cross(direction, worldUp));
+						translate(cameraRight.x * movementSpeed, cameraRight.y * movementSpeed, cameraRight.z * movementSpeed);
+					}
+
+					else if (event.getKey() == Key::SPACE) {
+						translate(worldUp.x * movementSpeed, worldUp.y * movementSpeed, worldUp.z * movementSpeed);
+					}
+
+					else if (event.getKey() == Key::LSHIFT) {
+						translate(worldUp.x * -movementSpeed, worldUp.y * -movementSpeed, worldUp.z * -movementSpeed);
+					}
+				}
+			}
+		}
 	}
 }

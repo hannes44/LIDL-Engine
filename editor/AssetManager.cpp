@@ -4,6 +4,8 @@ namespace engine
 {
 	AssetNode::AssetNode(bool isFolder, std::weak_ptr<Selectable> asset) : isFolder(isFolder), asset(asset)
 	{
+		if (isFolder)
+			iconTexture = AssetManager::getIconTextureForNode(this);
 	}
 	void AssetNode::addChild(std::shared_ptr<AssetNode> parent, std::shared_ptr<AssetNode> child)
 	{
@@ -22,7 +24,9 @@ namespace engine
 		return parents;
 	}
 	AssetManager::AssetManager(Game* game) : game(game)
-	{}
+	{
+		loadIconTextures();
+	}
 
 	void AssetManager::buildAssetTree()
 	{
@@ -51,5 +55,16 @@ namespace engine
 	{
 		this->game = game;
 		buildAssetTree();
+	}
+	void AssetManager::loadIconTextures()
+	{
+		folderIconTexture = std::shared_ptr<Texture>(Texture::create("folder_icon.png"));
+	}
+	std::shared_ptr<Texture> AssetManager::getIconTextureForNode(AssetNode* node)
+	{
+		if (node->isFolder)
+			return folderIconTexture;
+
+		return nullptr;
 	}
 }

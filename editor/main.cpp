@@ -8,6 +8,9 @@
 #include <memory>
 #include <Shader.hpp>
 #include <Camera.hpp>
+#include "InputFramework.hpp"
+#include "Shader.hpp"
+#include "Camera.hpp"
 #include <vector>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
@@ -19,13 +22,12 @@
 #include <imgui_impl_sdl3.h>
 #include <imgui_impl_opengl3.h>
 #include "EditorGUI.hpp"
+#include "Editor.hpp"
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
-
-	engine::EditorGUI editor{};
+	engine::Editor editor{};
 	editor.start();
 
 	return 0;
 }
-

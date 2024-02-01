@@ -3,7 +3,6 @@
 #include <Window.hpp>
 #include "InputFramework.hpp"
 #include "Game.hpp"
-#include "Cube.hpp"
 #include "GameObject.hpp"
 #include "TestGame.hpp"
 #include "Bootstrap.hpp"
@@ -23,12 +22,10 @@ namespace engine {
 	}
 
 	void TestGame::update() {
+
 	}
 
 	void TestGame::initialize() {
-		// Initialize the InputFramework and InputSystem
-		InputFramework::getInstance().initialize();
-
 
 		std::shared_ptr<MeshComponent> meshComponent1 = engine::MeshComponent::loadMeshFromOBJFile("amugus.obj");
 		std::shared_ptr<MeshComponent> meshComponent2 = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);

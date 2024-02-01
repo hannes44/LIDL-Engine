@@ -17,24 +17,13 @@ namespace engine
 #define IMGUI_TOP_MENU_HEIGHT 18
 #define IMGUI_SHOW_DEMO_WINDOWS false
 
-	EditorGUI::EditorGUI() : window(Window::getInstance())
+	EditorGUI::EditorGUI(std::shared_ptr<Project> project) :  window(Window::getInstance()), project(project)
 	{
-		
+		game = project->game;
 	}
 
 	void EditorGUI::start()
 	{
-		engine::Logger::init();
-		LOG_INFO("Starting Editor");
-
-		Window& window = Window::getInstance();
-		window.createWindow(1280, 720, "Editor");
-
-		glewInit();
-
-		engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
-
-		game = std::make_shared<TestGame>();
 		game->initialize(); // Temporary for testing, should not be called when serialization works
 		game->camera.translate(0, 0, 5);
 
@@ -45,27 +34,37 @@ namespace engine
 
 		assetManager = std::make_unique<AssetManager>(game.get());
 
-		if (game)
-			assetManager->buildAssetTree();
 
+		InputFramework& inputFramework = InputFramework::getInstance();
+		inputFramework.addListener(this);
+
+		assetManager->buildAssetTree();
+   
 		selectedAssetNodeFolder = assetManager->rootNode;
 
 		editorSettings = EditorSerializer::deSerializeEditorSettings();
+
+		rotateIconTexture = std::shared_ptr<Texture>(Texture::create("rotation_icon.png"));
+
+		scaleIconTexture = std::shared_ptr<Texture>(Texture::create("scale_icon.png"));
+
+		translateIconTexture = std::shared_ptr<Texture>(Texture::create("translation_icon.png"));
+
+		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png"));
 
 		while (true)
 		{
 			editorCamera.rotate(1, 0, 1, 0);
 			renderNewFrame();
-			InputFramework::getInstance().getInput();
+
+			inputFramework.getInput();
+
+			Renderer::renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 
 
-			if (game)
-				Renderer::renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
-
-			// GamePhysics::getInstance().run(game);
+			// GamePhysics::getInstance().run(game.get());
 			// game->run();
 			// Renderer::renderGame(game, getActiveCamera(), &editorSettings.rendererSettings);
-
 
 			endFrame();
 			window.newFrame();
@@ -99,6 +98,8 @@ namespace engine
 			drawTopMenu();
 			drawPlayButtonToolbar();
 			drawBottomPanel();
+
+
 		}
 	}
 
@@ -108,47 +109,26 @@ namespace engine
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
-	void EditorGUI::drawMainMenu()
+	void EditorGUI::handleInput(const InputEvent& event, const std::string& EventType)
 	{
-		int w, h;
-		window.getWindowSize(&w, &h);
-		ImGui::SetNextWindowPos({ 0, 0 });
-		ImGui::SetNextWindowSize(ImVec2(w, h));
-
-		ImGuiWindowFlags windowFlags = 0;
-		windowFlags |= ImGuiWindowFlags_NoTitleBar;
-		windowFlags |= ImGuiWindowFlags_NoMove;
-		windowFlags |= ImGuiWindowFlags_NoResize;
-		windowFlags |= ImGuiWindowFlags_NoScrollbar;
-		windowFlags |= ImGuiWindowFlags_NoScrollWithMouse;
-		windowFlags |= ImGuiWindowFlags_NoCollapse;
-		windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-
-		ImGui::Begin("MainMenu", nullptr, windowFlags);
-		std::string editorName = "GIGA Editor";
-		auto windowWidth = ImGui::GetWindowSize().x;
-		auto textWidth = ImGui::CalcTextSize(editorName.c_str()).x;
-
-		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
-		ImGui::Text(editorName.c_str());
-
-		ImGui::Button("New Project");
-		ImGui::SameLine();
-		ImGui::Button("Open Project");
-
-
-		ImGui::Text("Projects: ");
-		for (auto gameName : EditorSerializer::getAllGameNamesInGamesFolder())
+		if (EventType == "KeyDown")
 		{
-			if (ImGui::Button(gameName.c_str()))
+			if ((Key)event.getKey() == Key::DELETE)
 			{
-				std::shared_ptr<Game> game = GameSerializer::deserializeGame(gameName);
-				changeGame(game);
+				if (auto lockedSelectedObject = selectedObject.lock())
+				{
+					if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
+					{
+						game->deleteGameObject(lockedGameObject->getUUID().id);
+					}
+				}
 			}
 		}
-			
+	}
 
-		ImGui::End();
+	void EditorGUI::drawMainMenu()
+	{
+
 	}
 
 	void EditorGUI::drawViewPort()
@@ -185,6 +165,9 @@ namespace engine
 		}
 
 		drawGuizmos();
+
+		if (std::dynamic_pointer_cast<GameObject>(selectedObject.lock()))
+			drawGuizmoOperationsWindow();
 
 		ImGui::End();
 	}
@@ -477,7 +460,7 @@ namespace engine
 
 			glm::mat4 projectionMatrix = getActiveCamera()->getProjectionMatrix();
 
-			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(projectionMatrix), guizmoOperation, ImGuizmo::WORLD, modelMatrixPtr);
+			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(projectionMatrix), guizmoOperation, isGuizmoOperationInWorldSpace ? ImGuizmo::WORLD : ImGuizmo::LOCAL, modelMatrixPtr);
 		}
 	}
 
@@ -545,8 +528,8 @@ namespace engine
 			}
 
 			ImGui::Text("Camera Settings");
-			ImGui::SliderFloat("Camera Speed", &editorCamera.cameraSpeed, 0.1f, 10.0f);
-			ImGui::SliderFloat("Camera Sensitivity", &editorCameraSensitivity, 0.1f, 10.0f); 
+			ImGui::SliderFloat("Camera Speed", &editorCamera.movementSpeed, 0.001f, 1.0f);
+			ImGui::SliderFloat("Camera Sensitivity", &editorCamera.rotationSpeed, 0.001f, 0.1f); 
 			ImGui::SliderFloat("Camera FOV", &editorCamera.fov, 0.1f, 120.0f);
 			
 		}
@@ -643,13 +626,109 @@ namespace engine
 		}
 	}
 
+	void EditorGUI::drawGuizmoOperationsWindow()
+	{
+		ImGuiWindowFlags windowFlags = 0;
+		windowFlags |= ImGuiWindowFlags_NoTitleBar;
+		windowFlags |= ImGuiWindowFlags_NoResize;
+		windowFlags |= ImGuiWindowFlags_NoScrollbar;
+
+		ImGui::SetNextWindowSize(ImVec2(50, 170));
+		ImGui::Begin("Gizmo Operation", nullptr, windowFlags);
+
+		bool pushedStyleColor = false;
+		if (guizmoOperation == ImGuizmo::ROTATE)
+		{
+			ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered]);
+			pushedStyleColor = true;
+		}
+
+		if (ImGui::ImageButton("##rotateOperationButton", (void*)(intptr_t)rotateIconTexture->textureIDOpenGL, ImVec2(25, 25), { 0, 1 }, { 1, 0 }))
+		{
+			guizmoOperation = ImGuizmo::ROTATE;
+		}
+		if (pushedStyleColor)
+			ImGui::PopStyleColor();
+
+		pushedStyleColor = false;
+
+
+		if (guizmoOperation == ImGuizmo::TRANSLATE)
+		{
+			ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered]);
+			pushedStyleColor = true;
+		}
+
+		if (ImGui::ImageButton("##translateOperationButton", (void*)(intptr_t)translateIconTexture->textureIDOpenGL, ImVec2(25, 25), { 0, 1 }, { 1, 0 }))
+		{
+			guizmoOperation = ImGuizmo::TRANSLATE;
+		}
+		if (pushedStyleColor)
+			ImGui::PopStyleColor();
+
+
+		pushedStyleColor = false;
+
+		if (guizmoOperation == ImGuizmo::SCALE)
+		{
+			ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered]);
+			pushedStyleColor = true;
+		}
+
+		if (ImGui::ImageButton("##scaleOperationButton", (void*)(intptr_t)scaleIconTexture->textureIDOpenGL, ImVec2(25, 25), { 0, 1 }, { 1, 0 }))
+		{
+			guizmoOperation = ImGuizmo::SCALE;
+		}
+		if (pushedStyleColor)
+			ImGui::PopStyleColor();
+
+
+		pushedStyleColor = false;
+
+		ImGui::NewLine();
+
+		if (isGuizmoOperationInWorldSpace)
+		{
+			ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered]);
+			pushedStyleColor = true;
+		}
+
+		if (ImGui::ImageButton("##worldOperationButton", (void*)(intptr_t)worldIconTexture->textureIDOpenGL, ImVec2(25, 25), { 0, 1 }, { 1, 0 }))
+		{
+			isGuizmoOperationInWorldSpace = !isGuizmoOperationInWorldSpace;
+		}
+		if (pushedStyleColor)
+			ImGui::PopStyleColor();
+
+		ImGui::End();
+	}
+
 	void EditorGUI::drawAssetItem(std::shared_ptr<AssetNode> assetNode)
 	{
-		if (ImGui::Button(assetNode->name.c_str()))
+		ImGui::BeginGroup();
 		{
-			if (assetNode->isFolder)
-				selectedAssetNodeFolder = assetNode;
+			int openGLTextureId = assetNode->iconTexture != nullptr ? assetNode->iconTexture->textureIDOpenGL : 0;
+
+			if (ImGui::ImageButton(("##" + assetNode->uuid.id).c_str(), (void*)(intptr_t)openGLTextureId, ImVec2(70, 70), { 0, 1 }, { 1, 0 }))
+			{
+				if (assetNode->isFolder)
+					selectedAssetNodeFolder = assetNode;
+			}
+
+
+			float currentX = ImGui::GetCursorPosX();
+			std::string name = assetNode->name;
+
+			if (name.size() > 10)
+				name = name.substr(0, 8) + "...";
+
+			auto textWidth = ImGui::CalcTextSize(name.c_str()).x;
+
+			ImGui::SetCursorPosX(currentX + (75 - textWidth) / 2);
+
+			ImGui::Text(name.c_str());
 		}
+		ImGui::EndGroup();
 	}
 
 	bool EditorGUI::defaultCheckBox(const std::string& label, bool* value)

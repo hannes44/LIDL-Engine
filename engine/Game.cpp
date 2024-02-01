@@ -27,4 +27,8 @@ namespace engine {
 	{
 		gameObjects[gameObject->uuid.id] = std::move(gameObject);
 	}
+	void Game::deleteGameObject(const std::string& id)
+	{
+		gameObjects.erase(id);
+	}
 }

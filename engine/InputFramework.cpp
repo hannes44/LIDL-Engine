@@ -1,5 +1,6 @@
 #include "InputFramework.hpp"
 #include "Bootstrap.hpp"
+#include "Logger.hpp"
 #include <SDL.h>
 #include <imgui_impl_sdl3.h>
 
@@ -10,70 +11,91 @@
 
 namespace engine {
 
-    InputFramework::InputFramework() : tick(0), timeInterval(1.0 / 60.0) {}
+    InputFramework::InputFramework() {
+    }
 
     InputFramework& InputFramework::getInstance() {
         static InputFramework instance;
         return instance;
     }
 
+    bool InputFramework::isKeyPressed(const char* key) {
+        SDL_Keycode keycode = SDL_GetKeyFromName(key);
+        const Uint8* keystates = SDL_GetKeyboardState(NULL);
+        return keystates[SDL_GetScancodeFromKey(keycode)];
+    }
+
+    // Handle continuous input for keys
+    void InputFramework::handleContinousInput() {
+        // Initialize with default values
+        InputEvent ie(0, 0, 0, Key::LAST);
+        
+        const Uint8* keystates = SDL_GetKeyboardState(NULL);
+        for (int keyInt = (int)Key::A; (int)keyInt != (int)Key::LAST; keyInt++) {
+            Key key = static_cast<Key>(keyInt);
+            if (keystates[keyInt]) {
+				ie.setKey(key);
+				dispatchEvent(ie, "KeyHold");
+			}
+        }
+    }
+
     // Read input from the SDL window
     void InputFramework::getInput() {
-        SDL_Event ev;
-        InputEvent ie(0, 0, 0, "");  // Initialize with default values
+        // Initialize with default values
+        InputEvent ie(0, 0, 0, Key::LAST);
 
+        SDL_PumpEvents();
+        handleContinousInput();
+
+        // Poll for events and dispatch them
         while (SDL_PollEvent(&ev)) {
-            // Handle different types of input events and dispatch them
-            // to registered listeners using InputSystem::dispatchEvent.
 
             ImGui_ImplSDL3_ProcessEvent(&ev);
-                
+
             if (ev.type == SDL_EVENT_MOUSE_MOTION) {
                 SDL_MouseMotionEvent mot = ev.motion;
-                ie.setX(mot.x);
-                ie.setY(mot.y);
+                SDL_MouseButtonEvent but = ev.button;
+                ie.setButton(but.button);
+                ie.setX(mot.xrel);
+                ie.setY(mot.yrel);
                 dispatchEvent(ie, "MouseMotion");
             }
-            else if (ev.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
+            if (ev.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
                 SDL_MouseButtonEvent but = ev.button;
                 ie.setX(but.x);
                 ie.setY(but.y);
                 ie.setButton(but.button);
                 dispatchEvent(ie, "MouseButtonDown");
             }
-            else if (ev.type == SDL_EVENT_MOUSE_BUTTON_UP) {
+            if (ev.type == SDL_EVENT_MOUSE_BUTTON_UP) {
                 SDL_MouseButtonEvent but = ev.button;
                 ie.setX(but.x);
                 ie.setY(but.y);
                 ie.setButton(but.button);
                 dispatchEvent(ie, "MouseButtonUp");
             }
-            else if (ev.type == SDL_EVENT_KEY_DOWN) {
+            if (ev.type == SDL_EVENT_KEY_DOWN && ev.key.repeat == 0) {
                 SDL_KeyboardEvent key = ev.key;
-                ie.setKey(SDL_GetKeyName(key.keysym.sym));
+                ie.setKey((Key)key.keysym.scancode);
                 dispatchEvent(ie, "KeyDown");
             }
-            else if (ev.type == SDL_EVENT_KEY_UP) {
+            if (ev.type == SDL_EVENT_KEY_UP) {
                 SDL_KeyboardEvent key = ev.key;
-                ie.setKey(SDL_GetKeyName(key.keysym.sym));
+                ie.setKey((Key)key.keysym.scancode);
                 dispatchEvent(ie, "KeyUp");
             }
-            else if (ev.type == SDL_EVENT_QUIT) {
+            if (ev.type == SDL_EVENT_QUIT) {
                 dispatchEvent(ie, "Quit");
             }
-           
         }
-
-
-        tick -= timeInterval;
     }
 
     // Initialize the input framework
     void InputFramework::initialize() {
-        tick = 0;
-        timeInterval = 1.0 / 60.0;
         // Additional initialization logic can be added here
         InputSystem::initialize();
+        SDL_SetRelativeMouseMode(SDL_TRUE);
     }
 
     // Clean up resources
