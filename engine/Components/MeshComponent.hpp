@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Component.hpp"
-#include "Vertex.hpp"
+#include "Renderer/Vertex.hpp"
 
 #include <vector>
 #include <string>

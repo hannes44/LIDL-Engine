@@ -1,6 +1,6 @@
 #include "Window.hpp"
 #include "Logger.hpp"
-#include "SDLWindow.hpp"
+#include "SDL/SDLWindow.hpp"
 
 namespace engine
 {

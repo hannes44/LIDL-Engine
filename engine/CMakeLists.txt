@@ -12,16 +12,16 @@ add_library(engine
 	Components/MeshComponent.cpp
 	Game.hpp
 	Game.cpp
-	Display.hpp
-	DisplayTerminal.hpp
-	DisplayTerminal.cpp
+	Renderer/Console/Display.hpp
+	Renderer/Console/DisplayTerminal.hpp
+	Renderer/Console/DisplayTerminal.cpp
+	Renderer/Vertex.hpp
 	Bootstrap.hpp
 	Bootstrap.cpp
 	Logger.hpp
 	Logger.cpp
 	Window.hpp
 	Window.cpp
-	Vertex.hpp
 	InputEvent.hpp
 	InputEvent.cpp
 	InputListener.hpp
@@ -54,14 +54,14 @@ add_library(engine
 	Texture.cpp
 	Material.hpp
 	GameConfig.hpp
-	GameSerializer.hpp
-	GameSerializer.cpp
-	SDLWindow.hpp
-	SDLWindow.cpp
+	Serializer/GameSerializer.hpp
+	Serializer/GameSerializer.cpp
+	SDL/SDLWindow.hpp
+	SDL/SDLWindow.cpp
 	Uuid.hpp
 	Uuid.cpp
-	GamePhysics.hpp
-	GamePhysics.cpp
+	Physics/GamePhysics.hpp
+	Physics/GamePhysics.cpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 	../vendor/stb/stb_image.h
 	../vendor/ImGuizmo/ImGuizmo.h
@@ -87,6 +87,7 @@ source_group("Renderer" FILES
 	Renderer/Shader.hpp
 	Renderer/Shader.cpp
 	Renderer/RendererSettings.hpp
+	Renderer/Vertex.hpp
 )
 
 source_group("OpenGL" FILES
@@ -101,13 +102,18 @@ source_group("OpenGL" FILES
 )
 
 source_group("Serializer" FILES
-	GameSerializer.hpp
-	GameSerializer.cpp
+	Serializer/GameSerializer.hpp
+	Serializer/GameSerializer.cpp
+)
+
+source_group("Physics" FILES
+	Physics/GamePhysics.hpp
+	Physics/GamePhysics.cpp
 )
 
 source_group("SDL" FILES
-	SDLWindow.hpp
-	SDLWindow.cpp
+	SDL/SDLWindow.hpp
+	SDL/SDLWindow.cpp
 )
 
 # Find *all* shaders.

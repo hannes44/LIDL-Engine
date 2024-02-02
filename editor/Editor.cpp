@@ -1,7 +1,7 @@
 #include "Editor.hpp"
 #include "Logger.hpp"
 #include "Window.hpp"
-#include "Renderer.hpp"
+#include "Renderer/Renderer.hpp"
 #include "EditorGui.hpp"
 #include "MainMenuGUI.hpp"
 #include "EditorSerializer.hpp"

@@ -1,6 +1,6 @@
 #pragma once
-#include "Display.hpp"
-#include "DisplayTerminal.hpp"
+#include "Renderer/Console/Display.hpp"
+#include "Renderer/Console/DisplayTerminal.hpp"
 
 namespace engine
 {

@@ -3,7 +3,7 @@
 #include "Renderer/Renderer.hpp"
 #include "InputFramework.hpp"
 #include "Window.hpp"
-#include "GamePhysics.hpp"
+#include "Physics/GamePhysics.hpp"
 
 constexpr auto TIME_CONVERSION_FACTOR = 1000000000;
 

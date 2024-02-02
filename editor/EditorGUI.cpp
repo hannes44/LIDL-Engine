@@ -9,7 +9,7 @@
 #include "Logger.hpp"
 #include "RendererSettings.hpp"
 #include "EditorSerializer.hpp"
-#include "GameSerializer.hpp"
+#include "Serializer/GameSerializer.hpp"
 #include "GamePhysics.hpp"
 
 namespace engine
