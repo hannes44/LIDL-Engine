@@ -5,6 +5,7 @@
 #include "GUI/MainMenuGUI.hpp"
 #include "Serializer/EditorSerializer.hpp"
 #include "Project.hpp"
+#include "TestGame2.hpp"
 #include "TestGame.hpp"
 
 namespace engine

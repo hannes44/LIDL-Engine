@@ -5,9 +5,10 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "../../vendor/tinyobjloader/tiny_obj_loader.h"
 
+
 namespace engine
 {
-	#define MODELS_PATH "../../assets/3DObjects/"
+#define MODELS_PATH "../../assets/3DObjects/"
 
 	MeshComponent::MeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices)
 	{
