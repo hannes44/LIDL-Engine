@@ -3,39 +3,39 @@ project(Editor, VERSION 0.01)
 # Create executable
 add_executable(Editor)
 target_sources(Editor PRIVATE 
-	main.cpp
-	Serializer/EditorSerializer.hpp
-	Serializer/EditorSerializer.cpp
-	GUI/EditorGUI.hpp
-	GUI/EditorGUI.cpp
-	GUI/MainMenuGUI.hpp
-	GUI/MainMenuGUI.cpp
-	GUI/GUIHelper.hpp
-	GUI/GUIHelper.cpp
-	AssetManager.hpp
-	AssetManager.cpp
-	AssetNode.hpp
-	EditorSettings.hpp
-	Editor.hpp
-	Editor.cpp
-	Project.hpp
+	src/main.cpp
+	src/Serializer/EditorSerializer.hpp
+	src/Serializer/EditorSerializer.cpp
+	src/GUI/EditorGUI.hpp
+	src/GUI/EditorGUI.cpp
+	src/GUI/MainMenuGUI.hpp
+	src/GUI/MainMenuGUI.cpp
+	src/GUI/GUIHelper.hpp
+	src/GUI/GUIHelper.cpp
+	src/AssetManager.hpp
+	src/AssetManager.cpp
+	src/AssetNode.hpp
+	src/EditorSettings.hpp
+	src/Editor.hpp
+	src/Editor.cpp
+	src/Project.hpp
 )
 
 source_group("GUI" FILES
-	GUI/EditorGUI.hpp
-	GUI/EditorGUI.cpp
-	GUI/MainMenuGUI.hpp
-	GUI/MainMenuGUI.cpp
-	GUI/GUIHelper.hpp
-	GUI/GUIHelper.cpp
+	src/GUI/EditorGUI.hpp
+	src/GUI/EditorGUI.cpp
+	src/GUI/MainMenuGUI.hpp
+	src/GUI/MainMenuGUI.cpp
+	src/GUI/GUIHelper.hpp
+	src/GUI/GUIHelper.cpp
 )
 
 source_group("Serializer" FILES
-	Serializer/EditorSerializer.hpp
-	Serializer/EditorSerializer.cpp
+	src/Serializer/EditorSerializer.hpp
+	src/Serializer/EditorSerializer.cpp
 )
 
-target_include_directories(Editor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(Editor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Link libraries
 target_link_libraries(Editor PRIVATE
