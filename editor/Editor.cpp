@@ -1,9 +1,9 @@
 #include "Editor.hpp"
 #include <Engine.hpp>
 #include "Renderer/Renderer.hpp"
-#include "EditorGui.hpp"
-#include "MainMenuGUI.hpp"
-#include "EditorSerializer.hpp"
+#include "GUI/EditorGui.hpp"
+#include "GUI/MainMenuGUI.hpp"
+#include "Serializer/EditorSerializer.hpp"
 #include "Project.hpp"
 #include "TestGame.hpp"
 

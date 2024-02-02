@@ -3,7 +3,7 @@
 #include "../vendor/ImGuizmo/ImGuizmo.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <TestGame.hpp>"
-#include "EditorSerializer.hpp"
+#include "Serializer/EditorSerializer.hpp"
 #include "Serializer/GameSerializer.hpp"
 #include <Physics/GamePhysics.hpp>
 
