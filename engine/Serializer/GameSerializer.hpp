@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Game.hpp"
-#include "GameConfig.hpp"
+#include "Core/Game.hpp"
+#include "Core/GameConfig.hpp"
 #include <yaml-cpp/yaml.h>
-#include "Material.hpp"
-#include "Texture.hpp"
+#include "Core/Material.hpp"
+#include "Core/Texture.hpp"
 
 namespace engine
 {

@@ -1,5 +1,5 @@
 #include "Game.hpp"
-#include "Utils.hpp"
+#include "Utils/Utils.hpp"
 #include "Renderer/Renderer.hpp"
 #include "InputFramework.hpp"
 #include "Window.hpp"

@@ -1,9 +1,9 @@
 #include <iostream>
-#include "Logger.hpp"
-#include "Game.hpp"
-#include "Window.hpp"
+#include "Core/Logger.hpp"
+#include "Core/Game.hpp"
+#include "Core/Window.hpp"
 #include "Renderer/Renderer.hpp"
-#include "InputFramework.hpp"
+#include "Core/InputFramework.hpp"
 
 extern engine::Game* engine::createGame();
 

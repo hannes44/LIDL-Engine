@@ -8,7 +8,7 @@
 
 #include "Renderer/Buffer.hpp"
 
-#include "Material.hpp"
+#include "Core/Material.hpp"
 
 namespace engine
 {

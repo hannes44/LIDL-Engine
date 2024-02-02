@@ -1,35 +1,42 @@
 add_library(engine
 	main.cpp
 	Engine.hpp
-	Transform.hpp
-	Transform.cpp
-	GameObject.hpp
-	GameObject.cpp
+	Core/Transform.hpp
+	Core/Transform.cpp
+	Core/GameObject.hpp
+	Core/GameObject.cpp
+	Core/Game.hpp
+	Core/Game.cpp
+	Core/Bootstrap.hpp
+	Core/Bootstrap.cpp
+	Core/Logger.hpp
+	Core/Logger.cpp
+	Core/Window.hpp
+	Core/Window.cpp
+	Core/InputEvent.hpp
+	Core/InputEvent.cpp
+	Core/InputListener.hpp
+	Core/InputListener.cpp
+	Core/InputSystem.hpp
+	Core/InputSystem.cpp
+	Core/InputFramework.hpp
+	Core/InputFramework.cpp
+	Core/Uuid.hpp
+	Core/Uuid.cpp
+	Core/Camera.hpp
+	Core/Camera.cpp
+	Core/Texture.hpp
+	Core/Texture.cpp
+	Core/Material.hpp
+	Core/GameConfig.hpp
 	Components/Component.hpp
 	Components/PointLightComponent.hpp
 	Components/PhysicsComponent.hpp
 	Components/MeshComponent.hpp
 	Components/MeshComponent.cpp
-	Game.hpp
-	Game.cpp
 	Renderer/Console/Display.hpp
 	Renderer/Console/DisplayTerminal.hpp
 	Renderer/Console/DisplayTerminal.cpp
-	Renderer/Vertex.hpp
-	Bootstrap.hpp
-	Bootstrap.cpp
-	Logger.hpp
-	Logger.cpp
-	Window.hpp
-	Window.cpp
-	InputEvent.hpp
-	InputEvent.cpp
-	InputListener.hpp
-	InputListener.cpp
-	InputSystem.hpp
-	InputSystem.cpp
-	InputFramework.hpp
-	InputFramework.cpp
 	Renderer/Renderer.hpp
 	Renderer/Renderer.cpp
 	Renderer/GraphicsAPI.hpp
@@ -37,6 +44,7 @@ add_library(engine
 	Renderer/Buffer.cpp
 	Renderer/Shader.hpp
 	Renderer/Shader.cpp
+	Renderer/Vertex.hpp
 	Renderer/RendererSettings.hpp
 	Renderer/OpenGL/OpenGLGraphicsAPI.hpp
 	Renderer/OpenGL/OpenGLGraphicsAPI.cpp
@@ -46,22 +54,14 @@ add_library(engine
 	Renderer/OpenGL/OpenGLShader.cpp
 	Renderer/OpenGL/OpenGLTexture.hpp
 	Renderer/OpenGL/OpenGLTexture.cpp
-	Utils.hpp
-	Utils.cpp
-	Camera.hpp
-	Camera.cpp
-	Texture.hpp
-	Texture.cpp
-	Material.hpp
-	GameConfig.hpp
 	Serializer/GameSerializer.hpp
 	Serializer/GameSerializer.cpp
 	SDL/SDLWindow.hpp
 	SDL/SDLWindow.cpp
-	Uuid.hpp
-	Uuid.cpp
 	Physics/GamePhysics.hpp
 	Physics/GamePhysics.cpp
+	Utils/Utils.hpp
+	Utils/Utils.cpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 	../vendor/stb/stb_image.h
 	../vendor/ImGuizmo/ImGuizmo.h
@@ -106,6 +106,12 @@ source_group("Serializer" FILES
 	Serializer/GameSerializer.cpp
 )
 
+source_group("Utils" FILES
+	Utils/Utils.hpp
+	Utils/Utils.cpp
+)
+
+
 source_group("Physics" FILES
 	Physics/GamePhysics.hpp
 	Physics/GamePhysics.cpp
@@ -116,10 +122,44 @@ source_group("SDL" FILES
 	SDL/SDLWindow.cpp
 )
 
+
+source_group("Core" FILES
+	Core/Transform.hpp
+	Core/Transform.cpp
+	Core/GameObject.hpp
+	Core/GameObject.cpp
+	Core/Game.hpp
+	Core/Game.cpp
+	Core/Bootstrap.hpp
+	Core/Bootstrap.cpp
+	Core/Logger.hpp
+	Core/Logger.cpp
+	Core/Window.hpp
+	Core/Window.cpp
+	Core/InputEvent.hpp
+	Core/InputEvent.cpp
+	Core/InputListener.hpp
+	Core/InputListener.cpp
+	Core/InputSystem.hpp
+	Core/InputSystem.cpp
+	Core/InputFramework.hpp
+	Core/InputFramework.cpp
+	Core/Uuid.hpp
+	Core/Uuid.cpp
+	Core/Utils.hpp
+	Core/Utils.cpp
+	Core/Camera.hpp
+	Core/Camera.cpp
+	Core/Texture.hpp
+	Core/Texture.cpp
+	Core/Material.hpp
+	Core/GameConfig.hpp
+)
+
 # Find *all* shaders.
 file(GLOB_RECURSE SHADERS
-    "${CMAKE_CURRENT_SOURCE_DIR}/shaders/*.vert"
-    "${CMAKE_CURRENT_SOURCE_DIR}/shaders/*.frag"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Shaders/*.vert"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Shaders/*.frag"
 )
 # Separate filter for shaders.
 source_group("Shaders" FILES ${SHADERS})

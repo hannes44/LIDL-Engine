@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "GameObject.hpp"
+#include "Core/GameObject.hpp"
 
 namespace engine
 {

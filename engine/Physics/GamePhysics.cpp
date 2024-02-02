@@ -1,10 +1,10 @@
 #include "GamePhysics.hpp"
-#include "Logger.hpp"
-#include "Game.hpp"
+#include "Core/Logger.hpp"
+#include "Core/Game.hpp"
 #include <string>
 #include <chrono>
 #include "Components/PhysicsComponent.hpp"
-#include "Utils.hpp"
+#include "Utils/Utils.hpp"
 
 namespace engine {
 

@@ -1,5 +1,5 @@
 #include "OpenGLTexture.hpp"
-#include "Logger.hpp"
+#include "Core/Logger.hpp"
 #define STB_IMAGE_IMPLEMENTATION
 #include "../vendor/stb/stb_image.h"
 

@@ -1,5 +1,5 @@
 #include "SDLWindow.hpp"
-#include "Logger.hpp"
+#include "Core/Logger.hpp"
 
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>

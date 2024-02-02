@@ -1,7 +1,7 @@
 #include "OpenGLGraphicsAPI.hpp"
 #include <glm/glm.hpp>
 #include <GL/glew.h>
-#include "Logger.hpp"
+#include "Core/Logger.hpp"
 
 namespace engine
 {

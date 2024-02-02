@@ -1,12 +1,12 @@
 #include "Renderer.hpp"
-#include "Logger.hpp"
+#include "Core/Logger.hpp"
 #include "Renderer/OpenGL/OpenGLGraphicsAPI.hpp"
-#include "GameObject.hpp"
+#include "Core/GameObject.hpp"
 #include "Components/MeshComponent.hpp"
-#include "Window.hpp"
+#include "Core/Window.hpp"
 #include "Components/PointLightComponent.hpp"
-#include "Game.hpp"
-#include "Camera.hpp"
+#include "Core/Game.hpp"
+#include "Core/Camera.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>

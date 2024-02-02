@@ -1,5 +1,5 @@
 #include "MeshComponent.hpp"
-#include "Logger.hpp"
+#include "Core/Logger.hpp"
 #include <iostream>
 
 #define TINYOBJLOADER_IMPLEMENTATION

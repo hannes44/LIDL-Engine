@@ -3,7 +3,7 @@
 #include <memory>
 #include "Shader.hpp"
 #include <vector>
-#include "Game.hpp"
+#include "Core/Game.hpp"
 #include "RendererSettings.hpp"
 
 namespace engine

@@ -1,5 +1,5 @@
 #include "OpenGLShader.hpp"
-#include "Logger.hpp"
+#include "Core/Logger.hpp"
 #include <GL/glew.h>
 #include <filesystem>
 #include <fstream>

@@ -1,7 +1,7 @@
 #include "Buffer.hpp"
 #include "Renderer.hpp"
 #include "Renderer/OpenGL/OpenGLBuffer.hpp"
-#include "Logger.hpp"
+#include "Core/Logger.hpp"
 
 namespace engine
 {

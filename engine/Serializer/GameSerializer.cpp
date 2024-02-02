@@ -1,5 +1,5 @@
 #include "GameSerializer.hpp"
-#include "Logger.hpp"
+#include "Core/Logger.hpp"
 #include <fstream>
 #include <Windows.h>
 #include <yaml-cpp/yaml.h>
