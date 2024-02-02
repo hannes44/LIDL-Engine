@@ -8,7 +8,7 @@
 #include "GameConfig.hpp"
 #include "Material.hpp"
 #include "GameObject.hpp"
-#include "RendererSettings.hpp"
+#include "Renderer/RendererSettings.hpp"
 
 
 namespace engine

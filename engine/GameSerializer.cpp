@@ -5,8 +5,8 @@
 #include <yaml-cpp/yaml.h>
 #include <iostream>
 #include <memory>
-#include "MeshComponent.hpp"
-#include "PointLightComponent.hpp"
+#include "Components/MeshComponent.hpp"
+#include "Components/PointLightComponent.hpp"
 
 namespace engine
 {

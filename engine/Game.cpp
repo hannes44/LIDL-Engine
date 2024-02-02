@@ -1,8 +1,9 @@
 #include "Game.hpp"
 #include "Utils.hpp"
-#include "Renderer.hpp"
+#include "Renderer/Renderer.hpp"
 #include "InputFramework.hpp"
 #include "Window.hpp"
+#include "GamePhysics.hpp"
 
 constexpr auto TIME_CONVERSION_FACTOR = 1000000000;
 
@@ -20,6 +21,8 @@ namespace engine {
 		Renderer::renderGame(this, &camera, &renderingSettings);
 
 		Window::getInstance().newFrame();
+
+		GamePhysics::getInstance().run(this);
 		update();
 	}
 	const void Game::gameLoop()

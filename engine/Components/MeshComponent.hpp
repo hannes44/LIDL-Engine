@@ -6,7 +6,7 @@
 #include <vector>
 #include <string>
 
-#include "Buffer.hpp"
+#include "Renderer/Buffer.hpp"
 
 #include "Material.hpp"
 

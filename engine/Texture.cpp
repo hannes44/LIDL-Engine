@@ -1,6 +1,6 @@
 #include "Texture.hpp"
-#include "Renderer.hpp"
-#include "OpenGLTexture.hpp"
+#include "Renderer/Renderer.hpp"
+#include "Renderer/OpenGL/OpenGLTexture.hpp"
 
 
 namespace engine

@@ -1,5 +1,5 @@
 #pragma once
-#include "Shader.hpp"
+#include "Renderer/Shader.hpp"
 #include <string>
 #include <GL/glew.h>
 

@@ -3,7 +3,7 @@
 #include "Game.hpp"
 #include <string>
 #include <chrono>
-#include "PhysicsComponent.hpp"
+#include "Components/PhysicsComponent.hpp"
 #include "Utils.hpp"
 
 namespace engine {

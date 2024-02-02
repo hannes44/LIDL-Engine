@@ -1,12 +1,15 @@
 add_library(engine
 	main.cpp
+	Engine.hpp
 	Transform.hpp
 	Transform.cpp
 	GameObject.hpp
 	GameObject.cpp
-	Component.hpp
-	PointLightComponent.hpp
-	PhysicsComponent.hpp
+	Components/Component.hpp
+	Components/PointLightComponent.hpp
+	Components/PhysicsComponent.hpp
+	Components/MeshComponent.hpp
+	Components/MeshComponent.cpp
 	Game.hpp
 	Game.cpp
 	Display.hpp
@@ -18,8 +21,6 @@ add_library(engine
 	Logger.cpp
 	Window.hpp
 	Window.cpp
-	MeshComponent.hpp
-	MeshComponent.cpp
 	Vertex.hpp
 	InputEvent.hpp
 	InputEvent.cpp
@@ -29,21 +30,22 @@ add_library(engine
 	InputSystem.cpp
 	InputFramework.hpp
 	InputFramework.cpp
-	Renderer.hpp
-	Renderer.cpp
-	GraphicsAPI.hpp
-	OpenGLGraphicsAPI.hpp
-	OpenGLGraphicsAPI.cpp
-	OpenGLBuffer.hpp
-	OpenGLBuffer.cpp
-	OpenGLShader.hpp
-	OpenGLShader.cpp
-	OpenGLTexture.hpp
-	OpenGLTexture.cpp
-	Buffer.hpp
-	Buffer.cpp
-	Shader.hpp
-	Shader.cpp
+	Renderer/Renderer.hpp
+	Renderer/Renderer.cpp
+	Renderer/GraphicsAPI.hpp
+	Renderer/Buffer.hpp
+	Renderer/Buffer.cpp
+	Renderer/Shader.hpp
+	Renderer/Shader.cpp
+	Renderer/RendererSettings.hpp
+	Renderer/OpenGL/OpenGLGraphicsAPI.hpp
+	Renderer/OpenGL/OpenGLGraphicsAPI.cpp
+	Renderer/OpenGL/OpenGLBuffer.hpp
+	Renderer/OpenGL/OpenGLBuffer.cpp
+	Renderer/OpenGL/OpenGLShader.hpp
+	Renderer/OpenGL/OpenGLShader.cpp
+	Renderer/OpenGL/OpenGLTexture.hpp
+	Renderer/OpenGL/OpenGLTexture.cpp
 	Utils.hpp
 	Utils.cpp
 	Camera.hpp
@@ -58,7 +60,6 @@ add_library(engine
 	SDLWindow.cpp
 	Uuid.hpp
 	Uuid.cpp
-	RendererSettings.hpp
 	GamePhysics.hpp
 	GamePhysics.cpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
@@ -70,33 +71,33 @@ add_library(engine
 target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 source_group("Components" FILES
-	Component.hpp
-	PointLightComponent.hpp
-	PhysicsComponent.hpp
-	MeshComponent.hpp
-	MeshComponent.cpp
+	Components/Component.hpp
+	Components/PointLightComponent.hpp
+	Components/PhysicsComponent.hpp
+	Components/MeshComponent.hpp
+	Components/MeshComponent.cpp
 )
 
 source_group("Renderer" FILES
-	Renderer.hpp
-	Renderer.cpp
-	GraphicsAPI.hpp
-	Buffer.hpp
-	Buffer.cpp
-	Shader.hpp
-	Shader.cpp
-	RendererSettings.hpp
+	Renderer/Renderer.hpp
+	Renderer/Renderer.cpp
+	Renderer/GraphicsAPI.hpp
+	Renderer/Buffer.hpp
+	Renderer/Buffer.cpp
+	Renderer/Shader.hpp
+	Renderer/Shader.cpp
+	Renderer/RendererSettings.hpp
 )
 
 source_group("OpenGL" FILES
-	OpenGLGraphicsAPI.hpp
-	OpenGLGraphicsAPI.cpp
-	OpenGLShader.hpp
-	OpenGLShader.cpp
-	OpenGLBuffer.hpp
-	OpenGLBuffer.cpp
-	OpenGLTexture.hpp
-	OpenGLTexture.cpp
+	Renderer/OpenGL/OpenGLGraphicsAPI.hpp
+	Renderer/OpenGL/OpenGLGraphicsAPI.cpp
+	Renderer/OpenGL/OpenGLBuffer.hpp
+	Renderer/OpenGL/OpenGLBuffer.cpp
+	Renderer/OpenGL/OpenGLShader.hpp
+	Renderer/OpenGL/OpenGLShader.cpp
+	Renderer/OpenGL/OpenGLTexture.hpp
+	Renderer/OpenGL/OpenGLTexture.cpp
 )
 
 source_group("Serializer" FILES

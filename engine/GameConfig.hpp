@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "GraphicsAPI.hpp"
+#include "Renderer/GraphicsAPI.hpp"
 
 namespace engine
 {

@@ -1,10 +1,10 @@
 #include "Renderer.hpp"
 #include "Logger.hpp"
-#include "OpenGLGraphicsAPI.hpp"
+#include "Renderer/OpenGL/OpenGLGraphicsAPI.hpp"
 #include "GameObject.hpp"
-#include "MeshComponent.hpp"
+#include "Components/MeshComponent.hpp"
 #include "Window.hpp"
-#include "PointLightComponent.hpp"
+#include "Components/PointLightComponent.hpp"
 #include "Game.hpp"
 #include "Camera.hpp"
 

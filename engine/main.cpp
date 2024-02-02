@@ -2,7 +2,7 @@
 #include "Logger.hpp"
 #include "Game.hpp"
 #include "Window.hpp"
-#include "Renderer.hpp"
+#include "Renderer/Renderer.hpp"
 #include "InputFramework.hpp"
 
 extern engine::Game* engine::createGame();
@@ -24,6 +24,7 @@ int main(int argc, char* argv[])
 	engine::InputFramework& inputFramework = engine::InputFramework::getInstance();
 
 	auto game =  engine::createGame();
+	window.setWindowTitle(game->name);
 	game->initialize();
 	game->gameLoop();
 

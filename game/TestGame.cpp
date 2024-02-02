@@ -6,14 +6,14 @@
 #include "GameObject.hpp"
 #include "TestGame.hpp"
 #include "Bootstrap.hpp"
-#include "MeshComponent.hpp"
-#include "Renderer.hpp"
+#include "Components/MeshComponent.hpp"
+#include "Renderer/Renderer.hpp"
 #include "Window.hpp"
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
-#include "PointLightComponent.hpp"
-#include "PhysicsComponent.hpp"
+#include "Components/PointLightComponent.hpp"
+#include "Components/PhysicsComponent.hpp"
 
 
 namespace engine {
