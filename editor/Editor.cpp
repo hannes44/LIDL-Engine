@@ -1,6 +1,5 @@
 #include "Editor.hpp"
-#include "Logger.hpp"
-#include "Window.hpp"
+#include <Engine.hpp>
 #include "Renderer/Renderer.hpp"
 #include "EditorGui.hpp"
 #include "MainMenuGUI.hpp"

@@ -156,6 +156,14 @@ source_group("Core" FILES
 	Core/GameConfig.hpp
 )
 
+source_group("Vendor" FILES
+	../vendor/tinyobjloader/tiny_obj_loader.h
+	../vendor/stb/stb_image.h
+	../vendor/ImGuizmo/ImGuizmo.h
+	../vendor/ImGuizmo/ImGuizmo.cpp
+)
+
+
 # Find *all* shaders.
 file(GLOB_RECURSE SHADERS
     "${CMAKE_CURRENT_SOURCE_DIR}/Shaders/*.vert"

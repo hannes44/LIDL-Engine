@@ -1,7 +1,7 @@
 #pragma once
 #include "Project.hpp"
 #include <memory>
-#include "Window.hpp"
+#include <Engine.hpp>
 
 namespace engine
 {

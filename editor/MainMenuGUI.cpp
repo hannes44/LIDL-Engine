@@ -3,13 +3,10 @@
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_sdl3.h>
 #include "EditorSerializer.hpp"
-#include "Game.hpp"
-#include "GameSerializer.hpp"
-#include "InputFramework.hpp"
+#include "Serializer/GameSerializer.hpp"
 #include "Project.hpp"
 #include "GUIHelper.hpp"
 #include "Editor.hpp"
-#include "Logger.hpp"
 #include <imgui_internal.h>
 #include <Windows.h>
 

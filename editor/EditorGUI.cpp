@@ -1,16 +1,11 @@
 #include "EditorGUI.hpp"
-#include "Window.hpp"
-#include "Game.hpp"
+#include <Engine.hpp>
 #include "../vendor/ImGuizmo/ImGuizmo.h"
 #include <glm/gtc/type_ptr.hpp>
-#include "InputFramework.hpp"
-#include <TestGame.hpp>
-#include "Renderer.hpp"
-#include "Logger.hpp"
-#include "RendererSettings.hpp"
+#include <TestGame.hpp>"
 #include "EditorSerializer.hpp"
 #include "Serializer/GameSerializer.hpp"
-#include "GamePhysics.hpp"
+#include <Physics/GamePhysics.hpp>
 
 namespace engine
 {

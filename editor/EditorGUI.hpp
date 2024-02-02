@@ -1,14 +1,11 @@
 #pragma once
+#include <Engine.hpp>
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_sdl3.h>
-#include "Window.hpp"
-#include "Game.hpp"
 #include "../vendor/ImGuizmo/ImGuizmo.h"
-#include "RendererSettings.hpp"
 #include "EditorSettings.hpp"
 #include "AssetManager.hpp"
-#include "InputListener.hpp"
 #include "Project.hpp"
 
 namespace engine

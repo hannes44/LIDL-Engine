@@ -1,5 +1,5 @@
 #pragma once
-#include "RendererSettings.hpp"
+#include <Engine.hpp>
 
 namespace engine
 {
