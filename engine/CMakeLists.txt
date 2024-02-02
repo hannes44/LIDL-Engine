@@ -1,159 +1,157 @@
 add_library(engine
-	main.cpp
-	Engine.hpp
-	Core/Transform.hpp
-	Core/Transform.cpp
-	Core/GameObject.hpp
-	Core/GameObject.cpp
-	Core/Game.hpp
-	Core/Game.cpp
-	Core/Bootstrap.hpp
-	Core/Bootstrap.cpp
-	Core/Logger.hpp
-	Core/Logger.cpp
-	Core/Window.hpp
-	Core/Window.cpp
-	Core/InputEvent.hpp
-	Core/InputEvent.cpp
-	Core/InputListener.hpp
-	Core/InputListener.cpp
-	Core/InputSystem.hpp
-	Core/InputSystem.cpp
-	Core/InputFramework.hpp
-	Core/InputFramework.cpp
-	Core/Uuid.hpp
-	Core/Uuid.cpp
-	Core/Camera.hpp
-	Core/Camera.cpp
-	Core/Texture.hpp
-	Core/Texture.cpp
-	Core/Material.hpp
-	Core/GameConfig.hpp
-	Components/Component.hpp
-	Components/PointLightComponent.hpp
-	Components/PhysicsComponent.hpp
-	Components/MeshComponent.hpp
-	Components/MeshComponent.cpp
-	Renderer/Console/Display.hpp
-	Renderer/Console/DisplayTerminal.hpp
-	Renderer/Console/DisplayTerminal.cpp
-	Renderer/Renderer.hpp
-	Renderer/Renderer.cpp
-	Renderer/GraphicsAPI.hpp
-	Renderer/Buffer.hpp
-	Renderer/Buffer.cpp
-	Renderer/Shader.hpp
-	Renderer/Shader.cpp
-	Renderer/Vertex.hpp
-	Renderer/RendererSettings.hpp
-	Renderer/OpenGL/OpenGLGraphicsAPI.hpp
-	Renderer/OpenGL/OpenGLGraphicsAPI.cpp
-	Renderer/OpenGL/OpenGLBuffer.hpp
-	Renderer/OpenGL/OpenGLBuffer.cpp
-	Renderer/OpenGL/OpenGLShader.hpp
-	Renderer/OpenGL/OpenGLShader.cpp
-	Renderer/OpenGL/OpenGLTexture.hpp
-	Renderer/OpenGL/OpenGLTexture.cpp
-	Serializer/GameSerializer.hpp
-	Serializer/GameSerializer.cpp
-	SDL/SDLWindow.hpp
-	SDL/SDLWindow.cpp
-	Physics/GamePhysics.hpp
-	Physics/GamePhysics.cpp
-	Utils/Utils.hpp
-	Utils/Utils.cpp
+	src/main.cpp
+	src/Engine.hpp
+	src/Core/Transform.hpp
+	src/Core/Transform.cpp
+	src/Core/GameObject.hpp
+	src/Core/GameObject.cpp
+	src/Core/Game.hpp
+	src/Core/Game.cpp
+	src/Core/Bootstrap.hpp
+	src/Core/Bootstrap.cpp
+	src/Core/Logger.hpp
+	src/Core/Logger.cpp
+	src/Core/Window.hpp
+	src/Core/Window.cpp
+	src/Core/InputEvent.hpp
+	src/Core/InputEvent.cpp
+	src/Core/InputListener.hpp
+	src/Core/InputListener.cpp
+	src/Core/InputSystem.hpp
+	src/Core/InputSystem.cpp
+	src/Core/InputFramework.hpp
+	src/Core/InputFramework.cpp
+	src/Core/Uuid.hpp
+	src/Core/Uuid.cpp
+	src/Core/Camera.hpp
+	src/Core/Camera.cpp
+	src/Core/Texture.hpp
+	src/Core/Texture.cpp
+	src/Core/Material.hpp
+	src/Core/GameConfig.hpp
+	src/Components/Component.hpp
+	src/Components/PointLightComponent.hpp
+	src/Components/PhysicsComponent.hpp
+	src/Components/MeshComponent.hpp
+	src/Components/MeshComponent.cpp
+	src/Renderer/Console/Display.hpp
+	src/Renderer/Console/DisplayTerminal.hpp
+	src/Renderer/Console/DisplayTerminal.cpp
+	src/Renderer/Renderer.hpp
+	src/Renderer/Renderer.cpp
+	src/Renderer/GraphicsAPI.hpp
+	src/Renderer/Buffer.hpp
+	src/Renderer/Buffer.cpp
+	src/Renderer/Shader.hpp
+	src/Renderer/Shader.cpp
+	src/Renderer/Vertex.hpp
+	src/Renderer/RendererSettings.hpp
+	src/Renderer/OpenGL/OpenGLGraphicsAPI.hpp
+	src/Renderer/OpenGL/OpenGLGraphicsAPI.cpp
+	src/Renderer/OpenGL/OpenGLBuffer.hpp
+	src/Renderer/OpenGL/OpenGLBuffer.cpp
+	src/Renderer/OpenGL/OpenGLShader.hpp
+	src/Renderer/OpenGL/OpenGLShader.cpp
+	src/Renderer/OpenGL/OpenGLTexture.hpp
+	src/Renderer/OpenGL/OpenGLTexture.cpp
+	src/Serializer/GameSerializer.hpp
+	src/Serializer/GameSerializer.cpp
+	src/SDL/SDLWindow.hpp
+	src/SDL/SDLWindow.cpp
+	src/Physics/GamePhysics.hpp
+	src/Physics/GamePhysics.cpp
+	src/Utils/Utils.hpp
+	src/Utils/Utils.cpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 	../vendor/stb/stb_image.h
 	../vendor/ImGuizmo/ImGuizmo.h
 	../vendor/ImGuizmo/ImGuizmo.cpp
 	${SHADERS}
 )
-target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 source_group("Components" FILES
-	Components/Component.hpp
-	Components/PointLightComponent.hpp
-	Components/PhysicsComponent.hpp
-	Components/MeshComponent.hpp
-	Components/MeshComponent.cpp
+	src/Components/Component.hpp
+	src/Components/PointLightComponent.hpp
+	src/Components/PhysicsComponent.hpp
+	src/Components/MeshComponent.hpp
+	src/Components/MeshComponent.cpp
 )
 
 source_group("Renderer" FILES
-	Renderer/Renderer.hpp
-	Renderer/Renderer.cpp
-	Renderer/GraphicsAPI.hpp
-	Renderer/Buffer.hpp
-	Renderer/Buffer.cpp
-	Renderer/Shader.hpp
-	Renderer/Shader.cpp
-	Renderer/RendererSettings.hpp
-	Renderer/Vertex.hpp
+	src/Renderer/Renderer.hpp
+	src/Renderer/Renderer.cpp
+	src/Renderer/GraphicsAPI.hpp
+	src/Renderer/Buffer.hpp
+	src/Renderer/Buffer.cpp
+	src/Renderer/Shader.hpp
+	src/Renderer/Shader.cpp
+	src/Renderer/RendererSettings.hpp
+	src/Renderer/Vertex.hpp
 )
 
 source_group("OpenGL" FILES
-	Renderer/OpenGL/OpenGLGraphicsAPI.hpp
-	Renderer/OpenGL/OpenGLGraphicsAPI.cpp
-	Renderer/OpenGL/OpenGLBuffer.hpp
-	Renderer/OpenGL/OpenGLBuffer.cpp
-	Renderer/OpenGL/OpenGLShader.hpp
-	Renderer/OpenGL/OpenGLShader.cpp
-	Renderer/OpenGL/OpenGLTexture.hpp
-	Renderer/OpenGL/OpenGLTexture.cpp
+	src/Renderer/OpenGL/OpenGLGraphicsAPI.hpp
+	src/Renderer/OpenGL/OpenGLGraphicsAPI.cpp
+	src/Renderer/OpenGL/OpenGLBuffer.hpp
+	src/Renderer/OpenGL/OpenGLBuffer.cpp
+	src/Renderer/OpenGL/OpenGLShader.hpp
+	src/Renderer/OpenGL/OpenGLShader.cpp
+	src/Renderer/OpenGL/OpenGLTexture.hpp
+	src/Renderer/OpenGL/OpenGLTexture.cpp
 )
 
 source_group("Serializer" FILES
-	Serializer/GameSerializer.hpp
-	Serializer/GameSerializer.cpp
+	src/Serializer/GameSerializer.hpp
+	src/Serializer/GameSerializer.cpp
 )
 
 source_group("Utils" FILES
-	Utils/Utils.hpp
-	Utils/Utils.cpp
+	src/Utils/Utils.hpp
+	src/Utils/Utils.cpp
 )
 
 
 source_group("Physics" FILES
-	Physics/GamePhysics.hpp
-	Physics/GamePhysics.cpp
+	src/Physics/GamePhysics.hpp
+	src/Physics/GamePhysics.cpp
 )
 
 source_group("SDL" FILES
-	SDL/SDLWindow.hpp
-	SDL/SDLWindow.cpp
+	src/SDL/SDLWindow.hpp
+	src/SDL/SDLWindow.cpp
 )
 
 
 source_group("Core" FILES
-	Core/Transform.hpp
-	Core/Transform.cpp
-	Core/GameObject.hpp
-	Core/GameObject.cpp
-	Core/Game.hpp
-	Core/Game.cpp
-	Core/Bootstrap.hpp
-	Core/Bootstrap.cpp
-	Core/Logger.hpp
-	Core/Logger.cpp
-	Core/Window.hpp
-	Core/Window.cpp
-	Core/InputEvent.hpp
-	Core/InputEvent.cpp
-	Core/InputListener.hpp
-	Core/InputListener.cpp
-	Core/InputSystem.hpp
-	Core/InputSystem.cpp
-	Core/InputFramework.hpp
-	Core/InputFramework.cpp
-	Core/Uuid.hpp
-	Core/Uuid.cpp
-	Core/Utils.hpp
-	Core/Utils.cpp
-	Core/Camera.hpp
-	Core/Camera.cpp
-	Core/Texture.hpp
-	Core/Texture.cpp
-	Core/Material.hpp
-	Core/GameConfig.hpp
+	src/Core/Transform.hpp
+	src/Core/Transform.cpp
+	src/Core/GameObject.hpp
+	src/Core/GameObject.cpp
+	src/Core/Game.hpp
+	src/Core/Game.cpp
+	src/Core/Bootstrap.hpp
+	src/Core/Bootstrap.cpp
+	src/Core/Logger.hpp
+	src/Core/Logger.cpp
+	src/Core/Window.hpp
+	src/Core/Window.cpp
+	src/Core/InputEvent.hpp
+	src/Core/InputEvent.cpp
+	src/Core/InputListener.hpp
+	src/Core/InputListener.cpp
+	src/Core/InputSystem.hpp
+	src/Core/InputSystem.cpp
+	src/Core/InputFramework.hpp
+	src/Core/InputFramework.cpp
+	src/Core/Uuid.hpp
+	src/Core/Uuid.cpp
+	src/Core/Camera.hpp
+	src/Core/Camera.cpp
+	src/Core/Texture.hpp
+	src/Core/Texture.cpp
+	src/Core/Material.hpp
+	src/Core/GameConfig.hpp
 )
 
 source_group("Vendor" FILES

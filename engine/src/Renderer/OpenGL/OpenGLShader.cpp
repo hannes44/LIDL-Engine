@@ -7,7 +7,7 @@
 
 namespace engine
 {
-	#define SHADERS_PATH "../../engine/shaders/"
+	#define SHADERS_PATH "../../engine/src/Shaders/"
 
 	OpenGLShader::OpenGLShader(const std::string& vertName, const std::string& fragName)
 	{

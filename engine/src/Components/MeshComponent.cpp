@@ -3,7 +3,7 @@
 #include <iostream>
 
 #define TINYOBJLOADER_IMPLEMENTATION
-#include "../vendor/tinyobjloader/tiny_obj_loader.h"
+#include "../../vendor/tinyobjloader/tiny_obj_loader.h"
 
 namespace engine
 {
