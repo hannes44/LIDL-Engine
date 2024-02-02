@@ -5,7 +5,7 @@
 #include <imgui_impl_sdl3.h>
 #include "../vendor/ImGuizmo/ImGuizmo.h"
 #include "EditorSettings.hpp"
-#include "AssetManager.hpp"
+#include "AssetExplorer/AssetManager.hpp"
 #include "Project.hpp"
 
 namespace engine

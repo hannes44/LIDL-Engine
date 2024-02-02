@@ -12,9 +12,9 @@ target_sources(Editor PRIVATE
 	src/GUI/MainMenuGUI.cpp
 	src/GUI/GUIHelper.hpp
 	src/GUI/GUIHelper.cpp
-	src/AssetManager.hpp
-	src/AssetManager.cpp
-	src/AssetNode.hpp
+	src/AssetExplorer/AssetManager.hpp
+	src/AssetExplorer/AssetManager.cpp
+	src/AssetExplorer/AssetNode.hpp
 	src/EditorSettings.hpp
 	src/Editor.hpp
 	src/Editor.cpp
@@ -33,6 +33,12 @@ source_group("GUI" FILES
 source_group("Serializer" FILES
 	src/Serializer/EditorSerializer.hpp
 	src/Serializer/EditorSerializer.cpp
+)
+
+source_group("AssetExplorer" FILES
+	src/AssetExplorer/AssetManager.hpp
+	src/AssetExplorer/AssetManager.cpp
+	src/AssetExplorer/AssetNode.hpp
 )
 
 target_include_directories(Editor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
