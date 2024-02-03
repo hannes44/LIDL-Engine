@@ -2,7 +2,7 @@
 #include "InputSystem.hpp"
 #include "InputEvent.hpp"
 #include <SDL.h>
-
+#include "Events/EventManager.hpp"
 /*
     InputFramework class
 	- This class is a singleton that inherits from InputSystem

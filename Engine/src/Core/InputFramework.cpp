@@ -53,6 +53,11 @@ namespace engine {
 
             ImGui_ImplSDL3_ProcessEvent(&ev);
 
+            // If the user closes the window
+            if (ev.type == SDL_EVENT_QUIT) {
+				EventManager::getInstance().notify(EventType::QuitProgram);
+			}
+
             if (ev.type == SDL_EVENT_MOUSE_MOTION) {
                 SDL_MouseMotionEvent mot = ev.motion;
                 SDL_MouseButtonEvent but = ev.button;

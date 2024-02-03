@@ -5,6 +5,7 @@
 #include "Serializer/EditorSerializer.hpp"
 #include "Serializer/GameSerializer.hpp"
 #include <Physics/GamePhysics.hpp>
+#include <memory>
 
 namespace engine
 {
@@ -34,6 +35,9 @@ namespace engine
 
 		inputFramework.removeListener(&game->camera);
 
+		EventManager& eventManager = EventManager::getInstance();
+		eventManager.subscribe(EventType::QuitProgram, this);
+
 		assetManager->buildAssetTree();
    
 		selectedAssetNodeFolder = assetManager->rootNode;
@@ -48,7 +52,7 @@ namespace engine
 
 		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png"));
 
-		while (true)
+		while (!quitProgram)
 		{
 			editorCamera.rotate(1, 0, 1, 0);
 			renderNewFrame();
@@ -99,8 +103,6 @@ namespace engine
 			drawTopMenu();
 			drawPlayButtonToolbar();
 			drawBottomPanel();
-
-
 		}
 	}
 
@@ -124,6 +126,14 @@ namespace engine
 					}
 				}
 			}
+		}
+	}
+
+	void EditorGUI::onEvent(EventType type, std::string message)
+	{
+		if (type == EventType::QuitProgram)
+		{
+			quitProgram = true;
 		}
 	}
 

@@ -8,7 +8,6 @@
 #include "AssetExplorer/AssetManager.hpp"
 #include "Project.hpp"
 #include "GUIHelper.hpp"
-
 namespace engine
 {
 	enum class EditorSceneState
@@ -24,7 +23,7 @@ namespace engine
 		Game
 	};
 
-	class EditorGUI : public InputListener
+	class EditorGUI : public InputListener, public EventListener
 	{
 	public:
 		EditorGUI(std::shared_ptr<Project> project);
@@ -37,6 +36,8 @@ namespace engine
 
 		void handleInput(const InputEvent& event, const std::string& EventType) override;
 		
+		void onEvent(EventType type, std::string message);
+
 		std::shared_ptr<Game> game = nullptr;
 	private:
 		void drawMainMenu();
@@ -89,6 +90,8 @@ namespace engine
 		bool wasPlayButtonPressed = false;
 
 		bool wasStopButtonPressed = false;
+
+		bool quitProgram = false;
 
 		Camera* getActiveCamera();
 

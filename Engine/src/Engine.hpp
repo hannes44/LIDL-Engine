@@ -28,3 +28,6 @@
 #include "Components/MeshComponent.hpp"
 #include "Components/PhysicsComponent.hpp"
 #include "Components/PointLightComponent.hpp"
+
+//Events
+#include "Events/EventManager.hpp"

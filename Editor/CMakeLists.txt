@@ -41,6 +41,7 @@ source_group("AssetExplorer" FILES
 	src/AssetExplorer/AssetNode.hpp
 )
 
+
 target_include_directories(Editor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Link libraries

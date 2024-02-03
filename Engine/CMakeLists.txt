@@ -62,6 +62,9 @@ add_library(engine
 	src/Physics/GamePhysics.cpp
 	src/Utils/Utils.hpp
 	src/Utils/Utils.cpp
+	src/Events/EventManager.hpp
+	src/Events/EventManager.cpp
+	src/Events/EventListener.hpp
 	../vendor/tinyobjloader/tiny_obj_loader.h
 	../vendor/stb/stb_image.h
 	../vendor/ImGuizmo/ImGuizmo.h
@@ -99,6 +102,12 @@ source_group("OpenGL" FILES
 	src/Renderer/OpenGL/OpenGLShader.cpp
 	src/Renderer/OpenGL/OpenGLTexture.hpp
 	src/Renderer/OpenGL/OpenGLTexture.cpp
+)
+
+source_group("Events" FILES
+	src/Events/EventManager.hpp
+	src/Events/EventManager.cpp
+	src/Events/EventListener.hpp
 )
 
 source_group("Serializer" FILES
