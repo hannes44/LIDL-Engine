@@ -24,6 +24,8 @@ namespace engine
 
 		virtual void setViewport(int x, int y, int width, int height) = 0;
 
+		virtual void drawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec3& color, glm::mat4 modelViewProjection) = 0;
+
 		virtual GraphicsAPIType getType() = 0;
 	};
 }

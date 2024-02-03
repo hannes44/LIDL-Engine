@@ -13,6 +13,8 @@ namespace engine
 	public:
 		static void renderGame(Game* game, Camera* camera, RendererSettings* renderingSettings);
 
+		static void drawLine(glm::vec3 start, glm::vec3 end, glm::vec3 color, Camera* camera);
+
 		static void initGraphicsAPI(GraphicsAPIType type);
 
 		static std::unique_ptr<GraphicsAPI> graphicsAPI;
