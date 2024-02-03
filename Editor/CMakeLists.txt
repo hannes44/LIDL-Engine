@@ -19,6 +19,9 @@ target_sources(Editor PRIVATE
 	src/Editor.hpp
 	src/Editor.cpp
 	src/Project.hpp
+	src/EventManager.hpp
+	src/EventManager.cpp
+	src/EventListener.hpp
 )
 
 source_group("GUI" FILES

@@ -99,8 +99,6 @@ namespace engine
 			drawTopMenu();
 			drawPlayButtonToolbar();
 			drawBottomPanel();
-
-
 		}
 	}
 
