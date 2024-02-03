@@ -19,18 +19,18 @@ namespace engine
 		return *instance;
 	}
 
-	void EventManager::subscribe(EventType type, EventListener& eventListener)
+	void EventManager::subscribe(EventType type, EventListener* eventListener)
 	{
-		eventListeners[(int)type].push_back(&eventListener);
+		eventListeners[(int)type].push_back(eventListener);
 	}
 
-	void EventManager::unsubscribe(EventType type, EventListener& eventListener)
+	void EventManager::unsubscribe(EventType type, EventListener* eventListener)
 	{
 		int i = 0;
 		std::vector<EventListener*> listeners = eventListeners[(int)type];
 		for (auto& listener : listeners)
 		{
-			if (listener == &eventListener)
+			if (listener == eventListener)
 			{
 				eventListeners[(int)type].erase(eventListeners[(int)type].begin() + i);
 				break;

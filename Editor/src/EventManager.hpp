@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <vector>
 #include <string>
+#include <memory>
 
 namespace engine
 {
@@ -13,8 +14,8 @@ namespace engine
 		~EventManager() = default;
 		EventManager(const EventManager&) = delete;
 
-		void subscribe(EventType type, EventListener& eventListener);
-		void unsubscribe(EventType type, EventListener& eventListener);
+		void subscribe(EventType type, EventListener* eventListener);
+		void unsubscribe(EventType type, EventListener* eventListener);
 		void notify(EventType type, std::string message);
 
 	private:
