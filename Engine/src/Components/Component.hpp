@@ -19,6 +19,8 @@ namespace engine
 		VECTOR4,
 	};
 
+	// Variable that will be serialized and be displayed in the editor
+	// The name and discription will be used to display the variable in the editor
 	struct SerializableVariable
 	{
 		SerializableType type;
