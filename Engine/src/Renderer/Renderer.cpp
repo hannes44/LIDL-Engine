@@ -114,6 +114,12 @@ namespace engine
 
 	}
 
+	void Renderer::drawLine(glm::vec3 start, glm::vec3 end, glm::vec3 color, Camera* camera)
+	{
+		glm::mat4 modelViewProjection = camera->getProjectionMatrix() * camera->getViewMatrix() * glm::mat4(1.0f);
+		graphicsAPI->drawLine(start, end, color, modelViewProjection);
+	}
+
 	void Renderer::initGraphicsAPI(GraphicsAPIType type)
 	{
 		switch (type)

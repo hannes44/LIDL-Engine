@@ -18,6 +18,8 @@ namespace engine
 
 		void setViewport(int x, int y, int width, int height) override;
 
+		void drawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec3& color, glm::mat4 modelViewProjection) override;
+
 		GraphicsAPIType getType() override;
 
 	private:

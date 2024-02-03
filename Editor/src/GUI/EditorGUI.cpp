@@ -54,7 +54,6 @@ namespace engine
 
 		while (!quitProgram)
 		{
-			editorCamera.rotate(1, 0, 1, 0);
 			renderNewFrame();
 
 			inputFramework.getInput();
