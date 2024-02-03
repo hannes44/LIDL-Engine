@@ -488,6 +488,7 @@ namespace engine
 				{
 					if (ImGui::CollapsingHeader(component->getName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 					{
+						drawComponentSerializableVariables(component);
 					}
 				}
 			
@@ -617,6 +618,52 @@ namespace engine
 				drawAssetItem(child);
 				ImGui::SameLine();
 			}
+		}
+	}
+
+	void EditorGUI::drawComponentSerializableVariables(std::shared_ptr<Component> component)
+	{
+		for (auto seralizableVariable : component->getSerializableVariables())
+		{
+			if (seralizableVariable.type == SerializableType::STRING)
+			{
+				ImGui::InputText(seralizableVariable.name.c_str(), (char*)seralizableVariable.data, 255);
+			}
+			else if (seralizableVariable.type == SerializableType::INT)
+			{
+				ImGui::InputInt(seralizableVariable.name.c_str(), (int*)seralizableVariable.data);
+			}
+			else if (seralizableVariable.type == SerializableType::FLOAT)
+			{
+				ImGui::InputFloat(seralizableVariable.name.c_str(), (float*)seralizableVariable.data); 
+			}
+			else if (seralizableVariable.type == SerializableType::BOOLEAN)
+			{
+				ImGui::Checkbox(seralizableVariable.name.c_str(), (bool*)seralizableVariable.data);
+			}
+			else if (seralizableVariable.type == SerializableType::DOUBLE)
+			{
+				ImGui::InputDouble(seralizableVariable.name.c_str(), (double*)seralizableVariable.data);
+			}
+			else if (seralizableVariable.type == SerializableType::VECTOR2)
+			{
+				ImGui::InputFloat2(seralizableVariable.name.c_str(), (float*)seralizableVariable.data);
+			}
+			else if (seralizableVariable.type == SerializableType::VECTOR3)
+			{
+				ImGui::InputFloat3(seralizableVariable.name.c_str(), (float*)seralizableVariable.data);
+			}
+			else if (seralizableVariable.type == SerializableType::VECTOR4)
+			{
+				ImGui::InputFloat4(seralizableVariable.name.c_str(), (float*)seralizableVariable.data);
+			}
+			else {
+				LOG_WARN("Cannot serialize variable type: name: {}", seralizableVariable.name);
+				return;
+			}
+
+			ImGui::SameLine();
+			GUIHelper::HelpMarker(seralizableVariable.description.c_str());
 		}
 	}
 

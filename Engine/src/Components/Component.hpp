@@ -2,9 +2,31 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace engine
 {
+
+	enum class SerializableType
+	{
+		STRING,
+		INT,
+		FLOAT,
+		DOUBLE,
+		BOOLEAN,
+		VECTOR2,
+		VECTOR3,
+		VECTOR4,
+	};
+
+	struct SerializableVariable
+	{
+		SerializableType type;
+		std::string name;
+		std::string description;
+		void* data;
+	};
+
 	// Component class for Entity-Component-System
 	// All components must inherit from this class
 	// A future improvement would be to use a component library such as EnTT
@@ -19,5 +41,7 @@ namespace engine
 
 		virtual std::string getDescription() { return ""; };
 		// TODO: store UUID to entity
+
+		virtual std::vector<SerializableVariable> getSerializableVariables() { return {}; };
 	};
 }

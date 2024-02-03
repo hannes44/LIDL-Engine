@@ -30,7 +30,7 @@ namespace engine {
             glm::vec3 velocity = physicsComponent->getVelocity();
 
             // Apply gravity
-            if (!physicsComponent->disableGravity) {
+            if (physicsComponent->enableGravity) {
                 velocity.y -= physicsComponent->overrideGravityCoefficient ? physicsComponent->gravityCoefficient : settings.gravity;
             }
             

@@ -7,6 +7,7 @@
 #include "EditorSettings.hpp"
 #include "AssetExplorer/AssetManager.hpp"
 #include "Project.hpp"
+#include "GUIHelper.hpp"
 
 namespace engine
 {
@@ -59,6 +60,8 @@ namespace engine
 		void drawBottomPanel();
 
 		void drawAssetsSection();
+
+		void drawComponentSerializableVariables(std::shared_ptr<Component> component);
 
 		void drawGuizmoOperationsWindow();
 
