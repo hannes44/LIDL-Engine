@@ -19,9 +19,6 @@ target_sources(Editor PRIVATE
 	src/Editor.hpp
 	src/Editor.cpp
 	src/Project.hpp
-	src/EventManager.hpp
-	src/EventManager.cpp
-	src/EventListener.hpp
 )
 
 source_group("GUI" FILES
@@ -42,12 +39,6 @@ source_group("AssetExplorer" FILES
 	src/AssetExplorer/AssetManager.hpp
 	src/AssetExplorer/AssetManager.cpp
 	src/AssetExplorer/AssetNode.hpp
-)
-
-source_group("Events" FILES
-	src/EventManager.hpp
-	src/EventManager.cpp
-	src/EventListener.hpp
 )
 
 

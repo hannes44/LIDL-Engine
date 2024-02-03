@@ -8,8 +8,6 @@
 #include "AssetExplorer/AssetManager.hpp"
 #include "Project.hpp"
 #include "GUIHelper.hpp"
-#include "EventManager.hpp"
-
 namespace engine
 {
 	enum class EditorSceneState
