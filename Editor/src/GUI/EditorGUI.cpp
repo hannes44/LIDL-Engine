@@ -32,6 +32,8 @@ namespace engine
 		InputFramework& inputFramework = InputFramework::getInstance();
 		inputFramework.addListener(this);
 
+		inputFramework.removeListener(&game->camera);
+
 		assetManager->buildAssetTree();
    
 		selectedAssetNodeFolder = assetManager->rootNode;
