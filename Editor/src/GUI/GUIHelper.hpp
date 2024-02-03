@@ -9,5 +9,6 @@ namespace engine
 	{
 	public:
 		static void drawCenteredText(const std::string& text);
+		static void HelpMarker(const char* desc);
 	};
 }

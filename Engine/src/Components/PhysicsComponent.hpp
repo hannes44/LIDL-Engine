@@ -7,9 +7,9 @@ namespace engine
 	class PhysicsComponent : public Component
 	{
 	public:
-		PhysicsComponent(bool disableGravity = false) : disableGravity(disableGravity) {};
+		PhysicsComponent(bool enableGravity = true) : enableGravity(enableGravity) {};
 		
-		bool disableGravity = false;
+		bool enableGravity = true;
 		bool overrideGravityCoefficient = false;
 
 		float gravityCoefficient = 9.82f;
@@ -21,5 +21,14 @@ namespace engine
 		void setVelocity(glm::vec3 velocity) { currentVelocity = velocity; };
 
 		std::string getName() override { return "Physics"; };
+
+		std::vector<SerializableVariable> getSerializableVariables() override
+		{
+			return
+			{
+				{SerializableType::BOOLEAN, "Gravity", "Should Gravity affect the game object", &enableGravity},
+				{SerializableType::FLOAT, "Mass", "The mass of the game object in Kg", &mass}
+			};
+		};
 	};
 }
