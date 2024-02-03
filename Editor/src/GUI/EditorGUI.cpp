@@ -55,6 +55,11 @@ namespace engine
 
 			Renderer::renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 
+			if (sceneState == EditorSceneState::Play)
+			{
+				GamePhysics::getInstance().run(game.get());
+				game->update();
+			}
 
 			// GamePhysics::getInstance().run(game.get());
 			// game->run();
@@ -368,13 +373,25 @@ namespace engine
 
 		if (ImGui::BeginTabBar("##BottomTabs", ImGuiTabBarFlags_None))
 		{
-			if (ImGui::BeginTabItem("Scene"))
+			ImGuiTabBarFlags tabFlags = ImGuiSelectableFlags_None;
+			
+			if (wasStopButtonPressed)
+				tabFlags = ImGuiTabItemFlags_SetSelected;
+			
+
+			if (ImGui::BeginTabItem("Scene", nullptr, tabFlags))
 			{
 				activeViewPort = ActiveViewPort::Scene;
 				ImGui::EndTabItem();
+			
 			}
 
-			if (ImGui::BeginTabItem("Game"))
+			tabFlags = ImGuiSelectableFlags_None;
+
+			if (wasPlayButtonPressed)
+				tabFlags = ImGuiTabItemFlags_SetSelected;
+
+			if (ImGui::BeginTabItem("Game", nullptr, tabFlags))
 			{
 				activeViewPort = ActiveViewPort::Game;
 				ImGui::EndTabItem();
@@ -387,6 +404,8 @@ namespace engine
 		ImGui::Dummy(ImVec2(150.0f, 20.0f));
 		ImGui::SameLine();
 
+		wasPlayButtonPressed = false;
+
 		bool pushedStyleColor = false;
 		if (sceneState == EditorSceneState::Play)
 		{
@@ -395,6 +414,8 @@ namespace engine
 		}
 		if (ImGui::Button("Play"))
 		{
+			wasPlayButtonPressed = true;
+
 			sceneState = EditorSceneState::Play;
 
 		}
@@ -405,6 +426,8 @@ namespace engine
 
 		ImGui::SameLine();
 
+		wasStopButtonPressed = false;
+
 		pushedStyleColor = false;
 		if (sceneState == EditorSceneState::Scene)
 		{
@@ -414,6 +437,8 @@ namespace engine
 		if (ImGui::Button("Stop"))
 		{
 			sceneState = EditorSceneState::Scene;
+
+			wasStopButtonPressed = true;
 		}
 		if (sceneState == EditorSceneState::Scene && pushedStyleColor)
 		{

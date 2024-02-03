@@ -82,6 +82,11 @@ namespace engine
 
 		ActiveViewPort activeViewPort = ActiveViewPort::Scene;
 
+		// Flag for when the play button is pressed
+		bool wasPlayButtonPressed = false;
+
+		bool wasStopButtonPressed = false;
+
 		Camera* getActiveCamera();
 
 		EditorSettings editorSettings{};
