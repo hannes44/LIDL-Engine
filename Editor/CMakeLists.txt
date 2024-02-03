@@ -44,6 +44,13 @@ source_group("AssetExplorer" FILES
 	src/AssetExplorer/AssetNode.hpp
 )
 
+source_group("Events" FILES
+	src/EventManager.hpp
+	src/EventManager.cpp
+	src/EventListener.hpp
+)
+
+
 target_include_directories(Editor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Link libraries

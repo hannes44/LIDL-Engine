@@ -1,6 +1,8 @@
 #pragma once
 #include "EventListener.hpp"
 #include <unordered_map>
+#include <vector>
+#include <string>
 
 namespace engine
 {
