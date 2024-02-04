@@ -1,11 +1,17 @@
 #pragma once
 
+#include "Core/GameObject.hpp"
+
 #include <memory>
 #include <string>
 #include <vector>
 
 namespace engine
 {
+	// Forward declaration due to circular dependency
+	class GameObject;
+	class ColliderComponent;
+	class BoxColliderComponent;
 
 	enum class SerializableType
 	{
@@ -39,11 +45,18 @@ namespace engine
 		virtual void initialize() {};
 		virtual void update() {};
 
-		virtual std::string getName() { return ""; };
+		virtual std::string getName() = 0;
 
 		virtual std::string getDescription() { return ""; };
 		// TODO: store UUID to entity
 
 		virtual std::vector<SerializableVariable> getSerializableVariables() { return {}; };
+
+		void setGameObject(GameObject* gameObject) {
+			this->gameObject = gameObject;
+		}
+
+	protected:
+		GameObject* gameObject = nullptr;
 	};
 }

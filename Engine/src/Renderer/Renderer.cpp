@@ -2,6 +2,7 @@
 #include "Core/Logger.hpp"
 #include "Renderer/OpenGL/OpenGLGraphicsAPI.hpp"
 #include "Core/GameObject.hpp"
+#include "Components/ColliderComponent.hpp"
 #include "Components/MeshComponent.hpp"
 #include "Core/Window.hpp"
 #include "Components/PointLightComponent.hpp"
@@ -44,7 +45,7 @@ namespace engine
 		// TODO: There should be a list of all the lights in the game to avoid this loop
 		for (const auto& [gameObjectId, gameObject] : game->gameObjects) 
 		{
-			for (auto component : gameObject->components)
+			for (auto component : gameObject->getComponents())
 			{
 				if (dynamic_cast<PointLightComponent*>(component.get()))
 				{
@@ -73,7 +74,7 @@ namespace engine
 			MeshComponent* meshComponent = nullptr;
 
 			// TODO: Only gameobjects with a mesh should be sent to the renderer to aviod looping
-			for (auto component : gameObject->components)
+			for (auto component : gameObject->getComponents())
 			{
 				if (dynamic_cast<MeshComponent*>(component.get()))
 				{
@@ -110,6 +111,29 @@ namespace engine
 			}
 
 			graphicsAPI->drawIndexed(meshComponent->vertexArray.get(), meshComponent->indices.size());
+		}
+
+	}
+
+	void Renderer::renderGizmos(Game* game, Camera* camera, RendererSettings* renderingSettings)
+	{
+		for (const auto& [gameObjectId, gameObject] : game->gameObjects)
+		{
+			ColliderComponent* colliderComponent = nullptr;
+
+			for (auto component : gameObject->getComponents())
+			{
+				if (dynamic_cast<ColliderComponent*>(component.get()))
+				{
+					colliderComponent = dynamic_cast<ColliderComponent*>(component.get());
+					break;
+				}
+			}
+
+			if (colliderComponent == nullptr)
+				continue;
+			
+			colliderComponent->drawCollider(camera);
 		}
 
 	}

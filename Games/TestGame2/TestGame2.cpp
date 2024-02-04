@@ -33,7 +33,7 @@ namespace engine {
 		GameObject* sphere1 = new GameObject();
 		sphere1->transform.setScale(glm::vec3(2, 2, 2));
 		sphere1->transform.setPosition(glm::vec3(10, 10, 0));
-		sphere1->components.push_back(meshComponent1);
+		sphere1->addComponent(meshComponent1);
 		sphere1->name = "SIGMA AMUGUS";
 		addGameObject(std::unique_ptr<GameObject>(sphere1));
 
@@ -43,7 +43,7 @@ namespace engine {
 		float depth = width / 2.f;
 		sphere2->transform.setScale(glm::vec3(width, height, depth));
 		sphere2->transform.setPosition(glm::vec3(15, 10, 0));
-		sphere2->components.push_back(meshComponent2);
+		sphere2->addComponent(meshComponent2);
 		sphere2->name = "BOMPASPY";
 		addGameObject(std::unique_ptr<GameObject>(sphere2));
 
@@ -51,7 +51,7 @@ namespace engine {
 		
 		GameObject* light = new GameObject();
 		light->transform.setPosition(glm::vec3(0, 20, 0));
-		light->components.push_back(std::make_unique<engine::PointLightComponent>(pointLightComponent));
+		light->addComponent(std::make_unique<engine::PointLightComponent>(pointLightComponent));
 		light->name = "Light";
 		addGameObject(std::unique_ptr<GameObject>(light));
 

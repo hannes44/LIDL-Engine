@@ -118,7 +118,7 @@ namespace engine
 		// TODO: Add proper Id when UUID is implemented
 		out << YAML::Value << gameObject->uuid.id;
 
-		serializeComponents(gameObject->components, out);
+		serializeComponents(gameObject->getComponents(), out);
 
 		out << YAML::EndMap;
 
@@ -403,18 +403,18 @@ namespace engine
 					std::string primativeType = node["primativeType"].as<std::string>();
 					PrimativeMeshType type = MeshComponent::stringToPrimativeType(primativeType);
 					std::shared_ptr<MeshComponent> meshComponent = MeshComponent::createPrimative(type);
-					gameObject->components.push_back(meshComponent);
+					gameObject->addComponent(meshComponent);
 				}
 				else if (node["objFileName"])
 				{
 					std::string objFileName = node["objFileName"].as<std::string>();
 					std::shared_ptr<MeshComponent> meshComponent = MeshComponent::loadMeshFromOBJFile(objFileName);
-					gameObject->components.push_back(meshComponent);
+					gameObject->addComponent(meshComponent);
 				}
 			}
 			else if (componentName == PointLightComponent::name)
 			{
-				gameObject->components.push_back(std::make_shared<PointLightComponent>());
+				gameObject->addComponent(std::make_shared<PointLightComponent>());
 			}
 		}
 		catch (const std::exception& e)

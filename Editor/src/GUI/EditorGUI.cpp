@@ -59,6 +59,7 @@ namespace engine
 			inputFramework.getInput();
 
 			Renderer::renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
+			Renderer::renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 
 			if (sceneState == EditorSceneState::Play)
 			{
@@ -520,7 +521,7 @@ namespace engine
 				}
 
 			
-				for (auto component : lockedGameObject->components)
+				for (auto component : lockedGameObject->getComponents())
 				{
 					if (ImGui::CollapsingHeader(component->getName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 					{

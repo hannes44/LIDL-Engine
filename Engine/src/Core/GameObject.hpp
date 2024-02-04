@@ -10,6 +10,9 @@
 
 namespace engine
 {
+	// Forward declaration due to circular dependency
+	class Component;
+
 	class GameObject : public Selectable
 	{
 	public:
@@ -27,12 +30,14 @@ namespace engine
 
 		std::string name = "GameObject";
 
-		// TODO: Should limit each component to one of each type
-		std::vector<std::shared_ptr<Component>> components{};
-
 		UUID uuid{};
 
 		UUID getUUID() override;
+
+		void addComponent(std::shared_ptr<Component> component);
+		std::vector<std::shared_ptr<Component>>& getComponents() {
+			return components;
+		}
 
 		template<typename T> std::shared_ptr<T> getComponent() {
 			for (auto& component : components) {
@@ -40,7 +45,7 @@ namespace engine
 					return std::dynamic_pointer_cast<T>(component);
 				}
 			}
-			
+
 			return nullptr;
 		}
 
@@ -49,5 +54,9 @@ namespace engine
 		}
 
 		std::string getName() override { return name; };
+
+	private:
+		// TODO: Should limit each component to one of each type
+		std::vector<std::shared_ptr<Component>> components{};
 	};
 }

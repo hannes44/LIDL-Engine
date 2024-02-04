@@ -40,6 +40,7 @@ namespace engine
 		static GamePhysics& getInstance();
 
         void fixedUpdate(std::map<std::string, std::shared_ptr<GameObject>> gameObjects);
+        void checkCollisions(std::map<std::string, std::shared_ptr<GameObject>> gameObjects);
         void run(Game *game);
 
         // Disabled for now. TODO: Implement

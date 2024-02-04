@@ -27,6 +27,8 @@
 #include "Components/Component.hpp"
 #include "Components/MeshComponent.hpp"
 #include "Components/PhysicsComponent.hpp"
+#include "Components/BoxColliderComponent.hpp"
+#include "Components/SphereColliderComponent.hpp"
 #include "Components/PointLightComponent.hpp"
 
 //Events
