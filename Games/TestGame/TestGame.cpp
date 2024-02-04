@@ -29,6 +29,8 @@ namespace engine {
 
 		meshComponent2->material.diffuseTexture = loadTexture("glocken.png");
 
+		Debug::Log("Hello World");
+
 		/*
 		GameObject* sphere1 = new GameObject();
 		sphere1->transform.setScale(glm::vec3(2, 2, 2));
