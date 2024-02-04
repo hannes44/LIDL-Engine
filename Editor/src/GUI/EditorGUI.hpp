@@ -80,7 +80,7 @@ namespace engine
 
 		bool isGuizmoOperationInWorldSpace = true;
 
-		Camera editorCamera{};
+		CameraComponent editorCamera{};
 
 		EditorSceneState sceneState = EditorSceneState::Scene;
 
@@ -93,7 +93,7 @@ namespace engine
 
 		bool quitProgram = false;
 
-		Camera* getActiveCamera();
+		CameraComponent* getActiveCamera();
 
 		EditorSettings editorSettings{};
 
