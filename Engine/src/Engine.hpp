@@ -15,6 +15,7 @@
 #include "Core/Transform.hpp"
 #include "Core/Uuid.hpp"
 #include "Core/Window.hpp"
+#include "Core/Debug.hpp"
 
 // Rendering
 #include "Renderer/Renderer.hpp"
