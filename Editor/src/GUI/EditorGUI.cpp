@@ -600,6 +600,7 @@ namespace engine
 			}
 			if (ImGui::BeginTabItem("Console"))
 			{
+				ConsoleGUI::ShowConsole(nullptr);
 				ImGui::EndTabItem();
 			}
 			ImGui::EndTabBar();

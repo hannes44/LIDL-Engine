@@ -27,6 +27,8 @@ add_library(engine
 	src/Core/Texture.cpp
 	src/Core/Material.hpp
 	src/Core/GameConfig.hpp
+	src/Core/Debug.hpp
+	src/Core/Debug.cpp
 	src/Components/Component.hpp
 	src/Components/PointLightComponent.hpp
 	src/Components/PhysicsComponent.hpp
@@ -161,6 +163,8 @@ source_group("Core" FILES
 	src/Core/Texture.cpp
 	src/Core/Material.hpp
 	src/Core/GameConfig.hpp
+	src/Core/Debug.hpp
+	src/Core/Debug.cpp
 )
 
 source_group("Vendor" FILES
