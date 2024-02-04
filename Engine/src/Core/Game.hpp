@@ -1,5 +1,5 @@
 #pragma once
-#include "Camera.hpp"
+#include "Components/CameraComponent.hpp"
 #include <memory>
 #include <vector>
 #include "Texture.hpp"
@@ -29,7 +29,7 @@ namespace engine
 		const void gameLoop();
 
 		// Currenly limit the game to only one camera
-		Camera camera{};
+		CameraComponent camera{};
 
 		// Texture Id to Texture
 		std::map<std::string, std::shared_ptr<Texture>> textures{};
@@ -46,9 +46,15 @@ namespace engine
 
 		GameConfig config{};
 
+		std::weak_ptr<GameObject> mainCamera;
+
 		void addGameObject(std::shared_ptr<GameObject> gameObject);
 
 		void deleteGameObject(const std::string& id);
+
+		void changeMainCamera(GameObject* newCamera);
+
+		CameraComponent* getMainCamera();
 
 		RendererSettings renderingSettings{};
 

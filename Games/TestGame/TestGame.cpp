@@ -55,6 +55,12 @@ namespace engine {
 		light->name = "Light";
 		addGameObject(std::unique_ptr<GameObject>(light));
 
+		GameObject* camera = new GameObject();
+		camera->transform.setPosition(glm::vec3(0, 0, 10));
+		camera->components.push_back(std::make_unique<engine::CameraComponent>());
+		camera->name = "Camera";
+		addGameObject(std::unique_ptr<GameObject>(camera));
+
 
 		GameObject* ball1 = new GameObject();
 		ball1->transform.setPosition(glm::vec3(0, 0, 0));

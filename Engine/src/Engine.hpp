@@ -4,7 +4,6 @@
 
 // Core
 #include "Core/Game.hpp"
-#include "Core/Camera.hpp"
 #include "Core/GameObject.hpp"
 #include "Core/InputEvent.hpp"
 #include "Core/InputFrameWork.hpp"
@@ -28,6 +27,7 @@
 #include "Components/MeshComponent.hpp"
 #include "Components/PhysicsComponent.hpp"
 #include "Components/PointLightComponent.hpp"
+#include "Components/CameraComponent.hpp"
 
 //Events
 #include "Events/EventManager.hpp"
