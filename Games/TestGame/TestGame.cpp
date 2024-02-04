@@ -1,6 +1,11 @@
 #include "TestGame.hpp"
+#include <iostream>
 
-
+extern "C" {
+	__declspec(dllexport) engine::Game* createGame() {
+		return new engine::TestGame();
+	}
+}
 namespace engine {
 	double TestGame::getTargetFrameRate() {
 		return 10;

@@ -7,7 +7,7 @@ target_sources(Game PRIVATE
 	TestGame.cpp
 )
 
-add_library(gamelib 
+add_library(gamelib SHARED
 	TestGame.hpp
 	TestGame.cpp
 )
@@ -35,3 +35,4 @@ target_link_libraries(imguilib PRIVATE
 	imgui
 	SDL3::SDL3
 )
+add_definitions(-DBUILD_DLL)

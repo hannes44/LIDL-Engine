@@ -5,8 +5,8 @@
 #include "GUI/MainMenuGUI.hpp"
 #include "Serializer/EditorSerializer.hpp"
 #include "Project.hpp"
-#include "TestGame2.hpp"
-#include "TestGame.hpp"
+#include <Windows.h>
+#include <iostream>
 
 namespace engine
 {
@@ -22,10 +22,37 @@ namespace engine
 
 		engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
 
+
+		HMODULE testGame = LoadLibraryExW(L"gamelib.dll", nullptr, 0);
+
+		if (testGame)
+		{
+			LOG_INFO("TestGame.dll loaded");
+			typedef engine::Game* (*createGame)();
+			createGame createGameFunction = (createGame)GetProcAddress(testGame, "createGame");
+			if (createGameFunction)
+			{
+				LOG_INFO("createGame function found");
+				project = std::make_shared<Project>();
+				project->game = std::shared_ptr<Game>(createGameFunction());
+			}
+			else
+			{
+				LOG_ERROR("createGame function not found");
+			}
+		}
+		else
+		{
+			LOG_ERROR("TestGame.dll not loaded");
+		}
+		
+		std::cout << project->game->name << std::endl;
+		project->game->update();
+		return;
+
 		// Comment out this to access the main menu, temporary for development
 		project = std::make_shared<Project>();
-		project->game = std::make_shared<TestGame>();
-		
+
 		if (!project)
 		{
 			MainMenuGUI mainMenuGui{};
