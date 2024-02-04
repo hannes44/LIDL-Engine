@@ -13,11 +13,11 @@ namespace engine
 	class ConsoleGUI
 	{
 	public:
-		static void ShowConsole(bool* p_open);
+		static void ShowConsole();
 	private:
 	};
 
-
+	// Re-used from imgui_demo.cpp from ImGui
 	struct ConsoleStruct
 	{
 		ImGuiTextBuffer     Buf;
@@ -50,7 +50,7 @@ namespace engine
 					LineOffsets.push_back(old_size + 1);
 		}
 
-		void Draw(const char* title, bool* p_open = NULL)
+		void Draw(const char* title)
 		{
 
 			// Options menu

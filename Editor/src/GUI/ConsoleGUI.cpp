@@ -11,7 +11,7 @@
 
 namespace engine
 {
-	void ConsoleGUI::ShowConsole(bool* p_open)
+	void ConsoleGUI::ShowConsole()
 	{
 		static ConsoleStruct log;
 
@@ -44,6 +44,6 @@ namespace engine
 			log.AddLog((logEntry.message + "\n").c_str());
 		}
 
-		log.Draw("Example: Log", p_open);
+		log.Draw("Example: Log");
 	}
 }
