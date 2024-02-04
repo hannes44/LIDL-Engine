@@ -6,11 +6,11 @@ namespace engine {
         return BoundingBox(gameObject->transform.getPosition() + offset, extent);
     }
 
-    void BoxColliderComponent::drawCollider(Camera* camera) {
+    void BoxColliderComponent::drawCollider(CameraComponent* camera) {
         drawBoundingBox(this, getBoundingBox(), camera);
     }
 
     std::string BoxColliderComponent::getName() {
-        return "BoxColliderComponent";
+        return "Box Collider";
     }
 }

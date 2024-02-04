@@ -33,7 +33,7 @@ namespace engine
 		InputFramework& inputFramework = InputFramework::getInstance();
 		inputFramework.addListener(this);
 
-		inputFramework.removeListener(&game->camera);
+		inputFramework.addListener(&editorCamera);
 
 		EventManager& eventManager = EventManager::getInstance();
 		eventManager.subscribe(EventType::QuitProgram, this);
@@ -601,6 +601,7 @@ namespace engine
 			}
 			if (ImGui::BeginTabItem("Console"))
 			{
+				ConsoleGUI::ShowConsole();
 				ImGui::EndTabItem();
 			}
 			ImGui::EndTabBar();
@@ -814,13 +815,16 @@ namespace engine
 		return ImGui::Checkbox(label.c_str(), value);
 	}
 
-	Camera* EditorGUI::getActiveCamera()
+	CameraComponent* EditorGUI::getActiveCamera()
 	{
 		if (activeViewPort == ActiveViewPort::Scene)
+		{
 			return &editorCamera;
-		else 
-			return &game->camera;
-
+		}
+		else
+		{
+			return game->getMainCamera();
+		}
 	}
 	void EditorGUI::changeGame(std::shared_ptr<Game> game)
 	{

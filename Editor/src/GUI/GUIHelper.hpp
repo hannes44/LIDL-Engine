@@ -1,10 +1,8 @@
 #pragma once
-
 #include <string>
 
 namespace engine
 {
-
 	class GUIHelper
 	{
 	public:

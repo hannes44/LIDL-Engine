@@ -37,6 +37,12 @@ namespace engine {
 		sphere1->name = "SIGMA AMUGUS";
 		addGameObject(std::unique_ptr<GameObject>(sphere1));
 
+		GameObject* camera = new GameObject();
+		camera->transform.setPosition(glm::vec3(0, 0, 10));
+		camera->addComponent(std::make_unique<engine::CameraComponent>());
+		camera->name = "Camera";
+		addGameObject(std::unique_ptr<GameObject>(camera));
+
 		GameObject* sphere2 = new GameObject();
 		float width = 5;
 		float height = width / 0.52f;

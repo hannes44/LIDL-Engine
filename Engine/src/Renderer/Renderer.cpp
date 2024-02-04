@@ -7,7 +7,7 @@
 #include "Core/Window.hpp"
 #include "Components/PointLightComponent.hpp"
 #include "Core/Game.hpp"
-#include "Core/Camera.hpp"
+#include "Components/CameraComponent.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
@@ -15,8 +15,15 @@
 
 namespace engine
 {
-	void Renderer::renderGame(Game* game, Camera* camera, RendererSettings* renderingSettings)
+	void Renderer::renderGame(Game* game, CameraComponent* camera, RendererSettings* renderingSettings)
 	{
+		if (!camera)
+		{
+			LOG_WARN("RenderGame: No camera found! Add camera component to game");
+			graphicsAPI->setClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+			// TODO: Render text to the screen telling user to add a camera
+			return;
+		}
 		int width, height;
 		Window::getInstance().getWindowSize(&width, &height);
 
@@ -115,7 +122,7 @@ namespace engine
 
 	}
 
-	void Renderer::renderGizmos(Game* game, Camera* camera, RendererSettings* renderingSettings)
+	void Renderer::renderGizmos(Game* game, CameraComponent* camera, RendererSettings* renderingSettings)
 	{
 		for (const auto& [gameObjectId, gameObject] : game->gameObjects)
 		{
@@ -138,7 +145,7 @@ namespace engine
 
 	}
 
-	void Renderer::drawLine(glm::vec3 start, glm::vec3 end, glm::vec3 color, Camera* camera)
+	void Renderer::drawLine(glm::vec3 start, glm::vec3 end, glm::vec3 color, CameraComponent* camera)
 	{
 		glm::mat4 modelViewProjection = camera->getProjectionMatrix() * camera->getViewMatrix() * glm::mat4(1.0f);
 		graphicsAPI->drawLine(start, end, color, modelViewProjection);

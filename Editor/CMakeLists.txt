@@ -19,6 +19,8 @@ target_sources(Editor PRIVATE
 	src/Editor.hpp
 	src/Editor.cpp
 	src/Project.hpp
+	src/GUI/ConsoleGUI.hpp
+	src/GUI/ConsoleGUI.cpp
 )
 
 source_group("GUI" FILES
@@ -28,6 +30,8 @@ source_group("GUI" FILES
 	src/GUI/MainMenuGUI.cpp
 	src/GUI/GUIHelper.hpp
 	src/GUI/GUIHelper.cpp
+	src/GUI/ConsoleGUI.hpp
+	src/GUI/ConsoleGUI.cpp
 )
 
 source_group("Serializer" FILES

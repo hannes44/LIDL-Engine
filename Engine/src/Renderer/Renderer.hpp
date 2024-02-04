@@ -12,11 +12,11 @@ namespace engine
 	class Renderer
 	{
 	public:
-		static void renderGame(Game* game, Camera* camera, RendererSettings* renderingSettings);
+		static void renderGame(Game* game, CameraComponent* camera, RendererSettings* renderingSettings);
 
-		static void renderGizmos(Game* game, Camera* camera, RendererSettings* renderingSettings);
+		static void renderGizmos(Game* game, CameraComponent* camera, RendererSettings* renderingSettings);
 
-		static void drawLine(glm::vec3 start, glm::vec3 end, glm::vec3 color, Camera* camera);
+		static void drawLine(glm::vec3 start, glm::vec3 end, glm::vec3 color, CameraComponent* camera);
 
 		static void initGraphicsAPI(GraphicsAPIType type);
 

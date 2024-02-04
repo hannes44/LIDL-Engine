@@ -23,14 +23,14 @@ add_library(engine
 	src/Core/InputFramework.cpp
 	src/Core/Uuid.hpp
 	src/Core/Uuid.cpp
-	src/Core/Camera.hpp
-	src/Core/Camera.cpp
 	src/Core/Texture.hpp
 	src/Core/Texture.cpp
 	src/Core/Material.hpp
 	src/Core/GameConfig.hpp
 	src/Core/BoundingBox.hpp
 	src/Core/BoundingBox.cpp
+	src/Core/Debug.hpp
+	src/Core/Debug.cpp
 	src/Components/Component.hpp
 	src/Components/PointLightComponent.hpp
 	src/Components/PhysicsComponent.hpp
@@ -42,6 +42,8 @@ add_library(engine
 	src/Components/BoxColliderComponent.cpp
 	src/Components/SphereColliderComponent.hpp
 	src/Components/SphereColliderComponent.cpp
+	src/Components/CameraComponent.hpp
+	src/Components/CameraComponent.cpp
 	src/Renderer/Console/Display.hpp
 	src/Renderer/Console/DisplayTerminal.hpp
 	src/Renderer/Console/DisplayTerminal.cpp
@@ -95,6 +97,8 @@ source_group("Components" FILES
 	src/Components/BoxColliderComponent.cpp
 	src/Components/SphereColliderComponent.hpp
 	src/Components/SphereColliderComponent.cpp
+	src/Components/CameraComponent.hpp
+	src/Components/CameraComponent.cpp
 )
 
 source_group("Renderer" FILES
@@ -173,14 +177,14 @@ source_group("Core" FILES
 	src/Core/InputFramework.cpp
 	src/Core/Uuid.hpp
 	src/Core/Uuid.cpp
-	src/Core/Camera.hpp
-	src/Core/Camera.cpp
 	src/Core/Texture.hpp
 	src/Core/Texture.cpp
 	src/Core/Material.hpp
 	src/Core/GameConfig.hpp
 	src/Core/BoundingBox.hpp
 	src/Core/BoundingBox.cpp
+	src/Core/Debug.hpp
+	src/Core/Debug.cpp
 )
 
 source_group("Vendor" FILES

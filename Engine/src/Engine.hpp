@@ -4,7 +4,6 @@
 
 // Core
 #include "Core/Game.hpp"
-#include "Core/Camera.hpp"
 #include "Core/GameObject.hpp"
 #include "Core/InputEvent.hpp"
 #include "Core/InputFrameWork.hpp"
@@ -16,6 +15,7 @@
 #include "Core/Transform.hpp"
 #include "Core/Uuid.hpp"
 #include "Core/Window.hpp"
+#include "Core/Debug.hpp"
 
 // Rendering
 #include "Renderer/Renderer.hpp"
@@ -30,6 +30,7 @@
 #include "Components/BoxColliderComponent.hpp"
 #include "Components/SphereColliderComponent.hpp"
 #include "Components/PointLightComponent.hpp"
+#include "Components/CameraComponent.hpp"
 
 //Events
 #include "Events/EventManager.hpp"

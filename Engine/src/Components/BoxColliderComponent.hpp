@@ -2,13 +2,13 @@
 
 #include "ColliderComponent.hpp"
 #include "Core/BoundingBox.hpp"
-#include "Core/Camera.hpp"
+#include "CameraComponent.hpp"
 
 namespace engine {
 
     class BoxColliderComponent : public ColliderComponent {
     public:
-        void drawCollider(Camera* camera);
+        void drawCollider(CameraComponent* camera);
         BoundingBox getBoundingBox();
         BoxColliderComponent(glm::vec3 offset, glm::vec3 extent) : ColliderComponent(offset, extent) {}
 

@@ -8,6 +8,8 @@
 #include "AssetExplorer/AssetManager.hpp"
 #include "Project.hpp"
 #include "GUIHelper.hpp"
+#include "ConsoleGUI.hpp"
+
 namespace engine
 {
 	enum class EditorSceneState
@@ -80,7 +82,7 @@ namespace engine
 
 		bool isGuizmoOperationInWorldSpace = true;
 
-		Camera editorCamera{};
+		CameraComponent editorCamera{};
 
 		EditorSceneState sceneState = EditorSceneState::Scene;
 
@@ -93,7 +95,7 @@ namespace engine
 
 		bool quitProgram = false;
 
-		Camera* getActiveCamera();
+		CameraComponent* getActiveCamera();
 
 		EditorSettings editorSettings{};
 

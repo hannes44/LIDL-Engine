@@ -1,36 +1,36 @@
-#include "Camera.hpp"
-#include "InputSystem.hpp"
-#include "Logger.hpp"
+#include "Components/CameraComponent.hpp"
+#include "Core/InputSystem.hpp"
+#include "Core/Logger.hpp"
 #define GLM_ENABLE_EXPERIMENTAL
-#include "InputFramework.hpp"
+#include "Core/InputFramework.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
-#include "Window.hpp"
+#include "Core/Window.hpp"
 #include <iostream>
-#include "Bootstrap.hpp"
+#include "Core/Bootstrap.hpp"
 #include <imgui_impl_sdl3.h>
 
 namespace engine
 {
-	Camera::Camera()
+	CameraComponent::CameraComponent()
 	{
-		InputSystem::addListener(this);
+
 	}
 
-	void Camera::update() {
+	void CameraComponent::update() {
 	}
 
-	void Camera::translate(float x, float y, float z)
+	void CameraComponent::translate(float x, float y, float z)
 	{
 		translation += glm::vec3(x, y, z);
 	}
 
-	void Camera::rotate(float angle, float x, float y, float z)
+	void CameraComponent::rotate(float angle, float x, float y, float z)
 	{
 		rotation += glm::vec3(angle * x, angle * y, angle * z);
 	}
 
-	glm::mat4 Camera::getTransform()
+	glm::mat4 CameraComponent::getTransform()
 	{
 		glm::mat4 lookAtMatrix = glm::lookAt(glm::vec3(0, 0, 0), direction, glm::vec3(0, 1, 0));
 
@@ -42,7 +42,7 @@ namespace engine
 		return glm::translate(glm::mat4(1.0f), translation) * rotationMat;
 	}
 
-	glm::mat4 Camera::getViewMatrix()
+	glm::mat4 CameraComponent::getViewMatrix()
 	{
 		glm::vec3 worldUp = glm::vec3(0, 1, 0);
 		glm::vec3 cameraRight = glm::normalize(glm::cross(direction, worldUp));
@@ -54,7 +54,7 @@ namespace engine
 		return viewMatrix;
 	}
 
-	glm::mat4 Camera::getProjectionMatrix()
+	glm::mat4 CameraComponent::getProjectionMatrix()
 	{
 		int width;
 		int height;
@@ -67,7 +67,7 @@ namespace engine
 		return projectionMatrix;
 	}
 
-	void Camera::handleInput(const InputEvent& event, const std::string& EventType) {
+	void CameraComponent::handleInput(const InputEvent& event, const std::string& EventType) {
 
 		// Handle key and mouse input here
 		// If mouse button is pressed we want to control the camera

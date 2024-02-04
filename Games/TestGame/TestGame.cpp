@@ -32,6 +32,8 @@ namespace engine {
 		auto boxColliderComponent = engine::BoxColliderComponent(glm::vec3(0, 0, 0), glm::vec3(1.1f, 1.1f, 1.1f));
 		auto boxColliderOffsetComponent = engine::BoxColliderComponent(glm::vec3(0.3f, 0.1f, 0.1f), glm::vec3(1.1f, 1.1f, 1.1f));
 		auto sphereColliderComponent = engine::SphereColliderComponent(glm::vec3(0, 0, 0), glm::vec3(1.1f, 1.1f, 1.1f));
+		
+		Debug::Log("Hello World");
 
 		/*
 		GameObject* sphere1 = new GameObject();
@@ -67,6 +69,12 @@ namespace engine {
 		light->addComponent(std::make_unique<engine::PointLightComponent>(pointLightComponent));
 		light->name = "Light";
 		addGameObject(std::unique_ptr<GameObject>(light));
+
+		GameObject* camera = new GameObject();
+		camera->transform.setPosition(glm::vec3(0, 0, 10));
+		camera->addComponent(std::make_unique<engine::CameraComponent>());
+		camera->name = "Camera";
+		addGameObject(std::unique_ptr<GameObject>(camera));
 
 
 		GameObject* box1 = new GameObject();
