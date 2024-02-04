@@ -27,6 +27,8 @@ add_library(engine
 	src/Core/Texture.cpp
 	src/Core/Material.hpp
 	src/Core/GameConfig.hpp
+	src/Core/BoundingBox.hpp
+	src/Core/BoundingBox.cpp
 	src/Core/Debug.hpp
 	src/Core/Debug.cpp
 	src/Components/Component.hpp
@@ -34,6 +36,12 @@ add_library(engine
 	src/Components/PhysicsComponent.hpp
 	src/Components/MeshComponent.hpp
 	src/Components/MeshComponent.cpp
+	src/Components/ColliderComponent.hpp
+	src/Components/ColliderComponent.cpp
+	src/Components/BoxColliderComponent.hpp
+	src/Components/BoxColliderComponent.cpp
+	src/Components/SphereColliderComponent.hpp
+	src/Components/SphereColliderComponent.cpp
 	src/Components/CameraComponent.hpp
 	src/Components/CameraComponent.cpp
 	src/Renderer/Console/Display.hpp
@@ -64,6 +72,8 @@ add_library(engine
 	src/Physics/GamePhysics.cpp
 	src/Utils/Utils.hpp
 	src/Utils/Utils.cpp
+	src/Utils/ColliderChecks.hpp
+	src/Utils/ColliderChecks.cpp
 	src/Events/EventManager.hpp
 	src/Events/EventManager.cpp
 	src/Events/EventListener.hpp
@@ -81,6 +91,12 @@ source_group("Components" FILES
 	src/Components/PhysicsComponent.hpp
 	src/Components/MeshComponent.hpp
 	src/Components/MeshComponent.cpp
+	src/Components/ColliderComponent.hpp
+	src/Components/ColliderComponent.cpp
+	src/Components/BoxColliderComponent.hpp
+	src/Components/BoxColliderComponent.cpp
+	src/Components/SphereColliderComponent.hpp
+	src/Components/SphereColliderComponent.cpp
 	src/Components/CameraComponent.hpp
 	src/Components/CameraComponent.cpp
 )
@@ -122,6 +138,8 @@ source_group("Serializer" FILES
 source_group("Utils" FILES
 	src/Utils/Utils.hpp
 	src/Utils/Utils.cpp
+	src/Utils/ColliderChecks.hpp
+	src/Utils/ColliderChecks.cpp
 )
 
 
@@ -163,6 +181,8 @@ source_group("Core" FILES
 	src/Core/Texture.cpp
 	src/Core/Material.hpp
 	src/Core/GameConfig.hpp
+	src/Core/BoundingBox.hpp
+	src/Core/BoundingBox.cpp
 	src/Core/Debug.hpp
 	src/Core/Debug.cpp
 )

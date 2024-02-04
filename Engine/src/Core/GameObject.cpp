@@ -18,4 +18,9 @@ namespace engine {
 			component->update();
 		}
 	}
+
+	void GameObject::addComponent(std::shared_ptr<Component> component) {
+		component->setGameObject(this);
+		components.push_back(component);
+	}
 }

@@ -46,5 +46,7 @@ namespace engine
 		float movementSpeed = 0.1f;	
 		bool isMouseDragging;
 
+		std::string getName() override { return "Camera"; };
+
 	};
 }

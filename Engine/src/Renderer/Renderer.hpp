@@ -1,4 +1,5 @@
 #pragma once
+
 #include "GraphicsAPI.hpp"
 #include <memory>
 #include "Shader.hpp"
@@ -12,6 +13,8 @@ namespace engine
 	{
 	public:
 		static void renderGame(Game* game, CameraComponent* camera, RendererSettings* renderingSettings);
+
+		static void renderGizmos(Game* game, CameraComponent* camera, RendererSettings* renderingSettings);
 
 		static void drawLine(glm::vec3 start, glm::vec3 end, glm::vec3 color, CameraComponent* camera);
 
