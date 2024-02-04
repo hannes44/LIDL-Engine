@@ -16,7 +16,7 @@ namespace engine {
     protected:
         bool deepCollisionCheck(ColliderComponent* other);
 
-        static void drawBoundingBox(ColliderComponent* collider, BoundingBox box, CameraComponent* camera);
+        static void drawBoundingBox(ColliderComponent* collider, BoundingBox& box, CameraComponent* camera);
         
         glm::vec3 offset{0};
         glm::vec3 extent{0};

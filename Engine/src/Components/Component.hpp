@@ -10,8 +10,6 @@ namespace engine
 {
 	// Forward declaration due to circular dependency
 	class GameObject;
-	class ColliderComponent;
-	class BoxColliderComponent;
 
 	enum class SerializableType
 	{

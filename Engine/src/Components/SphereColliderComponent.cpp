@@ -2,15 +2,16 @@
 #include "Renderer/Renderer.hpp"
 
 namespace engine {
-    BoundingBox SphereColliderComponent::getBoundingBox() {
-        return BoundingBox(gameObject->transform.getPosition() + offset, extent);
-    }
+	BoundingBox SphereColliderComponent::getBoundingBox() {
+		return BoundingBox(gameObject->transform.getPosition() + offset, extent);
+	}
 
-    void SphereColliderComponent::drawCollider(CameraComponent* camera) {
-        drawBoundingBox(this, getBoundingBox(), camera);
-    }
+	void SphereColliderComponent::drawCollider(CameraComponent* camera) {
+		BoundingBox box = getBoundingBox();
+		drawBoundingBox(this, box, camera);
+	}
 
-    std::string SphereColliderComponent::getName() {
-        return "Sphere Collider";
-    }
+	std::string SphereColliderComponent::getName() {
+		return "Sphere Collider";
+	}
 }

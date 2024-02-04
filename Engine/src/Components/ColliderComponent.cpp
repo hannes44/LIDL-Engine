@@ -6,7 +6,7 @@
 #include "CameraComponent.hpp"
 
 namespace engine {
-    void ColliderComponent::drawBoundingBox(ColliderComponent* collider, BoundingBox box, CameraComponent* camera) {
+    void ColliderComponent::drawBoundingBox(ColliderComponent* collider, BoundingBox& box, CameraComponent* camera) {
         // The center position of the box
         glm::vec3 centerPos = collider->gameObject->transform.getPosition() + collider->offset;
 

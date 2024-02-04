@@ -43,6 +43,7 @@ namespace engine {
     void GamePhysics::checkCollisions(std::map<std::string, std::shared_ptr<GameObject>> gameObjects) {
         std::vector<std::pair<std::string, std::string>> detectedCollisions{};
         
+        // TODO: Change this loop to only check the combinations of GameObjects, so we can simplify some checks and avoid unnecessary iterations
         for (auto const& [name1, gameObject1] : gameObjects) {
             std::shared_ptr<ColliderComponent> colliderComponent1 = gameObject1->getComponent<ColliderComponent>();
             if (!colliderComponent1)
