@@ -35,7 +35,7 @@ namespace engine {
             Key key = static_cast<Key>(keyInt);
             if (keystates[keyInt]) {
 				ie.setKey(key);
-                ie.setEventType(InputEventType::KeyDown);
+                ie.setEventType(InputEventType::KeyHold);
 				dispatchEvent(ie);
 			}
         }

@@ -81,7 +81,7 @@ namespace engine
 			isMouseDragging = false;
 		}
 
-		if ((EventType == InputEventType::MouseMotion || EventType == InputEventType::KeyDown || EventType == InputEventType::KeyUp)
+		if ((EventType == InputEventType::MouseMotion || EventType == InputEventType::KeyDown || EventType == InputEventType::KeyHold)
 			&& isMouseDragging && !(ImGui::GetIO().WantCaptureMouse)) {
 
 			if (SDL_BUTTON(SDL_BUTTON_RIGHT)) {
