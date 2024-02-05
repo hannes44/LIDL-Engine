@@ -81,6 +81,16 @@ add_library(engine
 	../vendor/stb/stb_image.h
 	../vendor/ImGuizmo/ImGuizmo.h
 	../vendor/ImGuizmo/ImGuizmo.cpp
+	src/InputOutput/InputEvent.cpp
+	src/InputOutput/InputEvent.hpp
+	src/InputOutput/InputListener.hpp
+	src/InputOutput/InputListener.cpp
+	src/InputOutput/InputSystem.hpp
+	src/InputOutput/InputSystem.cpp
+	src/InputOutput/InputFramework.hpp
+	src/InputOutput/InputFramework.cpp
+	src/Audio/AudioManager.cpp
+	src/Audio/AudioManager.hpp
 	${SHADERS}
 )
 target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -167,14 +177,6 @@ source_group("Core" FILES
 	src/Core/Logger.cpp
 	src/Core/Window.hpp
 	src/Core/Window.cpp
-	src/Core/InputEvent.hpp
-	src/Core/InputEvent.cpp
-	src/Core/InputListener.hpp
-	src/Core/InputListener.cpp
-	src/Core/InputSystem.hpp
-	src/Core/InputSystem.cpp
-	src/Core/InputFramework.hpp
-	src/Core/InputFramework.cpp
 	src/Core/Uuid.hpp
 	src/Core/Uuid.cpp
 	src/Core/Texture.hpp
@@ -192,6 +194,22 @@ source_group("Vendor" FILES
 	../vendor/stb/stb_image.h
 	../vendor/ImGuizmo/ImGuizmo.h
 	../vendor/ImGuizmo/ImGuizmo.cpp
+)
+
+source_group("InputOutput" FILES
+	src/InputOutput/InputEvent.cpp
+	src/InputOutput/InputEvent.hpp
+	src/InputOutput/InputListener.hpp
+	src/InputOutput/InputListener.cpp
+	src/InputOutput/InputSystem.hpp
+	src/InputOutput/InputSystem.cpp
+	src/InputOutput/InputFramework.hpp
+	src/InputOutput/InputFramework.cpp
+)
+
+source_group("Audio" FILES
+	src/InputOutput/AudioManager.cpp
+	src/InputOutput/AudioManager.hpp
 )
 
 
