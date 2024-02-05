@@ -564,6 +564,10 @@ bool isAddComponentVisible = false;
 			ImGui::Separator();
 			if (Filter.IsActive())
 			{
+				const char* lines[] = { "Box Collider", "Camera", "Collider", "Mesh", "Physics", "Point Light", "Sphere Collider" };
+				for (int i = 0; i < IM_ARRAYSIZE(lines); i++)
+					if (Filter.PassFilter(lines[i]))
+						ImGui::BulletText("%s", lines[i]);
 			}
 			if (ImGui::Button("Close"))
 			{
