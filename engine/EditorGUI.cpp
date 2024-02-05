@@ -109,7 +109,7 @@ namespace engine
 		{
 			if ((Key)event.getKey() == Key::DELETE)
 			{
-				AudioManager::getInstance().playSound("C:/Users/marti/Documents/GitHub/GameEngineTDA572/assets/sounds/boing_x.wav");
+				AudioManager::getInstance().playSound("boing_x.wav");
 				if (auto lockedSelectedObject = selectedObject.lock())
 				{
 					if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))

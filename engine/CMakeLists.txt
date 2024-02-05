@@ -161,6 +161,7 @@ target_link_libraries(Engine PRIVATE
 	imguilib
 	SDL3::SDL3
 	vendor
+	winmm.lib
 )
 
 target_link_libraries(imguilib PRIVATE 
