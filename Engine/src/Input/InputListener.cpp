@@ -17,7 +17,7 @@ namespace engine {
     }
 
     // Function to handle input events (default implementation) || override this function in a subclass
-    void InputListener::handleInput(const InputEvent& event, const std::string& EventType) {
+    void InputListener::handleInput(const InputEvent& event) {
         // Add your input handling logic here || or override this function in a subclass
         // You can access other information from the event, e.g., event.getX(), event.getY(), etc.
     }

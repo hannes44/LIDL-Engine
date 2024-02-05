@@ -30,7 +30,7 @@ namespace engine {
     public:
         InputListener();
 
-        virtual void handleInput(const InputEvent& event, const std::string& EventType);
+        virtual void handleInput(const InputEvent& event);
 
         std::string getInstance() const;
 

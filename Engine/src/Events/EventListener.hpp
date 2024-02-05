@@ -8,7 +8,6 @@ namespace engine
 		QuitProgram,
 		Last
 	};
-
 	class EventListener
 	{
 	public:

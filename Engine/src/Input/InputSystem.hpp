@@ -19,7 +19,7 @@ namespace engine {
 
         static void removeListener(InputListener* listener);
 
-        static void dispatchEvent(const InputEvent& e, const std::string& EventType);
+        static void dispatchEvent(const InputEvent& e);
 
         virtual void getInput() = 0;
 

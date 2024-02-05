@@ -13,7 +13,7 @@ namespace engine
 		void translate(float x, float y, float z);
 		void rotate(float angle, float x, float y, float z);
 
-		void handleInput(const InputEvent& event,const std::string& EventType) override;
+		void handleInput(const InputEvent& event) override;
 		void update();
 
 		bool isMainCamera = false;

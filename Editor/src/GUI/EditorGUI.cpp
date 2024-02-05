@@ -1,5 +1,6 @@
 #include "EditorGUI.hpp"
 #include <Engine.hpp>
+#include "Input/InputEvent.hpp"
 #include "../../vendor/ImGuizmo/ImGuizmo.h"
 #include <glm/gtc/type_ptr.hpp>
 #include "Audio/AudioManager.hpp"
@@ -120,9 +121,10 @@ bool isAddComponentVisible = false;
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
-	void EditorGUI::handleInput(const InputEvent& event, const std::string& EventType)
+	void EditorGUI::handleInput(const InputEvent& event)
 	{
-		if (EventType == "KeyDown")
+		InputEventType EventType = event.getEventType();
+		if (EventType == InputEventType::KeyDown)
 		{
 			if ((Key)event.getKey() == Key::DELETE)
 			{

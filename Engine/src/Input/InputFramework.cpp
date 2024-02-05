@@ -28,14 +28,15 @@ namespace engine {
     // Handle continuous input for keys
     void InputFramework::handleContinousInput() {
         // Initialize with default values
-        InputEvent ie(0, 0, 0, Key::LAST);
+        InputEvent ie(0, 0, 0, Key::LAST, InputEventType::NULL_EVENT);
         
         const Uint8* keystates = SDL_GetKeyboardState(NULL);
         for (int keyInt = (int)Key::A; (int)keyInt != (int)Key::LAST; keyInt++) {
             Key key = static_cast<Key>(keyInt);
             if (keystates[keyInt]) {
 				ie.setKey(key);
-				dispatchEvent(ie, "KeyHold");
+                ie.setEventType(InputEventType::KeyHold);
+				dispatchEvent(ie);
 			}
         }
     }
@@ -43,7 +44,7 @@ namespace engine {
     // Read input from the SDL window
     void InputFramework::getInput() {
         // Initialize with default values
-        InputEvent ie(0, 0, 0, Key::LAST);
+        InputEvent ie(0, 0, 0, Key::LAST, InputEventType::NULL_EVENT);
 
         SDL_PumpEvents();
         handleContinousInput();
@@ -64,34 +65,36 @@ namespace engine {
                 ie.setButton(but.button);
                 ie.setX(mot.xrel);
                 ie.setY(mot.yrel);
-                dispatchEvent(ie, "MouseMotion");
+                ie.setEventType(InputEventType::MouseMotion);
+                dispatchEvent(ie);
             }
             if (ev.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
                 SDL_MouseButtonEvent but = ev.button;
                 ie.setX(but.x);
                 ie.setY(but.y);
                 ie.setButton(but.button);
-                dispatchEvent(ie, "MouseButtonDown");
+                ie.setEventType(InputEventType::MouseButtonDown);
+                dispatchEvent(ie);
             }
             if (ev.type == SDL_EVENT_MOUSE_BUTTON_UP) {
                 SDL_MouseButtonEvent but = ev.button;
                 ie.setX(but.x);
                 ie.setY(but.y);
                 ie.setButton(but.button);
-                dispatchEvent(ie, "MouseButtonUp");
+                ie.setEventType(InputEventType::MouseButtonUp);
+                dispatchEvent(ie);
             }
             if (ev.type == SDL_EVENT_KEY_DOWN && ev.key.repeat == 0) {
                 SDL_KeyboardEvent key = ev.key;
                 ie.setKey((Key)key.keysym.scancode);
-                dispatchEvent(ie, "KeyDown");
+                ie.setEventType(InputEventType::KeyDown);
+                dispatchEvent(ie);
             }
             if (ev.type == SDL_EVENT_KEY_UP) {
                 SDL_KeyboardEvent key = ev.key;
                 ie.setKey((Key)key.keysym.scancode);
-                dispatchEvent(ie, "KeyUp");
-            }
-            if (ev.type == SDL_EVENT_QUIT) {
-                dispatchEvent(ie, "Quit");
+                ie.setEventType(InputEventType::KeyUp);
+                dispatchEvent(ie);
             }
         }
     }
