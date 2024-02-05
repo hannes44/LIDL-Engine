@@ -307,6 +307,7 @@ bool isAddComponentVisible = false;
 			ImGui::Separator();
 			if (ImGui::MenuItem("Exit", "Alt+F4"))
 			{
+				exit(0);
 				ImGui::End();
 			}
 			ImGui::EndMenu();
