@@ -17,7 +17,7 @@ namespace engine
 		// Initial project path
 		strcpy(projectPath, EditorSerializer::getPathToEditorGamesFolder().c_str());
 
-		while (true)
+		while (!stopStartMenu)
 		{
 			renderNewFrame();
 
@@ -205,8 +205,8 @@ namespace engine
 		{
 			if (ImGui::Button(gameName.c_str()))
 			{
-
-
+				Editor::openProject(gameName);
+				stopStartMenu = true;
 			}
 		}
 	}

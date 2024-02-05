@@ -11,6 +11,11 @@ namespace engine {
 		return 10;
 	}
 
+	TestGame::TestGame()
+	{
+		name = "TestGame";
+	}
+
 	void TestGame::update() {
 
 	}

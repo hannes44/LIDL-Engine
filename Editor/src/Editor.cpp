@@ -10,7 +10,9 @@
 
 namespace engine
 {
+	// Comment out to not skip the main menu
 	#define SKIP_MAIN_MENU
+
 	void engine::Editor::start()
 	{
 		engine::Logger::init();
@@ -53,11 +55,23 @@ namespace engine
 		EditorSerializer::createFolder(path + "/" + name + "/scripts");
 	}
 
+	void Editor::openProject(const std::string& gameName)
+	{
+		LOG_INFO("Opening project: {0}", gameName);
+		project = std::make_shared<Project>();
+		project->game = loadGameFromDLL(gameName);
+	}
+
 	std::shared_ptr<Game> Editor::loadGameFromDLL(const std::string gameName)
 	{
 		std::shared_ptr<Game> game = nullptr;
+		std::string fileName = gameName + ".dll";
 
-		HMODULE testGame = LoadLibraryExW(L"TestGame.dll", nullptr, 0);
+		// Convert std::string to LPCWSTR
+		std::wstring temp = std::wstring(fileName.begin(), fileName.end());
+		LPCWSTR wideFileName = temp.c_str();
+
+		HMODULE testGame = LoadLibraryExW(wideFileName, nullptr, 0);
 
 		if (testGame)
 		{

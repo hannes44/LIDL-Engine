@@ -10,6 +10,11 @@ namespace engine {
 		return 10;
 	}
 
+	TestGame2::TestGame2()
+	{
+		name = "TestGame2";
+	}
+
 	void TestGame2::update() {
 
 	}
