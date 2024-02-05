@@ -2,6 +2,7 @@
 #include "ControllableComponent.hpp"
 #include "Core/InputSystem.hpp"
 #include "Core/Logger.hpp"
+#include "Core/InputFramework.hpp"
 
 #include <set>
 #include <string>
@@ -9,7 +10,7 @@
 namespace engine {
 
     ControllableComponent::ControllableComponent() {
-        InputSystem::addListener(this);
+         InputFramework::getInstance().addListener(this);
     }
 
     std::set<std::string> ControllableComponent::getRequiredComponents() {
