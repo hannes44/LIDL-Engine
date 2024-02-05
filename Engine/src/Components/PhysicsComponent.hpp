@@ -16,7 +16,12 @@ namespace engine
 		float gravityCoefficient = 9.82f;
 		float mass = 0;
 
+		glm::vec3 currentAcceleration { 0 };
 		glm::vec3 currentVelocity { 0 };
+
+		glm::vec3 getAcceleration() { return currentAcceleration; };
+		void applyAcceleration(glm::vec3 acceleration) { currentAcceleration += acceleration; };
+		void setAcceleration(glm::vec3 acceleration) { currentAcceleration = acceleration; };
 
 		glm::vec3 getVelocity() { return currentVelocity; };
 		void setVelocity(glm::vec3 velocity) { currentVelocity = velocity; };
@@ -28,7 +33,8 @@ namespace engine
 			return
 			{
 				{SerializableType::BOOLEAN, "Gravity", "Should Gravity affect the game object", &enableGravity},
-				{SerializableType::FLOAT, "Mass", "The mass of the game object in Kg", &mass}
+				{SerializableType::FLOAT, "Mass", "The mass of the game object in Kg", &mass},
+				{SerializableType::VECTOR3, "Acceleration", "The current acceleration of the game object", &currentAcceleration},
 			};
 		};
 	};

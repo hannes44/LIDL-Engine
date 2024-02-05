@@ -31,6 +31,7 @@
 #include "Components/SphereColliderComponent.hpp"
 #include "Components/PointLightComponent.hpp"
 #include "Components/CameraComponent.hpp"
+#include "Components/ControllableComponent.hpp"
 
 //Events
 #include "Events/EventManager.hpp"

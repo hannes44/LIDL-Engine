@@ -30,14 +30,17 @@ namespace engine {
 		std::shared_ptr<MeshComponent> meshComponent1 = engine::MeshComponent::loadMeshFromOBJFile("amugus.obj");
 		std::shared_ptr<MeshComponent> meshComponent2 = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
 		engine::PointLightComponent pointLightComponent = engine::PointLightComponent();
+
+		engine::ControllableComponent controllableComponent = engine::ControllableComponent();
+		
 		engine::PhysicsComponent physicsComponentWithGravity = engine::PhysicsComponent();
-		physicsComponentWithGravity.setVelocity(glm::vec3(0, 10, 0));
+		physicsComponentWithGravity.setAcceleration(glm::vec3(0, 10, 0));
 		
 		engine::PhysicsComponent physicsComponentWithoutGravity = engine::PhysicsComponent(false);
-		physicsComponentWithoutGravity.setVelocity(glm::vec3(0, 0, 0));
+		physicsComponentWithoutGravity.setAcceleration(glm::vec3(0, 0, 0));
 		
 		engine::PhysicsComponent physicsComponentWithHigherGravity = engine::PhysicsComponent();
-		physicsComponentWithHigherGravity.setVelocity(glm::vec3(0, 10, 0));
+		physicsComponentWithHigherGravity.setAcceleration(glm::vec3(0, 10, 0));
 		
 		physicsComponentWithHigherGravity.overrideGravityCoefficient = true;
 		physicsComponentWithHigherGravity.gravityCoefficient *= 1.2f;
@@ -70,14 +73,16 @@ namespace engine {
 
 
 		*/
-		/*
+
 		GameObject* ball1 = new GameObject();
-		ball1->transform.setPosition(glm::vec3(0, 0, 0));
+		ball1->transform.setPosition(glm::vec3(-10, 0, 0));
 		ball1->addComponent(meshComponent2);
 		ball1->name = "Ball with gravity";
 		ball1->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithGravity));
 		ball1->addComponent(std::make_unique<engine::BoxColliderComponent>(boxColliderComponent));
-		*/
+		ball1->addComponent(std::make_unique<engine::ControllableComponent>(controllableComponent));
+		addGameObject(std::unique_ptr<GameObject>(ball1));
+		
 		
 		GameObject* light = new GameObject();
 		light->transform.setPosition(glm::vec3(0, 20, 0));

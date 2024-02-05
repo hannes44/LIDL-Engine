@@ -28,12 +28,13 @@ namespace engine {
                 continue;
             }
 
-            glm::vec3 velocity = physicsComponent->getVelocity();
+            // Update the velocity
+            glm::vec3 velocity = physicsComponent->getAcceleration() * getFixedUpdateScale();
+            physicsComponent->setVelocity(velocity);
 
             // Apply gravity
-            if (physicsComponent->enableGravity) {
+            if (physicsComponent->enableGravity)
                 velocity.y -= physicsComponent->overrideGravityCoefficient ? physicsComponent->gravityCoefficient : settings.gravity;
-            }
             
             // Move the object, scaled to account for the fixed update
 			gameObject->transform.shiftPosition(velocity * getFixedUpdateScale());
