@@ -30,9 +30,6 @@ namespace engine
 		project->game = loadGameFromDLL("TestGame");
 		#endif
 
-		// Comment out this to access the main menu, temporary for development
-		//project = std::make_shared<Project>();
-
 		if (!project)
 		{
 			MainMenuGUI mainMenuGui{};
@@ -71,16 +68,16 @@ namespace engine
 		std::wstring temp = std::wstring(fileName.begin(), fileName.end());
 		LPCWSTR wideFileName = temp.c_str();
 
-		HMODULE testGame = LoadLibraryExW(wideFileName, nullptr, 0);
+		HMODULE gameDLL = LoadLibraryExW(wideFileName, nullptr, 0);
 
-		if (testGame)
+		if (gameDLL)
 		{
-			LOG_INFO("TestGame.dll loaded");
+			LOG_INFO("Loaded: {0}", fileName);
 			typedef engine::Game* (*createGame)();
-			createGame createGameFunction = (createGame)GetProcAddress(testGame, "createGame");
+			createGame createGameFunction = (createGame)GetProcAddress(gameDLL, "createGame");
 			if (createGameFunction)
 			{
-				LOG_INFO("createGame function found");
+				LOG_TRACE("createGame function found");
 				game = std::shared_ptr<Game>(createGameFunction());
 			}
 			else
@@ -90,7 +87,7 @@ namespace engine
 		}
 		else
 		{
-			LOG_ERROR("TestGame.dll not loaded");
+			LOG_ERROR("Failed to load: {0}", fileName);
 		}
 		return game;
 	}
