@@ -563,7 +563,7 @@ bool isAddComponentVisible = false;
 			const char* lines[] = { "Box Collider", "Camera", "Collider", "Mesh", "Physics", "Point Light", "Sphere Collider" };
 			static int item_current_idx = 0;
 
-			if (ImGui::BeginListBox("Components"))
+			if (ImGui::BeginListBox("##"))
 			{
 				for (int n = 0; n < IM_ARRAYSIZE(lines); n++)
 				{
