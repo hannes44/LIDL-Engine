@@ -14,6 +14,8 @@ namespace engine
 
 		static void openProject();
 
+		static std::shared_ptr<Game> loadGameFromDLL(const std::string gameName);
+
 		std::shared_ptr<Project> project;
 	};
 }

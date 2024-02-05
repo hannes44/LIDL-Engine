@@ -10,6 +10,7 @@
 
 namespace engine
 {
+	#define SKIP_MAIN_MENU
 	void engine::Editor::start()
 	{
 		engine::Logger::init();
@@ -22,30 +23,10 @@ namespace engine
 
 		engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
 
-
-		HMODULE testGame = LoadLibraryExW(L"TestGame.dll", nullptr, 0);
-
-		if (testGame)
-		{
-			LOG_INFO("TestGame.dll loaded");
-			typedef engine::Game* (*createGame)();
-			createGame createGameFunction = (createGame)GetProcAddress(testGame, "createGame");
-			if (createGameFunction)
-			{
-				LOG_INFO("createGame function found");
-				project = std::make_shared<Project>();
-				project->game = std::shared_ptr<Game>(createGameFunction());
-			}
-			else
-			{
-				LOG_ERROR("createGame function not found");
-			}
-		}
-		else
-		{
-			LOG_ERROR("TestGame.dll not loaded");
-		}
-
+		#ifdef SKIP_MAIN_MENU
+		project = std::make_shared<Project>();
+		project->game = loadGameFromDLL("TestGame");
+		#endif
 
 		// Comment out this to access the main menu, temporary for development
 		//project = std::make_shared<Project>();
@@ -70,8 +51,34 @@ namespace engine
 		EditorSerializer::createFolder(path + "/" + name + "/assets");
 
 		EditorSerializer::createFolder(path + "/" + name + "/scripts");
+	}
 
+	std::shared_ptr<Game> Editor::loadGameFromDLL(const std::string gameName)
+	{
+		std::shared_ptr<Game> game = nullptr;
 
+		HMODULE testGame = LoadLibraryExW(L"TestGame.dll", nullptr, 0);
+
+		if (testGame)
+		{
+			LOG_INFO("TestGame.dll loaded");
+			typedef engine::Game* (*createGame)();
+			createGame createGameFunction = (createGame)GetProcAddress(testGame, "createGame");
+			if (createGameFunction)
+			{
+				LOG_INFO("createGame function found");
+				game = std::shared_ptr<Game>(createGameFunction());
+			}
+			else
+			{
+				LOG_ERROR("createGame function not found");
+			}
+		}
+		else
+		{
+			LOG_ERROR("TestGame.dll not loaded");
+		}
+		return game;
 	}
 	
 
