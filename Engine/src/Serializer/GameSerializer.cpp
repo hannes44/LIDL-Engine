@@ -249,9 +249,26 @@ namespace engine
 		out << YAML::Value << material->roughness;
 		out << YAML::Key << "shininess";
 		out << YAML::Value << material->shininess;
+		out << YAML::Key << "diffuseTexture";
+		if (material->diffuseTexture.expired())
+		{
+			out << YAML::Value << "";
+		}
+		else
+		{
+			out << YAML::Value << material->diffuseTexture.lock()->uuid.id;
+		}
+		out << YAML::Key << "specularTexture";
+		if (material->specularTexture.expired())
+		{
+			out << YAML::Value << "";
+		}
+		else
+		{
+			out << YAML::Value << material->specularTexture.lock()->uuid.id;
+		}
 		out << YAML::Key << "Id";
-		// TODO: Add proper Id when UUID is implemented
-		out << YAML::Value << "ID TODO Add when implemented";
+		out << YAML::Value << material->uuid.id;
 
 		out << YAML::EndMap;
 
@@ -345,6 +362,37 @@ namespace engine
 	
 	void GameSerializer::deserializeMaterials(YAML::Node node, Game* game)
 	{
+		return;
+		YAML::Node materialNode;
+		try
+		{
+			materialNode = node["Materials"];
+		}
+		catch (const std::exception& e)
+		{
+			LOG_ERROR("Failed to deserialize textures: " + std::string(e.what()));
+			return;
+		}
+
+		for (YAML::const_iterator it = materialNode.begin(); it != materialNode.end(); ++it)
+		{
+			try
+			{
+		//		YAML::Node textureNode = *it;
+		//		std::string name = textureNode["name"].as<std::string>();
+		//		std::string filename = textureNode["fileName"].as<std::string>();
+
+//				std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(Texture::create(filename));
+//				texture->uuid.id = textureNode["Id"].as<std::string>();
+//				game->textures[texture->uuid.id] = texture;
+
+			}
+			catch (const std::exception& e)
+			{
+				LOG_WARN("Failed to deserialize texture: " + std::string(e.what()));
+			}
+
+		}
 	}
 	
 	void GameSerializer::deserializeGameObjects(YAML::Node node, Game* game)

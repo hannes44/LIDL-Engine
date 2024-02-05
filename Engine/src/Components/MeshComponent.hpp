@@ -46,11 +46,14 @@ namespace engine
 
 		inline const static std::string componentName = "Mesh";
 
-		Material material{};
 
 		PrimativeMeshType primativeType = NONE;
 
 		std::string primativeTypeAsString = primativeTypeToString(primativeType);
+
+		Material* getMaterial();
+
+		void setMaterial(std::weak_ptr<Material> material);
 
 		virtual std::vector<SerializableVariable> getSerializableVariables() 
 		{ 
@@ -58,7 +61,7 @@ namespace engine
 			{
 				{SerializableType::STRING, "OBJ File", "The file path to the obj file", &objFileName},
 				{SerializableType::STRING, "Primative Type", "The type of primative to create", &primativeTypeAsString},
-				{SerializableType::STRING, "Material", "Id of the meshes material",&material.uuid.id}
+				{SerializableType::STRING, "Material", "Id of the meshes material", &getMaterial()->uuid.id}
 			}; 
 		};
 
@@ -71,6 +74,11 @@ namespace engine
 		//--------------------------------------
 
 	private:
+		// If the material is expired, use the default material
+		Material defaultMaterial{};
+
+		std::weak_ptr<Material> material;
+
 		static std::shared_ptr<MeshComponent> createCube();
 
 		void createVertexArray();

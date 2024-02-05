@@ -36,6 +36,23 @@ namespace engine
 		return mesh;
 	}
 
+	Material* MeshComponent::getMaterial()
+	{
+		if (auto lockedMaterial = material.lock())
+		{
+			return lockedMaterial.get();
+		}
+		else
+		{
+			return &defaultMaterial;
+		}
+	}
+
+	void MeshComponent::setMaterial(std::weak_ptr<Material> material)
+	{
+		this->material = material;
+	}
+
 	void MeshComponent::loadMeshFromOBJFile(const std::string& filename, MeshComponent* mesh)
 	{
 		LOG_INFO("Loading mesh from file: {0}", filename);

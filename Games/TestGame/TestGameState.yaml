@@ -1,51 +1,13 @@
 GameObjects:
-  - name: Light
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1]
-    isVisible: true
-    Id: 01zFjqC6xHOlX9ZdrQB7yGwnY5rTCjPX
-    Components:
-      - name: PointLight
-        Color: [1, 1, 1]
-        Intensity: 10
-  - name: Box 1
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
-    isVisible: true
-    Id: ATK8z6ZCKM7A4E0MQxCvIkZEqQ5Y8wJv
-    Components:
-      - name: Mesh
-        OBJ File: ""
-        Primative Type: CUBE
-        Material: 9fRJUiP3U3ooCZ1CqUKAJSr2QwK8n9Vb
-      - name: Physics
-        Gravity: false
-        Mass: 0
-      - name: Box Collider
-        Offset: [0, 0, 0]
-        Extent: [1.10000002, 1.10000002, 1.10000002]
-  - name: Box 2
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 5, 0, 0, 1]
-    isVisible: true
-    Id: OKY0gV0a1ZX0lhlLLVYnbkadKOBgp30D
-    Components:
-      - name: Mesh
-        OBJ File: ""
-        Primative Type: CUBE
-        Material: 9fRJUiP3U3ooCZ1CqUKAJSr2QwK8n9Vb
-      - name: Physics
-        Gravity: false
-        Mass: 0
-      - name: Box Collider
-        Offset: [0.300000012, 0.100000001, 0.100000001]
-        Extent: [1.10000002, 1.10000002, 1.10000002]
   - name: Sphere 1
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 10, 0, 0, 1]
     isVisible: true
-    Id: OyTwAGV9AoAlfk7ZDF9DgSf8fYNaND29
+    Id: Dg03TaOA78VFNZcJwTS4I5V318PNGV63
     Components:
       - name: Mesh
         OBJ File: ""
         Primative Type: CUBE
-        Material: 9fRJUiP3U3ooCZ1CqUKAJSr2QwK8n9Vb
+        Material: R2KVcVUCx25oIc8ejbVzFQQO2Q93QzeK
       - name: Physics
         Gravity: false
         Mass: 0
@@ -55,16 +17,61 @@ GameObjects:
   - name: Camera
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 10, 1]
     isVisible: true
-    Id: lccAX5Zc3B0yyBXTjETE41SKFa9Lm0PF
+    Id: FL5BM4u1FDAr7H9JLJUUJEDr4YNG9bfi
     Components:
       - name: Camera
         FOV: 50
         Near Plane: 0.100000001
         Far Plane: 1000
         Is Main Camera: false
+  - name: Box 1
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+    isVisible: true
+    Id: Q2JjhR3HI14SrFfv85AISeKO9iZkwhNY
+    Components:
+      - name: Mesh
+        OBJ File: ""
+        Primative Type: CUBE
+        Material: R2KVcVUCx25oIc8ejbVzFQQO2Q93QzeK
+      - name: Physics
+        Gravity: false
+        Mass: 0
+      - name: Box Collider
+        Offset: [0, 0, 0]
+        Extent: [1.10000002, 1.10000002, 1.10000002]
+  - name: Light
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1]
+    isVisible: true
+    Id: W7B0Nt9F4hK3QZgGDPPXJm5SACiVq2pC
+    Components:
+      - name: PointLight
+        Color: [1, 1, 1]
+        Intensity: 10
+  - name: Box 2
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 5, 0, 0, 1]
+    isVisible: true
+    Id: WxWcBHg1ad5J51k5TIyQRTBJM297cvGK
+    Components:
+      - name: Mesh
+        OBJ File: ""
+        Primative Type: CUBE
+        Material: R2KVcVUCx25oIc8ejbVzFQQO2Q93QzeK
+      - name: Physics
+        Gravity: false
+        Mass: 0
+      - name: Box Collider
+        Offset: [0.300000012, 0.100000001, 0.100000001]
+        Extent: [1.10000002, 1.10000002, 1.10000002]
 Textures:
   - name: glocken
     fileName: glocken.png
-    Id: GVDdFXRc3FIjromlKiKDZvLlDODkJbGb
+    Id: EWQibEVIGVKVM3XNFqRZCd3E16zSXu6L
 Materials:
-  []
+  - name: GLOCKEN :)
+    transparency: 1
+    emission: 0
+    roughness: 0
+    shininess: 0.5
+    diffuseTexture: EWQibEVIGVKVM3XNFqRZCd3E16zSXu6L
+    specularTexture: ""
+    Id: R2KVcVUCx25oIc8ejbVzFQQO2Q93QzeK

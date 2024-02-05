@@ -42,7 +42,9 @@ namespace engine {
 		physicsComponentWithHigherGravity.overrideGravityCoefficient = true;
 		physicsComponentWithHigherGravity.gravityCoefficient *= 1.2f;
 
-		meshComponent2->material.diffuseTexture = loadTexture("glocken.png");
+		std::weak_ptr<Material> material = createMaterial("GLOCKEN :)");
+		material.lock()->diffuseTexture = loadTexture("glocken.png");
+		meshComponent2->setMaterial(material);
 
 		auto boxColliderComponent = engine::BoxColliderComponent(glm::vec3(0, 0, 0), glm::vec3(1.1f, 1.1f, 1.1f));
 		auto boxColliderOffsetComponent = engine::BoxColliderComponent(glm::vec3(0.3f, 0.1f, 0.1f), glm::vec3(1.1f, 1.1f, 1.1f));

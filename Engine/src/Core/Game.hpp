@@ -54,6 +54,8 @@ namespace engine
 
 		void changeMainCamera(GameObject* newCamera);
 
+		std::weak_ptr<Material> createMaterial(const std::string& name);
+
 		CameraComponent* getMainCamera();
 
 		RendererSettings renderingSettings{};
