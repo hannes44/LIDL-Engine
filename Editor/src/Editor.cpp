@@ -11,7 +11,7 @@
 namespace engine
 {
 	// Comment out to not skip the main menu
-	#define SKIP_MAIN_MENU
+	//#define SKIP_MAIN_MENU
 
 	void engine::Editor::start()
 	{

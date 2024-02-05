@@ -1,0 +1,50 @@
+GameObjects:
+  - name: Box 1
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+    isVisible: true
+    Id: 7QMU65m9BoRxYBpjQWSJ5PifTMdFpT6C
+    Components:
+      - name: Mesh
+      - name: Physics
+        Mass: 0
+      - name: Box Collider
+  - name: Light
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1]
+    isVisible: true
+    Id: RTaES1NhSKzcXEKXadjpd29D1F3ugHG6
+    Components:
+      - name: PointLight
+        Intensity: 10
+  - name: Box 2
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 5, 0, 0, 1]
+    isVisible: true
+    Id: asb31QOVi4EZIAFmvB27HFysHaFlc4O3
+    Components:
+      - name: Mesh
+      - name: Physics
+        Mass: 0
+      - name: Box Collider
+  - name: Camera
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 10, 1]
+    isVisible: true
+    Id: fTgPEMaALnn0sx6Vs6tP4OgWqO9pM5HC
+    Components:
+      - name: Camera
+        FOV: 50
+        Near Plane: 0.100000001
+        Far Plane: 1000
+  - name: Sphere 1
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 10, 0, 0, 1]
+    isVisible: true
+    Id: nSwjNpJtfNvCLBSLcAw3VxcJVaSGAvIy
+    Components:
+      - name: Mesh
+      - name: Physics
+        Mass: 0
+      - name: Sphere Collider
+Textures:
+  - name: glocken
+    fileName: glocken.png
+    Id: b41USGRLZ9I2w02AuTCAtC6b7GlbTH07
+Materials:
+  []

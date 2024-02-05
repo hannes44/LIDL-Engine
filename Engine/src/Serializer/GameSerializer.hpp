@@ -16,7 +16,8 @@ namespace engine
 	public:
 		static void serializeGame(Game* game);
 
-		static std::shared_ptr<Game> deserializeGame(const std::string& gameName);
+		// Reads the game config files and alters the game object accordingly
+		static void deserializeGame(Game* game);
 
 		static void createYAMLFile(const std::string& filePath, const std::string& fileName);
 
@@ -37,9 +38,9 @@ namespace engine
 		static void serializeMaterials(const Game* game, YAML::Emitter& emitter);
 		static void serializeMaterial(Material* material, YAML::Emitter& emitter);
 		
-		static void deserializeGameConfig(const std::string& gameName, Game* game);
+		static void deserializeGameConfig(Game* game);
 
-		static void deserializeGameState(const std::string& gameName, Game* game);
+		static void deserializeGameState(Game* game);
 
 		static void deserializeTextures(YAML::Node node, Game* game);
 

@@ -31,6 +31,8 @@ namespace engine
 		std::string name;
 		std::string description;
 		void* data;
+
+
 	};
 
 	// Component class for Entity-Component-System

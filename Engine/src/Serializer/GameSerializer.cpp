@@ -146,20 +146,16 @@ namespace engine
 		out << YAML::Key << "name";
 		out << YAML::Value << component->getName();
 
-		if (auto mesh = std::dynamic_pointer_cast<MeshComponent>(component))
-		{
-			if (mesh->objFileName != "")
-			{
-				out << YAML::Key << "objFileName";
-				out << YAML::Value << mesh->objFileName;
-			}
-			else if (MeshComponent::primativeTypeToString(mesh->primativeType) != "")
-			{
-				out << YAML::Key << "primativeType";
-				out << YAML::Value << MeshComponent::primativeTypeToString(mesh->primativeType);
-			}
-		}
 
+		for (const auto serializableVariable : component->getSerializableVariables())
+		{
+			if (serializableVariable.type == SerializableType::FLOAT)
+			{
+				out << YAML::Key << serializableVariable.name;
+				out << YAML::Value << *static_cast<float*>(serializableVariable.data);
+			}
+			
+		}
 
 		out << YAML::EndMap;
 	}
@@ -238,19 +234,17 @@ namespace engine
 	}
 
 
-	std::shared_ptr<Game> GameSerializer::deserializeGame(const std::string& gameName)
+	void GameSerializer::deserializeGame(Game* game)
 	{
-		/*
-		 
-		
-		LOG_INFO("Deserializing game: {}", gameName);
-		std::string gameConfigFilePath = GAME_FOLDER_PATH + gameName + "/" + gameName + "Config" + GAME_CONFIG_FILE_EXTENSION;
+
+		LOG_INFO("Deserializing game: {}", game->name);
+		std::string gameConfigFilePath = GAME_FOLDER_PATH + game->name + "/" + game->name + "Config" + GAME_CONFIG_FILE_EXTENSION;
 		LOG_TRACE("Loading file: " + gameConfigFilePath);
 		YAML::Node config = YAML::LoadFile(gameConfigFilePath);
 
-		deserializeGameConfig(gameName, game.get());
+		deserializeGameConfig(game);
 
-		deserializeGameState(gameName, game.get());
+		deserializeGameState(game);
 
 		try {
 			//	settings.useDarkTheme = config["useDarkMode"].as<bool>();
@@ -263,21 +257,18 @@ namespace engine
 		}
 
 
-		LOG_INFO("Deserialized game: {}", gameName);
-		return game;
-		 */
-		return nullptr;
+		LOG_INFO("Deserialized game: {}", game->name);
 	}
 
 
-	void GameSerializer::deserializeGameConfig(const std::string& gameName, Game* game)
+	void GameSerializer::deserializeGameConfig(Game* game)
 	{
 	}
 
-	void GameSerializer::deserializeGameState(const std::string& gameName, Game* game)
+	void GameSerializer::deserializeGameState(Game* game)
 	{
-		LOG_INFO("Deserializing game state: {}", gameName);
-		std::string gameStateFilePath = GAME_FOLDER_PATH + gameName + "/" + gameName + "State" + GAME_CONFIG_FILE_EXTENSION;
+		LOG_INFO("Deserializing game state: {}", game->name);
+		std::string gameStateFilePath = GAME_FOLDER_PATH + game->name + "/" + game->name + "State" + GAME_CONFIG_FILE_EXTENSION;
 		LOG_TRACE("Loading file: " + gameStateFilePath);
 		YAML::Node state = YAML::LoadFile(gameStateFilePath);
 

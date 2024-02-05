@@ -1,0 +1,31 @@
+GameObjects:
+  - name: BOMPASPY
+    transform: [5, 0, 0, 0, 0, 9.61538506, 0, 0, 0, 0, 2.5, 0, 15, 10, 0, 1]
+    isVisible: true
+    Id: 0KKShTmL3KjCciyMXQge0S9EZlX6Y2cM
+    Components:
+      - name: Mesh
+        primativeType: CUBE
+  - name: Camera
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 10, 1]
+    isVisible: true
+    Id: 1FbVqJ22xSTvA8Z17YCGH6B17N8VcNNB
+    Components:
+      - name: Camera
+  - name: SIGMA AMUGUS
+    transform: [2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 10, 10, 0, 1]
+    isVisible: true
+    Id: 3gcJPT7feQX6vwKRSfulbQLRbH5kvVRh
+    Components:
+      - name: Mesh
+        objFileName: amugus.obj
+  - name: Light
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1]
+    isVisible: true
+    Id: HL6ciyfzr0aBN6FO0uxdV2OQ13SU50J7
+    Components:
+      - name: PointLight
+Textures:
+  []
+Materials:
+  []
