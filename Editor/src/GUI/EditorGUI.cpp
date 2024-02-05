@@ -7,12 +7,15 @@
 #include "Serializer/GameSerializer.hpp"
 #include <Physics/GamePhysics.hpp>
 #include <memory>
+#include <imgui_internal.h>
 
 
 namespace engine
 {
 #define IMGUI_TOP_MENU_HEIGHT 18
 #define IMGUI_SHOW_DEMO_WINDOWS false
+
+bool isAddComponentVisible = false;
 
 	EditorGUI::EditorGUI(std::shared_ptr<Project> project) :  window(Window::getInstance()), project(project)
 	{
@@ -534,10 +537,63 @@ namespace engine
 						drawComponentSerializableVariables(component);
 					}
 				}
-			
+
+				if (ImGui::Button("Add Component"))
+				{
+					isAddComponentVisible = !isAddComponentVisible;
+				}
 			
 			}
-		}	
+		}
+		if (isAddComponentVisible)
+		{
+			ShowAddComponent();
+		}
+	}
+	void EditorGUI::ShowAddComponent()
+	{
+		ImGuiTextFilter     Filter;
+
+		ImGuiWindowFlags windowFlags = 0;
+		windowFlags |= ImGuiWindowFlags_NoTitleBar;
+		windowFlags |= ImGuiWindowFlags_NoResize;
+		windowFlags |= ImGuiWindowFlags_NoScrollbar;
+
+		ImGui::SetNextWindowSize(ImVec2(360, 500));
+
+		if (ImGui::Begin("Add Component", nullptr, windowFlags))
+		{
+			ImGui::Text("Add Component");
+			ImGui::Separator();
+
+			const char* lines[] = { "Box Collider", "Camera", "Collider", "Mesh", "Physics", "Point Light", "Sphere Collider" };
+			static int item_current_idx = 0;
+
+			if (ImGui::BeginListBox("##"))
+			{
+				for (int n = 0; n < IM_ARRAYSIZE(lines); n++)
+				{
+					bool is_selected = (item_current_idx == n);
+					if (ImGui::Selectable(lines[n], is_selected, ImGuiSelectableFlags_AllowDoubleClick))
+					{
+						if (ImGui::IsMouseDoubleClicked(0))
+						{
+							item_current_idx = n;
+							Debug::Log(lines[item_current_idx]);
+							isAddComponentVisible = !isAddComponentVisible;
+						}
+					}
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndListBox();
+			}
+			if (ImGui::Button("Close"))
+			{
+				isAddComponentVisible = !isAddComponentVisible;
+			}
+		}
+		ImGui::End();
 	}
 	void EditorGUI::drawGameSettingsTab()
 	{
