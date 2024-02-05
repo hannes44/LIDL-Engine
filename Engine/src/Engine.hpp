@@ -5,10 +5,6 @@
 // Core
 #include "Core/Game.hpp"
 #include "Core/GameObject.hpp"
-#include "Core/InputEvent.hpp"
-#include "Core/InputFrameWork.hpp"
-#include "Core/InputListener.hpp"
-#include "Core/InputFrameWork.hpp"
 #include "Core/Logger.hpp"
 #include "Core/Material.hpp"
 #include "Core/Texture.hpp"
@@ -34,3 +30,9 @@
 
 //Events
 #include "Events/EventManager.hpp"
+
+//Input
+#include "Input/InputEvent.hpp"
+#include "Input/InputFrameWork.hpp"
+#include "Input/InputListener.hpp"
+#include "Input/InputFrameWork.hpp"

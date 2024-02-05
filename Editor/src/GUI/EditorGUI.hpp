@@ -58,6 +58,8 @@ namespace engine
 
 		void drawInspectorSelectedGameObject();
 
+		void ShowAddComponent();
+
 		void drawGameSettingsTab();	
 
 		void drawBottomPanel();
