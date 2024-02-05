@@ -2,8 +2,9 @@
 #include <iostream>
 
 extern "C" {
-	__declspec(dllexport) engine::Game* createGame(engine::Renderer* renderer) {
+	__declspec(dllexport) engine::Game* createGame(engine::Renderer* renderer, engine::Window* window) {
 		engine::Renderer::instance = renderer;
+		engine::Window::instance = window; 
 		return new engine::TestGame();
 	}
 }

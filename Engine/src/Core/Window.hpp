@@ -34,8 +34,8 @@ namespace engine
 
 		virtual void newFrame() = 0;
 
-	private:
 		inline static Window* instance = nullptr;
+	private:
 
 		inline static WindowBackend backend = WindowBackend::SDL3;
 	};
