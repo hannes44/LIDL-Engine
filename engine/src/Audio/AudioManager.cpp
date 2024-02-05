@@ -1,6 +1,6 @@
 #include "AudioManager.hpp"
-#include "Logger.hpp"
-#include "Window.hpp"
+#include "Core/Logger.hpp"
+#include "Core/Window.hpp"
 #include <Windows.h>
 #include <MMSystem.h>
 

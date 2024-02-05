@@ -2,15 +2,8 @@
 #include <Engine.hpp>
 #include "../../vendor/ImGuizmo/ImGuizmo.h"
 #include <glm/gtc/type_ptr.hpp>
-#include "InputFramework.hpp"
 #include "TestGame.hpp"
-#include "Renderer.hpp"
-#include "Logger.hpp"
-#include "RendererSettings.hpp"
-#include "EditorSerializer.hpp"
-#include "GameSerializer.hpp"
-#include "GamePhysics.hpp"
-#include "AudioManager.hpp"
+#include "Audio/AudioManager.hpp"
 #include "Serializer/EditorSerializer.hpp"
 #include "Serializer/GameSerializer.hpp"
 #include <Physics/GamePhysics.hpp>

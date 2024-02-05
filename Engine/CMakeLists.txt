@@ -13,14 +13,6 @@ add_library(engine
 	src/Core/Logger.cpp
 	src/Core/Window.hpp
 	src/Core/Window.cpp
-	src/Core/InputEvent.hpp
-	src/Core/InputEvent.cpp
-	src/Core/InputListener.hpp
-	src/Core/InputListener.cpp
-	src/Core/InputSystem.hpp
-	src/Core/InputSystem.cpp
-	src/Core/InputFramework.hpp
-	src/Core/InputFramework.cpp
 	src/Core/Uuid.hpp
 	src/Core/Uuid.cpp
 	src/Core/Texture.hpp
@@ -81,14 +73,14 @@ add_library(engine
 	../vendor/stb/stb_image.h
 	../vendor/ImGuizmo/ImGuizmo.h
 	../vendor/ImGuizmo/ImGuizmo.cpp
-	src/InputOutput/InputEvent.cpp
-	src/InputOutput/InputEvent.hpp
-	src/InputOutput/InputListener.hpp
-	src/InputOutput/InputListener.cpp
-	src/InputOutput/InputSystem.hpp
-	src/InputOutput/InputSystem.cpp
-	src/InputOutput/InputFramework.hpp
-	src/InputOutput/InputFramework.cpp
+	src/Input/InputEvent.cpp
+	src/Input/InputEvent.hpp
+	src/Input/InputListener.hpp
+	src/Input/InputListener.cpp
+	src/Input/InputSystem.hpp
+	src/Input/InputSystem.cpp
+	src/Input/InputFramework.hpp
+	src/Input/InputFramework.cpp
 	src/Audio/AudioManager.cpp
 	src/Audio/AudioManager.hpp
 	${SHADERS}
@@ -196,20 +188,20 @@ source_group("Vendor" FILES
 	../vendor/ImGuizmo/ImGuizmo.cpp
 )
 
-source_group("InputOutput" FILES
-	src/InputOutput/InputEvent.cpp
-	src/InputOutput/InputEvent.hpp
-	src/InputOutput/InputListener.hpp
-	src/InputOutput/InputListener.cpp
-	src/InputOutput/InputSystem.hpp
-	src/InputOutput/InputSystem.cpp
-	src/InputOutput/InputFramework.hpp
-	src/InputOutput/InputFramework.cpp
+source_group("Input" FILES
+	src/Input/InputEvent.cpp
+	src/Input/InputEvent.hpp
+	src/Input/InputListener.hpp
+	src/Input/InputListener.cpp
+	src/Input/InputSystem.hpp
+	src/Input/InputSystem.cpp
+	src/Input/InputFramework.hpp
+	src/Input/InputFramework.cpp
 )
 
 source_group("Audio" FILES
-	src/InputOutput/AudioManager.cpp
-	src/InputOutput/AudioManager.hpp
+	src/Audio/AudioManager.cpp
+	src/Audio/AudioManager.hpp
 )
 
 
@@ -227,6 +219,7 @@ target_link_libraries(engine PRIVATE
 	imgui
 	imguilib
 	SDL3::SDL3
+	winmm.lib
 )
 
 target_link_libraries(imguilib PRIVATE 
