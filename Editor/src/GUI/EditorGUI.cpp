@@ -554,7 +554,6 @@ bool isAddComponentVisible = false;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
 
 		ImGui::SetNextWindowSize(ImVec2(550, 680));
-		//ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
 
 		if (ImGui::Begin("Add Component", nullptr, windowFlags))
 		{
