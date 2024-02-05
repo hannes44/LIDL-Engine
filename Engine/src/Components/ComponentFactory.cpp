@@ -18,15 +18,15 @@ namespace engine
 		{
 			return new MeshComponent();
 		}
-		else if (componentName == "Physics")
+		if (componentName == "Physics")
 		{
 			return new PhysicsComponent();
 		}
-		else if (componentName == "BoxCollider")
+		else if (componentName == "Box Collider")
 		{
 			return new BoxColliderComponent();
 		}
-		else if (componentName == "SphereCollider")
+		else if (componentName == "Sphere Collider")
 		{
 			return new SphereColliderComponent();
 		}

@@ -29,8 +29,13 @@ namespace engine
 		std::vector<Vertex> vertices{};
 		std::vector<uint32_t> indices{};
 
-		static std::shared_ptr<MeshComponent> loadMeshFromOBJFile(const std::string& filename);
+
+		static void loadMeshFromOBJFile(const std::string& filename, MeshComponent* mesh);
+
+		static std::shared_ptr<MeshComponent> createMeshFromObjFile(const std::string& filename);
 		
+		static void loadPrimativeMesh(PrimativeMeshType type, MeshComponent* mesh);
+
 		static std::shared_ptr<MeshComponent> createPrimative(PrimativeMeshType type);
 
 		static std::string primativeTypeToString(PrimativeMeshType type);
@@ -43,12 +48,16 @@ namespace engine
 
 		Material material{};
 
+		PrimativeMeshType primativeType = NONE;
+
+		std::string primativeTypeAsString = primativeTypeToString(primativeType);
+
 		virtual std::vector<SerializableVariable> getSerializableVariables() 
 		{ 
 			return 
 			{
 				{SerializableType::STRING, "OBJ File", "The file path to the obj file", &objFileName},
-				//{SerializableType::STRING, "Primative Type", "The type of primative to create", &primativeType},
+				{SerializableType::STRING, "Primative Type", "The type of primative to create", &primativeTypeAsString},
 				{SerializableType::STRING, "Material", "Id of the meshes material",&material.uuid.id}
 			}; 
 		};
@@ -58,7 +67,7 @@ namespace engine
 
 		std::string objFileName = "";
 
-		PrimativeMeshType primativeType;
+
 		//--------------------------------------
 
 	private:

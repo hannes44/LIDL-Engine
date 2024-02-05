@@ -13,6 +13,16 @@ namespace engine {
         virtual void drawCollider(CameraComponent* camera) = 0;
         virtual BoundingBox getBoundingBox() = 0;
         ColliderComponent(glm::vec3 offset, glm::vec3 extent) : offset(offset), extent(extent) {}
+        
+        std::vector<SerializableVariable> getSerializableVariables() override 
+        {
+            return 
+            {
+            	{SerializableType::VECTOR3, "Offset", "The offset of the collider", &offset},
+				{SerializableType::VECTOR3, "Extent", "The extent of the collider", &extent}
+            }; 
+        };
+
     protected:
         bool deepCollisionCheck(ColliderComponent* other);
 

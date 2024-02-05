@@ -19,9 +19,9 @@ namespace engine
 
 	void EditorGUI::start()
 	{
-//		game->initialize(); // Temporary for testing, should not be called when serialization works
+		//game->initialize(); // Temporary for testing, should not be called when serialization works
 
-//		GameSerializer::serializeGame(game.get());
+		//GameSerializer::serializeGame(game.get());
 
 		GameSerializer::deserializeGame(game.get());
 
@@ -69,10 +69,6 @@ namespace engine
 				GamePhysics::getInstance().run(game.get());
 				game->update();
 			}
-
-			// GamePhysics::getInstance().run(game.get());
-			// game->run();
-			// Renderer::renderGame(game, getActiveCamera(), &editorSettings.rendererSettings);
 
 			endFrame();
 			window.newFrame();
@@ -671,7 +667,10 @@ namespace engine
 
 			if (seralizableVariable.type == SerializableType::STRING)
 			{
-				ImGui::InputText(seralizableVariable.name.c_str(), (char*)seralizableVariable.data, 255);
+				std::string data = *static_cast<std::string*>(seralizableVariable.data);
+				ImGui::Text((seralizableVariable.name + ":").c_str());
+				ImGui::SameLine();
+				ImGui::Text(data.c_str());
 			}
 			else if (seralizableVariable.type == SerializableType::INT)
 			{

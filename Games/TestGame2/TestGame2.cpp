@@ -22,7 +22,7 @@ namespace engine {
 	void TestGame2::initialize() {
 		Logger::init();
 
-		std::shared_ptr<MeshComponent> meshComponent1 = engine::MeshComponent::loadMeshFromOBJFile("amugus.obj");
+		std::shared_ptr<MeshComponent> meshComponent1 = engine::MeshComponent::createMeshFromObjFile("amugus.obj");
 		std::shared_ptr<MeshComponent> meshComponent2 = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
 		engine::PointLightComponent pointLightComponent = engine::PointLightComponent();
 		engine::PhysicsComponent physicsComponentWithGravity = engine::PhysicsComponent();

@@ -424,7 +424,6 @@ namespace engine
 				return;
 			}
 
-
 			for (YAML::const_iterator it = node.begin(); it != node.end(); ++it)
 			{
 				std::string nodeName = it->first.as<std::string>();
@@ -462,6 +461,26 @@ namespace engine
 						{
 							LOG_ERROR("Failed to deserialize component: " + componentName + " because of unknown serializable type");
 						}
+					}
+
+				}
+			}
+
+			// Special case for mesh component
+			if (componentName == "Mesh")
+			{
+				MeshComponent* meshComponent = dynamic_cast<MeshComponent*>(component);
+				if (meshComponent != nullptr)
+				{
+					if (meshComponent->objFileName != "")
+					{
+
+					}
+
+					if (meshComponent->primativeTypeAsString != "")
+					{
+						meshComponent->primativeType = MeshComponent::stringToPrimativeType(meshComponent->primativeTypeAsString);
+						MeshComponent::loadPrimativeMesh(meshComponent->primativeType, meshComponent);
 					}
 
 				}

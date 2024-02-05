@@ -14,6 +14,15 @@ namespace engine {
 
         std::string getName() override;
 
+        std::vector<SerializableVariable> getSerializableVariables() override
+        {
+            return
+            {
+                {SerializableType::VECTOR3, "Offset", "The offset of the collider", &offset},
+                {SerializableType::VECTOR3, "Extent", "The extent of the collider", &extent}
+            };
+        };
+
     protected:
 
     };
