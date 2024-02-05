@@ -73,7 +73,7 @@ namespace engine
 
 		// Handle key and mouse input here
 		// If mouse button is pressed we want to control the camera
-		if (event.getEventType() == InputEventType::MouseButtonDown && (Key)event.getButton() == Key::MOUSE_RIGHT && !(ImGui::GetIO().WantCaptureMouse)) {
+		if (EventType == InputEventType::MouseButtonDown && (Key)event.getButton() == Key::MOUSE_RIGHT && !(ImGui::GetIO().WantCaptureMouse)) {
 			isMouseDragging = true;
 		}
 		// If mouse button is released we want to stop controlling the camera
