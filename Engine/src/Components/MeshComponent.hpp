@@ -24,7 +24,7 @@ namespace engine
 	class MeshComponent : public Component
 	{
 	public:
-		MeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices);
+		MeshComponent(std::vector<Vertex> vertices = {}, std::vector<uint32_t> indices = {});
 
 		std::vector<Vertex> vertices{};
 		std::vector<uint32_t> indices{};

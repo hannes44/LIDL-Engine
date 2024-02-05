@@ -7,6 +7,7 @@
 #include <memory>
 #include "Components/MeshComponent.hpp"
 #include "Components/PointLightComponent.hpp"
+#include "Components/ComponentFactory.hpp"
 
 namespace engine
 {
@@ -414,28 +415,9 @@ namespace engine
 		try 
 		{
 			std::string componentName = node["name"].as<std::string>();
-			Component* component = nullptr;
 
-			// Since mesh component needs constructor parameters, we need to handle it differently
-			if (componentName == MeshComponent::componentName)
-			{
-
-				//component = new MeshComponent();
-			}
-			else if (componentName == PointLightComponent::name)
-			{
-				component = new PointLightComponent();
-			}
-			else if (componentName == "Camera")
-			{
-				component = new CameraComponent();
-			}
-			else
-			{
-				LOG_WARN("Failed to deserialize component: " + componentName + " because it is not implemented");
-				return;
-			}
-
+			Component* component = ComponentFactory::createComponent(componentName);
+			
 			if (component == nullptr)
 			{
 				LOG_WARN("Failed to deserialize component: " + componentName + " because it is nullptr");

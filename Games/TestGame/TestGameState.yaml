@@ -37,10 +37,10 @@ GameObjects:
     Id: GFSzVPIyY2J76ZaHaXPT0yUj4GkOSJBD
     Components:
       - name: Camera
-        FOV: 50
+        FOV: 60
         Near Plane: 0.100000001
-        Far Plane: 1000
-        Is Main Camera: false
+        Far Plane: 1111
+        Is Main Camera: true
   - name: Box 1
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
     isVisible: true
