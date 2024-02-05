@@ -6,9 +6,8 @@ namespace engine
 	enum class EventType
 	{
 		QuitProgram,
-		Last
+		LAST
 	};
-
 	class EventListener
 	{
 	public:

@@ -135,26 +135,40 @@ namespace engine {
 
         LAST = 255,
     };
+    enum class InputEventType {
+		QuitProgram,
+		KeyDown,
+		KeyUp,
+		MouseButtonDown,
+		MouseButtonUp,
+		MouseMotion,
+		MouseWheel,
+		KeyHold,
+        NULL_EVENT
+	};
     class InputEvent {
     public:
-        InputEvent(float x, float y, float button, const Key key);
+        InputEvent(float x, float y, float button, const Key key, const InputEventType eventType);
         void clear();
 
         float getX() const;
         float getY() const;
         float getButton() const;
         const Key getKey() const;
+        const InputEventType getEventType() const;
 
         void setX(float x);
         void setY(float y);
         void setButton(float button);
         void setKey(const Key key);
+        void setEventType(const InputEventType eventType);
 
     private:
         float x;
         float y;
         float button;
         Key key;
+        InputEventType eventType;
     };
 
 }
