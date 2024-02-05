@@ -569,7 +569,7 @@ namespace engine
 
 		if (ImGui::CollapsingHeader("Game Settings", ImGuiTreeNodeFlags_DefaultOpen))
 		{
-			ImGui::Text("Game Name: ");
+			ImGui::Text(("Game Name: " + game->name).c_str());
 		}
 		ImGui::Separator();
 

@@ -4,6 +4,7 @@
 namespace engine {
 	class TestGame2 : public Game {
 	public:
+		TestGame2();
 		void update() override;
 		void initialize() override;
 

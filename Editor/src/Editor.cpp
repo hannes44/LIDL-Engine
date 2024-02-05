@@ -5,11 +5,14 @@
 #include "GUI/MainMenuGUI.hpp"
 #include "Serializer/EditorSerializer.hpp"
 #include "Project.hpp"
-#include "TestGame2.hpp"
-#include "TestGame.hpp"
+#include <Windows.h>
+#include <iostream>
 
 namespace engine
 {
+	// Comment out to not skip the main menu
+	#define SKIP_MAIN_MENU
+
 	void engine::Editor::start()
 	{
 		engine::Logger::init();
@@ -22,10 +25,11 @@ namespace engine
 
 		engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
 
-		// Comment out this to access the main menu, temporary for development
+		#ifdef SKIP_MAIN_MENU
 		project = std::make_shared<Project>();
-		project->game = std::make_shared<TestGame>();
-		
+		project->game = loadGameFromDLL("TestGame");
+		#endif
+
 		if (!project)
 		{
 			MainMenuGUI mainMenuGui{};
@@ -46,8 +50,46 @@ namespace engine
 		EditorSerializer::createFolder(path + "/" + name + "/assets");
 
 		EditorSerializer::createFolder(path + "/" + name + "/scripts");
+	}
 
+	void Editor::openProject(const std::string& gameName)
+	{
+		LOG_INFO("Opening project: {0}", gameName);
+		project = std::make_shared<Project>();
+		project->game = loadGameFromDLL(gameName);
+	}
 
+	std::shared_ptr<Game> Editor::loadGameFromDLL(const std::string gameName)
+	{
+		std::shared_ptr<Game> game = nullptr;
+		std::string fileName = gameName + ".dll";
+
+		// Convert std::string to LPCWSTR
+		std::wstring temp = std::wstring(fileName.begin(), fileName.end());
+		LPCWSTR wideFileName = temp.c_str();
+
+		HMODULE gameDLL = LoadLibraryExW(wideFileName, nullptr, 0);
+
+		if (gameDLL)
+		{
+			LOG_INFO("Loaded: {0}", fileName);
+			typedef engine::Game* (*createGame)();
+			createGame createGameFunction = (createGame)GetProcAddress(gameDLL, "createGame");
+			if (createGameFunction)
+			{
+				LOG_TRACE("createGame function found");
+				game = std::shared_ptr<Game>(createGameFunction());
+			}
+			else
+			{
+				LOG_ERROR("createGame function not found");
+			}
+		}
+		else
+		{
+			LOG_ERROR("Failed to load: {0}", fileName);
+		}
+		return game;
 	}
 	
 

@@ -50,8 +50,8 @@ target_include_directories(Editor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Link libraries
 target_link_libraries(Editor PRIVATE
-	gamelib
-	game2lib
+	TestGame
+	TestGame2
 	engine
 	vendor
 	imgui

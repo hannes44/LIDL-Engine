@@ -1,9 +1,18 @@
 #include "TestGame2.hpp"
 
-
+extern "C" {
+	__declspec(dllexport) engine::Game* createGame() {
+		return new engine::TestGame2();
+	}
+}
 namespace engine {
 	double TestGame2::getTargetFrameRate() {
 		return 10;
+	}
+
+	TestGame2::TestGame2()
+	{
+		name = "TestGame2";
 	}
 
 	void TestGame2::update() {
@@ -11,6 +20,7 @@ namespace engine {
 	}
 
 	void TestGame2::initialize() {
+		Logger::init();
 
 		std::shared_ptr<MeshComponent> meshComponent1 = engine::MeshComponent::loadMeshFromOBJFile("amugus.obj");
 		std::shared_ptr<MeshComponent> meshComponent2 = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
@@ -27,7 +37,7 @@ namespace engine {
 		physicsComponentWithHigherGravity.overrideGravityCoefficient = true;
 		physicsComponentWithHigherGravity.gravityCoefficient *= 1.2f;
 
-		meshComponent2->material.diffuseTexture = loadTexture("glocken.png");
+		//meshComponent2->material.diffuseTexture = loadTexture("glocken.png");
 
 		
 		GameObject* sphere1 = new GameObject();

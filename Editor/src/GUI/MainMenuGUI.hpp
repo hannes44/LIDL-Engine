@@ -47,5 +47,7 @@ private:
 	inline static char projectName[100] = "New Project";
 
 	inline static char projectPath[100] = "C:/Users/";
+
+	bool stopStartMenu = false;
 	};
 }

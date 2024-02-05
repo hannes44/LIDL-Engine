@@ -12,8 +12,10 @@ namespace engine
 
 		static void createNewProject(const std::string& name, const std::string& path);
 
-		static void openProject();
+		static void openProject(const std::string& gameName);
 
-		std::shared_ptr<Project> project;
+		static std::shared_ptr<Game> loadGameFromDLL(const std::string gameName);
+
+		inline static std::shared_ptr<Project> project;
 	};
 }

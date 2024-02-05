@@ -21,86 +21,12 @@ namespace engine
 		this->vertices = vertices;
 		this->indices = indices;
 
-		// The mesh creation is currently not abstracted from OpenGL
-		// TODO: Abstract mesh creation
-
-		// Parsing the vertex data into a format that OpenGL expects
-		std::vector<glm::vec3> positions{};
-		std::vector<glm::vec3> colors{};
-		std::vector<glm::vec3> normals{};
-		std::vector<glm::vec2> uvs{};
-
-		for (auto vertex : vertices)
-		{
-			positions.push_back(vertex.position);
-			colors.push_back(vertex.color);
-			normals.push_back(vertex.normal);
-			uvs.push_back(vertex.texCoords);
-		}
-
 		// -----------------------------------------------------------------------
 		// TODO: BUILD THE BOUNDING BOX
 		// -----------------------------------------------------------------------
 
 
-		// -----------------------------------------------------------------------
-		// VERTEX ARRAY OBJECT
-		// -----------------------------------------------------------------------
 
-		vertexArray = std::shared_ptr<VertexArray>(VertexArray::create());
-		vertexArray->bind();
-
-		// -----------------------------------------------------------------------
-		// POSITION BUFFER
-		// -----------------------------------------------------------------------
-
-		std::shared_ptr<VertexBuffer> positionBuffer = std::shared_ptr<VertexBuffer>(VertexBuffer::create((float*)positions.data(), positions.size() * sizeof(glm::vec3)));
-		vertexArray->addVertexBuffer(positionBuffer);
-
-		positionBuffer->bind();
-		glVertexAttribPointer(0, 3, GL_FLOAT, false /*normalized*/, 0 /*stride*/, 0 /*offset*/); // TODO: Add vertex layout to vertex buffer
-		glEnableVertexAttribArray(0);
-
-		// -----------------------------------------------------------------------
-		// COLOR BUFFER
-		// -----------------------------------------------------------------------
-
-		std::shared_ptr<VertexBuffer> colorBuffer = std::shared_ptr<VertexBuffer>(VertexBuffer::create((float*)colors.data(), colors.size() * sizeof(glm::vec3)));
-		vertexArray->addVertexBuffer(colorBuffer);
-
-		colorBuffer->bind();
-		glVertexAttribPointer(1, 3, GL_FLOAT, false /*normalized*/, 0 /*stride*/, 0 /*offset*/);
-		glEnableVertexAttribArray(1);
-
-		// -----------------------------------------------------------------------
-		// NORMAL BUFFER
-		// -----------------------------------------------------------------------
-
-		std::shared_ptr<VertexBuffer> normalBuffer = std::shared_ptr<VertexBuffer>(VertexBuffer::create((float*)normals.data(), normals.size() * sizeof(glm::vec3)));
-		vertexArray->addVertexBuffer(normalBuffer);
-
-		normalBuffer->bind();
-		glVertexAttribPointer(2, 3, GL_FLOAT, false /*normalized*/, 0 /*stride*/, 0 /*offset*/);
-		glEnableVertexAttribArray(2);
-
-		// -----------------------------------------------------------------------
-		// UV BUFFER
-		// -----------------------------------------------------------------------
-
-		std::shared_ptr<VertexBuffer> uvBuffer = std::shared_ptr<VertexBuffer>(VertexBuffer::create((float*)uvs.data(), uvs.size() * sizeof(glm::vec2)));
-		vertexArray->addVertexBuffer(uvBuffer);
-
-		uvBuffer->bind();
-
-		glVertexAttribPointer(3, 2, GL_FLOAT, false /*normalized*/, 0 /*stride*/, 0 /*offset*/);
-		glEnableVertexAttribArray(3);
-
-		// -----------------------------------------------------------------------
-		// INDEX BUFFER
-		// -----------------------------------------------------------------------
-
-		std::shared_ptr<IndexBuffer> indexBuffer = std::shared_ptr<IndexBuffer>(IndexBuffer::create(indices.data(), indices.size()));
-		vertexArray->setIndexBuffer(indexBuffer);
 
 		LOG_INFO("MeshComponent: Created mesh with {0} vertices and {1} indices", vertices.size(), indices.size());
 	}
@@ -220,6 +146,16 @@ namespace engine
 			return PrimativeMeshType::CUBE;
 		}
 	}
+	std::shared_ptr<VertexArray> MeshComponent::getVertexArray()
+	{
+		if (vertexArray == nullptr)
+		{
+			createVertexArray();
+		}
+
+		return vertexArray;
+
+	}
 	std::shared_ptr<MeshComponent> MeshComponent::createCube()
 	{
 		LOG_INFO("Creating cube mesh");
@@ -285,5 +221,84 @@ namespace engine
 		MeshComponent cube = MeshComponent(vertices, indices);
 		cube.primativeType = PrimativeMeshType::CUBE;
 		return std::make_shared<MeshComponent>(cube);
+	}
+	void MeshComponent::createVertexArray()
+	{
+		// The vertex array creation is currently not abstracted from OpenGL
+		// TODO: Abstract vertex array
+
+		// Parsing the vertex data into a format that OpenGL expects
+		std::vector<glm::vec3> positions{};
+		std::vector<glm::vec3> colors{};
+		std::vector<glm::vec3> normals{};
+		std::vector<glm::vec2> uvs{};
+
+		for (auto vertex : vertices)
+		{
+			positions.push_back(vertex.position);
+			colors.push_back(vertex.color);
+			normals.push_back(vertex.normal);
+			uvs.push_back(vertex.texCoords);
+		}
+
+
+		// -----------------------------------------------------------------------
+		// VERTEX ARRAY OBJECT
+		// -----------------------------------------------------------------------
+
+		vertexArray = std::shared_ptr<VertexArray>(VertexArray::create());
+		vertexArray->bind();
+
+		// -----------------------------------------------------------------------
+		// POSITION BUFFER
+		// -----------------------------------------------------------------------
+
+		std::shared_ptr<VertexBuffer> positionBuffer = std::shared_ptr<VertexBuffer>(VertexBuffer::create((float*)positions.data(), positions.size() * sizeof(glm::vec3)));
+		vertexArray->addVertexBuffer(positionBuffer);
+
+		positionBuffer->bind();
+		glVertexAttribPointer(0, 3, GL_FLOAT, false /*normalized*/, 0 /*stride*/, 0 /*offset*/); // TODO: Add vertex layout to vertex buffer
+		glEnableVertexAttribArray(0);
+
+		// -----------------------------------------------------------------------
+		// COLOR BUFFER
+		// -----------------------------------------------------------------------
+
+		std::shared_ptr<VertexBuffer> colorBuffer = std::shared_ptr<VertexBuffer>(VertexBuffer::create((float*)colors.data(), colors.size() * sizeof(glm::vec3)));
+		vertexArray->addVertexBuffer(colorBuffer);
+
+		colorBuffer->bind();
+		glVertexAttribPointer(1, 3, GL_FLOAT, false /*normalized*/, 0 /*stride*/, 0 /*offset*/);
+		glEnableVertexAttribArray(1);
+
+		// -----------------------------------------------------------------------
+		// NORMAL BUFFER
+		// -----------------------------------------------------------------------
+
+		std::shared_ptr<VertexBuffer> normalBuffer = std::shared_ptr<VertexBuffer>(VertexBuffer::create((float*)normals.data(), normals.size() * sizeof(glm::vec3)));
+		vertexArray->addVertexBuffer(normalBuffer);
+
+		normalBuffer->bind();
+		glVertexAttribPointer(2, 3, GL_FLOAT, false /*normalized*/, 0 /*stride*/, 0 /*offset*/);
+		glEnableVertexAttribArray(2);
+
+		// -----------------------------------------------------------------------
+		// UV BUFFER
+		// -----------------------------------------------------------------------
+
+		std::shared_ptr<VertexBuffer> uvBuffer = std::shared_ptr<VertexBuffer>(VertexBuffer::create((float*)uvs.data(), uvs.size() * sizeof(glm::vec2)));
+		vertexArray->addVertexBuffer(uvBuffer);
+
+		uvBuffer->bind();
+
+		glVertexAttribPointer(3, 2, GL_FLOAT, false /*normalized*/, 0 /*stride*/, 0 /*offset*/);
+		glEnableVertexAttribArray(3);
+
+		// -----------------------------------------------------------------------
+		// INDEX BUFFER
+		// -----------------------------------------------------------------------
+
+		std::shared_ptr<IndexBuffer> indexBuffer = std::shared_ptr<IndexBuffer>(IndexBuffer::create(indices.data(), indices.size()));
+		vertexArray->setIndexBuffer(indexBuffer);
 	}
 }
