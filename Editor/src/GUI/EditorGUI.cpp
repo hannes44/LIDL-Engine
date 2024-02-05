@@ -2,10 +2,12 @@
 #include <Engine.hpp>
 #include "../../vendor/ImGuizmo/ImGuizmo.h"
 #include <glm/gtc/type_ptr.hpp>
+#include "Audio/AudioManager.hpp"
 #include "Serializer/EditorSerializer.hpp"
 #include "Serializer/GameSerializer.hpp"
 #include <Physics/GamePhysics.hpp>
 #include <memory>
+
 
 namespace engine
 {
@@ -21,6 +23,9 @@ namespace engine
 	{
 		game->initialize(); // Temporary for testing, should not be called when serialization works
 		game->camera.translate(0, 0, 5);
+
+
+		AudioManager::getInstance().initialize();
 
 		editorCamera.translate(0, 0, 15);
 		editorCamera.rotate(10, 0, 1, 0);
@@ -118,6 +123,7 @@ namespace engine
 		{
 			if ((Key)event.getKey() == Key::DELETE)
 			{
+				AudioManager::getInstance().playSound("boing_x.wav");
 				if (auto lockedSelectedObject = selectedObject.lock())
 				{
 					if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))

@@ -1,8 +1,8 @@
 #include "Components/CameraComponent.hpp"
-#include "Core/InputSystem.hpp"
+#include "Input/InputSystem.hpp"
 #include "Core/Logger.hpp"
 #define GLM_ENABLE_EXPERIMENTAL
-#include "Core/InputFramework.hpp"
+#include "Input/InputFramework.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 #include "Core/Window.hpp"
