@@ -1,5 +1,6 @@
 #include "Transform.hpp"
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 engine::Transform::Transform()
 {
@@ -13,6 +14,10 @@ glm::vec3 engine::Transform::getPosition()
 void engine::Transform::setPosition(glm::vec3 position)
 {
 	transformMatrix[3] = glm::vec4(position, 1.0f);
+}
+
+glm::quat engine::Transform::getRotation() {
+	return glm::quat(transformMatrix);
 }
 
 void engine::Transform::shiftPosition(glm::vec3 offset)
