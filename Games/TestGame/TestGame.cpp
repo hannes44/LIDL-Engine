@@ -44,7 +44,7 @@ namespace engine {
 
 		meshComponent2->material.diffuseTexture = loadTexture("glocken.png");
 
-		auto boxColliderComponent = engine::BoxColliderComponent(glm::vec3(0, 0, 0), glm::vec3(1.1f, 1.1f, 1.1f));
+		auto boxColliderComponent = engine::BoxColliderComponent(glm::vec3(0, 0, 0), glm::vec3(1.f, 1.f, 1.f));
 		auto boxColliderOffsetComponent = engine::BoxColliderComponent(glm::vec3(0.3f, 0.1f, 0.1f), glm::vec3(1.1f, 1.1f, 1.1f));
 		auto sphereColliderComponent = engine::SphereColliderComponent(glm::vec3(0, 0, 0), glm::vec3(1.1f, 1.1f, 1.1f));
 		
