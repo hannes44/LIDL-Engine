@@ -559,15 +559,28 @@ bool isAddComponentVisible = false;
 		{
 			ImGui::Text("Add Component");
 			ImGui::Separator();
-			Filter.Draw("Search", -100.0f);
 
-			ImGui::Separator();
-			if (Filter.IsActive())
+			const char* lines[] = { "Box Collider", "Camera", "Collider", "Mesh", "Physics", "Point Light", "Sphere Collider" };
+			static int item_current_idx = 0;
+
+			if (ImGui::BeginListBox("Components"))
 			{
-				const char* lines[] = { "Box Collider", "Camera", "Collider", "Mesh", "Physics", "Point Light", "Sphere Collider" };
-				for (int i = 0; i < IM_ARRAYSIZE(lines); i++)
-					if (Filter.PassFilter(lines[i]))
-						ImGui::BulletText("%s", lines[i]);
+				for (int n = 0; n < IM_ARRAYSIZE(lines); n++)
+				{
+					bool is_selected = (item_current_idx == n);
+					if (ImGui::Selectable(lines[n], is_selected, ImGuiSelectableFlags_AllowDoubleClick))
+					{
+						if (ImGui::IsMouseDoubleClicked(0))
+						{
+							item_current_idx = n;
+							Debug::Log(lines[item_current_idx]);
+							isAddComponentVisible = !isAddComponentVisible;
+						}
+					}
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndListBox();
 			}
 			if (ImGui::Button("Close"))
 			{
