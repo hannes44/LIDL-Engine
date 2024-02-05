@@ -22,8 +22,9 @@ namespace engine
 		window.createWindow(1280, 720, "Editor");
 
 		glewInit();
-
-		engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
+		Renderer* renderer = Renderer::getInstance();
+		Renderer::getInstance()->initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
+		renderer->baseShader = engine::Shader::create("simple.vert", "simple.frag");
 
 		#ifdef SKIP_MAIN_MENU
 		project = std::make_shared<Project>();
@@ -73,12 +74,12 @@ namespace engine
 		if (gameDLL)
 		{
 			LOG_INFO("Loaded: {0}", fileName);
-			typedef engine::Game* (*createGame)();
+			typedef engine::Game* (*createGame)(Renderer*, Window*);
 			createGame createGameFunction = (createGame)GetProcAddress(gameDLL, "createGame");
 			if (createGameFunction)
 			{
 				LOG_TRACE("createGame function found");
-				game = std::shared_ptr<Game>(createGameFunction());
+				game = std::shared_ptr<Game>(createGameFunction(Renderer::getInstance(), &Window::getInstance()));
 			}
 			else
 			{

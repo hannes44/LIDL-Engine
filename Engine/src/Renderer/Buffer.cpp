@@ -7,7 +7,7 @@ namespace engine
 {
 	std::unique_ptr<VertexBuffer> VertexBuffer::create(float* vertices, int size)
 	{
-		switch (Renderer::getAPIType())
+		switch (Renderer::getInstance()->getAPIType())
 		{
 			case GraphicsAPIType::OpenGL:
 				return std::make_unique<OpenGLVertexBuffer>(vertices, size);
@@ -21,7 +21,7 @@ namespace engine
 
 	std::unique_ptr<IndexBuffer> IndexBuffer::create(unsigned int* indices, int count)
 	{
-		switch (Renderer::getAPIType())
+		switch (Renderer::getInstance()->getAPIType())
 		{
 		case GraphicsAPIType::OpenGL:
 			return std::make_unique<OpenGLIndexBuffer>(indices, count);
@@ -35,7 +35,7 @@ namespace engine
 
 	std::unique_ptr<VertexArray> VertexArray::create()
 	{
-		switch (Renderer::getAPIType())
+		switch (Renderer::getInstance()->getAPIType())
 		{
 		case GraphicsAPIType::OpenGL:
 			return std::make_unique<OpenGLVertexArray>();

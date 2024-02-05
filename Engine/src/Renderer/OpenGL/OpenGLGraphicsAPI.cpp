@@ -110,7 +110,15 @@ namespace engine
 		glUniform3fv(glGetUniformLocation(shaderProgram, "color"), 1, &color[0]);
 
 		glBindVertexArray(VAO);
+
 		glDrawArrays(GL_LINES, 0, 2);
+		glBindVertexArray(0);
+		glUseProgram(0);
+		
+
+		glDeleteVertexArrays(1, &VAO);
+		glDeleteBuffers(1, &VBO);
+		glDeleteProgram(shaderProgram);
 	}
 	GraphicsAPIType engine::OpenGLGraphicsAPI::getType()
 	{
