@@ -6,11 +6,14 @@
 #include "Serializer/GameSerializer.hpp"
 #include <Physics/GamePhysics.hpp>
 #include <memory>
+#include <imgui_internal.h>
 
 namespace engine
 {
 #define IMGUI_TOP_MENU_HEIGHT 18
 #define IMGUI_SHOW_DEMO_WINDOWS false
+
+bool isAddComponentVisible = false;
 
 	EditorGUI::EditorGUI(std::shared_ptr<Project> project) :  window(Window::getInstance()), project(project)
 	{
@@ -528,10 +531,47 @@ namespace engine
 						drawComponentSerializableVariables(component);
 					}
 				}
-			
+
+				if (ImGui::Button("Add Component"))
+				{
+					isAddComponentVisible = !isAddComponentVisible;
+				}
 			
 			}
-		}	
+		}
+		if (isAddComponentVisible)
+		{
+			ShowAddComponent();
+		}
+	}
+	void EditorGUI::ShowAddComponent()
+	{
+		ImGuiTextFilter     Filter;
+
+		ImGuiWindowFlags windowFlags = 0;
+		windowFlags |= ImGuiWindowFlags_NoTitleBar;
+		windowFlags |= ImGuiWindowFlags_NoResize;
+		windowFlags |= ImGuiWindowFlags_NoScrollbar;
+
+		ImGui::SetNextWindowSize(ImVec2(550, 680));
+		//ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
+
+		if (ImGui::Begin("Add Component", nullptr, windowFlags))
+		{
+			ImGui::Text("Add Component");
+			ImGui::Separator();
+			Filter.Draw("Search", -100.0f);
+
+			ImGui::Separator();
+			if (Filter.IsActive())
+			{
+			}
+			if (ImGui::Button("Close"))
+			{
+				isAddComponentVisible = !isAddComponentVisible;
+			}
+		}
+		ImGui::End();
 	}
 	void EditorGUI::drawGameSettingsTab()
 	{
