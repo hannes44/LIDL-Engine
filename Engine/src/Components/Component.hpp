@@ -31,8 +31,7 @@ namespace engine
 		std::string name;
 		std::string description;
 		void* data;
-
-
+		bool showInEditor = true;
 	};
 
 	// Component class for Entity-Component-System

@@ -17,7 +17,8 @@ namespace engine
 		CUBE,
 		SPHERE,
 		CYLINDER,
-		PLANE
+		PLANE,
+		NONE
 	};
 
 	class MeshComponent : public Component
@@ -40,11 +41,20 @@ namespace engine
 
 		inline const static std::string componentName = "Mesh";
 
+		Material material{};
+
+		virtual std::vector<SerializableVariable> getSerializableVariables() 
+		{ 
+			return 
+			{
+				{SerializableType::STRING, "OBJ File", "The file path to the obj file", &objFileName},
+				//{SerializableType::STRING, "Primative Type", "The type of primative to create", &primativeType},
+				{SerializableType::STRING, "Material", "Id of the meshes material",&material.uuid.id}
+			}; 
+		};
+
 		// Generating the vertex array on demand
 		std::shared_ptr<VertexArray> getVertexArray();
-
-		// -Serialized properties-
-		Material material{};
 
 		std::string objFileName = "";
 

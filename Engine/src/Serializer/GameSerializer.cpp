@@ -149,12 +149,39 @@ namespace engine
 
 		for (const auto serializableVariable : component->getSerializableVariables())
 		{
+			out << YAML::Key << serializableVariable.name;
 			if (serializableVariable.type == SerializableType::FLOAT)
-			{
-				out << YAML::Key << serializableVariable.name;
+			{	
 				out << YAML::Value << *static_cast<float*>(serializableVariable.data);
 			}
-			
+			else if (serializableVariable.type == SerializableType::VECTOR3)
+			{
+				float* vec3 = static_cast<float*>(serializableVariable.data);
+				std::vector<float> vec3Vector(vec3, vec3 + 3);
+				out << YAML::Flow << YAML::Value << vec3Vector;
+			}
+			else if (serializableVariable.type == SerializableType::VECTOR4)
+			{
+				float * vec4 = static_cast<float*>(serializableVariable.data);
+				std::vector<float> vec4Vector(vec4, vec4 + 4);
+				out << YAML::Flow << YAML::Value << vec4Vector;
+			}
+			else if (serializableVariable.type == SerializableType::BOOLEAN)
+			{
+				out << YAML::Value << *static_cast<bool*>(serializableVariable.data);
+			}
+			else if (serializableVariable.type == SerializableType::STRING)
+			{
+				out << YAML::Value << *static_cast<std::string*>(serializableVariable.data);
+			}
+			else if (serializableVariable.type == SerializableType::INT)
+			{
+				out << YAML::Value << *static_cast<int*>(serializableVariable.data);
+			}
+			else
+			{
+				LOG_ERROR("Failed to serialize component: " + component->getName() + " because of unknown serializable type");
+			}
 		}
 
 		out << YAML::EndMap;
@@ -387,26 +414,79 @@ namespace engine
 		try 
 		{
 			std::string componentName = node["name"].as<std::string>();
+			Component* component = nullptr;
+
+			// Since mesh component needs constructor parameters, we need to handle it differently
 			if (componentName == MeshComponent::componentName)
 			{
-				if (node["primativeType"])
-				{
-					std::string primativeType = node["primativeType"].as<std::string>();
-					PrimativeMeshType type = MeshComponent::stringToPrimativeType(primativeType);
-					std::shared_ptr<MeshComponent> meshComponent = MeshComponent::createPrimative(type);
-					gameObject->addComponent(meshComponent);
-				}
-				else if (node["objFileName"])
-				{
-					std::string objFileName = node["objFileName"].as<std::string>();
-					std::shared_ptr<MeshComponent> meshComponent = MeshComponent::loadMeshFromOBJFile(objFileName);
-					gameObject->addComponent(meshComponent);
-				}
+
+				//component = new MeshComponent();
 			}
 			else if (componentName == PointLightComponent::name)
 			{
-				gameObject->addComponent(std::make_shared<PointLightComponent>());
+				component = new PointLightComponent();
 			}
+			else if (componentName == "Camera")
+			{
+				component = new CameraComponent();
+			}
+			else
+			{
+				LOG_WARN("Failed to deserialize component: " + componentName + " because it is not implemented");
+				return;
+			}
+
+			if (component == nullptr)
+			{
+				LOG_WARN("Failed to deserialize component: " + componentName + " because it is nullptr");
+				return;
+			}
+
+
+			for (YAML::const_iterator it = node.begin(); it != node.end(); ++it)
+			{
+				std::string nodeName = it->first.as<std::string>();
+				for (auto serializableVariable : component->getSerializableVariables())
+				{
+					if (nodeName == serializableVariable.name)
+					{
+						if (serializableVariable.type == SerializableType::FLOAT)
+						{
+							*static_cast<float*>(serializableVariable.data) = it->second.as<float>();
+						}
+						else if (serializableVariable.type == SerializableType::VECTOR3)
+						{
+							std::vector<float> vec3 = it->second.as<std::vector<float>>();
+							std::copy(vec3.begin(), vec3.end(), static_cast<float*>(serializableVariable.data));
+						}
+						else if (serializableVariable.type == SerializableType::VECTOR4)
+						{
+							std::vector<float> vec4 = it->second.as<std::vector<float>>();
+							std::copy(vec4.begin(), vec4.end(), static_cast<float*>(serializableVariable.data));
+						}
+						else if (serializableVariable.type == SerializableType::BOOLEAN)
+						{
+							*static_cast<bool*>(serializableVariable.data) = it->second.as<bool>();
+						}
+						else if (serializableVariable.type == SerializableType::STRING)
+						{
+							*static_cast<std::string*>(serializableVariable.data) = it->second.as<std::string>();
+						}
+						else if (serializableVariable.type == SerializableType::INT)
+						{
+							*static_cast<int*>(serializableVariable.data) = it->second.as<int>();
+						}
+						else
+						{
+							LOG_ERROR("Failed to deserialize component: " + componentName + " because of unknown serializable type");
+						}
+					}
+
+				}
+			}
+
+			gameObject->addComponent(std::shared_ptr<Component>(component));
+
 		}
 		catch (const std::exception& e)
 		{

@@ -1,30 +1,38 @@
 GameObjects:
-  - name: BOMPASPY
-    transform: [5, 0, 0, 0, 0, 9.61538506, 0, 0, 0, 0, 2.5, 0, 15, 10, 0, 1]
-    isVisible: true
-    Id: 0KKShTmL3KjCciyMXQge0S9EZlX6Y2cM
-    Components:
-      - name: Mesh
-        primativeType: CUBE
   - name: Camera
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 10, 1]
     isVisible: true
-    Id: 1FbVqJ22xSTvA8Z17YCGH6B17N8VcNNB
+    Id: 7C2b2yX9son2hIL02WgOK0X4g6tetb0c
     Components:
       - name: Camera
+        FOV: 50
+        Near Plane: 0.100000001
+        Far Plane: 1000
+        Is Main Camera: false
+  - name: BOMPASPY
+    transform: [5, 0, 0, 0, 0, 9.61538506, 0, 0, 0, 0, 2.5, 0, 15, 10, 0, 1]
+    isVisible: true
+    Id: 7Z036PG1LJDkRw4D9oSAn0MFh1A6Xta1
+    Components:
+      - name: Mesh
+        OBJ File: ""
+        Material: KXPVzX3fNNtSPO8P61UkAqncFG48k3FM
   - name: SIGMA AMUGUS
     transform: [2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 10, 10, 0, 1]
     isVisible: true
-    Id: 3gcJPT7feQX6vwKRSfulbQLRbH5kvVRh
+    Id: EPIE9M9EQgMOxu97uceogLI6Pi6Av0KZ
     Components:
       - name: Mesh
-        objFileName: amugus.obj
+        OBJ File: amugus.obj
+        Material: fDnFV71mxedDQFUXRakgUGy3RN5URA4M
   - name: Light
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1]
     isVisible: true
-    Id: HL6ciyfzr0aBN6FO0uxdV2OQ13SU50J7
+    Id: ZdiVbLmKU08Lcj3bAwgLD6vBLRjNaR16
     Components:
       - name: PointLight
+        Color: [1, 1, 1]
+        Intensity: 10
 Textures:
   []
 Materials:

@@ -125,6 +125,8 @@ namespace engine
 			return "CYLINDER";
 		case PrimativeMeshType::SPHERE:
 			return "SPHERE";
+		case PrimativeMeshType::NONE:
+			return "NONE";
 		default:
 			LOG_ERROR("PrimativeMeshType: {0} is not a valid primative mesh type", type);
 			return "";

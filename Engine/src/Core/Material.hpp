@@ -20,5 +20,7 @@ namespace engine
 
 		std::weak_ptr<Texture> diffuseTexture;
 		std::weak_ptr<Texture> specularTexture;
+
+		UUID uuid{};
 	};
 }
