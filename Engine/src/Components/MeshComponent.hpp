@@ -28,8 +28,6 @@ namespace engine
 		std::vector<Vertex> vertices{};
 		std::vector<uint32_t> indices{};
 
-		std::shared_ptr<VertexArray> vertexArray = nullptr;
-
 		static std::shared_ptr<MeshComponent> loadMeshFromOBJFile(const std::string& filename);
 		
 		static std::shared_ptr<MeshComponent> createPrimative(PrimativeMeshType type);
@@ -41,7 +39,10 @@ namespace engine
 		std::string getName() override { return componentName; };
 
 		inline const static std::string componentName = "Mesh";
-		
+
+		// Generating the vertex array on demand
+		std::shared_ptr<VertexArray> getVertexArray();
+
 		// -Serialized properties-
 		Material material{};
 
@@ -52,5 +53,9 @@ namespace engine
 
 	private:
 		static std::shared_ptr<MeshComponent> createCube();
+
+		void createVertexArray();
+
+		std::shared_ptr<VertexArray> vertexArray = nullptr;
 	};
 }

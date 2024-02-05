@@ -115,8 +115,8 @@ namespace engine
 				glActiveTexture(GL_TEXTURE1);
 				glBindTexture(GL_TEXTURE_2D, meshComponent->material.specularTexture.lock()->textureIDOpenGL);
 			}
-
-			graphicsAPI->drawIndexed(meshComponent->vertexArray.get(), meshComponent->indices.size());
+			
+			graphicsAPI->drawIndexed(meshComponent->getVertexArray().get(), meshComponent->indices.size());
 		}
 
 	}

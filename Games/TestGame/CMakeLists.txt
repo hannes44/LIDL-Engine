@@ -7,12 +7,12 @@ target_sources(Game PRIVATE
 	TestGame.cpp
 )
 
-add_library(gamelib SHARED
+add_library(TestGame SHARED
 	TestGame.hpp
 	TestGame.cpp
 )
 
-target_include_directories(gamelib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(TestGame PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Link libraries
 target_link_libraries(Game PRIVATE
@@ -23,7 +23,7 @@ target_link_libraries(Game PRIVATE
 	SDL3::SDL3
 )
 
-target_link_libraries(gamelib PRIVATE
+target_link_libraries(TestGame PRIVATE
 	engine
 	vendor	
 	imgui

@@ -16,6 +16,8 @@ namespace engine {
 	}
 
 	void TestGame::initialize() {
+		Logger::init();
+
 
 		std::shared_ptr<MeshComponent> meshComponent1 = engine::MeshComponent::loadMeshFromOBJFile("amugus.obj");
 		std::shared_ptr<MeshComponent> meshComponent2 = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
@@ -32,7 +34,7 @@ namespace engine {
 		physicsComponentWithHigherGravity.overrideGravityCoefficient = true;
 		physicsComponentWithHigherGravity.gravityCoefficient *= 1.2f;
 
-		meshComponent2->material.diffuseTexture = loadTexture("glocken.png");
+		//meshComponent2->material.diffuseTexture = loadTexture("glocken.png");
 
 		Debug::Log("Hello World");
 

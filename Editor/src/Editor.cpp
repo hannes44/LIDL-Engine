@@ -23,7 +23,7 @@ namespace engine
 		engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
 
 
-		HMODULE testGame = LoadLibraryExW(L"gamelib.dll", nullptr, 0);
+		HMODULE testGame = LoadLibraryExW(L"TestGame.dll", nullptr, 0);
 
 		if (testGame)
 		{
@@ -45,13 +45,10 @@ namespace engine
 		{
 			LOG_ERROR("TestGame.dll not loaded");
 		}
-		
-		std::cout << project->game->name << std::endl;
-		project->game->update();
-		return;
+
 
 		// Comment out this to access the main menu, temporary for development
-		project = std::make_shared<Project>();
+		//project = std::make_shared<Project>();
 
 		if (!project)
 		{
