@@ -1,6 +1,5 @@
 #include "SDLWindow.hpp"
 #include "Core/Logger.hpp"
-
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_sdl3.h>
@@ -12,7 +11,7 @@ namespace engine
 
 	void SDLWindow::createWindow(int width, int height, std::string title)
 	{
-		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
+		if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		{
 			LOG_FATAL("SDL could not initialize! SDL_Error: {}", SDL_GetError());
 		}
