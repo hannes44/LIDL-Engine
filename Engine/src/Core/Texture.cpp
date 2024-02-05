@@ -7,7 +7,7 @@ namespace engine
 {
 	Texture* Texture::create(const std::string& textureFilename)
 	{
-		switch (Renderer::getAPIType())
+		switch (Renderer::getInstance()->getAPIType())
 		{
 		case GraphicsAPIType::OpenGL:
 			return new OpenGLTexture(textureFilename);

@@ -17,9 +17,11 @@ int main(int argc, char* argv[])
 
 	glewInit();
 
-	engine::Renderer::initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
+	engine::Renderer* renderer = engine::Renderer::getInstance();
 
-	engine::Renderer::baseShader = engine::Shader::create("simple.vert", "simple.frag");
+	renderer->initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
+
+	renderer->baseShader = engine::Shader::create("simple.vert", "simple.frag");
 
 	engine::InputFramework& inputFramework = engine::InputFramework::getInstance();
 

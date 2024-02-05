@@ -19,7 +19,7 @@ namespace engine {
 
 		InputFramework::getInstance().getInput();
 
-		Renderer::renderGame(this, getMainCamera(), &renderingSettings);
+		Renderer::getInstance()->renderGame(this, getMainCamera(), &renderingSettings);
 
 		Window::getInstance().newFrame();
 

@@ -12,18 +12,30 @@ namespace engine
 	class Renderer
 	{
 	public:
-		static void renderGame(Game* game, CameraComponent* camera, RendererSettings* renderingSettings);
+		void renderGame(Game* game, CameraComponent* camera, RendererSettings* renderingSettings);
 
-		static void renderGizmos(Game* game, CameraComponent* camera, RendererSettings* renderingSettings);
+		void renderGizmos(Game* game, CameraComponent* camera, RendererSettings* renderingSettings);
 
-		static void drawLine(glm::vec3 start, glm::vec3 end, glm::vec3 color, CameraComponent* camera);
+		void drawLine(glm::vec3 start, glm::vec3 end, glm::vec3 color, CameraComponent* camera);
 
-		static void initGraphicsAPI(GraphicsAPIType type);
+		void initGraphicsAPI(GraphicsAPIType type);
 
-		static std::unique_ptr<GraphicsAPI> graphicsAPI;
+		std::unique_ptr<GraphicsAPI> graphicsAPI = nullptr;
 
-		static GraphicsAPIType getAPIType();
+		GraphicsAPIType getAPIType();
 
-		static std::unique_ptr<Shader> baseShader;
+		std::unique_ptr<Shader> baseShader = nullptr;
+
+		static Renderer* getInstance()
+		{
+			if (instance == nullptr)
+			{
+				instance = new Renderer();
+			}
+			return instance;
+		}
+
+		// Temporary hack to sync the renderer state with the editor and game
+		inline static Renderer* instance;
 	};
 }

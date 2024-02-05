@@ -25,7 +25,7 @@ namespace engine
 		editorCamera.translate(0, 0, 15);
 		editorCamera.rotate(10, 0, 1, 0);
 
-		engine::Renderer::baseShader = engine::Shader::create("simple.vert", "simple.frag");
+		Renderer* renderer = Renderer::getInstance();
 
 		assetManager = std::make_unique<AssetManager>(game.get());
 
@@ -58,8 +58,8 @@ namespace engine
 
 			inputFramework.getInput();
 
-			Renderer::renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
-			Renderer::renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
+			renderer->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
+			renderer->renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 
 			if (sceneState == EditorSceneState::Play)
 			{

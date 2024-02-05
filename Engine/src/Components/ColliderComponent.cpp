@@ -29,10 +29,11 @@ namespace engine {
             glm::vec3(0, 0, 0) // Needed for the last rendering pass, but the actual value is never used
         };
         
+        Renderer* renderer = Renderer::getInstance();
         for(auto nextPointOffset : nextPointOffsets) {
-            Renderer::drawLine(currPos, nextPos, color, camera); // Top line
-            Renderer::drawLine(currPos + down, nextPos + down, color, camera); // Bottom line (mirrored from top)
-            Renderer::drawLine(currPos, currPos + down, color, camera); // Corner, vertically linking top and bottom
+            renderer->drawLine(currPos, nextPos, color, camera); // Top line
+            renderer->drawLine(currPos + down, nextPos + down, color, camera); // Bottom line (mirrored from top)
+            renderer->drawLine(currPos, currPos + down, color, camera); // Corner, vertically linking top and bottom
 
             // Update the current position
             currPos = nextPos;

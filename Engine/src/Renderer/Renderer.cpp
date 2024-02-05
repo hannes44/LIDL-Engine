@@ -173,7 +173,4 @@ namespace engine
 			
 		return graphicsAPI->getType();
 	}
-
-	std::unique_ptr<GraphicsAPI> Renderer::graphicsAPI = nullptr;
-	std::unique_ptr<Shader> Renderer::baseShader;
 }

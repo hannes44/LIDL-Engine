@@ -7,7 +7,6 @@ namespace engine {
 		TestGame();
 		void update() override;
 		void initialize() override;
-
 	protected:
 		double getTargetFrameRate() override;
 	};
