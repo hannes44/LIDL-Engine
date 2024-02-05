@@ -553,7 +553,7 @@ bool isAddComponentVisible = false;
 		windowFlags |= ImGuiWindowFlags_NoResize;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
 
-		ImGui::SetNextWindowSize(ImVec2(550, 680));
+		ImGui::SetNextWindowSize(ImVec2(360, 500));
 
 		if (ImGui::Begin("Add Component", nullptr, windowFlags))
 		{
