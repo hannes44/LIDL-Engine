@@ -28,7 +28,7 @@ namespace engine {
 		Logger::init();
 
 
-		std::shared_ptr<MeshComponent> meshComponent1 = engine::MeshComponent::loadMeshFromOBJFile("amugus.obj");
+		std::shared_ptr<MeshComponent> meshComponent1 = engine::MeshComponent::createMeshFromObjFile("amugus.obj");
 		std::shared_ptr<MeshComponent> meshComponent2 = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
 		engine::PointLightComponent pointLightComponent = engine::PointLightComponent();
 		
@@ -44,7 +44,9 @@ namespace engine {
 		physicsComponentWithHigherGravity.overrideGravityCoefficient = true;
 		physicsComponentWithHigherGravity.gravityCoefficient *= 1.2f;
 
-		meshComponent2->material.diffuseTexture = loadTexture("glocken.png");
+		std::weak_ptr<Material> material = createMaterial("GLOCKEN :)");
+		material.lock()->diffuseTexture = loadTexture("glocken.png");
+		meshComponent2->setMaterial(material);
 
 		auto boxColliderComponent = engine::BoxColliderComponent(glm::vec3(0, 0, 0), glm::vec3(1.f, 1.f, 1.f));
 		auto boxColliderOffsetComponent = engine::BoxColliderComponent(glm::vec3(0.3f, 0.1f, 0.1f), glm::vec3(1.1f, 1.1f, 1.1f));

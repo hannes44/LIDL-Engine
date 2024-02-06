@@ -10,7 +10,7 @@ namespace engine {
     public:
         void drawCollider(CameraComponent* camera);
         BoundingBox getBoundingBox();
-        BoxColliderComponent(glm::vec3 offset, glm::vec3 extent) : ColliderComponent(offset, extent) {}
+        BoxColliderComponent(glm::vec3 offset = glm::vec3(0, 0, 0), glm::vec3 extent = glm::vec3(1, 1, 1)) : ColliderComponent(offset, extent) {}
 
         std::string getName() override;
 

@@ -50,7 +50,7 @@ namespace engine
 
 		int lightIndex = 0;
 		// TODO: There should be a list of all the lights in the game to avoid this loop
-		for (const auto& [gameObjectId, gameObject] : game->gameObjects) 
+		for (const auto& [gameObjectId, gameObject] : game->getGameObjects()) 
 		{
 			for (auto component : gameObject->getComponents())
 			{
@@ -76,7 +76,7 @@ namespace engine
 		baseShader->setVec3("viewPos", camera->translation.x, camera->translation.y, camera->translation.z);
 
 
-		for (const auto& [gameObjectId, gameObject] : game->gameObjects)
+		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
 		{
 			MeshComponent* meshComponent = nullptr;
 
@@ -98,23 +98,24 @@ namespace engine
 			Renderer::baseShader->setMat4("modelViewProjectionMatrix", &modelViewProjectionMatrix[0].x);
 			Renderer::baseShader->setMat4("modelMatrix", &gameObject->transform.transformMatrix[0].x);
 
+			Material* material = meshComponent->getMaterial();
 			// Material
-			Renderer::baseShader->setFloat("material.shininess", meshComponent->material.shininess);
-			Renderer::baseShader->setVec3("material.baseColor", meshComponent->material.baseColor.x, meshComponent->material.baseColor.y, meshComponent->material.baseColor.z);
-			Renderer::baseShader->setInt("material.hasDiffuseTexture", !meshComponent->material.diffuseTexture.expired());
-			Renderer::baseShader->setInt("material.hasSpecularTexture", !meshComponent->material.specularTexture.expired());
+			Renderer::baseShader->setFloat("material.shininess", material->shininess);
+			Renderer::baseShader->setVec3("material.baseColor", material->baseColor.x, material->baseColor.y, material->baseColor.z);
+			Renderer::baseShader->setInt("material.hasDiffuseTexture", !material->diffuseTexture.expired());
+			Renderer::baseShader->setInt("material.hasSpecularTexture", !material->specularTexture.expired());
 
-			if (!meshComponent->material.diffuseTexture.expired())
+			if (!material->diffuseTexture.expired())
 			{
 				Renderer::baseShader->setInt("material.diffuseTexture", 0);
 				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, meshComponent->material.diffuseTexture.lock()->textureIDOpenGL);
+				glBindTexture(GL_TEXTURE_2D, material->diffuseTexture.lock()->textureIDOpenGL);
 			}
-			if (!meshComponent->material.specularTexture.expired())
+			if (!material->specularTexture.expired())
 			{
 				Renderer::baseShader->setInt("material.specularTexture", 1);
 				glActiveTexture(GL_TEXTURE1);
-				glBindTexture(GL_TEXTURE_2D, meshComponent->material.specularTexture.lock()->textureIDOpenGL);
+				glBindTexture(GL_TEXTURE_2D, material->specularTexture.lock()->textureIDOpenGL);
 			}
 			
 			graphicsAPI->drawIndexed(meshComponent->getVertexArray().get(), meshComponent->indices.size());
@@ -124,7 +125,7 @@ namespace engine
 
 	void Renderer::renderGizmos(Game* game, CameraComponent* camera, RendererSettings* renderingSettings)
 	{
-		for (const auto& [gameObjectId, gameObject] : game->gameObjects)
+		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
 		{
 			ColliderComponent* colliderComponent = nullptr;
 

@@ -15,6 +15,9 @@ namespace engine
 {
 #define IMGUI_TOP_MENU_HEIGHT 18
 #define IMGUI_SHOW_DEMO_WINDOWS false
+// Turning this to true will make the game be initiated from the game instead of deserializing the game state file
+// The game will not save if this is true to avoid overwritting the game state file
+#define USE_GAME_INITIATION_INSTEAD_OF_DESERIALIZATION false
 
 bool isAddComponentVisible = false;
 
@@ -25,8 +28,11 @@ bool isAddComponentVisible = false;
 
 	void EditorGUI::start()
 	{
-		game->initialize(); // Temporary for testing, should not be called when serialization works
-		game->camera.translate(0, 0, 5);
+		#if USE_GAME_INITIATION_INSTEAD_OF_DESERIALIZATION
+			game->initialize();
+		#else
+			GameSerializer::deserializeGame(game.get());
+		#endif
 
 
 		AudioManager::getInstance().initialize();
@@ -76,14 +82,13 @@ bool isAddComponentVisible = false;
 				game->update();
 			}
 
-			// GamePhysics::getInstance().run(game.get());
-			// game->run();
-			// Renderer::renderGame(game, getActiveCamera(), &editorSettings.rendererSettings);
-
 			endFrame();
 			window.newFrame();
 		}
 
+		#if !USE_GAME_INITIATION_INSTEAD_OF_DESERIALIZATION
+			GameSerializer::serializeGame(game.get());
+		#endif
 		EditorSerializer::serializeEditorSettings(editorSettings);
 	}
 
@@ -253,7 +258,7 @@ bool isAddComponentVisible = false;
 			{
 				ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 0, 0));
 				ImGui::BeginListBox("##2", ImVec2(500, 500));
-				for (const auto& [gameObjectId, gameObject] : game->gameObjects)
+				for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
 				{
 					ImGui::PushID(gameObjectId.c_str());
 					if (ImGui::Selectable(gameObject->name.c_str(), selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID())))
@@ -343,6 +348,10 @@ bool isAddComponentVisible = false;
 			{
 				if (ImGui::MenuItem("Cube"))
 				{
+					std::shared_ptr<GameObject> cube = std::make_shared<GameObject>();
+					cube->addComponent(MeshComponent::createPrimative(PrimativeMeshType::CUBE));
+					game->addGameObject(cube);
+					selectedObject = cube;
 				}
 				if (ImGui::MenuItem("Sphere"))
 				{
@@ -352,6 +361,11 @@ bool isAddComponentVisible = false;
 				}
 				ImGui::EndMenu();
 			}
+			if (ImGui::MenuItem("Open OBJ file"))
+			{
+				
+			}
+
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("View"))
@@ -727,9 +741,15 @@ bool isAddComponentVisible = false;
 	{
 		for (auto seralizableVariable : component->getSerializableVariables())
 		{
+			if (!seralizableVariable.showInEditor)
+				continue;
+
 			if (seralizableVariable.type == SerializableType::STRING)
 			{
-				ImGui::InputText(seralizableVariable.name.c_str(), (char*)seralizableVariable.data, 255);
+				std::string data = *static_cast<std::string*>(seralizableVariable.data);
+				ImGui::Text((seralizableVariable.name + ":").c_str());
+				ImGui::SameLine();
+				ImGui::Text(data.c_str());
 			}
 			else if (seralizableVariable.type == SerializableType::INT)
 			{

@@ -1,0 +1,78 @@
+GameObjects:
+  - name: Box 2
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 5, 0, 0, 1]
+    isVisible: true
+    Id: C9CDE8Ik7TaUqK05Y1UGbalcgMDhc15L
+    Components:
+      - name: Mesh
+        OBJ File: ""
+        Primative Type: CUBE
+        Material: TfeNBW84ZLgYRYkcC8gdDpxGLs450XlP
+      - name: Physics
+        Gravity: false
+        Mass: 0
+      - name: Box Collider
+        Offset: [0.300000012, 0.100000001, 0.100000001]
+        Extent: [1.10000002, 1.10000002, 1.10000002]
+  - name: Camera
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 10, 1]
+    isVisible: true
+    Id: Uohy401iK3blxjEQBLBBz9Do1XT2O3JM
+    Components:
+      - name: Camera
+        FOV: 50
+        Near Plane: 0.100000001
+        Far Plane: 1000
+        Is Main Camera: false
+  - name: Box 1
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+    isVisible: true
+    Id: qIhxX82ilKzFsgKPIgVPV48WJkeFluME
+    Components:
+      - name: Mesh
+        OBJ File: ""
+        Primative Type: CUBE
+        Material: TfeNBW84ZLgYRYkcC8gdDpxGLs450XlP
+      - name: Physics
+        Gravity: false
+        Mass: 0
+      - name: Box Collider
+        Offset: [0, 0, 0]
+        Extent: [1.10000002, 1.10000002, 1.10000002]
+  - name: Sphere 1
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -19.5798626, 5.71042871, 0, 1]
+    isVisible: true
+    Id: U4NONrDKB00TU9MTdZpCOsWEl5V3cB6Y
+    Components:
+      - name: Mesh
+        OBJ File: ""
+        Primative Type: CUBE
+        Material: TfeNBW84ZLgYRYkcC8gdDpxGLs450XlP
+      - name: Physics
+        Gravity: false
+        Mass: 0
+      - name: Sphere Collider
+        Offset: [0, 0, 0]
+        Extent: [1.10000002, 1.10000002, 1.10000002]
+  - name: Light
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1]
+    isVisible: true
+    Id: 8vZ53HWnzy6BWMuTNZaWaLEQfPmd5jo0
+    Components:
+      - name: PointLight
+        Color: [1, 1, 1]
+        Intensity: 10
+Textures:
+  - name: glocken
+    fileName: glocken.png
+    Id: mF1DnjCqqgucK0KDC6Ip5Fql2tAagcda
+Materials:
+  - Base Color: [1, 1, 1]
+    Transparency: 1
+    Emission: [0, 0, 0]
+    Roughness: 0
+    Shininess: 0.5
+    Name: GLOCKEN :)
+    Diffuse Texture: mF1DnjCqqgucK0KDC6Ip5Fql2tAagcda
+    Specular Texture: ""
+    Id: TfeNBW84ZLgYRYkcC8gdDpxGLs450XlP

@@ -1,0 +1,3 @@
+name: Default Game
+isDefaultFullscreen: false
+graphicsAPI: OpenGL

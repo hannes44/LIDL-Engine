@@ -17,19 +17,25 @@ namespace engine
 		CUBE,
 		SPHERE,
 		CYLINDER,
-		PLANE
+		PLANE,
+		NONE
 	};
 
 	class MeshComponent : public Component
 	{
 	public:
-		MeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices);
+		MeshComponent(std::vector<Vertex> vertices = {}, std::vector<uint32_t> indices = {});
 
 		std::vector<Vertex> vertices{};
 		std::vector<uint32_t> indices{};
 
-		static std::shared_ptr<MeshComponent> loadMeshFromOBJFile(const std::string& filename);
+
+		static void loadMeshFromOBJFile(const std::string& filename, MeshComponent* mesh);
+
+		static std::shared_ptr<MeshComponent> createMeshFromObjFile(const std::string& filename);
 		
+		static void loadPrimativeMesh(PrimativeMeshType type, MeshComponent* mesh);
+
 		static std::shared_ptr<MeshComponent> createPrimative(PrimativeMeshType type);
 
 		static std::string primativeTypeToString(PrimativeMeshType type);
@@ -40,18 +46,39 @@ namespace engine
 
 		inline const static std::string componentName = "Mesh";
 
+
+		PrimativeMeshType primativeType = NONE;
+
+		std::string primativeTypeAsString = primativeTypeToString(primativeType);
+
+		Material* getMaterial();
+
+		void setMaterial(std::weak_ptr<Material> material);
+
+		virtual std::vector<SerializableVariable> getSerializableVariables() 
+		{ 
+			return 
+			{
+				{SerializableType::STRING, "OBJ File", "The file path to the obj file", &objFileName},
+				{SerializableType::STRING, "Primative Type", "The type of primative to create", &primativeTypeAsString},
+				{SerializableType::STRING, "Material", "Id of the meshes material", &getMaterial()->uuid.id}
+			}; 
+		};
+
 		// Generating the vertex array on demand
 		std::shared_ptr<VertexArray> getVertexArray();
 
-		// -Serialized properties-
-		Material material{};
-
 		std::string objFileName = "";
 
-		PrimativeMeshType primativeType;
+
 		//--------------------------------------
 
 	private:
+		// If the material is expired, use the default material
+		Material defaultMaterial{};
+
+		std::weak_ptr<Material> material;
+
 		static std::shared_ptr<MeshComponent> createCube();
 
 		void createVertexArray();

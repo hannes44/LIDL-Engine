@@ -31,15 +31,6 @@ namespace engine
 		// Currenly limit the game to only one camera
 		CameraComponent camera{};
 
-		// Texture Id to Texture
-		std::map<std::string, std::shared_ptr<Texture>> textures{};
-
-		// GameObject Id to GameObject
-		std::map<std::string, std::shared_ptr<GameObject>> gameObjects{};
-
-		// Material Id to Material
-		std::map<std::string, std::shared_ptr<Material>> materials{};
-
 		std::weak_ptr<Texture> loadTexture(const std::string& textureFileName);
 
 		std::string name = "Giga Game";
@@ -48,11 +39,27 @@ namespace engine
 
 		std::weak_ptr<GameObject> mainCamera;
 
-		void addGameObject(std::shared_ptr<GameObject> gameObject);
+		const std::map<std::string, std::shared_ptr<GameObject>> getGameObjects() const { return gameObjects; };
 
+		const std::map<std::string, std::shared_ptr<Texture>> getTextures() const { return textures; };
+
+		const std::map<std::string, std::shared_ptr<Material>> getMaterials() const { return materials; };
+
+		void addGameObject(std::shared_ptr<GameObject> gameObject);
+		std::weak_ptr<GameObject> getGameObject(const std::string& id);
 		void deleteGameObject(const std::string& id);
 
+		void addTexture(std::shared_ptr<Texture> texture);
+		std::weak_ptr<Texture> getTexture(const std::string& id);
+		void deleteTexture(const std::string& id);
+
+		void addMaterial(std::shared_ptr<Material> material);
+		std::weak_ptr<Material> getMaterial(const std::string& id);
+		void deleteMaterial(const std::string& id);
+
 		void changeMainCamera(GameObject* newCamera);
+
+		std::weak_ptr<Material> createMaterial(const std::string& name);
 
 		CameraComponent* getMainCamera();
 
@@ -64,6 +71,15 @@ namespace engine
 
 		int frameCount = 0;
 		long long lastFrameTime = 0;
+
+		// Texture Id to Texture
+		std::map<std::string, std::shared_ptr<Texture>> textures{};
+
+		// GameObject Id to GameObject
+		std::map<std::string, std::shared_ptr<GameObject>> gameObjects{};
+
+		// Material Id to Material
+		std::map<std::string, std::shared_ptr<Material>> materials{};
 	};
 
 	Game * createGame();

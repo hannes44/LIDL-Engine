@@ -37,7 +37,7 @@ namespace engine
 		texturesFolderNode->name = "Textures";
 		AssetNode::addChild(rootNode, texturesFolderNode);
 
-		for (const auto& [textureId, texture] : game->textures)
+		for (const auto& [textureId, texture] : game->getTextures())
 		{
 			std::shared_ptr<AssetNode> textureNode = std::make_shared<AssetNode>(false, texture);
 			textureNode->name = texture->getName();
@@ -47,6 +47,13 @@ namespace engine
 		std::shared_ptr<AssetNode> materialsFolderNode = std::make_shared<AssetNode>(true, std::weak_ptr<Selectable>());
 		materialsFolderNode->name = "Materials";
 		AssetNode::addChild(rootNode, materialsFolderNode);
+
+		for (const auto& [materialId, material] : game->getMaterials())
+		{
+			std::shared_ptr<AssetNode> materialNode = std::make_shared<AssetNode>(false, material);
+			materialNode->name = material->getName();
+			AssetNode::addChild(materialsFolderNode, materialNode);
+		}
 
 		
 
