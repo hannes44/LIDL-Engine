@@ -66,7 +66,7 @@ namespace engine
 
 		void drawAssetsSection();
 
-		void drawComponentSerializableVariables(std::shared_ptr<Component> component);
+		void drawSerializableVariables(Serializable* serializable);
 
 		void drawGuizmoOperationsWindow();
 

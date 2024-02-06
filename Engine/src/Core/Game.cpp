@@ -49,9 +49,51 @@ namespace engine {
 		gameObjects[gameObject->uuid.id] = std::move(gameObject);
 	}
 
+	std::weak_ptr<GameObject> Game::getGameObject(const std::string& id)
+	{
+		if (gameObjects.count(id))
+			return gameObjects[id];
+
+		return std::weak_ptr<GameObject>();
+	}
+
 	void Game::deleteGameObject(const std::string& id)
 	{
 		gameObjects.erase(id);
+	}
+
+	void Game::addTexture(std::shared_ptr<Texture> texture)
+	{
+		textures[texture->getUUID().id] = texture;
+	}
+
+	std::weak_ptr<Texture> Game::getTexture(const std::string& id)
+	{
+		if (textures.count(id))
+			return textures[id];
+		return std::weak_ptr<Texture>();
+	}
+
+	void Game::deleteTexture(const std::string& id)
+	{
+		textures.erase(id);
+	}
+
+	void Game::addMaterial(std::shared_ptr<Material> material)
+	{
+		materials[material->uuid.id] = material;
+	}
+
+	std::weak_ptr<Material> Game::getMaterial(const std::string& id)
+	{
+		if (materials.count(id))
+			return materials[id];
+		return std::weak_ptr<Material>();
+	}
+
+	void Game::deleteMaterial(const std::string& id)
+	{
+		materials.erase(id);
 	}
 
 	void Game::changeMainCamera(GameObject* newCamera)
@@ -74,6 +116,14 @@ namespace engine {
 				}
 			}
 		}
+	}
+
+	std::weak_ptr<Material> Game::createMaterial(const std::string& name)
+	{
+		std::shared_ptr<Material> material = std::make_shared<Material>();
+		material->name = name;
+		materials[material->uuid.id] = material;
+		return std::weak_ptr<Material>(material);
 	}
 
 	CameraComponent* Game::getMainCamera()

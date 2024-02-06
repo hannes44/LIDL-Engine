@@ -1,2 +1,9 @@
-useDarkMode: true
-showGizmos: true
+Use Dark Theme: true
+Show Gizmos: true
+Use Serialization: false
+Enable User Retention: false
+Enable Depth Test: true
+Enable Face Culling: true
+Draw Wireframe: false
+Use Multi Sampling: true
+Draw Bounding Boxes: false

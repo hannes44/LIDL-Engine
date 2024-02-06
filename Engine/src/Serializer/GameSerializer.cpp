@@ -7,11 +7,13 @@
 #include <memory>
 #include "Components/MeshComponent.hpp"
 #include "Components/PointLightComponent.hpp"
+#include "Components/ComponentFactory.hpp"
+#include "Serializable.hpp"
 
 namespace engine
 {
 
-
+	// Serializes the game into a folder with config and state yaml files
 	void GameSerializer::serializeGame(Game* game)
 	{
 		LOG_INFO("Serializing game: " + game->name);
@@ -34,6 +36,7 @@ namespace engine
 		outfile.close();
 	}
 	
+	// Serialized the game config to a YAML file at the given file path
 	void GameSerializer::serializeGameConfig(const std::string& filePath, const Game* game)
 	{
 		LOG_INFO("Serializing game config: " + game->name);
@@ -63,6 +66,7 @@ namespace engine
 		LOG_INFO("Serialized game config: " + game->name);
 	}
 
+	// Serializes the game state to a YAML file at the given file path
 	void GameSerializer::serializeGameState(const std::string& filePath, const Game* game)
 	{
 		LOG_INFO("Serializing game state: " + game->name);
@@ -84,12 +88,14 @@ namespace engine
 
 		LOG_INFO("Serialized game state: " + game->name);
 	}
+
+	// Serializes all game objects to the given YAML emitter, will create a sequence of game objects
 	void GameSerializer::serializeGameObjects(const Game* game, YAML::Emitter& out)
 	{
 		out << YAML::Key << "GameObjects";
 		out << YAML::Value << YAML::BeginSeq;
 
-		for (const auto& [gameObjectId, gameObject] : game->gameObjects)
+		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
 		{
 			serializeGameObject(gameObject.get(), out);
 		}
@@ -102,6 +108,8 @@ namespace engine
 			LOG_ERROR("Failed to serialize game objects");
 
 	}
+
+	// Serializes a game object to the given YAML emitter as a map
 	void GameSerializer::serializeGameObject(GameObject* gameObject, YAML::Emitter& out)
 	{
 		out << YAML::BeginMap;
@@ -127,6 +135,8 @@ namespace engine
 		else
 			LOG_ERROR("Failed to serialize game object: " + gameObject->name);
 	}
+
+	// Serializes all components to the given YAML emitter, will create a sequence of components
 	void GameSerializer::serializeComponents(std::vector<std::shared_ptr<Component>> components, YAML::Emitter& out)
 	{
 		out << YAML::Key << "Components";
@@ -140,35 +150,24 @@ namespace engine
 		out << YAML::EndSeq;
 	}
 
+	// Serializes a component to the given YAML emitter as a map
 	void GameSerializer::serializeComponent(std::shared_ptr<Component> component, YAML::Emitter& out)
 	{
+		std::shared_ptr<Serializable> serializable = std::dynamic_pointer_cast<Serializable>(component);
 		out << YAML::BeginMap;
 		out << YAML::Key << "name";
 		out << YAML::Value << component->getName();
-
-		if (auto mesh = std::dynamic_pointer_cast<MeshComponent>(component))
-		{
-			if (mesh->objFileName != "")
-			{
-				out << YAML::Key << "objFileName";
-				out << YAML::Value << mesh->objFileName;
-			}
-			else if (MeshComponent::primativeTypeToString(mesh->primativeType) != "")
-			{
-				out << YAML::Key << "primativeType";
-				out << YAML::Value << MeshComponent::primativeTypeToString(mesh->primativeType);
-			}
-		}
-
-
+		serializeSerializable(serializable.get(), out);
 		out << YAML::EndMap;
 	}
+
+	// Serializes all textures to the given YAML emitter, will create a sequence of textures
 	void GameSerializer::serializeTextures(const Game* game, YAML::Emitter& out)
 	{
 
 		out << YAML::Key << "Textures";
 		out << YAML::Value << YAML::BeginSeq;
-		for (const auto& [textureId, texture] : game->textures)
+		for (const auto& [textureId, texture] : game->getTextures())
 		{
 			serializeTexture(texture.get(), out);
 		}
@@ -179,16 +178,12 @@ namespace engine
 		else
 			LOG_ERROR("Failed to serialize textures");
 	}
+
+	// Serializes a texture to the given YAML emitter as a map
 	void GameSerializer::serializeTexture(Texture* texture, YAML::Emitter& out)
 	{
 		out << YAML::BeginMap;
-		out << YAML::Key << "name";
-		out << YAML::Value << texture->name;
-		out << YAML::Key << "fileName";
-		out << YAML::Value << texture->filename;
-		out << YAML::Key << "Id";
-		// TODO: Add proper Id when UUID is implemented
-		out << YAML::Value << texture->uuid.id;
+		serializeSerializable(texture, out);
 		out << YAML::EndMap;
 
 		if (out.good())
@@ -196,11 +191,13 @@ namespace engine
 		else
 			LOG_ERROR("Failed to serialize texture: " + texture->name);
 	}
+
+	// Serializes all materials to the given YAML emitter, will create a sequence of materials
 	void GameSerializer::serializeMaterials(const Game* game, YAML::Emitter& out)
 	{
 		out << YAML::Key << "Materials";
 		out << YAML::Value << YAML::BeginSeq;
-		for (const auto& [materialId, material] : game->materials)
+		for (const auto& [materialId, material] : game->getMaterials())
 		{
 			serializeMaterial(material.get(), out);
 		}
@@ -212,23 +209,12 @@ namespace engine
 		else
 			LOG_ERROR("Failed to serialize materials");
 	}
+
+	// Serializes a material to the given YAML emitter as a map
 	void GameSerializer::serializeMaterial(Material* material, YAML::Emitter& out)
 	{
 		out << YAML::BeginMap;
-		out << YAML::Key << "name";
-		out << YAML::Value << material->name;
-		out << YAML::Key << "transparency";
-		out << YAML::Value << material->transparency;
-		out << YAML::Key << "emission";
-		out << YAML::Value << YAML::Flow << material->emission[0];
-		out << YAML::Key << "roughness";
-		out << YAML::Value << material->roughness;
-		out << YAML::Key << "shininess";
-		out << YAML::Value << material->shininess;
-		out << YAML::Key << "Id";
-		// TODO: Add proper Id when UUID is implemented
-		out << YAML::Value << "ID TODO Add when implemented";
-
+		serializeSerializable(material, out);
 		out << YAML::EndMap;
 
 		if (out.good())
@@ -237,20 +223,106 @@ namespace engine
 			LOG_ERROR("Failed to serialize material: " + material->name);
 	}
 
-
-	std::shared_ptr<Game> GameSerializer::deserializeGame(const std::string& gameName)
+	// Serializes a serializable to the given YAML emitter as key value pairs for each serializable variable
+	void GameSerializer::serializeSerializable(Serializable* serializable, YAML::Emitter& out)
 	{
-		/*
-		 
-		
-		LOG_INFO("Deserializing game: {}", gameName);
-		std::string gameConfigFilePath = GAME_FOLDER_PATH + gameName + "/" + gameName + "Config" + GAME_CONFIG_FILE_EXTENSION;
+		for (const auto serializableVariable : serializable->getSerializableVariables())
+		{
+			out << YAML::Key << serializableVariable.name;
+			if (serializableVariable.type == SerializableType::FLOAT)
+			{
+				out << YAML::Value << *static_cast<float*>(serializableVariable.data);
+			}
+			else if (serializableVariable.type == SerializableType::VECTOR3)
+			{
+				float* vec3 = static_cast<float*>(serializableVariable.data);
+				std::vector<float> vec3Vector(vec3, vec3 + 3);
+				out << YAML::Flow << YAML::Value << vec3Vector;
+			}
+			else if (serializableVariable.type == SerializableType::VECTOR4)
+			{
+				float* vec4 = static_cast<float*>(serializableVariable.data);
+				std::vector<float> vec4Vector(vec4, vec4 + 4);
+				out << YAML::Flow << YAML::Value << vec4Vector;
+			}
+			else if (serializableVariable.type == SerializableType::BOOLEAN)
+			{
+				out << YAML::Value << *static_cast<bool*>(serializableVariable.data);
+			}
+			else if (serializableVariable.type == SerializableType::STRING)
+			{
+				out << YAML::Value << *static_cast<std::string*>(serializableVariable.data);
+			}
+			else if (serializableVariable.type == SerializableType::INT)
+			{
+				out << YAML::Value << *static_cast<int*>(serializableVariable.data);
+			}
+			else
+			{
+				LOG_ERROR("Failed to serialize serializable because of unknown serializable type");
+			}
+		}
+	}
+
+	// Deserializes the given serializable from the given YAML node
+	// The given node should be the components node of a game object
+	void GameSerializer::deserializeSerializable(YAML::Node node, Serializable* serializable)
+	{
+		// TODO: improve complexity, currently does unnecessary iterations
+		for (YAML::const_iterator it = node.begin(); it != node.end(); ++it)
+		{
+			std::string nodeName = it->first.as<std::string>();
+			for (auto serializableVariable : serializable->getSerializableVariables())
+			{
+				if (nodeName == serializableVariable.name)
+				{
+					if (serializableVariable.type == SerializableType::FLOAT)
+					{
+						*static_cast<float*>(serializableVariable.data) = it->second.as<float>();
+					}
+					else if (serializableVariable.type == SerializableType::VECTOR3)
+					{
+						std::vector<float> vec3 = it->second.as<std::vector<float>>();
+						std::copy(vec3.begin(), vec3.end(), static_cast<float*>(serializableVariable.data));
+					}
+					else if (serializableVariable.type == SerializableType::VECTOR4)
+					{
+						std::vector<float> vec4 = it->second.as<std::vector<float>>();
+						std::copy(vec4.begin(), vec4.end(), static_cast<float*>(serializableVariable.data));
+					}
+					else if (serializableVariable.type == SerializableType::BOOLEAN)
+					{
+						*static_cast<bool*>(serializableVariable.data) = it->second.as<bool>();
+					}
+					else if (serializableVariable.type == SerializableType::STRING)
+					{
+						*static_cast<std::string*>(serializableVariable.data) = it->second.as<std::string>();
+					}
+					else if (serializableVariable.type == SerializableType::INT)
+					{
+						*static_cast<int*>(serializableVariable.data) = it->second.as<int>();
+					}
+					else
+					{
+						LOG_ERROR("Failed to deserialize serializable because of unknown serializable type");
+					}
+
+				}
+			}
+		}
+	}
+
+	// Deserializes the game config, state yaml files from the folder with the given game's name
+	void GameSerializer::deserializeGame(Game* game)
+	{
+		LOG_INFO("Deserializing game: {}", game->name);
+		std::string gameConfigFilePath = GAME_FOLDER_PATH + game->name + "/" + game->name + "Config" + GAME_CONFIG_FILE_EXTENSION;
 		LOG_TRACE("Loading file: " + gameConfigFilePath);
 		YAML::Node config = YAML::LoadFile(gameConfigFilePath);
 
-		deserializeGameConfig(gameName, game.get());
+		deserializeGameConfig(game);
 
-		deserializeGameState(gameName, game.get());
+		deserializeGameState(game);
 
 		try {
 			//	settings.useDarkTheme = config["useDarkMode"].as<bool>();
@@ -263,21 +335,19 @@ namespace engine
 		}
 
 
-		LOG_INFO("Deserialized game: {}", gameName);
-		return game;
-		 */
-		return nullptr;
+		LOG_INFO("Deserialized game: {}", game->name);
 	}
 
 
-	void GameSerializer::deserializeGameConfig(const std::string& gameName, Game* game)
+	void GameSerializer::deserializeGameConfig(Game* game)
 	{
 	}
 
-	void GameSerializer::deserializeGameState(const std::string& gameName, Game* game)
+	// Deserializes the game state from the game name's folder
+	void GameSerializer::deserializeGameState(Game* game)
 	{
-		LOG_INFO("Deserializing game state: {}", gameName);
-		std::string gameStateFilePath = GAME_FOLDER_PATH + gameName + "/" + gameName + "State" + GAME_CONFIG_FILE_EXTENSION;
+		LOG_INFO("Deserializing game state: {}", game->name);
+		std::string gameStateFilePath = GAME_FOLDER_PATH + game->name + "/" + game->name + "State" + GAME_CONFIG_FILE_EXTENSION;
 		LOG_TRACE("Loading file: " + gameStateFilePath);
 		YAML::Node state = YAML::LoadFile(gameStateFilePath);
 
@@ -289,6 +359,7 @@ namespace engine
 		LOG_INFO("Deserialized game state: " + game->name);
 	}
 
+	// Deserializes all textures from the given YAML node into the game
 	void GameSerializer::deserializeTextures(YAML::Node node, Game* game)
 	{
 		YAML::Node texturesNode;
@@ -306,15 +377,12 @@ namespace engine
 		{
 			try
 			{
-
 				YAML::Node textureNode = *it;
 				std::string name = textureNode["name"].as<std::string>();
 				std::string filename = textureNode["fileName"].as<std::string>();
-
 				std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(Texture::create(filename));
 				texture->uuid.id = textureNode["Id"].as<std::string>();
-				game->textures[texture->uuid.id] = texture;
-
+				game->addTexture(texture);
 			}
 			catch (const std::exception& e)
 			{
@@ -324,10 +392,45 @@ namespace engine
 		}
 	}
 	
+	// Deserializes all materials from the given YAML node into the game
 	void GameSerializer::deserializeMaterials(YAML::Node node, Game* game)
 	{
+		YAML::Node materialNode;
+		try
+		{
+			materialNode = node["Materials"];
+		}
+		catch (const std::exception& e)
+		{
+			LOG_ERROR("Failed to deserialize textures: " + std::string(e.what()));
+			return;
+		}
+
+		for (YAML::const_iterator it = materialNode.begin(); it != materialNode.end(); ++it)
+		{
+			YAML::Node materialNode = *it;
+			Material* material = new Material();
+
+			deserializeSerializable(materialNode, material);
+
+			std::string diffuseTextureId = materialNode["Diffuse Texture"].as<std::string>();
+			std::string specularTextureId = materialNode["Specular Texture"].as<std::string>();
+
+			if (diffuseTextureId != "")
+			{
+				material->diffuseTexture = game->getTexture(diffuseTextureId);
+			}
+
+			if (specularTextureId != "")
+			{
+				material->specularTexture = game->getTexture(specularTextureId);
+			}
+
+			game->addMaterial(std::shared_ptr<Material>(material));
+		}
 	}
 	
+	// Deserializes all game objects from the given YAML node into the game
 	void GameSerializer::deserializeGameObjects(YAML::Node node, Game* game)
 	{
 		YAML::Node gameObjectsNode;
@@ -351,9 +454,9 @@ namespace engine
 				std::vector<float> transformMatrix = gameObjectNode["transform"].as<std::vector<float>>();
 				std::copy(transformMatrix.begin(), transformMatrix.end(), &gameObject->transform.transformMatrix[0][0]);
 				gameObject->isVisible = gameObjectNode["isVisible"].as<bool>();
-				game->addGameObject(gameObject);
 				gameObject->uuid.id = gameObjectNode["Id"].as<std::string>();
-				deserializeComponents(gameObjectNode, gameObject.get());
+				deserializeComponents(gameObjectNode, gameObject.get(), game);
+				game->addGameObject(gameObject);
 			}
 			catch (const std::exception& e)
 			{
@@ -364,7 +467,8 @@ namespace engine
 
 	}
 
-	void GameSerializer::deserializeComponents(YAML::Node node, GameObject* gameObject)
+	// Deserializes all components from the given YAML node into the given game object
+	void GameSerializer::deserializeComponents(YAML::Node node, GameObject* gameObject, Game* game)
 	{
 		YAML::Node componentsNode;
 		try
@@ -382,7 +486,7 @@ namespace engine
 			try
 			{
 				YAML::Node componentNode = *it;
-				deserializeComponent(componentNode, gameObject);
+				deserializeComponent(componentNode, gameObject, game);
 			}
 			catch (const std::exception& e)
 			{
@@ -391,31 +495,50 @@ namespace engine
 		}
 	}
 
-	void GameSerializer::deserializeComponent(YAML::Node node, GameObject* gameObject)
+	// Deserializes a component from the given YAML node into the given game object
+	void GameSerializer::deserializeComponent(YAML::Node node, GameObject* gameObject, Game* game)
 	{
 		try 
 		{
 			std::string componentName = node["name"].as<std::string>();
-			if (componentName == MeshComponent::componentName)
+
+			std::shared_ptr<Component> component = ComponentFactory::createComponent(componentName);
+			
+			if (component == nullptr)
 			{
-				if (node["primativeType"])
+				LOG_WARN("Failed to deserialize component: " + componentName + " because it is nullptr");
+				return;
+			}
+
+			deserializeSerializable(node, component.get());
+			
+			// Special case for mesh component
+			if (componentName == "Mesh")
+			{
+				MeshComponent* meshComponent = dynamic_cast<MeshComponent*>(component.get());
+				if (meshComponent != nullptr)
 				{
-					std::string primativeType = node["primativeType"].as<std::string>();
-					PrimativeMeshType type = MeshComponent::stringToPrimativeType(primativeType);
-					std::shared_ptr<MeshComponent> meshComponent = MeshComponent::createPrimative(type);
-					gameObject->addComponent(meshComponent);
-				}
-				else if (node["objFileName"])
-				{
-					std::string objFileName = node["objFileName"].as<std::string>();
-					std::shared_ptr<MeshComponent> meshComponent = MeshComponent::loadMeshFromOBJFile(objFileName);
-					gameObject->addComponent(meshComponent);
+					if (meshComponent->objFileName != "")
+					{
+						MeshComponent::loadMeshFromOBJFile(meshComponent->objFileName, meshComponent);
+					}
+
+					if (meshComponent->primativeTypeAsString != "" && meshComponent->primativeTypeAsString != "NONE")
+					{
+						meshComponent->primativeType = MeshComponent::stringToPrimativeType(meshComponent->primativeTypeAsString);
+						MeshComponent::loadPrimativeMesh(meshComponent->primativeType, meshComponent);
+					}
+
+					std::string materialId = node["Material"].as<std::string>();
+					if (materialId != "")
+					{
+						meshComponent->setMaterial(game->getMaterial(materialId));
+					}
 				}
 			}
-			else if (componentName == PointLightComponent::name)
-			{
-				gameObject->addComponent(std::make_shared<PointLightComponent>());
-			}
+
+			gameObject->addComponent(component);
+
 		}
 		catch (const std::exception& e)
 		{

@@ -7,7 +7,7 @@
 
 namespace engine
 {
-	class AssetManager
+	class AssetManager : public EventListener
 	{
 	public:
 		AssetManager(Game* game);
@@ -15,14 +15,19 @@ namespace engine
 		void buildAssetTree();
 
 		std::shared_ptr<AssetNode> rootNode;
-	
+
 		void changeGame(Game* game);
 
 		static std::shared_ptr<Texture> getIconTextureForNode(AssetNode* node);
+
+		void onEvent(EventType type, std::string message);
+
+		void addChild(std::shared_ptr<AssetNode> parent, std::shared_ptr<AssetNode> child);
 	private:
 		void loadIconTextures();
 
-		std::unordered_map<std::string, std::weak_ptr<AssetNode>> assetNodes;
+		// In order to be able to delete assets from their selectableId we map it to the assetNode
+		std::unordered_map<std::string, std::shared_ptr<AssetNode>> selectableIdToAssetNode{};
 
 		Game* game;
 

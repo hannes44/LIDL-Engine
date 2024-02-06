@@ -3,10 +3,12 @@
 #include <string>
 #include <memory>
 #include "Texture.hpp"
+#include "Serializer/Serializable.hpp"
+#include "Selectable.hpp"
 
 namespace engine
 {
-	class Material
+	class Material : public Selectable, public Serializable
 	{
 	public:
 		glm::vec3 baseColor{ 1,1,1 };
@@ -20,5 +22,38 @@ namespace engine
 
 		std::weak_ptr<Texture> diffuseTexture;
 		std::weak_ptr<Texture> specularTexture;
+
+		UUID uuid{};
+
+		std::string getName() override
+		{
+			return name;
+		}
+
+		UUID getUUID() override
+		{
+			return uuid;
+		}
+
+		std::vector<SerializableVariable> getSerializableVariables() override
+		{
+			std::string* diffuseId = diffuseTexture.expired() ? &dummyId : &diffuseTexture.lock()->uuid.id;
+			std::string* specularId = specularTexture.expired() ? &dummyId : &specularTexture.lock()->uuid.id;
+			return 
+			{
+				{ SerializableType::VECTOR3, "Base Color", "", &baseColor},
+				{ SerializableType::FLOAT, "Transparency", "", &transparency},
+				{ SerializableType::VECTOR3, "Emission", "", &emission},
+				{ SerializableType::FLOAT, "Roughness", "", &roughness},
+				{ SerializableType::FLOAT, "Shininess", "", &shininess},
+				{ SerializableType::STRING, "Name", "", &name},
+				{ SerializableType::STRING, "Diffuse Texture", "", diffuseId},
+				{ SerializableType::STRING, "Specular Texture", "", specularId},
+				{ SerializableType::STRING, "Id", "", &uuid}
+			};
+			 
+		};
+	private:
+		std::string dummyId = "";
 	};
 }

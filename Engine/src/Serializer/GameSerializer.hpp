@@ -16,9 +16,14 @@ namespace engine
 	public:
 		static void serializeGame(Game* game);
 
-		static std::shared_ptr<Game> deserializeGame(const std::string& gameName);
+		// Reads the game config files and alters the game object accordingly
+		static void deserializeGame(Game* game);
 
 		static void createYAMLFile(const std::string& filePath, const std::string& fileName);
+
+		static void serializeSerializable(Serializable* serializable, YAML::Emitter& out);
+
+		static void deserializeSerializable(YAML::Node node, Serializable* serializable);
 
 	private:
 		static void serializeGameConfig(const std::string& filePath, const Game* game);
@@ -36,19 +41,19 @@ namespace engine
 
 		static void serializeMaterials(const Game* game, YAML::Emitter& emitter);
 		static void serializeMaterial(Material* material, YAML::Emitter& emitter);
-		
-		static void deserializeGameConfig(const std::string& gameName, Game* game);
 
-		static void deserializeGameState(const std::string& gameName, Game* game);
+		static void deserializeGameConfig(Game* game);
+
+		static void deserializeGameState(Game* game);
 
 		static void deserializeTextures(YAML::Node node, Game* game);
 
 		static void deserializeMaterials(YAML::Node node, Game* game);
 
 		static void deserializeGameObjects(YAML::Node node, Game* game);
-		static void deserializeComponents(YAML::Node node, GameObject* gameObject);
+		static void deserializeComponents(YAML::Node node, GameObject* gameObject, Game* game);
 
-		static void deserializeComponent(YAML::Node node, GameObject* gameObject);
+		static void deserializeComponent(YAML::Node node, GameObject* gameObject, Game* game);
 
 	};
 }

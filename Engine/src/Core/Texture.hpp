@@ -5,10 +5,11 @@
 #include <GL/glew.h>
 #include "Selectable.hpp"
 #include "Uuid.hpp"
+#include "Serializer/Serializable.hpp"
 
 namespace engine
 {
-	class Texture : public Selectable
+	class Texture : public Selectable, public Serializable
 	{
 	public:
 		virtual void bind() const = 0;
@@ -29,5 +30,16 @@ namespace engine
 		UUID uuid{};
 
 		UUID getUUID() override { return uuid; };
+
+		std::vector<SerializableVariable> getSerializableVariables() override
+		{
+			return
+			{
+				{SerializableType::STRING, "name", "", &name},
+				{SerializableType::STRING, "fileName", "", &filename},
+				{SerializableType::STRING, "Id", "", &uuid}
+			};
+
+		};
 	};
 }

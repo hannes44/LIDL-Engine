@@ -12,28 +12,6 @@
 
 namespace engine {
 
-    enum CollisionType {
-        FULLY_ELASTIC,
-        FULLY_INELASTIC
-    };
-
-    class GamePhysicsSettings : public Serializable {
-    public:
-        bool useGravity = true;
-        float gravity = 9.82f;
-        int fixedUpdateIntervalMS = 10;
-        CollisionType collisionType = FULLY_ELASTIC;
-
-        std::vector<SerializableVariable> getSerializableVariables() override {
-            return {
-                {SerializableType::BOOLEAN, "Use Gravity", "Should gravity be used in the game", &useGravity},
-                {SerializableType::FLOAT, "Gravity", "The gravitational acceleration (g) to use", &gravity},
-                {SerializableType::INTEGER, "Fixed Update Interval", "The interval in milliseconds to perform the fixed update", &fixedUpdateIntervalMS},
-                {SerializableType::ENUM, "Collision Type", "The type of collision to perform", &collisionType}
-            };
-        }
-    };
-
 	GamePhysics& GamePhysics::getInstance()
 	{
 		if (instance == nullptr)
@@ -42,11 +20,7 @@ namespace engine {
 		return *instance;
 	}
 
-	float GamePhysics::getFixedUpdateScale() {
-		return settings.fixedUpdateIntervalMS / 1000.0f;
-	}
-
-	void GamePhysics::fixedUpdate(std::map<std::string, std::shared_ptr<GameObject>> gameObjects) {
+	void GamePhysics::fixedUpdate(std::map<std::string, std::shared_ptr<GameObject>> gameObjects, GamePhysicsSettings& settings) {
 		for (auto const& [name, gameObject] : gameObjects) {
 			std::shared_ptr<PhysicsComponent> physicsComponent = gameObject->getComponent<PhysicsComponent>();
 			if (!physicsComponent) {
@@ -71,10 +45,10 @@ namespace engine {
 			if (zeroResultantForce && glm::length(physicsComponent->getVelocity()) < 0.1f)
 				physicsComponent->setVelocity(glm::vec3(0));
 			else
-				physicsComponent->applyVelocity(physicsComponent->currentAcceleration * getFixedUpdateScale());
+				physicsComponent->applyVelocity(physicsComponent->currentAcceleration * settings.getFixedUpdateScale());
 
 			// Move the object, scaled to account for the fixed update
-			gameObject->transform.shiftPosition(physicsComponent->getVelocity() * getFixedUpdateScale());
+			gameObject->transform.shiftPosition(physicsComponent->getVelocity() * settings.getFixedUpdateScale());
 		}
 	}
 
@@ -99,7 +73,7 @@ namespace engine {
         return std::make_pair(v, v);
     }
 
-	void GamePhysics::checkCollisions(std::map<std::string, std::shared_ptr<GameObject>> gameObjects) {
+	void GamePhysics::checkCollisions(std::map<std::string, std::shared_ptr<GameObject>> gameObjects, GamePhysicsSettings& settings) {
 		std::vector<std::pair<std::string, std::string>> detectedCollisions{};
 
 		// TODO: Change this loop to only check the combinations of GameObjects, so we can simplify some checks and avoid unnecessary iterations
@@ -146,7 +120,18 @@ namespace engine {
                         pc2->setVelocity(-pc2->currentVelocity);
                     else {
                         std::pair<glm::vec3,glm::vec3> finalVelocities;
-                        switch(settings.collisionType) {
+                        
+                        /* --- Temporary conversion until enums are serializable --- */
+                        CollisionType collisionType;
+                        if (settings.collisionType == "FULLY_ELASTIC")
+                            collisionType = CollisionType::FULLY_ELASTIC;
+                        else if (settings.collisionType == "FULLY_INELASTIC")
+                            collisionType = CollisionType::FULLY_INELASTIC;
+                        else
+                            LOG_FATAL("Invalid collision type");
+                        /* --- */
+                        
+                        switch(collisionType) {
                             case FULLY_ELASTIC:
                                 finalVelocities = resolveCollisionFullyElastic(pc1, pc2);
                                 break;
@@ -168,12 +153,12 @@ namespace engine {
 	}
 
 	void GamePhysics::run(Game* game) {
-		if (Utils::getTimestampNS() - lastPhysicsUpdateTimestamp < PHYSICS_TIME_CONVERSION_FACTOR * settings.fixedUpdateIntervalMS) {
+		if (Utils::getTimestampNS() - lastPhysicsUpdateTimestamp < PHYSICS_TIME_CONVERSION_FACTOR * game->config.physicsSettings.fixedUpdateIntervalMS) {
 			return;
 		}
 
 		lastPhysicsUpdateTimestamp = Utils::getTimestampNS();
-		fixedUpdate(game->gameObjects);
-		checkCollisions(game->gameObjects);
+		fixedUpdate(game->getGameObjects(), game->config.physicsSettings);
+		checkCollisions(game->getGameObjects(), game->config.physicsSettings);
 	}
 }

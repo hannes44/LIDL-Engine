@@ -7,6 +7,7 @@
 #include "Serializer/EditorSerializer.hpp"
 #include "Serializer/GameSerializer.hpp"
 #include <Physics/GamePhysics.hpp>
+#include "Components/ComponentFactory.hpp"
 #include <memory>
 #include <imgui_internal.h>
 
@@ -25,14 +26,22 @@ bool isAddComponentVisible = false;
 
 	void EditorGUI::start()
 	{
-		game->initialize(); // Temporary for testing, should not be called when serialization works
-		game->camera.translate(0, 0, 5);
+		editorSettings = EditorSerializer::deSerializeEditorSettings();
 
+		// We have to save the initial serialization state to avoid serializing the initiated game if the user changes settings
+		bool initialUseSerialization = editorSettings.useSerialization;
+		if (initialUseSerialization)
+		{
+			GameSerializer::deserializeGame(game.get());
+		}
+		else
+		{
+			game->initialize();
+		}
 
 		AudioManager::getInstance().initialize();
 
 		editorCamera.translate(0, 0, 15);
-		editorCamera.rotate(10, 0, 1, 0);
 
 		Renderer* renderer = Renderer::getInstance();
 
@@ -51,7 +60,6 @@ bool isAddComponentVisible = false;
    
 		selectedAssetNodeFolder = assetManager->rootNode;
 
-		editorSettings = EditorSerializer::deSerializeEditorSettings();
 
 		rotateIconTexture = std::shared_ptr<Texture>(Texture::create("rotation_icon.png"));
 
@@ -76,14 +84,13 @@ bool isAddComponentVisible = false;
 				game->update();
 			}
 
-			// GamePhysics::getInstance().run(game.get());
-			// game->run();
-			// Renderer::renderGame(game, getActiveCamera(), &editorSettings.rendererSettings);
-
 			endFrame();
 			window.newFrame();
 		}
 
+		if (initialUseSerialization)
+			GameSerializer::serializeGame(game.get());
+		
 		EditorSerializer::serializeEditorSettings(editorSettings);
 	}
 
@@ -133,7 +140,21 @@ bool isAddComponentVisible = false;
 				{
 					if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
 					{
+						std::string gameObjectId = lockedGameObject->getUUID().id;
 						game->deleteGameObject(lockedGameObject->getUUID().id);
+						EventManager::getInstance().notify(EventType::SelectableDeleted, gameObjectId);
+					}
+					else if (auto lockedMaterial = dynamic_pointer_cast<Material>(lockedSelectedObject))
+					{
+						std::string materialId = lockedMaterial->getUUID().id;
+						game->deleteMaterial(lockedMaterial->getUUID().id);
+						EventManager::getInstance().notify(EventType::SelectableDeleted, materialId);
+					}
+					else if (auto lockedTexture = dynamic_pointer_cast<Texture>(lockedSelectedObject))
+					{
+						std::string textureId = lockedTexture->getUUID().id;
+						game->deleteTexture(lockedTexture->getUUID().id);
+						EventManager::getInstance().notify(EventType::SelectableDeleted, textureId);
 					}
 				}
 			}
@@ -219,6 +240,10 @@ bool isAddComponentVisible = false;
 				{
 					drawInspectorSelectedGameObject();
 				}
+				else if (dynamic_pointer_cast<Serializable>(lockedSelectedObject))
+				{
+					drawSerializableVariables(dynamic_pointer_cast<Serializable>(lockedSelectedObject).get());
+				}
 
 			}
 			else
@@ -253,7 +278,7 @@ bool isAddComponentVisible = false;
 			{
 				ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 0, 0));
 				ImGui::BeginListBox("##2", ImVec2(500, 500));
-				for (const auto& [gameObjectId, gameObject] : game->gameObjects)
+				for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
 				{
 					ImGui::PushID(gameObjectId.c_str());
 					if (ImGui::Selectable(gameObject->name.c_str(), selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID())))
@@ -343,15 +368,45 @@ bool isAddComponentVisible = false;
 			{
 				if (ImGui::MenuItem("Cube"))
 				{
+					std::shared_ptr<GameObject> cube = std::make_shared<GameObject>();
+					cube->name = "Cube";
+					cube->addComponent(MeshComponent::createPrimative(PrimativeMeshType::CUBE));
+					game->addGameObject(cube);
+					selectedObject = cube;
 				}
 				if (ImGui::MenuItem("Sphere"))
 				{
+					std::shared_ptr<GameObject> sphere = std::make_shared<GameObject>();
+					sphere->name = "Sphere";
+					sphere->addComponent(MeshComponent::createPrimative(PrimativeMeshType::SPHERE));
+					game->addGameObject(sphere);
+					selectedObject = sphere;
 				}
 				if (ImGui::MenuItem("Plane"))
 				{
+					std::shared_ptr<GameObject> plane = std::make_shared<GameObject>();
+					plane->name = "Plane";
+					plane->addComponent(MeshComponent::createPrimative(PrimativeMeshType::PLANE));
+					game->addGameObject(plane);
+					selectedObject = plane;
 				}
 				ImGui::EndMenu();
 			}
+			if (ImGui::MenuItem("Add obj file mesh"))
+			{
+				char fileFilter[64] = "obj files: .obj\0*.obj*\0\0";
+				std::string filename = EditorSerializer::addFileFromWindowsExplorerToProject(project.get(), fileFilter);
+				if (filename != "")
+				{		
+					std::shared_ptr<GameObject> obj = std::make_shared<GameObject>();
+					obj->name = filename;
+					obj->addComponent(MeshComponent::createMeshFromObjFile(filename));
+					game->addGameObject(obj);
+					selectedObject = obj;
+					
+				}
+			}
+
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("View"))
@@ -536,7 +591,7 @@ bool isAddComponentVisible = false;
 				{
 					if (ImGui::CollapsingHeader(component->getName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 					{
-						drawComponentSerializableVariables(component);
+						drawSerializableVariables(component.get());
 					}
 				}
 
@@ -568,7 +623,8 @@ bool isAddComponentVisible = false;
 			ImGui::Text("Add Component");
 			ImGui::Separator();
 
-			const char* lines[] = { "Box Collider", "Camera", "Collider", "Mesh", "Physics", "Point Light", "Sphere Collider" };
+			const char* lines[] = { "Box Collider", "Camera", "Mesh", "Physics", "PointLight", "Sphere Collider" };
+			
 			static int item_current_idx = 0;
 
 			if (ImGui::BeginListBox("##"))
@@ -583,6 +639,16 @@ bool isAddComponentVisible = false;
 							item_current_idx = n;
 							Debug::Log(lines[item_current_idx]);
 							isAddComponentVisible = !isAddComponentVisible;
+
+							if (auto lockedSelectedObject = selectedObject.lock())
+							{
+								if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
+								{
+									std::string componentName = lines[item_current_idx];
+									lockedGameObject->addComponent(ComponentFactory::createComponent(componentName));
+								}
+							}
+
 						}
 					}
 					if (is_selected)
@@ -604,19 +670,16 @@ bool isAddComponentVisible = false;
 		if (ImGui::CollapsingHeader("Editor Settings", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			ImGui::Text("RENDERING SETTINGS");
-			defaultCheckBox("Multisampling", &editorSettings.rendererSettings.useMultiSampling);
-			defaultCheckBox("Show Triangle outlines", &editorSettings.rendererSettings.drawWireframe);
-			defaultCheckBox("Depth Test", &editorSettings.rendererSettings.enableDepthTest);
-			defaultCheckBox("Face Culling", &editorSettings.rendererSettings.enableFaceCulling);
+
+			drawSerializableVariables(&editorSettings.rendererSettings);
 
 			ImGui::Text("EDITOR SETTINGS");
-			defaultCheckBox("Show Gizmos", &editorSettings.showGizmos);
 
-			bool savedUseDarkTheme = editorSettings.useDarkTheme;
-			if (defaultCheckBox("Use Dark Mode", &editorSettings.useDarkTheme))
+			drawSerializableVariables(&editorSettings);
+
+			if (editorSettings.useDarkTheme)
 			{
-				if (savedUseDarkTheme != editorSettings.useDarkTheme)
-					ImGui::StyleColorsDark();
+				ImGui::StyleColorsDark();
 			}
 			else if (!editorSettings.useDarkTheme)
 			{
@@ -634,6 +697,9 @@ bool isAddComponentVisible = false;
 		if (ImGui::CollapsingHeader("Game Settings", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			ImGui::Text(("Game Name: " + game->name).c_str());
+			
+			ImGui::Text("Physics Settings");
+			drawSerializableVariables(&game->config.physicsSettings);
 		}
 		ImGui::Separator();
 
@@ -723,13 +789,19 @@ bool isAddComponentVisible = false;
 		}
 	}
 
-	void EditorGUI::drawComponentSerializableVariables(std::shared_ptr<Component> component)
+	void EditorGUI::drawSerializableVariables(Serializable* serializable)
 	{
-		for (auto seralizableVariable : component->getSerializableVariables())
+		for (auto seralizableVariable : serializable->getSerializableVariables())
 		{
+			if (!seralizableVariable.showInEditor)
+				continue;
+
 			if (seralizableVariable.type == SerializableType::STRING)
 			{
-				ImGui::InputText(seralizableVariable.name.c_str(), (char*)seralizableVariable.data, 255);
+				std::string data = *static_cast<std::string*>(seralizableVariable.data);
+				ImGui::Text((seralizableVariable.name + ":").c_str());
+				ImGui::SameLine();
+				ImGui::Text(data.c_str());
 			}
 			else if (seralizableVariable.type == SerializableType::INT)
 			{
@@ -856,6 +928,8 @@ bool isAddComponentVisible = false;
 			{
 				if (assetNode->isFolder)
 					selectedAssetNodeFolder = assetNode;
+				else
+					selectedObject = assetNode->asset;
 			}
 
 

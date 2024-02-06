@@ -12,11 +12,6 @@ namespace engine
 
 	MeshComponent::MeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices)
 	{
-		if (vertices.size() < 3)
-			LOG_WARN("MeshComponent: vertices size is less than 3");
-
-		if (indices.size() < 3)
-			LOG_WARN("MeshComponent: indices size is less than 3");
 
 		this->vertices = vertices;
 		this->indices = indices;
@@ -31,7 +26,34 @@ namespace engine
 		LOG_INFO("MeshComponent: Created mesh with {0} vertices and {1} indices", vertices.size(), indices.size());
 	}
 
-	std::shared_ptr<MeshComponent> MeshComponent::loadMeshFromOBJFile(const std::string& filename)
+	std::shared_ptr<MeshComponent> MeshComponent::createMeshFromObjFile(const std::string& filename)
+	{
+		LOG_INFO("Creating mesh from file: {0}", filename);
+
+		std::shared_ptr<MeshComponent> mesh = std::make_shared<MeshComponent>();
+		loadMeshFromOBJFile(filename, mesh.get());
+
+		return mesh;
+	}
+
+	Material* MeshComponent::getMaterial()
+	{
+		if (auto lockedMaterial = material.lock())
+		{
+			return lockedMaterial.get();
+		}
+		else
+		{
+			return &defaultMaterial;
+		}
+	}
+
+	void MeshComponent::setMaterial(std::weak_ptr<Material> material)
+	{
+		this->material = material;
+	}
+
+	void MeshComponent::loadMeshFromOBJFile(const std::string& filename, MeshComponent* mesh)
 	{
 		LOG_INFO("Loading mesh from file: {0}", filename);
 
@@ -83,12 +105,12 @@ namespace engine
 				indices.push_back(vertices.size() - 1);
 			}
 		}
-		MeshComponent mesh = MeshComponent(vertices, indices);
-		mesh.objFileName = filename;
 
-		LOG_INFO("Created mesh from file: {0}", filename);
+		mesh->vertices = vertices;
+		mesh->indices = indices;
+		mesh->objFileName = filename;
 
-		return std::make_shared<MeshComponent>(mesh);
+		LOG_INFO("Loaded mesh from file: {0}", filename);
 	}
 
 	std::shared_ptr<MeshComponent> MeshComponent::createPrimative(PrimativeMeshType type)
@@ -100,19 +122,52 @@ namespace engine
 		switch (type)
 		{
 		case PrimativeMeshType::PLANE:
-			break;
+			return createPlane();
 		case PrimativeMeshType::CUBE:
 			return createCube();
 		case PrimativeMeshType::CYLINDER:
 			break;
 		case PrimativeMeshType::SPHERE:
-			break;
+			return createSphere();
 		default:
-			LOG_ERROR("PrimativeMeshType: {0} is not a valid primative mesh type", type);
+			LOG_ERROR("createPrimative: {0} is not a valid primative mesh type", type);
 
 			return nullptr;
 		}
 	}
+
+	void MeshComponent::loadPrimativeMesh(PrimativeMeshType type, MeshComponent* mesh)
+	{
+		std::shared_ptr<MeshComponent> primative;
+		std::vector<Vertex> vertices{};
+		std::vector<uint32_t> indices{};
+
+		// TODO: Implement primative mesh creation
+		switch (type)
+		{
+		case PrimativeMeshType::PLANE:
+			primative = createPlane();
+			break;
+		case PrimativeMeshType::CUBE:
+			primative = createCube();
+			break;
+		case PrimativeMeshType::CYLINDER:
+			break;
+		case PrimativeMeshType::SPHERE:
+			primative = createSphere();
+			break;
+		default:
+			LOG_ERROR("loadPrimativeMesh: {0} is not a valid primative mesh type", type);
+
+		}
+			if (primative == nullptr)
+			{
+				return;
+			}
+		mesh->vertices = primative->vertices;
+		mesh->indices = primative->indices;
+	}
+
 	std::string MeshComponent::primativeTypeToString(PrimativeMeshType type)
 	{
 		switch (type)
@@ -125,8 +180,10 @@ namespace engine
 			return "CYLINDER";
 		case PrimativeMeshType::SPHERE:
 			return "SPHERE";
+		case PrimativeMeshType::NONE:
+			return "NONE";
 		default:
-			LOG_ERROR("PrimativeMeshType: {0} is not a valid primative mesh type", type);
+			LOG_ERROR("primativeTypeToString: {0} is not a valid primative mesh type", type);
 			return "";
 		}
 	}
@@ -142,10 +199,11 @@ namespace engine
 			return PrimativeMeshType::SPHERE;
 		else
 		{
-			LOG_ERROR("PrimativeMeshType: {0} is not a valid primative mesh type", type);
+			LOG_ERROR("stringToPrimativeType: {0} is not a valid primative mesh type", type);
 			return PrimativeMeshType::CUBE;
 		}
 	}
+
 	std::shared_ptr<VertexArray> MeshComponent::getVertexArray()
 	{
 		if (vertexArray == nullptr)
@@ -220,7 +278,88 @@ namespace engine
 
 		MeshComponent cube = MeshComponent(vertices, indices);
 		cube.primativeType = PrimativeMeshType::CUBE;
+		cube.primativeTypeAsString = primativeTypeToString(PrimativeMeshType::CUBE);
 		return std::make_shared<MeshComponent>(cube);
+	}
+	std::shared_ptr<MeshComponent> MeshComponent::createSphere(int stacks, int slices)
+	{
+		std::vector<Vertex> vertices{};
+		std::vector<uint32_t> indices{};
+
+		float radius = 1.0f;
+		float sectorStep = 2 * 3.1415 / slices;
+		float stackStep = 3.1415 / stacks;
+		float sectorAngle, stackAngle;
+
+		for (int i = 0; i <= stacks; ++i)
+		{
+			stackAngle = 3.1415 / 2 - i * stackStep;
+			float xy = radius * cosf(stackAngle);
+			float z = radius * sinf(stackAngle);
+
+			for (int j = 0; j <= slices; ++j)
+			{
+				sectorAngle = j * sectorStep;
+
+				float x = xy * cosf(sectorAngle);
+				float y = xy * sinf(sectorAngle);
+
+				glm::vec3 normal = glm::normalize(glm::vec3(x, y, z));
+				glm::vec2 uv = glm::vec2((float)j / slices, (float)i / stacks);
+
+				vertices.push_back({ glm::vec3(x, y, z), glm::vec3(1, 0, 0), normal, uv });
+			}
+		}
+
+		int k1, k2;
+
+		for (int i = 0; i < stacks; ++i)
+		{
+			k1 = i * (slices + 1);
+			k2 = k1 + slices + 1;
+
+			for (int j = 0; j < slices; ++j, ++k1, ++k2)
+			{
+				if (i != 0)
+				{
+					indices.push_back(k1);
+					indices.push_back(k2);
+					indices.push_back(k1 + 1);
+				}
+
+				if (i != (stacks - 1))
+				{
+					indices.push_back(k1 + 1);
+					indices.push_back(k2);
+					indices.push_back(k2 + 1);
+				}
+			}
+		}
+
+		std::shared_ptr<MeshComponent> mesh = std::make_shared<MeshComponent>(vertices, indices);
+		mesh->primativeType = PrimativeMeshType::SPHERE;
+		mesh->primativeTypeAsString = primativeTypeToString(PrimativeMeshType::SPHERE);
+		return mesh;
+	}
+	std::shared_ptr<MeshComponent> MeshComponent::createPlane()
+	{
+		std::vector<Vertex> vertices{};
+		std::vector<uint32_t> indices{};
+
+		vertices.push_back({ glm::vec3(-5.f, 0.0f, -5.f), glm::vec3(1, 0, 0), glm::vec3(0, 1, 0), glm::vec2(0, 0) });
+		vertices.push_back({ glm::vec3(5.f, 0.0f, -5.f), glm::vec3(0, 1, 0), glm::vec3(0, 1, 0), glm::vec2(1, 0) });
+		vertices.push_back({ glm::vec3(5.f, 0.0f, 5.f), glm::vec3(0, 0, 1), glm::vec3(0, 1, 0), glm::vec2(1, 1) });
+		vertices.push_back({ glm::vec3(-5.f, 0.0f, 5.f), glm::vec3(1, 1, 0), glm::vec3(0, 1, 0), glm::vec2(0, 1) });
+
+		indices.push_back(0); indices.push_back(1); indices.push_back(2);
+		indices.push_back(2); indices.push_back(3); indices.push_back(0);
+		indices.push_back(2); indices.push_back(1); indices.push_back(0);
+		indices.push_back(0); indices.push_back(3); indices.push_back(2);
+
+		std::shared_ptr<MeshComponent> mesh = std::make_shared<MeshComponent>(vertices, indices);
+		mesh->primativeType = PrimativeMeshType::PLANE;
+		mesh->primativeTypeAsString = primativeTypeToString(PrimativeMeshType::PLANE);
+		return mesh;
 	}
 	void MeshComponent::createVertexArray()
 	{
