@@ -27,7 +27,9 @@ bool isAddComponentVisible = false;
 	{
 		editorSettings = EditorSerializer::deSerializeEditorSettings();
 
-		if (editorSettings.useSerialization)
+		// We have to save the initial serialization state to avoid serializing the initiated game if the user changes settings
+		bool initialUseSerialization = editorSettings.useSerialization;
+		if (initialUseSerialization)
 		{
 			GameSerializer::deserializeGame(game.get());
 		}
@@ -85,7 +87,7 @@ bool isAddComponentVisible = false;
 			window.newFrame();
 		}
 
-		if (editorSettings.useSerialization)
+		if (initialUseSerialization)
 			GameSerializer::serializeGame(game.get());
 		
 		EditorSerializer::serializeEditorSettings(editorSettings);
@@ -549,7 +551,7 @@ bool isAddComponentVisible = false;
 				{
 					if (ImGui::CollapsingHeader(component->getName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 					{
-						drawComponentSerializableVariables(component);
+						drawSerializableVariables(component.get());
 					}
 				}
 
@@ -617,19 +619,16 @@ bool isAddComponentVisible = false;
 		if (ImGui::CollapsingHeader("Editor Settings", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			ImGui::Text("RENDERING SETTINGS");
-			defaultCheckBox("Multisampling", &editorSettings.rendererSettings.useMultiSampling);
-			defaultCheckBox("Show Triangle outlines", &editorSettings.rendererSettings.drawWireframe);
-			defaultCheckBox("Depth Test", &editorSettings.rendererSettings.enableDepthTest);
-			defaultCheckBox("Face Culling", &editorSettings.rendererSettings.enableFaceCulling);
+
+			drawSerializableVariables(&editorSettings.rendererSettings);
 
 			ImGui::Text("EDITOR SETTINGS");
-			defaultCheckBox("Show Gizmos", &editorSettings.showGizmos);
 
-			bool savedUseDarkTheme = editorSettings.useDarkTheme;
-			if (defaultCheckBox("Use Dark Mode", &editorSettings.useDarkTheme))
+			drawSerializableVariables(&editorSettings);
+
+			if (editorSettings.useDarkTheme)
 			{
-				if (savedUseDarkTheme != editorSettings.useDarkTheme)
-					ImGui::StyleColorsDark();
+				ImGui::StyleColorsDark();
 			}
 			else if (!editorSettings.useDarkTheme)
 			{
@@ -736,9 +735,9 @@ bool isAddComponentVisible = false;
 		}
 	}
 
-	void EditorGUI::drawComponentSerializableVariables(std::shared_ptr<Component> component)
+	void EditorGUI::drawSerializableVariables(Serializable* serializable)
 	{
-		for (auto seralizableVariable : component->getSerializableVariables())
+		for (auto seralizableVariable : serializable->getSerializableVariables())
 		{
 			if (!seralizableVariable.showInEditor)
 				continue;

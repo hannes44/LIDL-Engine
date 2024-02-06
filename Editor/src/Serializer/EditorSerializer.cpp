@@ -41,6 +41,8 @@ namespace engine
 
 		GameSerializer::serializeSerializable(&settings, out);
 
+		GameSerializer::serializeSerializable(&settings.rendererSettings, out);
+
 		out << YAML::EndMap;
 
 		std::string fileName = EDITOR_CONFIG_FILE_NAME;
@@ -61,6 +63,8 @@ namespace engine
 		EditorSettings settings{};
 
 		GameSerializer::deserializeSerializable(config, &settings);
+
+		GameSerializer::deserializeSerializable(config, &settings.rendererSettings);
 		
 		LOG_INFO("Deserialized editor settings: ");
 		return settings;
