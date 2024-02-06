@@ -36,8 +36,8 @@ namespace engine
 			return
 			{
 				{SerializableType::STRING, "name", "", &name},
-				{SerializableType::STRING, "filename", "", &filename},
-				{SerializableType::STRING, "id", "", &uuid}
+				{SerializableType::STRING, "fileName", "", &filename},
+				{SerializableType::STRING, "Id", "", &uuid}
 			};
 
 		};

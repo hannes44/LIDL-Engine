@@ -4,10 +4,11 @@
 #include <memory>
 #include "Texture.hpp"
 #include "Serializer/Serializable.hpp"
+#include "Selectable.hpp"
 
 namespace engine
 {
-	class Material : public Serializable
+	class Material : public Selectable, public Serializable
 	{
 	public:
 		glm::vec3 baseColor{ 1,1,1 };
@@ -25,6 +26,16 @@ namespace engine
 		UUID uuid{};
 
 		std::string dummyId = "";
+
+		std::string getName() override
+		{
+			return name;
+		}
+
+		UUID getUUID() override
+		{
+			return uuid;
+		}
 
 		std::vector<SerializableVariable> getSerializableVariables() override
 		{

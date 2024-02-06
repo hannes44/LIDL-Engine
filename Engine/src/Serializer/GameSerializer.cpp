@@ -247,6 +247,52 @@ namespace engine
 		}
 	}
 
+	void GameSerializer::deserializeSerializable(YAML::Node node, Serializable* serializable)
+	{
+		// TODO: improve complexity, currently does unnecessary iterations
+		for (YAML::const_iterator it = node.begin(); it != node.end(); ++it)
+		{
+			std::string nodeName = it->first.as<std::string>();
+			for (auto serializableVariable : serializable->getSerializableVariables())
+			{
+				if (nodeName == serializableVariable.name)
+				{
+					if (serializableVariable.type == SerializableType::FLOAT)
+					{
+						*static_cast<float*>(serializableVariable.data) = it->second.as<float>();
+					}
+					else if (serializableVariable.type == SerializableType::VECTOR3)
+					{
+						std::vector<float> vec3 = it->second.as<std::vector<float>>();
+						std::copy(vec3.begin(), vec3.end(), static_cast<float*>(serializableVariable.data));
+					}
+					else if (serializableVariable.type == SerializableType::VECTOR4)
+					{
+						std::vector<float> vec4 = it->second.as<std::vector<float>>();
+						std::copy(vec4.begin(), vec4.end(), static_cast<float*>(serializableVariable.data));
+					}
+					else if (serializableVariable.type == SerializableType::BOOLEAN)
+					{
+						*static_cast<bool*>(serializableVariable.data) = it->second.as<bool>();
+					}
+					else if (serializableVariable.type == SerializableType::STRING)
+					{
+						*static_cast<std::string*>(serializableVariable.data) = it->second.as<std::string>();
+					}
+					else if (serializableVariable.type == SerializableType::INT)
+					{
+						*static_cast<int*>(serializableVariable.data) = it->second.as<int>();
+					}
+					else
+					{
+						LOG_ERROR("Failed to deserialize serializable because of unknown serializable type");
+					}
+
+				}
+			}
+		}
+	}
+
 
 	void GameSerializer::deserializeGame(Game* game)
 	{
@@ -311,15 +357,12 @@ namespace engine
 		{
 			try
 			{
-
 				YAML::Node textureNode = *it;
 				std::string name = textureNode["name"].as<std::string>();
 				std::string filename = textureNode["fileName"].as<std::string>();
-
 				std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(Texture::create(filename));
 				texture->uuid.id = textureNode["Id"].as<std::string>();
 				game->textures[texture->uuid.id] = texture;
-
 			}
 			catch (const std::exception& e)
 			{
@@ -331,7 +374,6 @@ namespace engine
 	
 	void GameSerializer::deserializeMaterials(YAML::Node node, Game* game)
 	{
-		return;
 		YAML::Node materialNode;
 		try
 		{
@@ -345,22 +387,25 @@ namespace engine
 
 		for (YAML::const_iterator it = materialNode.begin(); it != materialNode.end(); ++it)
 		{
-			try
-			{
-		//		YAML::Node textureNode = *it;
-		//		std::string name = textureNode["name"].as<std::string>();
-		//		std::string filename = textureNode["fileName"].as<std::string>();
+			YAML::Node materialNode = *it;
+			Material* material = new Material();
 
-//				std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(Texture::create(filename));
-//				texture->uuid.id = textureNode["Id"].as<std::string>();
-//				game->textures[texture->uuid.id] = texture;
+			deserializeSerializable(materialNode, material);
 
-			}
-			catch (const std::exception& e)
+			std::string difuseTextureId = materialNode["Diffuse Texture"].as<std::string>();
+			std::string specularTextureId = materialNode["Specular Texture"].as<std::string>();
+
+			if (difuseTextureId != "")
 			{
-				LOG_WARN("Failed to deserialize texture: " + std::string(e.what()));
+				material->diffuseTexture = game->textures[difuseTextureId];
 			}
 
+			if (specularTextureId != "")
+			{
+				material->specularTexture = game->textures[specularTextureId];
+			}
+
+			game->materials[material->uuid.id] = std::shared_ptr<Material>(material);
 		}
 	}
 	
@@ -441,48 +486,8 @@ namespace engine
 				return;
 			}
 
-			for (YAML::const_iterator it = node.begin(); it != node.end(); ++it)
-			{
-				std::string nodeName = it->first.as<std::string>();
-				for (auto serializableVariable : component->getSerializableVariables())
-				{
-					if (nodeName == serializableVariable.name)
-					{
-						if (serializableVariable.type == SerializableType::FLOAT)
-						{
-							*static_cast<float*>(serializableVariable.data) = it->second.as<float>();
-						}
-						else if (serializableVariable.type == SerializableType::VECTOR3)
-						{
-							std::vector<float> vec3 = it->second.as<std::vector<float>>();
-							std::copy(vec3.begin(), vec3.end(), static_cast<float*>(serializableVariable.data));
-						}
-						else if (serializableVariable.type == SerializableType::VECTOR4)
-						{
-							std::vector<float> vec4 = it->second.as<std::vector<float>>();
-							std::copy(vec4.begin(), vec4.end(), static_cast<float*>(serializableVariable.data));
-						}
-						else if (serializableVariable.type == SerializableType::BOOLEAN)
-						{
-							*static_cast<bool*>(serializableVariable.data) = it->second.as<bool>();
-						}
-						else if (serializableVariable.type == SerializableType::STRING)
-						{
-							*static_cast<std::string*>(serializableVariable.data) = it->second.as<std::string>();
-						}
-						else if (serializableVariable.type == SerializableType::INT)
-						{
-							*static_cast<int*>(serializableVariable.data) = it->second.as<int>();
-						}
-						else
-						{
-							LOG_ERROR("Failed to deserialize component: " + componentName + " because of unknown serializable type");
-						}
-					}
-
-				}
-			}
-
+			deserializeSerializable(node, component);
+			
 			// Special case for mesh component
 			if (componentName == "Mesh")
 			{

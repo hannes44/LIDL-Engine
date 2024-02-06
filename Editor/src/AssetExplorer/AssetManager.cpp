@@ -48,6 +48,13 @@ namespace engine
 		materialsFolderNode->name = "Materials";
 		AssetNode::addChild(rootNode, materialsFolderNode);
 
+		for (const auto& [materialId, material] : game->materials)
+		{
+			std::shared_ptr<AssetNode> materialNode = std::make_shared<AssetNode>(false, material);
+			materialNode->name = material->getName();
+			AssetNode::addChild(materialsFolderNode, materialNode);
+		}
+
 		
 
 	}

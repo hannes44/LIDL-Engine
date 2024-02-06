@@ -19,11 +19,11 @@ namespace engine
 
 	void EditorGUI::start()
 	{
-		game->initialize(); // Temporary for testing, should not be called when serialization works
+		//game->initialize(); // Temporary for testing, should not be called when serialization works
 
-		GameSerializer::serializeGame(game.get());
+		//GameSerializer::serializeGame(game.get());
 
-		//GameSerializer::deserializeGame(game.get());
+		GameSerializer::deserializeGame(game.get());
 
 		editorCamera.translate(0, 0, 15);
 		editorCamera.rotate(10, 0, 1, 0);

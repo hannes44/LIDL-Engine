@@ -40,6 +40,8 @@ namespace engine
 
 		static void serializeSerializable(Serializable* serializable, YAML::Emitter& out);
 		
+		static void deserializeSerializable(YAML::Node node, Serializable* serializable);
+
 		static void deserializeGameConfig(Game* game);
 
 		static void deserializeGameState(Game* game);
