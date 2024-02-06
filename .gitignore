@@ -38,4 +38,5 @@
 
 /Shaders
 Games/*/*State.yaml
+Games/*/*Config.yaml
 Editor/editor_settings.yaml
