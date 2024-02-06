@@ -68,6 +68,7 @@ add_library(engine
 	src/Renderer/OpenGL/OpenGLTexture.cpp
 	src/Serializer/GameSerializer.hpp
 	src/Serializer/GameSerializer.cpp
+	src/Serializer/Serializable.hpp
 	src/SDL/SDLWindow.hpp
 	src/SDL/SDLWindow.cpp
 	src/Physics/GamePhysics.hpp
@@ -137,6 +138,7 @@ source_group("Events" FILES
 source_group("Serializer" FILES
 	src/Serializer/GameSerializer.hpp
 	src/Serializer/GameSerializer.cpp
+	src/Serializer/Serializable.hpp
 )
 
 source_group("Utils" FILES

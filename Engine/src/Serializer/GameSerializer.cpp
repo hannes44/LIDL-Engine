@@ -8,6 +8,7 @@
 #include "Components/MeshComponent.hpp"
 #include "Components/PointLightComponent.hpp"
 #include "Components/ComponentFactory.hpp"
+#include "Serializable.hpp"
 
 namespace engine
 {
@@ -147,8 +148,8 @@ namespace engine
 		out << YAML::Key << "name";
 		out << YAML::Value << component->getName();
 
-
-		for (const auto serializableVariable : component->getSerializableVariables())
+		std::shared_ptr<Serializable> serializable = std::dynamic_pointer_cast<Serializable>(component);
+		for (const auto serializableVariable : serializable->getSerializableVariables())
 		{
 			out << YAML::Key << serializableVariable.name;
 			if (serializableVariable.type == SerializableType::FLOAT)
