@@ -50,7 +50,7 @@ namespace engine
 
 		int lightIndex = 0;
 		// TODO: There should be a list of all the lights in the game to avoid this loop
-		for (const auto& [gameObjectId, gameObject] : game->gameObjects) 
+		for (const auto& [gameObjectId, gameObject] : game->getGameObjects()) 
 		{
 			for (auto component : gameObject->getComponents())
 			{
@@ -76,7 +76,7 @@ namespace engine
 		baseShader->setVec3("viewPos", camera->translation.x, camera->translation.y, camera->translation.z);
 
 
-		for (const auto& [gameObjectId, gameObject] : game->gameObjects)
+		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
 		{
 			MeshComponent* meshComponent = nullptr;
 
@@ -125,7 +125,7 @@ namespace engine
 
 	void Renderer::renderGizmos(Game* game, CameraComponent* camera, RendererSettings* renderingSettings)
 	{
-		for (const auto& [gameObjectId, gameObject] : game->gameObjects)
+		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
 		{
 			ColliderComponent* colliderComponent = nullptr;
 

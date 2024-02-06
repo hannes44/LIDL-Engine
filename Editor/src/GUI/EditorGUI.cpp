@@ -19,9 +19,7 @@ namespace engine
 
 	void EditorGUI::start()
 	{
-		//game->initialize(); // Temporary for testing, should not be called when serialization works
-
-		//GameSerializer::serializeGame(game.get());
+//		game->initialize(); // Temporary for testing, should not be called when serialization works
 
 		GameSerializer::deserializeGame(game.get());
 
@@ -74,6 +72,7 @@ namespace engine
 			window.newFrame();
 		}
 
+		GameSerializer::serializeGame(game.get());
 		EditorSerializer::serializeEditorSettings(editorSettings);
 	}
 
@@ -241,7 +240,7 @@ namespace engine
 			{
 				ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 0, 0));
 				ImGui::BeginListBox("##2", ImVec2(500, 500));
-				for (const auto& [gameObjectId, gameObject] : game->gameObjects)
+				for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
 				{
 					ImGui::PushID(gameObjectId.c_str());
 					if (ImGui::Selectable(gameObject->name.c_str(), selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID())))

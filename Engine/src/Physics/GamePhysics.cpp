@@ -80,7 +80,7 @@ namespace engine {
         }
 
         lastPhysicsUpdateTimestamp = Utils::getTimestampNS();
-        checkCollisions(game->gameObjects);
-        fixedUpdate(game->gameObjects);
+        checkCollisions(game->getGameObjects());
+        fixedUpdate(game->getGameObjects());
     }
 }

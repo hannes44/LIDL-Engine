@@ -91,7 +91,7 @@ namespace engine
 		out << YAML::Key << "GameObjects";
 		out << YAML::Value << YAML::BeginSeq;
 
-		for (const auto& [gameObjectId, gameObject] : game->gameObjects)
+		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
 		{
 			serializeGameObject(gameObject.get(), out);
 		}
@@ -156,7 +156,7 @@ namespace engine
 
 		out << YAML::Key << "Textures";
 		out << YAML::Value << YAML::BeginSeq;
-		for (const auto& [textureId, texture] : game->textures)
+		for (const auto& [textureId, texture] : game->getTextures())
 		{
 			serializeTexture(texture.get(), out);
 		}
@@ -182,7 +182,7 @@ namespace engine
 	{
 		out << YAML::Key << "Materials";
 		out << YAML::Value << YAML::BeginSeq;
-		for (const auto& [materialId, material] : game->materials)
+		for (const auto& [materialId, material] : game->getMaterials())
 		{
 			serializeMaterial(material.get(), out);
 		}
@@ -362,7 +362,7 @@ namespace engine
 				std::string filename = textureNode["fileName"].as<std::string>();
 				std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(Texture::create(filename));
 				texture->uuid.id = textureNode["Id"].as<std::string>();
-				game->textures[texture->uuid.id] = texture;
+				game->addTexture(texture);
 			}
 			catch (const std::exception& e)
 			{
@@ -397,15 +397,15 @@ namespace engine
 
 			if (difuseTextureId != "")
 			{
-				material->diffuseTexture = game->textures[difuseTextureId];
+				material->diffuseTexture = game->getTexture(difuseTextureId);
 			}
 
 			if (specularTextureId != "")
 			{
-				material->specularTexture = game->textures[specularTextureId];
+				material->specularTexture = game->getTexture(specularTextureId);
 			}
 
-			game->materials[material->uuid.id] = std::shared_ptr<Material>(material);
+			game->addMaterial(std::shared_ptr<Material>(material));
 		}
 	}
 	
@@ -508,7 +508,7 @@ namespace engine
 					std::string materialId = node["Material"].as<std::string>();
 					if (materialId != "")
 					{
-						meshComponent->setMaterial(game->materials[materialId]);
+						meshComponent->setMaterial(game->getMaterial(materialId));
 					}
 				}
 			}
