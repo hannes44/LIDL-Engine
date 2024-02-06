@@ -7,8 +7,8 @@
 
 namespace engine {
 
-    InputEvent::InputEvent(float x, float y, float button, const Key key)
-        : x(x), y(y), button(button), key(key) {}
+    InputEvent::InputEvent(float x, float y, float button, const Key key, const InputEventType eventType)
+        : x(x), y(y), button(button), key(key), eventType(eventType) {}
 
     float InputEvent::getX() const {
         return x;
@@ -26,6 +26,10 @@ namespace engine {
         return key;
     }
 
+    const InputEventType InputEvent::getEventType() const {
+		return eventType;
+	}
+
     void InputEvent::setX(float x) {
         this->x = x;
     }
@@ -40,6 +44,10 @@ namespace engine {
 
     void InputEvent::setKey(const Key key) {
         this->key = key;
+    }
+
+    void InputEvent::setEventType(const InputEventType eventType) {
+        this->eventType = eventType;
     }
 
     void InputEvent::clear() {

@@ -1,8 +1,7 @@
 #include "PhysicsComponent.hpp"
 #include "ControllableComponent.hpp"
-#include "Core/InputSystem.hpp"
 #include "Core/Logger.hpp"
-#include "Core/InputFramework.hpp"
+#include "Input/InputFramework.hpp"
 
 #include <set>
 #include <string>
@@ -10,7 +9,7 @@
 namespace engine {
 
     ControllableComponent::ControllableComponent() {
-         InputFramework::getInstance().addListener(this);
+        InputFramework::getInstance().addListener(this);
     }
 
     std::set<std::string> ControllableComponent::getRequiredComponents() {
@@ -21,11 +20,12 @@ namespace engine {
         return "Controllable";
     }
     
-    void ControllableComponent::handleInput(const InputEvent& event, const std::string& eventType) {
+    void ControllableComponent::handleInput(const InputEvent& event) {
+        InputEventType eventType = event.getEventType();
         int forceDir = 0;
-        if (eventType == "KeyDown")
+        if (eventType == InputEventType::KeyDown)
             forceDir = 1;
-        else if (eventType == "KeyUp")
+        else if (eventType == InputEventType::KeyUp)
             forceDir = -1;
         else
             return;

@@ -13,14 +13,6 @@ add_library(engine
 	src/Core/Logger.cpp
 	src/Core/Window.hpp
 	src/Core/Window.cpp
-	src/Core/InputEvent.hpp
-	src/Core/InputEvent.cpp
-	src/Core/InputListener.hpp
-	src/Core/InputListener.cpp
-	src/Core/InputSystem.hpp
-	src/Core/InputSystem.cpp
-	src/Core/InputFramework.hpp
-	src/Core/InputFramework.cpp
 	src/Core/Uuid.hpp
 	src/Core/Uuid.cpp
 	src/Core/Texture.hpp
@@ -83,6 +75,14 @@ add_library(engine
 	../vendor/stb/stb_image.h
 	../vendor/ImGuizmo/ImGuizmo.h
 	../vendor/ImGuizmo/ImGuizmo.cpp
+	src/Input/InputEvent.cpp
+	src/Input/InputEvent.hpp
+	src/Input/InputListener.hpp
+	src/Input/InputListener.cpp
+	src/Input/InputFramework.hpp
+	src/Input/InputFramework.cpp
+	src/Audio/AudioManager.cpp
+	src/Audio/AudioManager.hpp
 	${SHADERS}
 )
 target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -171,14 +171,6 @@ source_group("Core" FILES
 	src/Core/Logger.cpp
 	src/Core/Window.hpp
 	src/Core/Window.cpp
-	src/Core/InputEvent.hpp
-	src/Core/InputEvent.cpp
-	src/Core/InputListener.hpp
-	src/Core/InputListener.cpp
-	src/Core/InputSystem.hpp
-	src/Core/InputSystem.cpp
-	src/Core/InputFramework.hpp
-	src/Core/InputFramework.cpp
 	src/Core/Uuid.hpp
 	src/Core/Uuid.cpp
 	src/Core/Texture.hpp
@@ -198,6 +190,20 @@ source_group("Vendor" FILES
 	../vendor/ImGuizmo/ImGuizmo.cpp
 )
 
+source_group("Input" FILES
+	src/Input/InputEvent.cpp
+	src/Input/InputEvent.hpp
+	src/Input/InputListener.hpp
+	src/Input/InputListener.cpp
+	src/Input/InputFramework.hpp
+	src/Input/InputFramework.cpp
+)
+
+source_group("Audio" FILES
+	src/Audio/AudioManager.cpp
+	src/Audio/AudioManager.hpp
+)
+
 
 # Find *all* shaders.
 file(GLOB_RECURSE SHADERS
@@ -213,6 +219,7 @@ target_link_libraries(engine PRIVATE
 	imgui
 	imguilib
 	SDL3::SDL3
+	winmm.lib
 )
 
 target_link_libraries(imguilib PRIVATE 

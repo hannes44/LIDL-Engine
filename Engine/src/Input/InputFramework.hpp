@@ -36,7 +36,7 @@ namespace engine {
 
         void removeListener(InputListener* listener);
 
-        void dispatchEvent(const InputEvent& e, const std::string& EventType);
+        void dispatchEvent(const InputEvent& e);
 
         inline static InputFramework* instance;
     private:

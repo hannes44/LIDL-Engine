@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Component.hpp"
-#include "Core/InputListener.hpp"
+#include "Input/InputListener.hpp"
 #include "ControllableComponent.hpp"
 #include "Core/GameObject.hpp"
 
@@ -18,7 +18,7 @@ namespace engine {
 
         std::set<std::string> getRequiredComponents() override;
 
-        void handleInput(const InputEvent& event,const std::string& EventType) override;
+        void handleInput(const InputEvent& event) override;
     protected:
     };
 }

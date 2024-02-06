@@ -36,7 +36,7 @@ namespace engine
 
 		void endFrame();
 
-		void handleInput(const InputEvent& event, const std::string& EventType) override;
+		void handleInput(const InputEvent& event) override;
 		
 		void onEvent(EventType type, std::string message);
 
@@ -57,6 +57,8 @@ namespace engine
 		void drawGuizmos();
 
 		void drawInspectorSelectedGameObject();
+
+		void ShowAddComponent();
 
 		void drawGameSettingsTab();	
 

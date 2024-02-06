@@ -1,8 +1,7 @@
 #include "Components/CameraComponent.hpp"
-#include "Core/InputSystem.hpp"
 #include "Core/Logger.hpp"
 #define GLM_ENABLE_EXPERIMENTAL
-#include "Core/InputFramework.hpp"
+#include "Input/InputFramework.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 #include "Core/Window.hpp"
@@ -67,11 +66,13 @@ namespace engine
 		return projectionMatrix;
 	}
 
-	void CameraComponent::handleInput(const InputEvent& event, const std::string& EventType) {
+	void CameraComponent::handleInput(const InputEvent& event) {
+
+		InputEventType EventType = event.getEventType();
 
 		// Handle key and mouse input here
 		// If mouse button is pressed we want to control the camera
-		if (EventType == "MouseButtonDown" && (Key)event.getButton() == Key::MOUSE_RIGHT && !(ImGui::GetIO().WantCaptureMouse)) {
+		if (EventType == InputEventType::MouseButtonDown && (Key)event.getButton() == Key::MOUSE_RIGHT && !(ImGui::GetIO().WantCaptureMouse)) {
 			isMouseDragging = true;
 		}
 		// If mouse button is released we want to stop controlling the camera
@@ -79,7 +80,7 @@ namespace engine
 			isMouseDragging = false;
 		}
 
-		if ((EventType == "MouseMotion" || EventType == "KeyDown" || EventType == "KeyHold")
+		if ((EventType == InputEventType::MouseMotion || EventType == InputEventType::KeyDown || EventType == InputEventType::KeyHold)
 			&& isMouseDragging && !(ImGui::GetIO().WantCaptureMouse)) {
 
 			if (SDL_BUTTON(SDL_BUTTON_RIGHT)) {
