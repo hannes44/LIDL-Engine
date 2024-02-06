@@ -11,6 +11,9 @@ namespace engine
 {
 #define IMGUI_TOP_MENU_HEIGHT 18
 #define IMGUI_SHOW_DEMO_WINDOWS false
+// Turning this to true will make the game be initiated from the game instead of deserializing the game state file
+// The game will not save if this is true to avoid overwritting the game state file
+#define USE_GAME_INITIATION_INSTEAD_OF_DESERIALIZATION false
 
 	EditorGUI::EditorGUI(std::shared_ptr<Project> project) :  window(Window::getInstance()), project(project)
 	{
@@ -19,9 +22,11 @@ namespace engine
 
 	void EditorGUI::start()
 	{
-//		game->initialize(); // Temporary for testing, should not be called when serialization works
-
-		GameSerializer::deserializeGame(game.get());
+		#if USE_GAME_INITIATION_INSTEAD_OF_DESERIALIZATION
+			game->initialize();
+		#else
+			GameSerializer::deserializeGame(game.get());
+		#endif
 
 		editorCamera.translate(0, 0, 15);
 		editorCamera.rotate(10, 0, 1, 0);
@@ -72,7 +77,9 @@ namespace engine
 			window.newFrame();
 		}
 
-		GameSerializer::serializeGame(game.get());
+		#if !USE_GAME_INITIATION_INSTEAD_OF_DESERIALIZATION
+			GameSerializer::serializeGame(game.get());
+		#endif
 		EditorSerializer::serializeEditorSettings(editorSettings);
 	}
 
