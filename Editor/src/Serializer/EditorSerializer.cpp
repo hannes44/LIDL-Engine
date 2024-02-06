@@ -112,9 +112,7 @@ namespace engine
 	{
 		OPENFILENAME ofn = { 0 };
 		TCHAR szFile[260] = { 0 };
-		// Initialize remaining fields of OPENFILENAME structure
 		ofn.lStructSize = sizeof(ofn);
-		//ofn.hwndOwner = hWnd;
 		ofn.lpstrFile = szFile;
 		ofn.nMaxFile = sizeof(szFile);
 		ofn.lpstrFilter = fileExplorerFilter;
@@ -124,63 +122,63 @@ namespace engine
 		ofn.lpstrInitialDir = fs::current_path().string().c_str();
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 
-		if (GetOpenFileName(&ofn) == TRUE)
-		{
-			// use ofn.lpstrFile here
-			std::cout << ofn.lpstrFile << std::endl;
-			fs::path objFilePath = ofn.lpstrFile;
-			std::string objFileName = objFilePath.filename().string();
-			std::string objFileNameNoExtension = objFilePath.stem().string();
-			std::string objFileExtension = objFilePath.extension().string();
-			int objFileSize = fs::file_size(objFilePath);
-
-			std::string destinationPath = fs::current_path().string() + GAME_ASSETS_FOLDER + objFileName;
-			LOG_INFO("Copying file from file explorer to assets: " + destinationPath);
-			CopyFile(ofn.lpstrFile, (destinationPath).c_str(), TRUE);
-			if (GetLastError() == WIN32_API_ERROR_CODE_FILE_ALREADY_EXISTS)
-			{
-				// Assuming the file is the same one if the size is the same
-				bool sameFileExists = fs::file_size(fs::current_path().string() + GAME_ASSETS_FOLDER + objFileName) == objFileSize;
-				if (!sameFileExists)
-				{
-					LOG_TRACE("File name already exists! Trying again with number extension");
-
-					// It will not recheck the size to determine if the file is the same after the initial check, not likely to happen but could fix it later
-					for (int i = 1; i < 100; i++)
-					{
-						CopyFile(ofn.lpstrFile, (fs::current_path().string() + GAME_ASSETS_FOLDER + objFileNameNoExtension + std::to_string(i) + objFileExtension).c_str(), TRUE);
-
-						objFileName = objFileNameNoExtension + std::to_string(i) + objFileExtension;
-
-						if (GetLastError() != WIN32_API_ERROR_CODE_FILE_ALREADY_EXISTS)
-						{
-							break;
-						}
-					}
-				}
-				else
-				{
-					std::string newDestinationPath = fs::current_path().string() + GAME_ASSETS_FOLDER + objFileName;
-					LOG_INFO("File: {} already exists in assets: {}", objFileName, newDestinationPath);
-					return objFileName;
-				}
-			}	
-			else if (GetLastError() != 0)
-			{
-				LOG_ERROR("Error copying file from file explorer to assets: " + destinationPath);
-				return "";
-			}
-
-			LOG_INFO("Copied file: {} from file explorer to assets: {}", objFileName, destinationPath );
-
-			return objFileName;
-		}
-		else
+		if (GetOpenFileName(&ofn) == FALSE)
 		{
 			LOG_INFO("User Cancelled File Explorer Dialog");
 			return "";
 		}
+		
+		// use ofn.lpstrFile here
+		std::cout << ofn.lpstrFile << std::endl;
+		fs::path objFilePath = ofn.lpstrFile;
+		std::string objFileName = objFilePath.filename().string();
+		std::string objFileNameNoExtension = objFilePath.stem().string();
+		std::string objFileExtension = objFilePath.extension().string();
+		int objFileSize = fs::file_size(objFilePath);
 
+		std::string destinationPath = fs::current_path().string() + GAME_ASSETS_FOLDER + objFileName;
+		LOG_INFO("Copying file from file explorer to assets: " + destinationPath);
+		CopyFile(ofn.lpstrFile, (destinationPath).c_str(), TRUE);
+
+		// If the file was copied successfully
+		if (GetLastError() == 0)
+		{
+			LOG_INFO("Copied file: {} from file explorer to assets: {}", objFileName, destinationPath);
+
+			return objFileName;
+		}
+
+		// If the file already exists
+		if (GetLastError() == WIN32_API_ERROR_CODE_FILE_ALREADY_EXISTS)
+		{
+			// Assuming the file is the same one if the size is the same
+			bool sameFileExists = fs::file_size(fs::current_path().string() + GAME_ASSETS_FOLDER + objFileName) == objFileSize;
+			if (sameFileExists)
+			{
+				std::string newDestinationPath = fs::current_path().string() + GAME_ASSETS_FOLDER + objFileName;
+				LOG_INFO("File: {} already exists in assets: {}", objFileName, newDestinationPath);
+				return objFileName;
+			}
+			
+			LOG_TRACE("File name already exists! Trying again with number extension");
+
+			// It will not recheck the size to determine if the file is the same after the initial check, not likely to happen but could fix it later
+			for (int i = 1; i < 100; i++)
+			{
+				CopyFile(ofn.lpstrFile, (fs::current_path().string() + GAME_ASSETS_FOLDER + objFileNameNoExtension + std::to_string(i) + objFileExtension).c_str(), TRUE);
+
+				objFileName = objFileNameNoExtension + std::to_string(i) + objFileExtension;
+
+				if (GetLastError() != WIN32_API_ERROR_CODE_FILE_ALREADY_EXISTS)
+				{
+					break;
+				}
+			}
+		}	
+
+		// Unknown error
+		LOG_ERROR("Error copying file from file explorer to assets: " + destinationPath);
+		return "";
 	}
 
 	// Gets the path to the folder that the user selected in the file explorer (Windows only)
