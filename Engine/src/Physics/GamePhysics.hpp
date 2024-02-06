@@ -4,16 +4,12 @@
 #include <vector>
 #include <memory>
 #include <map>
+#include "Components/CameraComponent.hpp"
+#include "Components/PhysicsComponent.hpp"
 
 namespace engine
 {
     constexpr auto PHYSICS_TIME_CONVERSION_FACTOR = 1000000;
-
-    struct GamePhysicsSettings {
-        bool useGravity = true;
-        float gravity = 9.82f;
-        int fixedUpdateIntervalMS = 100;
-    };
 
 	class GamePhysics
 	{
@@ -40,7 +36,9 @@ namespace engine
 		static GamePhysics& getInstance();
 
         void fixedUpdate(std::map<std::string, std::shared_ptr<GameObject>> gameObjects);
-        void checkCollisions(std::map<std::string, std::shared_ptr<GameObject>> gameObjects);
+        void checkCollisions(std::map<std::string, std::shared_ptr<GameObject>> gameObjects, CameraComponent* camera);
+        std::pair<glm::vec3, glm::vec3> resolveCollisionFullyElastic(std::shared_ptr<PhysicsComponent> pc1, std::shared_ptr<PhysicsComponent> pc2);
+        std::pair<glm::vec3, glm::vec3> resolveCollisionFullyInelastic(std::shared_ptr<PhysicsComponent> pc1, std::shared_ptr<PhysicsComponent> pc2);
         void run(Game *game);
 
         // Disabled for now. TODO: Implement
