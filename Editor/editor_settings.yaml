@@ -1,6 +1,6 @@
 Use Dark Theme: true
 Show Gizmos: true
-Use Serialization: false
+Use Serialization: true
 Enable User Retention: false
 Enable Depth Test: true
 Enable Face Culling: true
