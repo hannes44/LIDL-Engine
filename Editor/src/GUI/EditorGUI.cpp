@@ -697,6 +697,9 @@ bool isAddComponentVisible = false;
 		if (ImGui::CollapsingHeader("Game Settings", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			ImGui::Text(("Game Name: " + game->name).c_str());
+			
+			ImGui::Text("Physics Settings");
+			drawSerializableVariables(&game->config.physicsSettings);
 		}
 		ImGui::Separator();
 

@@ -1,4 +1,12 @@
 GameObjects:
+  - name: Light
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1]
+    isVisible: true
+    Id: 8vZ53HWnzy6BWMuTNZaWaLEQfPmd5jo0
+    Components:
+      - name: PointLight
+        Color: [1, 1, 1]
+        Intensity: 10
   - name: Box 2
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 5, 0, 0, 1]
     isVisible: true
@@ -11,8 +19,29 @@ GameObjects:
       - name: Physics
         Gravity: false
         Mass: 0
+        Force: [0, 0, 0]
+        Acceleration: [.nan, .nan, .nan]
+        Velocity: [0, 0, 0]
       - name: Box Collider
         Offset: [0.300000012, 0.100000001, 0.100000001]
+        Extent: [1.10000002, 1.10000002, 1.10000002]
+  - name: Sphere 1
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -19.5798626, 5.71042871, 0, 1]
+    isVisible: true
+    Id: U4NONrDKB00TU9MTdZpCOsWEl5V3cB6Y
+    Components:
+      - name: Mesh
+        OBJ File: ""
+        Primative Type: CUBE
+        Material: TfeNBW84ZLgYRYkcC8gdDpxGLs450XlP
+      - name: Physics
+        Gravity: false
+        Mass: 0
+        Force: [0, 0, 0]
+        Acceleration: [.nan, .nan, .nan]
+        Velocity: [0, 0, 0]
+      - name: Sphere Collider
+        Offset: [0, 0, 0]
         Extent: [1.10000002, 1.10000002, 1.10000002]
   - name: Camera
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 10, 1]
@@ -36,32 +65,12 @@ GameObjects:
       - name: Physics
         Gravity: false
         Mass: 0
+        Force: [0, 0, 0]
+        Acceleration: [.nan, .nan, .nan]
+        Velocity: [0, 0, 0]
       - name: Box Collider
         Offset: [0, 0, 0]
         Extent: [1.10000002, 1.10000002, 1.10000002]
-  - name: Sphere 1
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -19.5798626, 5.71042871, 0, 1]
-    isVisible: true
-    Id: U4NONrDKB00TU9MTdZpCOsWEl5V3cB6Y
-    Components:
-      - name: Mesh
-        OBJ File: ""
-        Primative Type: CUBE
-        Material: TfeNBW84ZLgYRYkcC8gdDpxGLs450XlP
-      - name: Physics
-        Gravity: false
-        Mass: 0
-      - name: Sphere Collider
-        Offset: [0, 0, 0]
-        Extent: [1.10000002, 1.10000002, 1.10000002]
-  - name: Light
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1]
-    isVisible: true
-    Id: 8vZ53HWnzy6BWMuTNZaWaLEQfPmd5jo0
-    Components:
-      - name: PointLight
-        Color: [1, 1, 1]
-        Intensity: 10
 Textures:
   - name: glocken
     fileName: glocken.png

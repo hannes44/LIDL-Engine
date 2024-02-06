@@ -67,6 +67,7 @@ add_library(engine
 	src/SDL/SDLWindow.cpp
 	src/Physics/GamePhysics.hpp
 	src/Physics/GamePhysics.cpp
+	src/Physics/GamePhysicsSettings.hpp
 	src/Utils/Utils.hpp
 	src/Utils/Utils.cpp
 	src/Utils/ColliderChecks.hpp
@@ -156,6 +157,7 @@ source_group("Utils" FILES
 source_group("Physics" FILES
 	src/Physics/GamePhysics.hpp
 	src/Physics/GamePhysics.cpp
+	src/Physics/GamePhysicsSettings.hpp
 )
 
 source_group("SDL" FILES

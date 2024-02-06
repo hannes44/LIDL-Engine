@@ -141,7 +141,8 @@ namespace engine
 			if (colliderComponent == nullptr)
 				continue;
 			
-			colliderComponent->drawCollider(camera);
+			if (renderingSettings->drawBoundingBoxes)
+				colliderComponent->drawCollider(camera);
 		}
 
 	}

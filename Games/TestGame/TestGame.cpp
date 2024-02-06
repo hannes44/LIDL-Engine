@@ -37,6 +37,15 @@ namespace engine {
 		
 		engine::PhysicsComponent physicsComponentWithoutGravity = engine::PhysicsComponent(false);
 		physicsComponentWithoutGravity.setForce(glm::vec3(0, 0, 0));
+
+		engine::PhysicsComponent physicsComponentWithoutGravityMovingRight = engine::PhysicsComponent(false);
+		physicsComponentWithoutGravityMovingRight.mass = 1.f;
+		//physicsComponentWithoutGravityMovingRight.setForce(glm::vec3(2, 0, 0));
+
+		engine::PhysicsComponent physicsComponentWithoutGravityMovingLeft = engine::PhysicsComponent(false);
+		physicsComponentWithoutGravityMovingLeft.mass = 2.f;
+		physicsComponentWithoutGravityMovingLeft.setVelocity(glm::vec3(-5.f, 0, 0));
+		//physicsComponentWithoutGravityMovingLeft.setForce(glm::vec3(-2.f, 0, 0));
 		
 		engine::PhysicsComponent physicsComponentWithHigherGravity = engine::PhysicsComponent();
 		physicsComponentWithHigherGravity.setForce(glm::vec3(0, 10, 0));
@@ -102,7 +111,7 @@ namespace engine {
 		box1->transform.setPosition(glm::vec3(0, 0, 0));
 		box1->addComponent(meshComponent2);
 		box1->name = "Box 1";
-		box1->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithoutGravity));
+		box1->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithoutGravityMovingRight));
 		box1->addComponent(std::make_unique<engine::BoxColliderComponent>(boxColliderComponent));
 
 		addGameObject(std::unique_ptr<GameObject>(box1));
@@ -112,7 +121,7 @@ namespace engine {
 		box2->transform.setPosition(glm::vec3(5, 0, 0));
 		box2->addComponent(meshComponent2);
 		box2->name = "Box 2";
-		box2->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithoutGravity));
+		box2->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithoutGravityMovingLeft));
 		box2->addComponent(std::make_unique<engine::BoxColliderComponent>(boxColliderOffsetComponent));
 
 		addGameObject(std::unique_ptr<GameObject>(box2));

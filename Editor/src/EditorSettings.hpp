@@ -18,8 +18,6 @@ namespace engine
 		// If this is turned off, the editor run the game initialization code to load the initial scene.
 		bool useSerialization = true;
 
-		bool drawBoundingBoxes = false;
-
 		bool enableUserRetention = false;
 		
 		std::vector<SerializableVariable> getSerializableVariables() override
@@ -29,7 +27,6 @@ namespace engine
 				{SerializableType::BOOLEAN, "Use Dark Theme", "Use Dark theme for the editor", &useDarkTheme},
 				{SerializableType::BOOLEAN, "Show Gizmos", "Show Gizmos", &showGizmos},
 				{SerializableType::BOOLEAN, "Use Serialization", "Should the editor load the inital gamestate from save file or from initiation function. With this turned of, the editor state will not save", &useSerialization},
-				{SerializableType::BOOLEAN, "Draw Bounding Boxes", "Draw bounding boxes for all colliders", &drawBoundingBoxes},
 				{SerializableType::BOOLEAN, "Enable User Retention", "Shows the user retention panel", &enableUserRetention}
 			};
 		};

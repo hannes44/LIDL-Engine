@@ -2,6 +2,7 @@
 
 #include <string>
 #include "Renderer/GraphicsAPI.hpp"
+#include "Physics/GamePhysicsSettings.hpp"
 
 namespace engine
 {
@@ -12,5 +13,6 @@ namespace engine
 		bool isDefaultFullscreen = false;
 
 		GraphicsAPIType graphicsAPIType = GraphicsAPIType::OpenGL;
+		GamePhysicsSettings physicsSettings{};
 	};
 }
