@@ -413,12 +413,12 @@ namespace engine
 
 			deserializeSerializable(materialNode, material);
 
-			std::string difuseTextureId = materialNode["Diffuse Texture"].as<std::string>();
+			std::string diffuseTextureId = materialNode["Diffuse Texture"].as<std::string>();
 			std::string specularTextureId = materialNode["Specular Texture"].as<std::string>();
 
-			if (difuseTextureId != "")
+			if (diffuseTextureId != "")
 			{
-				material->diffuseTexture = game->getTexture(difuseTextureId);
+				material->diffuseTexture = game->getTexture(diffuseTextureId);
 			}
 
 			if (specularTextureId != "")

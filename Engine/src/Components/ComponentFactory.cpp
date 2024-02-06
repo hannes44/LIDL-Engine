@@ -18,7 +18,7 @@ namespace engine
 		{
 			return new MeshComponent();
 		}
-		if (componentName == "Physics")
+		else if (componentName == "Physics")
 		{
 			return new PhysicsComponent();
 		}

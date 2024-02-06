@@ -35,6 +35,6 @@ namespace engine
 		}
 
 	protected:
-		GameObject *gameObject = nullptr;
+		GameObject* gameObject = nullptr;
 	};
 }
