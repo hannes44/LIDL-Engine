@@ -523,7 +523,7 @@ namespace engine
 						MeshComponent::loadMeshFromOBJFile(meshComponent->objFileName, meshComponent);
 					}
 
-					if (meshComponent->primativeTypeAsString != "")
+					if (meshComponent->primativeTypeAsString != "" && meshComponent->primativeTypeAsString != "NONE")
 					{
 						meshComponent->primativeType = MeshComponent::stringToPrimativeType(meshComponent->primativeTypeAsString);
 						MeshComponent::loadPrimativeMesh(meshComponent->primativeType, meshComponent);
