@@ -22,33 +22,39 @@ namespace engine {
     }
     
     void ControllableComponent::handleInput(const InputEvent& event, const std::string& eventType) {
-        int dir = 0;
-        LOG_INFO("KEY PRESSED 1");
-        if (eventType == "KeyUp")
-            dir = 1;
-        else if (eventType == "KeyDown")
-            dir = -1;
+        int forceDir = 0;
+        if (eventType == "KeyDown")
+            forceDir = 1;
+        else if (eventType == "KeyUp")
+            forceDir = -1;
         else
             return;
 
-        LOG_INFO("KEY PRESSED");
-
         auto physicsComponent = gameObject->getComponent<PhysicsComponent>();
+        const float strength = 3;
         
-        if (event.getKey() == Key::UP) {
-            physicsComponent->applyAcceleration(glm::vec3(0, dir, 0));
+        if (event.getKey() == Key::LSHIFT) {
+            physicsComponent->applyForce(glm::vec3(0, forceDir * strength, 0));
         }
 
-        else if (event.getKey() == Key::DOWN) {
-            physicsComponent->applyAcceleration(glm::vec3(0, -dir, 0));
+        else if (event.getKey() == Key::LCTRL) {
+            physicsComponent->applyForce(glm::vec3(0, -forceDir * strength, 0));
         }
 
-        else if (event.getKey() == Key::LEFT) {
-            physicsComponent->applyAcceleration(glm::vec3(dir, 0, 0));
+        else if (event.getKey() == Key::A) {
+            physicsComponent->applyForce(glm::vec3(-forceDir * strength, 0, 0));
         }
 
-        else if (event.getKey() == Key::RIGHT) {
-            physicsComponent->applyAcceleration(glm::vec3(-dir, 0, 0));
+        else if (event.getKey() == Key::D) {
+            physicsComponent->applyForce(glm::vec3(forceDir * strength, 0, 0));
+        }
+
+        else if (event.getKey() == Key::W) {
+            physicsComponent->applyForce(glm::vec3(0, 0, -forceDir * strength));
+        }
+
+        else if (event.getKey() == Key::S) {
+            physicsComponent->applyForce(glm::vec3(0, 0, forceDir * strength));
         }
 	}
 }

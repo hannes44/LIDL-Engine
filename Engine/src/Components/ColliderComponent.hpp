@@ -9,6 +9,7 @@ namespace engine {
 
     class ColliderComponent : public Component {
     public:
+        friend class GamePhysics;
         bool isColliding(ColliderComponent* other);
         virtual void drawCollider(CameraComponent* camera) = 0;
         virtual BoundingBox getBoundingBox() = 0;
@@ -16,9 +17,11 @@ namespace engine {
     protected:
         bool deepCollisionCheck(ColliderComponent* other);
 
-        static void drawBoundingBox(BoundingBox& box, CameraComponent* camera);
+        static void drawBoundingBox(BoundingBox& box, CameraComponent* camera, bool isColliding = false);
         
         glm::vec3 offset{0};
         glm::vec3 extent{0};
+
+        bool isCurrentlyColliding = false;
     };
 }

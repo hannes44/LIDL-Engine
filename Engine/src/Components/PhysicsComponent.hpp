@@ -8,22 +8,26 @@ namespace engine
 	class PhysicsComponent : public Component
 	{
 	public:
+		friend class GamePhysics;
 		PhysicsComponent(bool enableGravity = true) : enableGravity(enableGravity) {};
 		
 		bool enableGravity = true;
 		bool overrideGravityCoefficient = false;
 
 		float gravityCoefficient = 9.82f;
-		float mass = 0;
+		float mass = 1.f;
 
+		glm::vec3 currentForce { 0 };
 		glm::vec3 currentAcceleration { 0 };
 		glm::vec3 currentVelocity { 0 };
 
 		glm::vec3 getAcceleration() { return currentAcceleration; };
-		void applyAcceleration(glm::vec3 acceleration) { currentAcceleration += acceleration; };
-		void setAcceleration(glm::vec3 acceleration) { currentAcceleration = acceleration; };
+		glm::vec3 getForce() { return currentForce; };
+		void applyForce(glm::vec3 force) { currentForce += force; };
+		void setForce(glm::vec3 force) { currentForce = force; };
 
 		glm::vec3 getVelocity() { return currentVelocity; };
+		void applyVelocity(glm::vec3 velocity) { currentVelocity += velocity; };
 		void setVelocity(glm::vec3 velocity) { currentVelocity = velocity; };
 
 		std::string getName() override { return "Physics"; };
@@ -34,7 +38,9 @@ namespace engine
 			{
 				{SerializableType::BOOLEAN, "Gravity", "Should Gravity affect the game object", &enableGravity},
 				{SerializableType::FLOAT, "Mass", "The mass of the game object in Kg", &mass},
-				{SerializableType::VECTOR3, "Acceleration", "The current acceleration of the game object", &currentAcceleration},
+				{SerializableType::VECTOR3, "Force", "The current force acting on the game object", &currentForce},
+				{SerializableType::VECTOR3, "Acceleration", "The current resulting acceleration of the game object", &currentAcceleration},
+				{SerializableType::VECTOR3, "Velocity", "The current velocity of the game object", &currentVelocity},
 			};
 		};
 	};

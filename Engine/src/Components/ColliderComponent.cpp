@@ -6,7 +6,7 @@
 #include "CameraComponent.hpp"
 
 namespace engine {
-    void ColliderComponent::drawBoundingBox(BoundingBox& box, CameraComponent* camera) {
+    void ColliderComponent::drawBoundingBox(BoundingBox& box, CameraComponent* camera, bool isColliding) {
 
         // The center position of the box
         glm::vec3 centerPos = box.getCenter();
@@ -20,7 +20,7 @@ namespace engine {
         // We will move on the top surface of the box, so we use this offset vector to move to the mirrored bottom point
         glm::vec3 down = glm::vec3(0, -box.getExtent().y, 0);
         
-        glm::vec3 color = glm::vec3(1.0f, 0.0f, 0.0f);
+        glm::vec3 color = isColliding ? glm::vec3(1.0f, 0, 0) : glm::vec3(0, 1.0f, 0);
 
         // The offsets that take us to all the top surface corners of the box
         std::vector<glm::vec3> nextPointOffsets = {

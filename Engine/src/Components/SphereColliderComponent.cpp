@@ -9,7 +9,7 @@ namespace engine {
 
 	void SphereColliderComponent::drawCollider(CameraComponent* camera) {
 		BoundingBox box = getBoundingBox();
-		drawBoundingBox(box, camera);
+		drawBoundingBox(box, camera, isCurrentlyColliding);
 	}
 
 	std::string SphereColliderComponent::getName() {

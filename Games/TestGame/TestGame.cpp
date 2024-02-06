@@ -33,13 +33,13 @@ namespace engine {
 		engine::PointLightComponent pointLightComponent = engine::PointLightComponent();
 		
 		engine::PhysicsComponent physicsComponentWithGravity = engine::PhysicsComponent();
-		physicsComponentWithGravity.setAcceleration(glm::vec3(0, 10, 0));
+		physicsComponentWithGravity.setForce(glm::vec3(0, 10, 0));
 		
 		engine::PhysicsComponent physicsComponentWithoutGravity = engine::PhysicsComponent(false);
-		physicsComponentWithoutGravity.setAcceleration(glm::vec3(0, 0, 0));
+		physicsComponentWithoutGravity.setForce(glm::vec3(0, 0, 0));
 		
 		engine::PhysicsComponent physicsComponentWithHigherGravity = engine::PhysicsComponent();
-		physicsComponentWithHigherGravity.setAcceleration(glm::vec3(0, 10, 0));
+		physicsComponentWithHigherGravity.setForce(glm::vec3(0, 10, 0));
 		
 		physicsComponentWithHigherGravity.overrideGravityCoefficient = true;
 		physicsComponentWithHigherGravity.gravityCoefficient *= 1.2f;
@@ -76,8 +76,8 @@ namespace engine {
 		GameObject* ball1 = new GameObject();
 		ball1->transform.setPosition(glm::vec3(-10, 0, 0));
 		ball1->addComponent(meshComponent2);
-		ball1->name = "Ball with gravity";
-		ball1->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithGravity));
+		ball1->name = "Ball without gravity";
+		ball1->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithoutGravity));
 		ball1->addComponent(std::make_unique<engine::BoxColliderComponent>(boxColliderComponent));
 		ball1->addComponent(std::make_unique<engine::ControllableComponent>());
 		addGameObject(std::unique_ptr<GameObject>(ball1));
