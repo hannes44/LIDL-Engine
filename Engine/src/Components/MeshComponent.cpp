@@ -201,6 +201,7 @@ namespace engine
 			return PrimativeMeshType::CUBE;
 		}
 	}
+
 	std::shared_ptr<VertexArray> MeshComponent::getVertexArray()
 	{
 		if (vertexArray == nullptr)

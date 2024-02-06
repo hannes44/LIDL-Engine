@@ -25,8 +25,6 @@ namespace engine
 
 		UUID uuid{};
 
-		std::string dummyId = "";
-
 		std::string getName() override
 		{
 			return name;
@@ -55,5 +53,7 @@ namespace engine
 			};
 			 
 		};
+	private:
+		std::string dummyId = "";
 	};
 }

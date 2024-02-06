@@ -434,7 +434,7 @@ namespace engine
 				gameObject->isVisible = gameObjectNode["isVisible"].as<bool>();
 				game->addGameObject(gameObject);
 				gameObject->uuid.id = gameObjectNode["Id"].as<std::string>();
-				deserializeComponents(gameObjectNode, gameObject.get());
+				deserializeComponents(gameObjectNode, gameObject.get(), game);
 			}
 			catch (const std::exception& e)
 			{
@@ -445,7 +445,7 @@ namespace engine
 
 	}
 
-	void GameSerializer::deserializeComponents(YAML::Node node, GameObject* gameObject)
+	void GameSerializer::deserializeComponents(YAML::Node node, GameObject* gameObject, Game* game)
 	{
 		YAML::Node componentsNode;
 		try
@@ -463,7 +463,7 @@ namespace engine
 			try
 			{
 				YAML::Node componentNode = *it;
-				deserializeComponent(componentNode, gameObject);
+				deserializeComponent(componentNode, gameObject, game);
 			}
 			catch (const std::exception& e)
 			{
@@ -472,7 +472,7 @@ namespace engine
 		}
 	}
 
-	void GameSerializer::deserializeComponent(YAML::Node node, GameObject* gameObject)
+	void GameSerializer::deserializeComponent(YAML::Node node, GameObject* gameObject, Game* game)
 	{
 		try 
 		{
@@ -496,7 +496,7 @@ namespace engine
 				{
 					if (meshComponent->objFileName != "")
 					{
-
+						MeshComponent::loadMeshFromOBJFile(meshComponent->objFileName, meshComponent);
 					}
 
 					if (meshComponent->primativeTypeAsString != "")
@@ -505,6 +505,11 @@ namespace engine
 						MeshComponent::loadPrimativeMesh(meshComponent->primativeType, meshComponent);
 					}
 
+					std::string materialId = node["Material"].as<std::string>();
+					if (materialId != "")
+					{
+						meshComponent->setMaterial(game->materials[materialId]);
+					}
 				}
 			}
 
