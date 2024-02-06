@@ -454,9 +454,9 @@ namespace engine
 				std::vector<float> transformMatrix = gameObjectNode["transform"].as<std::vector<float>>();
 				std::copy(transformMatrix.begin(), transformMatrix.end(), &gameObject->transform.transformMatrix[0][0]);
 				gameObject->isVisible = gameObjectNode["isVisible"].as<bool>();
-				game->addGameObject(gameObject);
 				gameObject->uuid.id = gameObjectNode["Id"].as<std::string>();
 				deserializeComponents(gameObjectNode, gameObject.get(), game);
+				game->addGameObject(gameObject);
 			}
 			catch (const std::exception& e)
 			{

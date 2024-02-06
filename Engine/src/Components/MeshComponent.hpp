@@ -81,6 +81,10 @@ namespace engine
 
 		static std::shared_ptr<MeshComponent> createCube();
 
+		static std::shared_ptr<MeshComponent> createSphere(int stacks = 100, int slices = 100);
+
+		static std::shared_ptr<MeshComponent> createPlane();
+
 		void createVertexArray();
 
 		std::shared_ptr<VertexArray> vertexArray = nullptr;
