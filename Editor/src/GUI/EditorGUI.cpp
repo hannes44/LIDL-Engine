@@ -337,6 +337,9 @@ namespace engine
 			{
 				if (ImGui::MenuItem("Cube"))
 				{
+					std::shared_ptr<GameObject> cube = std::make_shared<GameObject>();
+					cube->addComponent(MeshComponent::createPrimative(PrimativeMeshType::CUBE));
+					game->addGameObject(cube);
 				}
 				if (ImGui::MenuItem("Sphere"))
 				{
