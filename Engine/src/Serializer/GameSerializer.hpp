@@ -37,6 +37,8 @@ namespace engine
 
 		static void serializeMaterials(const Game* game, YAML::Emitter& emitter);
 		static void serializeMaterial(Material* material, YAML::Emitter& emitter);
+
+		static void serializeSerializable(Serializable* serializable, YAML::Emitter& out);
 		
 		static void deserializeGameConfig(Game* game);
 

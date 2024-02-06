@@ -144,48 +144,11 @@ namespace engine
 
 	void GameSerializer::serializeComponent(std::shared_ptr<Component> component, YAML::Emitter& out)
 	{
+		std::shared_ptr<Serializable> serializable = std::dynamic_pointer_cast<Serializable>(component);
 		out << YAML::BeginMap;
 		out << YAML::Key << "name";
 		out << YAML::Value << component->getName();
-
-		std::shared_ptr<Serializable> serializable = std::dynamic_pointer_cast<Serializable>(component);
-		for (const auto serializableVariable : serializable->getSerializableVariables())
-		{
-			out << YAML::Key << serializableVariable.name;
-			if (serializableVariable.type == SerializableType::FLOAT)
-			{	
-				out << YAML::Value << *static_cast<float*>(serializableVariable.data);
-			}
-			else if (serializableVariable.type == SerializableType::VECTOR3)
-			{
-				float* vec3 = static_cast<float*>(serializableVariable.data);
-				std::vector<float> vec3Vector(vec3, vec3 + 3);
-				out << YAML::Flow << YAML::Value << vec3Vector;
-			}
-			else if (serializableVariable.type == SerializableType::VECTOR4)
-			{
-				float * vec4 = static_cast<float*>(serializableVariable.data);
-				std::vector<float> vec4Vector(vec4, vec4 + 4);
-				out << YAML::Flow << YAML::Value << vec4Vector;
-			}
-			else if (serializableVariable.type == SerializableType::BOOLEAN)
-			{
-				out << YAML::Value << *static_cast<bool*>(serializableVariable.data);
-			}
-			else if (serializableVariable.type == SerializableType::STRING)
-			{
-				out << YAML::Value << *static_cast<std::string*>(serializableVariable.data);
-			}
-			else if (serializableVariable.type == SerializableType::INT)
-			{
-				out << YAML::Value << *static_cast<int*>(serializableVariable.data);
-			}
-			else
-			{
-				LOG_ERROR("Failed to serialize component: " + component->getName() + " because of unknown serializable type");
-			}
-		}
-
+		serializeSerializable(serializable.get(), out);
 		out << YAML::EndMap;
 	}
 	void GameSerializer::serializeTextures(const Game* game, YAML::Emitter& out)
@@ -207,13 +170,7 @@ namespace engine
 	void GameSerializer::serializeTexture(Texture* texture, YAML::Emitter& out)
 	{
 		out << YAML::BeginMap;
-		out << YAML::Key << "name";
-		out << YAML::Value << texture->name;
-		out << YAML::Key << "fileName";
-		out << YAML::Value << texture->filename;
-		out << YAML::Key << "Id";
-		// TODO: Add proper Id when UUID is implemented
-		out << YAML::Value << texture->uuid.id;
+		serializeSerializable(texture, out);
 		out << YAML::EndMap;
 
 		if (out.good())
@@ -240,43 +197,54 @@ namespace engine
 	void GameSerializer::serializeMaterial(Material* material, YAML::Emitter& out)
 	{
 		out << YAML::BeginMap;
-		out << YAML::Key << "name";
-		out << YAML::Value << material->name;
-		out << YAML::Key << "transparency";
-		out << YAML::Value << material->transparency;
-		out << YAML::Key << "emission";
-		out << YAML::Value << YAML::Flow << material->emission[0];
-		out << YAML::Key << "roughness";
-		out << YAML::Value << material->roughness;
-		out << YAML::Key << "shininess";
-		out << YAML::Value << material->shininess;
-		out << YAML::Key << "diffuseTexture";
-		if (material->diffuseTexture.expired())
-		{
-			out << YAML::Value << "";
-		}
-		else
-		{
-			out << YAML::Value << material->diffuseTexture.lock()->uuid.id;
-		}
-		out << YAML::Key << "specularTexture";
-		if (material->specularTexture.expired())
-		{
-			out << YAML::Value << "";
-		}
-		else
-		{
-			out << YAML::Value << material->specularTexture.lock()->uuid.id;
-		}
-		out << YAML::Key << "Id";
-		out << YAML::Value << material->uuid.id;
-
+		serializeSerializable(material, out);
 		out << YAML::EndMap;
 
 		if (out.good())
 			LOG_TRACE("Serialized material: " + material->name);
 		else
 			LOG_ERROR("Failed to serialize material: " + material->name);
+	}
+
+
+	void GameSerializer::serializeSerializable(Serializable* serializable, YAML::Emitter& out)
+	{
+		for (const auto serializableVariable : serializable->getSerializableVariables())
+		{
+			out << YAML::Key << serializableVariable.name;
+			if (serializableVariable.type == SerializableType::FLOAT)
+			{
+				out << YAML::Value << *static_cast<float*>(serializableVariable.data);
+			}
+			else if (serializableVariable.type == SerializableType::VECTOR3)
+			{
+				float* vec3 = static_cast<float*>(serializableVariable.data);
+				std::vector<float> vec3Vector(vec3, vec3 + 3);
+				out << YAML::Flow << YAML::Value << vec3Vector;
+			}
+			else if (serializableVariable.type == SerializableType::VECTOR4)
+			{
+				float* vec4 = static_cast<float*>(serializableVariable.data);
+				std::vector<float> vec4Vector(vec4, vec4 + 4);
+				out << YAML::Flow << YAML::Value << vec4Vector;
+			}
+			else if (serializableVariable.type == SerializableType::BOOLEAN)
+			{
+				out << YAML::Value << *static_cast<bool*>(serializableVariable.data);
+			}
+			else if (serializableVariable.type == SerializableType::STRING)
+			{
+				out << YAML::Value << *static_cast<std::string*>(serializableVariable.data);
+			}
+			else if (serializableVariable.type == SerializableType::INT)
+			{
+				out << YAML::Value << *static_cast<int*>(serializableVariable.data);
+			}
+			else
+			{
+				LOG_ERROR("Failed to serialize serializable because of unknown serializable type");
+			}
+		}
 	}
 
 

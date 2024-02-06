@@ -31,7 +31,6 @@ namespace engine
 	class Serializable
 	{
 	public:
-		int test = 0;
 		virtual std::vector<SerializableVariable> getSerializableVariables() { return {}; };
 	};
 }
