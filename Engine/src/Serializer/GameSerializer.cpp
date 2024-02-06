@@ -13,7 +13,7 @@
 namespace engine
 {
 
-
+	// Serializes the game into a folder with config and state yaml files
 	void GameSerializer::serializeGame(Game* game)
 	{
 		LOG_INFO("Serializing game: " + game->name);
@@ -36,6 +36,7 @@ namespace engine
 		outfile.close();
 	}
 	
+	// Serialized the game config to a YAML file at the given file path
 	void GameSerializer::serializeGameConfig(const std::string& filePath, const Game* game)
 	{
 		LOG_INFO("Serializing game config: " + game->name);
@@ -65,6 +66,7 @@ namespace engine
 		LOG_INFO("Serialized game config: " + game->name);
 	}
 
+	// Serializes the game state to a YAML file at the given file path
 	void GameSerializer::serializeGameState(const std::string& filePath, const Game* game)
 	{
 		LOG_INFO("Serializing game state: " + game->name);
@@ -86,6 +88,8 @@ namespace engine
 
 		LOG_INFO("Serialized game state: " + game->name);
 	}
+
+	// Serializes all game objects to the given YAML emitter, will create a sequence of game objects
 	void GameSerializer::serializeGameObjects(const Game* game, YAML::Emitter& out)
 	{
 		out << YAML::Key << "GameObjects";
@@ -104,6 +108,8 @@ namespace engine
 			LOG_ERROR("Failed to serialize game objects");
 
 	}
+
+	// Serializes a game object to the given YAML emitter as a map
 	void GameSerializer::serializeGameObject(GameObject* gameObject, YAML::Emitter& out)
 	{
 		out << YAML::BeginMap;
@@ -129,6 +135,8 @@ namespace engine
 		else
 			LOG_ERROR("Failed to serialize game object: " + gameObject->name);
 	}
+
+	// Serializes all components to the given YAML emitter, will create a sequence of components
 	void GameSerializer::serializeComponents(std::vector<std::shared_ptr<Component>> components, YAML::Emitter& out)
 	{
 		out << YAML::Key << "Components";
@@ -142,6 +150,7 @@ namespace engine
 		out << YAML::EndSeq;
 	}
 
+	// Serializes a component to the given YAML emitter as a map
 	void GameSerializer::serializeComponent(std::shared_ptr<Component> component, YAML::Emitter& out)
 	{
 		std::shared_ptr<Serializable> serializable = std::dynamic_pointer_cast<Serializable>(component);
@@ -151,6 +160,8 @@ namespace engine
 		serializeSerializable(serializable.get(), out);
 		out << YAML::EndMap;
 	}
+
+	// Serializes all textures to the given YAML emitter, will create a sequence of textures
 	void GameSerializer::serializeTextures(const Game* game, YAML::Emitter& out)
 	{
 
@@ -167,6 +178,8 @@ namespace engine
 		else
 			LOG_ERROR("Failed to serialize textures");
 	}
+
+	// Serializes a texture to the given YAML emitter as a map
 	void GameSerializer::serializeTexture(Texture* texture, YAML::Emitter& out)
 	{
 		out << YAML::BeginMap;
@@ -178,6 +191,8 @@ namespace engine
 		else
 			LOG_ERROR("Failed to serialize texture: " + texture->name);
 	}
+
+	// Serializes all materials to the given YAML emitter, will create a sequence of materials
 	void GameSerializer::serializeMaterials(const Game* game, YAML::Emitter& out)
 	{
 		out << YAML::Key << "Materials";
@@ -194,6 +209,8 @@ namespace engine
 		else
 			LOG_ERROR("Failed to serialize materials");
 	}
+
+	// Serializes a material to the given YAML emitter as a map
 	void GameSerializer::serializeMaterial(Material* material, YAML::Emitter& out)
 	{
 		out << YAML::BeginMap;
@@ -206,7 +223,7 @@ namespace engine
 			LOG_ERROR("Failed to serialize material: " + material->name);
 	}
 
-
+	// Serializes a serializable to the given YAML emitter as key value pairs for each serializable variable
 	void GameSerializer::serializeSerializable(Serializable* serializable, YAML::Emitter& out)
 	{
 		for (const auto serializableVariable : serializable->getSerializableVariables())
@@ -247,6 +264,8 @@ namespace engine
 		}
 	}
 
+	// Deserializes the given serializable from the given YAML node
+	// The given node should be the components node of a game object
 	void GameSerializer::deserializeSerializable(YAML::Node node, Serializable* serializable)
 	{
 		// TODO: improve complexity, currently does unnecessary iterations
@@ -293,10 +312,9 @@ namespace engine
 		}
 	}
 
-
+	// Deserializes the game config, state yaml files from the folder with the given game's name
 	void GameSerializer::deserializeGame(Game* game)
 	{
-
 		LOG_INFO("Deserializing game: {}", game->name);
 		std::string gameConfigFilePath = GAME_FOLDER_PATH + game->name + "/" + game->name + "Config" + GAME_CONFIG_FILE_EXTENSION;
 		LOG_TRACE("Loading file: " + gameConfigFilePath);
@@ -325,6 +343,7 @@ namespace engine
 	{
 	}
 
+	// Deserializes the game state from the game name's folder
 	void GameSerializer::deserializeGameState(Game* game)
 	{
 		LOG_INFO("Deserializing game state: {}", game->name);
@@ -340,6 +359,7 @@ namespace engine
 		LOG_INFO("Deserialized game state: " + game->name);
 	}
 
+	// Deserializes all textures from the given YAML node into the game
 	void GameSerializer::deserializeTextures(YAML::Node node, Game* game)
 	{
 		YAML::Node texturesNode;
@@ -372,6 +392,7 @@ namespace engine
 		}
 	}
 	
+	// Deserializes all materials from the given YAML node into the game
 	void GameSerializer::deserializeMaterials(YAML::Node node, Game* game)
 	{
 		YAML::Node materialNode;
@@ -409,6 +430,7 @@ namespace engine
 		}
 	}
 	
+	// Deserializes all game objects from the given YAML node into the game
 	void GameSerializer::deserializeGameObjects(YAML::Node node, Game* game)
 	{
 		YAML::Node gameObjectsNode;
@@ -445,6 +467,7 @@ namespace engine
 
 	}
 
+	// Deserializes all components from the given YAML node into the given game object
 	void GameSerializer::deserializeComponents(YAML::Node node, GameObject* gameObject, Game* game)
 	{
 		YAML::Node componentsNode;
@@ -472,6 +495,7 @@ namespace engine
 		}
 	}
 
+	// Deserializes a component from the given YAML node into the given game object
 	void GameSerializer::deserializeComponent(YAML::Node node, GameObject* gameObject, Game* game)
 	{
 		try 

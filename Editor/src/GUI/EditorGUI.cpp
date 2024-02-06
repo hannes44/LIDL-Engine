@@ -340,6 +340,7 @@ namespace engine
 					std::shared_ptr<GameObject> cube = std::make_shared<GameObject>();
 					cube->addComponent(MeshComponent::createPrimative(PrimativeMeshType::CUBE));
 					game->addGameObject(cube);
+					selectedObject = cube;
 				}
 				if (ImGui::MenuItem("Sphere"))
 				{
@@ -349,6 +350,11 @@ namespace engine
 				}
 				ImGui::EndMenu();
 			}
+			if (ImGui::MenuItem("Open OBJ file"))
+			{
+				
+			}
+
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("View"))
