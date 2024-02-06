@@ -21,6 +21,10 @@ namespace engine
 
 		static void createYAMLFile(const std::string& filePath, const std::string& fileName);
 
+		static void serializeSerializable(Serializable* serializable, YAML::Emitter& out);
+
+		static void deserializeSerializable(YAML::Node node, Serializable* serializable);
+
 	private:
 		static void serializeGameConfig(const std::string& filePath, const Game* game);
 
@@ -37,10 +41,6 @@ namespace engine
 
 		static void serializeMaterials(const Game* game, YAML::Emitter& emitter);
 		static void serializeMaterial(Material* material, YAML::Emitter& emitter);
-
-		static void serializeSerializable(Serializable* serializable, YAML::Emitter& out);
-		
-		static void deserializeSerializable(YAML::Node node, Serializable* serializable);
 
 		static void deserializeGameConfig(Game* game);
 

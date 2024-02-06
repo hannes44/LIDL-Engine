@@ -31,6 +31,7 @@ namespace engine
 	class Serializable
 	{
 	public:
+		// Override this function in order to serialize variables and show them in the editor
 		virtual std::vector<SerializableVariable> getSerializableVariables() { return {}; };
 	};
 }
