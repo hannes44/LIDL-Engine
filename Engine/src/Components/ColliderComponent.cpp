@@ -6,27 +6,27 @@
 #include "CameraComponent.hpp"
 
 namespace engine {
-    void ColliderComponent::drawBoundingBox(ColliderComponent* collider, BoundingBox& box, CameraComponent* camera) {
+    void ColliderComponent::drawBoundingBox(BoundingBox& box, CameraComponent* camera, bool isColliding) {
 
         // The center position of the box
-        glm::vec3 centerPos = collider->gameObject->transform.getPosition() + collider->offset;
+        glm::vec3 centerPos = box.getCenter();
 
         // The start point, top corner of the box
-        glm::vec3 currPos = centerPos + glm::vec3(-collider->extent.x / 2, collider->extent.y / 2, -collider->extent.z / 2);
+        glm::vec3 currPos = centerPos + glm::vec3(-box.getExtent().x / 2, box.getExtent().y / 2, -box.getExtent().z / 2);
         
         // The end point of the line
-        glm::vec3 nextPos = currPos + glm::vec3(collider->extent.x, 0, 0);
+        glm::vec3 nextPos = currPos + glm::vec3(box.getExtent().x, 0, 0);
 
         // We will move on the top surface of the box, so we use this offset vector to move to the mirrored bottom point
-        glm::vec3 down = glm::vec3(0, -collider->extent.y, 0);
+        glm::vec3 down = glm::vec3(0, -box.getExtent().y, 0);
         
-        glm::vec3 color = glm::vec3(1.0f, 0.0f, 0.0f);
+        glm::vec3 color = isColliding ? glm::vec3(1.0f, 0, 0) : glm::vec3(0, 1.0f, 0);
 
         // The offsets that take us to all the top surface corners of the box
         std::vector<glm::vec3> nextPointOffsets = {
-            glm::vec3(0, 0, collider->extent.z),
-            glm::vec3(-collider->extent.x, 0, 0),
-            glm::vec3(0, 0, -collider->extent.z),
+            glm::vec3(0, 0, box.getExtent().z),
+            glm::vec3(-box.getExtent().x, 0, 0),
+            glm::vec3(0, 0, -box.getExtent().z),
             glm::vec3(0, 0, 0) // Needed for the last rendering pass, but the actual value is never used
         };
         

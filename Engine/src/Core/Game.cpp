@@ -1,7 +1,7 @@
 #include "Game.hpp"
 #include "Utils/Utils.hpp"
 #include "Renderer/Renderer.hpp"
-#include "InputFramework.hpp"
+#include "Input/InputFramework.hpp"
 #include "Window.hpp"
 #include "Physics/GamePhysics.hpp"
 #include "Core/Logger.hpp"

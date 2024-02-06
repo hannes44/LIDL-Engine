@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include "Serializer/Serializable.hpp"
+#include <set>
 
 namespace engine
 {
@@ -19,18 +20,21 @@ namespace engine
 	class Component : public Serializable
 	{
 	public:
-		virtual void initialize() {};
-		virtual void update() {};
+		virtual void initialize(){};
+		virtual void update(){};
 
 		virtual std::string getName() = 0;
 
+		virtual std::set<std::string> getRequiredComponents() { return {}; };
+
 		virtual std::string getDescription() { return ""; };
 
-		void setGameObject(GameObject* gameObject) {
+		void setGameObject(GameObject *gameObject)
+		{
 			this->gameObject = gameObject;
 		}
 
 	protected:
-		GameObject* gameObject = nullptr;
+		GameObject *gameObject = nullptr;
 	};
 }

@@ -3,7 +3,7 @@
 #include "Core/Game.hpp"
 #include "Core/Window.hpp"
 #include "Renderer/Renderer.hpp"
-#include "Core/InputFramework.hpp"
+#include "Input/InputFramework.hpp"
 
 extern engine::Game* engine::createGame();
 

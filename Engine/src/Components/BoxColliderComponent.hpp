@@ -15,6 +15,6 @@ namespace engine {
         std::string getName() override;
 
     protected:
-
+        std::vector<glm::vec3> cornerExtents = {};
     };
 }
