@@ -37,4 +37,4 @@
 /out/
 
 /Shaders
-/Games/TestGame/TestGameState.yaml
+Games/*/*State.yaml
