@@ -39,11 +39,9 @@ namespace engine
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 
-		out << YAML::Key << "useDarkMode";
-		out << YAML::Value << settings.useDarkTheme;
+		GameSerializer::serializeSerializable(&settings, out);
 
-		out << YAML::Key << "showGizmos";
-		out << YAML::Value << settings.showGizmos;
+		GameSerializer::serializeSerializable(&settings.rendererSettings, out);
 
 		out << YAML::EndMap;
 
@@ -57,22 +55,16 @@ namespace engine
 	{
 		LOG_INFO("Deserializing editor settings: ");
 
+
 		std::string fileName = EDITOR_CONFIG_FILE_NAME;
 		
 		YAML::Node config = YAML::LoadFile(EDITOR_FOLDER_PATH + fileName + EDITOR_CONFIG_FILE_EXTENSION);
 
 		EditorSettings settings{};
 
-		try {
-			settings.useDarkTheme = config["useDarkMode"].as<bool>();
-			settings.showGizmos = config["showGizmos"].as<bool>();
-		}
-		catch(const std::exception& e)
-		{
-			// If there is problems with deserialization, return default settings
-			LOG_WARN("Failed to deserialize editor settings: " + std::string(e.what()));
-			return EditorSettings();
-		}
+		GameSerializer::deserializeSerializable(config, &settings);
+
+		GameSerializer::deserializeSerializable(config, &settings.rendererSettings);
 		
 		LOG_INFO("Deserialized editor settings: ");
 		return settings;

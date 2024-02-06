@@ -16,9 +16,6 @@ namespace engine
 {
 #define IMGUI_TOP_MENU_HEIGHT 18
 #define IMGUI_SHOW_DEMO_WINDOWS false
-// Turning this to true will make the game be initiated from the game instead of deserializing the game state file
-// The game will not save if this is true to avoid overwritting the game state file
-#define USE_GAME_INITIATION_INSTEAD_OF_DESERIALIZATION false
 
 bool isAddComponentVisible = false;
 
@@ -29,17 +26,22 @@ bool isAddComponentVisible = false;
 
 	void EditorGUI::start()
 	{
-		#if USE_GAME_INITIATION_INSTEAD_OF_DESERIALIZATION
-			game->initialize();
-		#else
-			GameSerializer::deserializeGame(game.get());
-		#endif
+		editorSettings = EditorSerializer::deSerializeEditorSettings();
 
+		// We have to save the initial serialization state to avoid serializing the initiated game if the user changes settings
+		bool initialUseSerialization = editorSettings.useSerialization;
+		if (initialUseSerialization)
+		{
+			GameSerializer::deserializeGame(game.get());
+		}
+		else
+		{
+			game->initialize();
+		}
 
 		AudioManager::getInstance().initialize();
 
 		editorCamera.translate(0, 0, 15);
-		editorCamera.rotate(10, 0, 1, 0);
 
 		Renderer* renderer = Renderer::getInstance();
 
@@ -58,7 +60,6 @@ bool isAddComponentVisible = false;
    
 		selectedAssetNodeFolder = assetManager->rootNode;
 
-		editorSettings = EditorSerializer::deSerializeEditorSettings();
 
 		rotateIconTexture = std::shared_ptr<Texture>(Texture::create("rotation_icon.png"));
 
@@ -87,9 +88,9 @@ bool isAddComponentVisible = false;
 			window.newFrame();
 		}
 
-		#if !USE_GAME_INITIATION_INSTEAD_OF_DESERIALIZATION
+		if (initialUseSerialization)
 			GameSerializer::serializeGame(game.get());
-		#endif
+		
 		EditorSerializer::serializeEditorSettings(editorSettings);
 	}
 
@@ -562,7 +563,7 @@ bool isAddComponentVisible = false;
 				{
 					if (ImGui::CollapsingHeader(component->getName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 					{
-						drawComponentSerializableVariables(component);
+						drawSerializableVariables(component.get());
 					}
 				}
 
@@ -641,19 +642,16 @@ bool isAddComponentVisible = false;
 		if (ImGui::CollapsingHeader("Editor Settings", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			ImGui::Text("RENDERING SETTINGS");
-			defaultCheckBox("Multisampling", &editorSettings.rendererSettings.useMultiSampling);
-			defaultCheckBox("Show Triangle outlines", &editorSettings.rendererSettings.drawWireframe);
-			defaultCheckBox("Depth Test", &editorSettings.rendererSettings.enableDepthTest);
-			defaultCheckBox("Face Culling", &editorSettings.rendererSettings.enableFaceCulling);
+
+			drawSerializableVariables(&editorSettings.rendererSettings);
 
 			ImGui::Text("EDITOR SETTINGS");
-			defaultCheckBox("Show Gizmos", &editorSettings.showGizmos);
 
-			bool savedUseDarkTheme = editorSettings.useDarkTheme;
-			if (defaultCheckBox("Use Dark Mode", &editorSettings.useDarkTheme))
+			drawSerializableVariables(&editorSettings);
+
+			if (editorSettings.useDarkTheme)
 			{
-				if (savedUseDarkTheme != editorSettings.useDarkTheme)
-					ImGui::StyleColorsDark();
+				ImGui::StyleColorsDark();
 			}
 			else if (!editorSettings.useDarkTheme)
 			{
@@ -760,9 +758,9 @@ bool isAddComponentVisible = false;
 		}
 	}
 
-	void EditorGUI::drawComponentSerializableVariables(std::shared_ptr<Component> component)
+	void EditorGUI::drawSerializableVariables(Serializable* serializable)
 	{
-		for (auto seralizableVariable : component->getSerializableVariables())
+		for (auto seralizableVariable : serializable->getSerializableVariables())
 		{
 			if (!seralizableVariable.showInEditor)
 				continue;
