@@ -392,9 +392,19 @@ bool isAddComponentVisible = false;
 				}
 				ImGui::EndMenu();
 			}
-			if (ImGui::MenuItem("Open OBJ file"))
+			if (ImGui::MenuItem("Add obj file mesh"))
 			{
-				
+				char fileFilter[64] = "obj files: .obj\0*.obj*\0\0";
+				std::string filename = EditorSerializer::addFileFromWindowsExplorerToProject(project.get(), fileFilter);
+				if (filename != "")
+				{		
+					std::shared_ptr<GameObject> obj = std::make_shared<GameObject>();
+					obj->name = filename;
+					obj->addComponent(MeshComponent::createMeshFromObjFile(filename));
+					game->addGameObject(obj);
+					selectedObject = obj;
+					
+				}
 			}
 
 			ImGui::EndMenu();
