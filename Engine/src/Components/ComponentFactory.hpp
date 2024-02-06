@@ -6,6 +6,6 @@ namespace engine
 	class ComponentFactory 
 	{
 	public:
-		static Component* createComponent(std::string componentName);
+		static std::shared_ptr<Component> createComponent(std::string componentName);
 	};
 }

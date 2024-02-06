@@ -11,32 +11,32 @@
 
 namespace engine
 {
-	Component* ComponentFactory::createComponent(std::string componentName)
+	std::shared_ptr<Component> ComponentFactory::createComponent(std::string componentName)
 	{
 		LOG_INFO("Creating component: {0}", componentName);
 		if (componentName == "Mesh")
 		{
-			return new MeshComponent();
+			return std::make_shared<MeshComponent>();
 		}
 		else if (componentName == "Physics")
 		{
-			return new PhysicsComponent();
+			return std::make_shared<PhysicsComponent>();
 		}
 		else if (componentName == "Box Collider")
 		{
-			return new BoxColliderComponent();
+			return std::make_shared<BoxColliderComponent>();
 		}
 		else if (componentName == "Sphere Collider")
 		{
-			return new SphereColliderComponent();
+			return std::make_shared<SphereColliderComponent>();
 		}
 		else if (componentName == "PointLight")
 		{
-			return new PointLightComponent();
+			return std::make_shared<PointLightComponent>();
 		}
 		else if (componentName == "Camera")
 		{
-			return new CameraComponent();
+			return std::make_shared<CameraComponent>();
 		}
 
 		LOG_INFO("Did not find component: {0} in list of default components, looking for component dll");

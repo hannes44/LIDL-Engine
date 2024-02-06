@@ -502,7 +502,7 @@ namespace engine
 		{
 			std::string componentName = node["name"].as<std::string>();
 
-			Component* component = ComponentFactory::createComponent(componentName);
+			std::shared_ptr<Component> component = ComponentFactory::createComponent(componentName);
 			
 			if (component == nullptr)
 			{
@@ -510,12 +510,12 @@ namespace engine
 				return;
 			}
 
-			deserializeSerializable(node, component);
+			deserializeSerializable(node, component.get());
 			
 			// Special case for mesh component
 			if (componentName == "Mesh")
 			{
-				MeshComponent* meshComponent = dynamic_cast<MeshComponent*>(component);
+				MeshComponent* meshComponent = dynamic_cast<MeshComponent*>(component.get());
 				if (meshComponent != nullptr)
 				{
 					if (meshComponent->objFileName != "")
@@ -537,7 +537,7 @@ namespace engine
 				}
 			}
 
-			gameObject->addComponent(std::shared_ptr<Component>(component));
+			gameObject->addComponent(component);
 
 		}
 		catch (const std::exception& e)
