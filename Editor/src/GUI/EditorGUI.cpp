@@ -7,6 +7,7 @@
 #include "Serializer/EditorSerializer.hpp"
 #include "Serializer/GameSerializer.hpp"
 #include <Physics/GamePhysics.hpp>
+#include "Components/ComponentFactory.hpp"
 #include <memory>
 #include <imgui_internal.h>
 
@@ -593,7 +594,8 @@ bool isAddComponentVisible = false;
 			ImGui::Text("Add Component");
 			ImGui::Separator();
 
-			const char* lines[] = { "Box Collider", "Camera", "Collider", "Mesh", "Physics", "Point Light", "Sphere Collider" };
+			const char* lines[] = { "Box Collider", "Camera", "Mesh", "Physics", "PointLight", "Sphere Collider" };
+			
 			static int item_current_idx = 0;
 
 			if (ImGui::BeginListBox("##"))
@@ -608,6 +610,16 @@ bool isAddComponentVisible = false;
 							item_current_idx = n;
 							Debug::Log(lines[item_current_idx]);
 							isAddComponentVisible = !isAddComponentVisible;
+
+							if (auto lockedSelectedObject = selectedObject.lock())
+							{
+								if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
+								{
+									std::string componentName = lines[item_current_idx];
+									lockedGameObject->addComponent(ComponentFactory::createComponent(componentName));
+								}
+							}
+
 						}
 					}
 					if (is_selected)
