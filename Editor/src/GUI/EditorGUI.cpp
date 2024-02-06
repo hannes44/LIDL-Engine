@@ -349,6 +349,7 @@ bool isAddComponentVisible = false;
 				if (ImGui::MenuItem("Cube"))
 				{
 					std::shared_ptr<GameObject> cube = std::make_shared<GameObject>();
+					cube->name = "Cube";
 					cube->addComponent(MeshComponent::createPrimative(PrimativeMeshType::CUBE));
 					game->addGameObject(cube);
 					selectedObject = cube;
@@ -356,12 +357,18 @@ bool isAddComponentVisible = false;
 				if (ImGui::MenuItem("Sphere"))
 				{
 					std::shared_ptr<GameObject> sphere = std::make_shared<GameObject>();
+					sphere->name = "Sphere";
 					sphere->addComponent(MeshComponent::createPrimative(PrimativeMeshType::SPHERE));
 					game->addGameObject(sphere);
 					selectedObject = sphere;
 				}
 				if (ImGui::MenuItem("Plane"))
 				{
+					std::shared_ptr<GameObject> plane = std::make_shared<GameObject>();
+					plane->name = "Plane";
+					plane->addComponent(MeshComponent::createPrimative(PrimativeMeshType::PLANE));
+					game->addGameObject(plane);
+					selectedObject = plane;
 				}
 				ImGui::EndMenu();
 			}
