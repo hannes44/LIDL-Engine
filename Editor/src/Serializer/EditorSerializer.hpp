@@ -3,6 +3,7 @@
 #include <string>
 #include "EditorSettings.hpp"
 #include <vector>
+#include "Project.hpp"
 
 namespace engine
 {
@@ -25,6 +26,8 @@ namespace engine
 			static bool isProjectNameValid(const std::string& name);
 
 			static void createFolder(const std::string& path);
+
+			static std::string addFileFromWindowsExplorerToProject(Project* project, char* fileExplorerFilter);
 
 			static std::string getFolderPathFromFileExplorer(const std::string initialPath = "");
 
