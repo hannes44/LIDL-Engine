@@ -35,7 +35,7 @@ namespace engine {
 
 	void BoxColliderComponent::drawCollider(CameraComponent* camera) {
 		BoundingBox box = getBoundingBox();
-		drawBoundingBox(box, camera);
+		drawBoundingBox(box, camera, isCurrentlyColliding);
 	}
 
 	std::string BoxColliderComponent::getName() {

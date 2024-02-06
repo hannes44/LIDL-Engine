@@ -36,6 +36,8 @@ add_library(engine
 	src/Components/SphereColliderComponent.cpp
 	src/Components/CameraComponent.hpp
 	src/Components/CameraComponent.cpp
+	src/Components/ControllableComponent.hpp
+	src/Components/ControllableComponent.cpp
 	src/Renderer/Console/Display.hpp
 	src/Renderer/Console/DisplayTerminal.hpp
 	src/Renderer/Console/DisplayTerminal.cpp
@@ -77,8 +79,6 @@ add_library(engine
 	src/Input/InputEvent.hpp
 	src/Input/InputListener.hpp
 	src/Input/InputListener.cpp
-	src/Input/InputSystem.hpp
-	src/Input/InputSystem.cpp
 	src/Input/InputFramework.hpp
 	src/Input/InputFramework.cpp
 	src/Audio/AudioManager.cpp
@@ -101,6 +101,8 @@ source_group("Components" FILES
 	src/Components/SphereColliderComponent.cpp
 	src/Components/CameraComponent.hpp
 	src/Components/CameraComponent.cpp
+	src/Components/ControllableComponent.hpp
+	src/Components/ControllableComponent.cpp
 )
 
 source_group("Renderer" FILES
@@ -193,8 +195,6 @@ source_group("Input" FILES
 	src/Input/InputEvent.hpp
 	src/Input/InputListener.hpp
 	src/Input/InputListener.cpp
-	src/Input/InputSystem.hpp
-	src/Input/InputSystem.cpp
 	src/Input/InputFramework.hpp
 	src/Input/InputFramework.cpp
 )

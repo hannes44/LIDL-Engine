@@ -12,7 +12,7 @@ namespace engine
     struct GamePhysicsSettings {
         bool useGravity = true;
         float gravity = 9.82f;
-        int fixedUpdateIntervalMS = 1000;
+        int fixedUpdateIntervalMS = 100;
     };
 
 	class GamePhysics

@@ -15,8 +15,10 @@ namespace engine {
     }
 
     InputFramework& InputFramework::getInstance() {
-        static InputFramework instance;
-        return instance;
+        if (instance == nullptr) {
+			instance = new InputFramework();
+		}
+        return *instance;
     }
 
     bool InputFramework::isKeyPressed(const char* key) {
@@ -99,17 +101,28 @@ namespace engine {
         }
     }
 
-    // Initialize the input framework
-    void InputFramework::initialize() {
-        // Additional initialization logic can be added here
-        InputSystem::initialize();
-        SDL_SetRelativeMouseMode(SDL_TRUE);
-    }
-
     // Clean up resources
     void InputFramework::cleanup() {
-        InputSystem::cleanup();
-        // Implement cleanup logic if needed
+        listeners.clear();
+    }
+
+    // Function to add a listener (subscriber)
+    void InputFramework::addListener(InputListener* listener) {
+        listeners.push_back(listener);
+    }
+
+    // Function to remove a listener (subscriber)
+    void InputFramework::removeListener(InputListener* listener) {
+        listeners.remove(listener);
+    }
+
+    // Function to dispatch captured event to all listeners
+    void InputFramework::dispatchEvent(const InputEvent& e) {
+        for (auto* listener : listeners) {
+            if (listener) {
+                listener->handleInput(e);
+            }
+        }
     }
 
 }

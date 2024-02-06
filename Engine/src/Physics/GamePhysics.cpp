@@ -6,6 +6,7 @@
 #include "Components/PhysicsComponent.hpp"
 #include "Components/ColliderComponent.hpp"
 #include "Utils/Utils.hpp"
+#include "glm/glm.hpp"
 
 namespace engine {
 
@@ -28,15 +29,28 @@ namespace engine {
                 continue;
             }
 
-            glm::vec3 velocity = physicsComponent->getVelocity();
+            glm::vec3 force = physicsComponent->getForce();
 
             // Apply gravity
-            if (physicsComponent->enableGravity) {
-                velocity.y -= physicsComponent->overrideGravityCoefficient ? physicsComponent->gravityCoefficient : settings.gravity;
-            }
+            if (physicsComponent->enableGravity)
+                force.y -= physicsComponent->overrideGravityCoefficient ? physicsComponent->gravityCoefficient : settings.gravity;
+            
+            const bool zeroResultantForce = glm::length(force) < 0.0001f;
+            
+            // Apply friction
+            if (zeroResultantForce)
+                force -= physicsComponent->getVelocity() * 0.5f;
+
+            physicsComponent->currentAcceleration = force / physicsComponent->mass;
+
+            // Update the velocity, but snap to 0 if it is close to 0
+            if (zeroResultantForce && glm::length(physicsComponent->getVelocity()) < 0.1f)
+                physicsComponent->setVelocity(glm::vec3(0));
+            else    
+                physicsComponent->applyVelocity(physicsComponent->currentAcceleration * getFixedUpdateScale());
             
             // Move the object, scaled to account for the fixed update
-			gameObject->transform.shiftPosition(velocity * getFixedUpdateScale());
+			gameObject->transform.shiftPosition(physicsComponent->getVelocity() * getFixedUpdateScale());
         }
 	}
 
@@ -68,7 +82,13 @@ namespace engine {
 
                 if (colliderComponent1->isColliding(colliderComponent2.get())) {
                     detectedCollisions.push_back(std::make_pair(firstName, secondName));
+                    colliderComponent1->isCurrentlyColliding = true;
+                    colliderComponent2->isCurrentlyColliding = true;
                     LOG_TRACE("Collision detected between " + firstName + " and " + secondName);
+                }
+                else {
+                    colliderComponent1->isCurrentlyColliding = false;
+                    colliderComponent2->isCurrentlyColliding = false;
                 }
             }
         }

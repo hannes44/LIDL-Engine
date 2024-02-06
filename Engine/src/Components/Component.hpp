@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <set>
 
 namespace engine
 {
@@ -44,6 +45,8 @@ namespace engine
 		virtual void update() {};
 
 		virtual std::string getName() = 0;
+
+		virtual std::set<std::string> getRequiredComponents() { return {}; };
 
 		virtual std::string getDescription() { return ""; };
 		// TODO: store UUID to entity
