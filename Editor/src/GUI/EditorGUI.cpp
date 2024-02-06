@@ -140,7 +140,21 @@ bool isAddComponentVisible = false;
 				{
 					if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
 					{
+						std::string gameObjectId = lockedGameObject->getUUID().id;
 						game->deleteGameObject(lockedGameObject->getUUID().id);
+						EventManager::getInstance().notify(EventType::SelectableDeleted, gameObjectId);
+					}
+					else if (auto lockedMaterial = dynamic_pointer_cast<Material>(lockedSelectedObject))
+					{
+						std::string materialId = lockedMaterial->getUUID().id;
+						game->deleteMaterial(lockedMaterial->getUUID().id);
+						EventManager::getInstance().notify(EventType::SelectableDeleted, materialId);
+					}
+					else if (auto lockedTexture = dynamic_pointer_cast<Texture>(lockedSelectedObject))
+					{
+						std::string textureId = lockedTexture->getUUID().id;
+						game->deleteTexture(lockedTexture->getUUID().id);
+						EventManager::getInstance().notify(EventType::SelectableDeleted, textureId);
 					}
 				}
 			}
@@ -225,6 +239,10 @@ bool isAddComponentVisible = false;
 				if (dynamic_pointer_cast<GameObject>(lockedSelectedObject))
 				{
 					drawInspectorSelectedGameObject();
+				}
+				else if (dynamic_pointer_cast<Serializable>(lockedSelectedObject))
+				{
+					drawSerializableVariables(dynamic_pointer_cast<Serializable>(lockedSelectedObject).get());
 				}
 
 			}
@@ -897,6 +915,8 @@ bool isAddComponentVisible = false;
 			{
 				if (assetNode->isFolder)
 					selectedAssetNodeFolder = assetNode;
+				else
+					selectedObject = assetNode->asset;
 			}
 
 

@@ -7,11 +7,7 @@ namespace engine
 		if (isFolder)
 			iconTexture = AssetManager::getIconTextureForNode(this);
 	}
-	void AssetNode::addChild(std::shared_ptr<AssetNode> parent, std::shared_ptr<AssetNode> child)
-	{
-		parent->children.push_back(child);
-		child->parent = parent;
-	}
+
 	std::vector<std::weak_ptr<AssetNode>> AssetNode::getEntireParentage()
 	{
 		std::vector<std::weak_ptr<AssetNode>> parents;
@@ -25,7 +21,18 @@ namespace engine
 	}
 	AssetManager::AssetManager(Game* game) : game(game)
 	{
+		EventManager::getInstance().subscribe(EventType::SelectableDeleted, this);
 		loadIconTextures();
+	}
+
+	void AssetManager::addChild(std::shared_ptr<AssetNode> parent, std::shared_ptr<AssetNode> child)
+	{
+		parent->children.push_back(child);
+		child->parent = parent;
+		if (child->asset.lock())
+		{
+			selectableIdToAssetNode[child->asset.lock()->getUUID().id] = child;
+		}
 	}
 
 	void AssetManager::buildAssetTree()
@@ -35,24 +42,24 @@ namespace engine
 
 		std::shared_ptr<AssetNode> texturesFolderNode = std::make_shared<AssetNode>(true, std::weak_ptr<Selectable>());
 		texturesFolderNode->name = "Textures";
-		AssetNode::addChild(rootNode, texturesFolderNode);
+		addChild(rootNode, texturesFolderNode);
 
 		for (const auto& [textureId, texture] : game->getTextures())
 		{
 			std::shared_ptr<AssetNode> textureNode = std::make_shared<AssetNode>(false, texture);
 			textureNode->name = texture->getName();
-			AssetNode::addChild(texturesFolderNode, textureNode);
+			addChild(texturesFolderNode, textureNode);
 		}
 
 		std::shared_ptr<AssetNode> materialsFolderNode = std::make_shared<AssetNode>(true, std::weak_ptr<Selectable>());
 		materialsFolderNode->name = "Materials";
-		AssetNode::addChild(rootNode, materialsFolderNode);
+		addChild(rootNode, materialsFolderNode);
 
 		for (const auto& [materialId, material] : game->getMaterials())
 		{
 			std::shared_ptr<AssetNode> materialNode = std::make_shared<AssetNode>(false, material);
 			materialNode->name = material->getName();
-			AssetNode::addChild(materialsFolderNode, materialNode);
+			addChild(materialsFolderNode, materialNode);
 		}
 
 		
@@ -73,5 +80,28 @@ namespace engine
 			return folderIconTexture;
 
 		return nullptr;
+	}
+	void AssetManager::onEvent(EventType type, std::string message)
+	{
+		if (type == EventType::SelectableDeleted)
+		{
+			// In order to remove the node from the tree, we need to find the parent node and remove the child from it
+			AssetNode* node = selectableIdToAssetNode[message].get();
+			if (node)
+			{
+				if (auto lockedParent = node->parent.lock())
+				{
+					for (auto it = lockedParent->children.begin(); it != lockedParent->children.end(); it++)
+					{
+						if ((*it)->uuid.id == node->uuid.id)
+						{
+							lockedParent->children.erase(it);
+							break;
+						}
+					}
+				}
+				selectableIdToAssetNode.erase(node->asset.lock()->getUUID().id);
+			}
+		}
 	}
 }

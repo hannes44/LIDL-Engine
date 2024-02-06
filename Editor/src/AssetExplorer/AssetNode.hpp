@@ -23,8 +23,6 @@ namespace engine
 
 		UUID uuid{};
 
-		static void addChild(std::shared_ptr<AssetNode> parent, std::shared_ptr<AssetNode> child);
-
 		// Returns a vector of this nodes parentage, this nodes parent, the parents parent, etc.
 		std::vector<std::weak_ptr<AssetNode>> getEntireParentage();
 
