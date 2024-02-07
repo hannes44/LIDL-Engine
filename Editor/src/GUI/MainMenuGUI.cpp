@@ -15,7 +15,7 @@ namespace engine
 	std::shared_ptr<engine::Project> MainMenuGUI::MainMenu()
 	{
 		// Initial project path
-		strcpy(projectPath, EditorSerializer::getPathToEditorGamesFolder().c_str());
+		strcpy(projectPath, ResourceManager::getAbsolutePathToEditorGamesFolder().c_str());
 
 		while (!stopStartMenu)
 		{

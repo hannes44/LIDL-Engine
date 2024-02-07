@@ -17,8 +17,6 @@ namespace fs = std::filesystem;
 
 namespace engine
 {
-	#define EDITOR_FOLDER_PATH "../../editor/"
-	#define EDITOR_CONFIG_FILE_EXTENSION ".yaml"
 	#define EDITOR_CONFIG_FILE_NAME "editor_settings"
 	#define GAME_ASSETS_FOLDER "../../../assets/3DObjects/"
 	#define WIN32_API_ERROR_CODE_FILE_ALREADY_EXISTS 80
@@ -28,7 +26,7 @@ namespace engine
 	}
 	void EditorSerializer::createYAMLFile(const std::string& filePath, const std::string& fileName)
 	{
-		const std::string fullPath = filePath + fileName + EDITOR_CONFIG_FILE_EXTENSION;
+		const std::string fullPath = filePath + fileName + CONFIG_FILE_EXTENSION;
 		LOG_INFO("Creating YAML file: " + fullPath);
 		std::ofstream outfile(fullPath);
 		outfile.close();
@@ -36,7 +34,7 @@ namespace engine
 	void EditorSerializer::serializeEditorSettings(EditorSettings& settings)
 	{
 		LOG_INFO("Serializing editor settings: ");
-		createYAMLFile(EDITOR_FOLDER_PATH, EDITOR_CONFIG_FILE_NAME);
+		createYAMLFile(PATH_TO_EDITOR, EDITOR_CONFIG_FILE_NAME);
 
 		YAML::Emitter out;
 		out << YAML::BeginMap;
@@ -48,7 +46,7 @@ namespace engine
 		out << YAML::EndMap;
 
 		std::string fileName = EDITOR_CONFIG_FILE_NAME;
-		std::ofstream fout(EDITOR_FOLDER_PATH + fileName + EDITOR_CONFIG_FILE_EXTENSION);
+		std::ofstream fout(PATH_TO_EDITOR + fileName + CONFIG_FILE_EXTENSION);
 		fout << out.c_str();
 
 		LOG_INFO("Serialized editor settings: ");
@@ -60,7 +58,7 @@ namespace engine
 
 		std::string fileName = EDITOR_CONFIG_FILE_NAME;
 		
-		YAML::Node config = YAML::LoadFile(EDITOR_FOLDER_PATH + fileName + EDITOR_CONFIG_FILE_EXTENSION);
+		YAML::Node config = YAML::LoadFile(ResourceManager::getPathToEditorResource(fileName + CONFIG_FILE_EXTENSION));
 
 		EditorSettings settings{};
 
@@ -233,19 +231,5 @@ namespace engine
 		}
 
 		return success ? folderPath : "";
-	}
-	std::string EditorSerializer::getPathToEditorGamesFolder()
-	{
-		char path[100];
-		GetModuleFileNameA(NULL, path, 100);
-		std::string pathToEditorFolder = path;
-		// Turn the slashes around
-		std::replace(pathToEditorFolder.begin(), pathToEditorFolder.end(), '\\', '/');
-
-		// Unlucky
-		pathToEditorFolder = pathToEditorFolder.substr(0, pathToEditorFolder.find_last_of("\\/"));
-		pathToEditorFolder = pathToEditorFolder.substr(0, pathToEditorFolder.find_last_of("\\/"));
-		pathToEditorFolder = pathToEditorFolder.substr(0, pathToEditorFolder.find_last_of("\\/"));
-		return pathToEditorFolder + "/editor/games/";
 	}
 }

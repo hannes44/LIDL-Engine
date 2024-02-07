@@ -30,7 +30,5 @@ namespace engine
 			static std::string addFileFromWindowsExplorerToProject(Project* project, char* fileExplorerFilter);
 
 			static std::string getFolderPathFromFileExplorer(const std::string initialPath = "");
-
-			static std::string getPathToEditorGamesFolder();
 	};
 }

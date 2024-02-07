@@ -3,16 +3,13 @@
 #include <string>
 #include <filesystem>
 #include "Core/Logger.hpp"
+#include <Windows.h>
 
 namespace fs = std::filesystem;
 
 namespace engine
 {
-	#define PATH_TO_EDITOR "../../Editor/"
-	#define CONFIG_FILE_EXTENSION "yaml"
-
-
-	std::string ResourceManager::getPathToGameResource(const std::string& fileName, Game* game)
+	std::string ResourceManager::getPathToGameResource(const std::string& fileNameWithExtention, Game* game)
 	{
 
 		// Since finding resources isn't a critical part of the engine in regards to performance, we can afford to 
@@ -22,10 +19,10 @@ namespace engine
 	}
 
 	// This function will return the path to the given filename in the editor's folders
-	std::string ResourceManager::getPathToEditorResource(const std::string& fileName)
+	std::string ResourceManager::getPathToEditorResource(const std::string& fileNameWithExtention)
 	{
 		std::string pathToEditor = PATH_TO_EDITOR;
-		std::string fileNameExtension = fileName.substr(fileName.find_last_of(".") + 1);
+		std::string fileNameExtension = fileNameWithExtention.substr(fileNameWithExtention.find_last_of("."));
 		LOG_INFO("{}", fileNameExtension);
 
 		std::string pathToAssetFolder = pathToEditor + "assets/";
@@ -46,7 +43,7 @@ namespace engine
 		{
 			std::string currentFileName = entry.path().filename().string();
 			
-			if (currentFileName == fileName)
+			if (currentFileName == fileNameWithExtention)
 			{
 				std::string currentFilePath = entry.path().string();
 				LOG_INFO("Found file: {}, at path: {}", currentFileName, currentFilePath);
@@ -54,7 +51,24 @@ namespace engine
 			}
 		}
 
-		LOG_WARN("Could not find file: " + fileName);
+		LOG_WARN("Could not find file: " + fileNameWithExtention);
 		return "";
+	}
+
+	std::string ResourceManager::getAbsolutePathToEditorGamesFolder()
+	{
+		char path[100];
+		// Gettinsg the absolute path to the build folder
+		GetModuleFileNameA(NULL, path, 100);
+		std::string pathToEditorFolder = path;
+		// Turn the slashes around
+		std::replace(pathToEditorFolder.begin(), pathToEditorFolder.end(), '\\', '/');
+
+		// Remove the last part of the path to turn it into the path to the root of the project
+		pathToEditorFolder = pathToEditorFolder.substr(0, pathToEditorFolder.find_last_of("\\/"));
+		pathToEditorFolder = pathToEditorFolder.substr(0, pathToEditorFolder.find_last_of("\\/"));
+		pathToEditorFolder = pathToEditorFolder.substr(0, pathToEditorFolder.find_last_of("\\/"));
+
+		return pathToEditorFolder + "/editor/games/";
 	}
 }
