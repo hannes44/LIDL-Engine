@@ -23,6 +23,8 @@ add_library(engine
 	src/Core/BoundingBox.cpp
 	src/Core/Debug.hpp
 	src/Core/Debug.cpp
+	src/Core/ResourceManager.hpp
+	src/Core/ResourceManager.cpp
 	src/Components/Component.hpp
 	src/Components/PointLightComponent.hpp
 	src/Components/PhysicsComponent.hpp
@@ -189,6 +191,8 @@ source_group("Core" FILES
 	src/Core/BoundingBox.cpp
 	src/Core/Debug.hpp
 	src/Core/Debug.cpp
+	src/Core/ResourceManager.hpp
+	src/Core/ResourceManager.cpp
 )
 
 source_group("Vendor" FILES
