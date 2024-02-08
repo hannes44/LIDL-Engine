@@ -72,8 +72,9 @@ namespace engine
 	}
 	void AssetManager::loadIconTextures()
 	{
-		folderIconTexture = std::shared_ptr<Texture>(Texture::create("folder_icon.png"));
+		folderIconTexture = std::shared_ptr<Texture>(Texture::create("folder_icon.png", false));
 	}
+
 	std::shared_ptr<Texture> AssetManager::getIconTextureForNode(AssetNode* node)
 	{
 		if (node->isFolder)

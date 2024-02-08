@@ -2,12 +2,13 @@
 #include "Core/Logger.hpp"
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../vendor/stb/stb_image.h"
+#include "Core/ResourceManager.hpp"
 
 namespace engine
 {
 	#define PATH_TO_TEXTURES "../../assets/textures/"
 
-	OpenGLTexture::OpenGLTexture(const std::string& textureFilename)
+	OpenGLTexture::OpenGLTexture(const std::string& textureFilename, bool isGameAsset)
 	{
 		LOG_INFO("Creating texture " + textureFilename);
 		filename = textureFilename;
@@ -15,12 +16,14 @@ namespace engine
 		std::string filenameNoExtension = textureFilename.substr(0, textureFilename.find_last_of("."));
 		name = filenameNoExtension;
 
+		std::string pathToFile = isGameAsset ? ResourceManager::getInstance()->getPathToGameResource(textureFilename) : ResourceManager::getPathToEditorResource(textureFilename);
+
 		glGenTextures(1, &textureIDOpenGL);
 		glBindTexture(GL_TEXTURE_2D, textureIDOpenGL);
 
 		// Load and generate the texture
 		int width, height, nrChannels;
-		unsigned char* data = stbi_load((PATH_TO_TEXTURES + textureFilename).c_str(), &width, &height, &nrChannels, 0);
+		unsigned char* data = stbi_load(pathToFile.c_str(), &width, &height, &nrChannels, 0);
 		if (data)
 		{
 

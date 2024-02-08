@@ -9,13 +9,35 @@ namespace fs = std::filesystem;
 
 namespace engine
 {
-	std::string ResourceManager::getPathToGameResource(const std::string& fileNameWithExtention, Game* game)
+	void ResourceManager::changeGame(Game* game)
 	{
+		this->game = game;
+	}
+	std::string ResourceManager::getPathToGameResource(const std::string& fileNameWithExtention)
+	{
+		if (game == nullptr)
+		{
+			LOG_ERROR("No game has been set for the ResourceManager");
+			return "";
+		}
+
 		std::string pathToSearch = PATH_TO_GAMES_FOLDER;
+
+		// TODO: This should be done with macros. PATH_TO_GAMES_FOLDER should be set to the correct path depending on if games or editor is building
+		if (std::filesystem::current_path().filename() != "Editor")
+		{
+			pathToSearch = "../" + pathToSearch;
+		}
+
+		pathToSearch += game->name + "/assets/Textures";
 
 		for (const auto& entry : fs::directory_iterator(pathToSearch))
 		{
 			std::cout << entry.path() << std::endl;
+			if (entry.path().filename().string() == fileNameWithExtention)
+			{
+				return entry.path().string();
+			}
 		}
 
 		// Since finding resources isn't a critical part of the engine in regards to performance, we can afford to 
@@ -24,6 +46,8 @@ namespace engine
 		return "";
 	}
 
+	
+
 	// This function will return the path to the given filename in the editor's folders
 	std::string ResourceManager::getPathToEditorResource(const std::string& fileNameWithExtention)
 	{
@@ -31,7 +55,7 @@ namespace engine
 		std::string fileNameExtension = fileNameWithExtention.substr(fileNameWithExtention.find_last_of("."));
 		LOG_INFO("{}", fileNameExtension);
 
-		std::string pathToAssetFolder = pathToEditor + "assets/";
+		std::string pathToAssetFolder = pathToEditor + "Assets/";
 
 		std::string pathToTextures = pathToAssetFolder + "Textures/";
 

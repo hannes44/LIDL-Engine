@@ -7,7 +7,7 @@ namespace engine
 	class OpenGLTexture : public Texture
 	{
 	public:
-		OpenGLTexture(const std::string& textureFileName);
+		OpenGLTexture(const std::string& textureFileName, bool isGameAsset = true);
 
 		~OpenGLTexture();
 

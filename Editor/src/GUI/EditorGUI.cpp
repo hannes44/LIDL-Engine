@@ -61,15 +61,15 @@ bool isAddComponentVisible = false;
 		selectedAssetNodeFolder = assetManager->rootNode;
 
 
-		rotateIconTexture = std::shared_ptr<Texture>(Texture::create("rotation_icon.png"));
+		rotateIconTexture = std::shared_ptr<Texture>(Texture::create("rotation_icon.png", false));
 
-		scaleIconTexture = std::shared_ptr<Texture>(Texture::create("scale_icon.png"));
+		scaleIconTexture = std::shared_ptr<Texture>(Texture::create("scale_icon.png", false));
 
-		translateIconTexture = std::shared_ptr<Texture>(Texture::create("translation_icon.png"));
+		translateIconTexture = std::shared_ptr<Texture>(Texture::create("translation_icon.png", false));
 
-		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png"));
+		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png", false));
 
-		ResourceManager::getPathToGameResource("", game.get());
+		//ResourceManager::getPathToGameResource("");
 
 		while (!quitProgram)
 		{

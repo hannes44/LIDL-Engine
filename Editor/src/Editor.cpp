@@ -74,12 +74,12 @@ namespace engine
 		if (gameDLL)
 		{
 			LOG_INFO("Loaded: {0}", fileName);
-			typedef engine::Game* (*createGame)(Renderer*, Window*, InputFramework*);
+			typedef engine::Game* (*createGame)(Renderer*, Window*, InputFramework*, ResourceManager*);
 			createGame createGameFunction = (createGame)GetProcAddress(gameDLL, "createGame");
 			if (createGameFunction)
 			{
 				LOG_TRACE("createGame function found");
-				game = std::shared_ptr<Game>(createGameFunction(Renderer::getInstance(), &Window::getInstance(), &InputFramework::getInstance()));
+				game = std::shared_ptr<Game>(createGameFunction(Renderer::getInstance(), &Window::getInstance(), &InputFramework::getInstance(), ResourceManager::getInstance()));
 			}
 			else
 			{
