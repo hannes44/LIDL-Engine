@@ -19,11 +19,11 @@ namespace engine
 
 		void drawLine(glm::vec3 start, glm::vec3 end, glm::vec3 color, CameraComponent* camera);
 
-		// Creates a texture from the renderered gameObject. Cane be used to create icons for materials, meshes etc. Position of the gameobject doesn't matter
+		// Creates a texture from the renderered gameObject. Can be used to create icons for materials, meshes etc. Position of the gameobject doesn't matter
 		// since it will be placed in frame under good lighting conditions
 		std::shared_ptr<Texture> renderTextureOfGameObject(GameObject* gameObject);
 
-		// Creates a texture from a rendered sphere using the material. 
+		// Creates a texture from a rendered mesh using the material. 
 		std::shared_ptr<Texture> renderTextureOfMaterial(std::shared_ptr<Material> material);
 
 		void initGraphicsAPI(GraphicsAPIType type);
