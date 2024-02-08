@@ -34,7 +34,7 @@ namespace engine
 	void EditorSerializer::serializeEditorSettings(EditorSettings& settings)
 	{
 		LOG_INFO("Serializing editor settings: ");
-		createYAMLFile(PATH_TO_EDITOR, EDITOR_CONFIG_FILE_NAME);
+		createYAMLFile(PATH_TO_EDITOR_FOLDER, EDITOR_CONFIG_FILE_NAME);
 
 		YAML::Emitter out;
 		out << YAML::BeginMap;
@@ -46,7 +46,7 @@ namespace engine
 		out << YAML::EndMap;
 
 		std::string fileName = EDITOR_CONFIG_FILE_NAME;
-		std::ofstream fout(PATH_TO_EDITOR + fileName + CONFIG_FILE_EXTENSION);
+		std::ofstream fout(PATH_TO_EDITOR_FOLDER + fileName + CONFIG_FILE_EXTENSION);
 		fout << out.c_str();
 
 		LOG_INFO("Serialized editor settings: ");

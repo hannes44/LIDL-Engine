@@ -11,6 +11,12 @@ namespace engine
 {
 	std::string ResourceManager::getPathToGameResource(const std::string& fileNameWithExtention, Game* game)
 	{
+		std::string pathToSearch = PATH_TO_GAMES_FOLDER;
+
+		for (const auto& entry : fs::directory_iterator(pathToSearch))
+		{
+			std::cout << entry.path() << std::endl;
+		}
 
 		// Since finding resources isn't a critical part of the engine in regards to performance, we can afford to 
 		// bruteforce the search for the file. If performance becomes an issue, we can start searching the correct folders depending on the file extension
@@ -21,7 +27,7 @@ namespace engine
 	// This function will return the path to the given filename in the editor's folders
 	std::string ResourceManager::getPathToEditorResource(const std::string& fileNameWithExtention)
 	{
-		std::string pathToEditor = PATH_TO_EDITOR;
+		std::string pathToEditor = PATH_TO_EDITOR_FOLDER;
 		std::string fileNameExtension = fileNameWithExtention.substr(fileNameWithExtention.find_last_of("."));
 		LOG_INFO("{}", fileNameExtension);
 

@@ -35,4 +35,4 @@ target_link_libraries(imguilib PRIVATE
 	imgui
 	SDL3::SDL3
 )
-add_definitions(-DBUILD_DLL)
+target_compile_definitions(engine PUBLIC GAME_BUILD = 1)

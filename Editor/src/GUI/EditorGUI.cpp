@@ -69,6 +69,8 @@ bool isAddComponentVisible = false;
 
 		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png"));
 
+		ResourceManager::getPathToGameResource("", game.get());
+
 		while (!quitProgram)
 		{
 			renderNewFrame();

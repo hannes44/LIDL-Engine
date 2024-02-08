@@ -5,7 +5,13 @@
 namespace engine
 {
 	#define CONFIG_FILE_EXTENSION ".yaml"
-	#define PATH_TO_EDITOR "../../Editor/"
+	#define PATH_TO_EDITOR_FOLDER "../../Editor/"
+
+#ifdef EDITOR
+	#define PATH_TO_GAMES_FOLDER "../../Games/"
+#else
+	#define PATH_TO_GAMES_FOLDER "../../../Games/"
+#endif
 
 	class ResourceManager
 	{

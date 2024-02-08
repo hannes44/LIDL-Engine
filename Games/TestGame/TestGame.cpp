@@ -160,5 +160,7 @@ namespace engine {
 
 engine::Game* engine::createGame() {
 
+	engine::ResourceManager::getPathToGameResource("", new engine::TestGame());
+	throw std::runtime_error("Not implemented");
 	return new TestGame();
 }
