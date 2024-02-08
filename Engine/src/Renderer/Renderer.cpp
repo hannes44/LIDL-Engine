@@ -80,7 +80,7 @@ namespace engine
 		{
 			MeshComponent* meshComponent = nullptr;
 
-			// TODO: Only gameobjects with a mesh should be sent to the renderer to aviod looping
+			// TODO: Only GameObjects with a mesh should be sent to the renderer to avoid looping
 			for (auto component : gameObject->getComponents())
 			{
 				if (dynamic_cast<MeshComponent*>(component.get()))
@@ -186,7 +186,7 @@ namespace engine
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);
 
-		// Set "renderedTexture" as our colour attachement #0
+		// Set "renderedTexture" as our colour attachment #0
 		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderedTexture, 0);
 
 		// Set the list of draw buffers.
@@ -250,7 +250,7 @@ namespace engine
 
 		MeshComponent* meshComponent = nullptr;
 
-		// TODO: Only gameobjects with a mesh should be sent to the renderer to aviod looping
+		// TODO: Only GameObjects with a mesh should be sent to the renderer to avoid looping
 		for (auto component : gameObject->getComponents())
 		{
 			if (dynamic_cast<MeshComponent*>(component.get()))
