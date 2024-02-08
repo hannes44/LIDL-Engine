@@ -16,4 +16,15 @@ namespace engine
 			break;
 		}
 	}
+	Texture* Texture::create()
+	{
+		switch (Renderer::getInstance()->getAPIType())
+		{
+		case GraphicsAPIType::OpenGL:
+			return new OpenGLTexture();
+			break;
+		default:
+			break;
+		}
+	}
 }

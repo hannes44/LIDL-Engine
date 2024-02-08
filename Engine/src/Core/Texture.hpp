@@ -18,6 +18,8 @@ namespace engine
 
 		static Texture* create(const std::string& textureFilename, bool isGameAsset = true);
 
+		// Empty texture, can be used to render into
+		static Texture* create();
 		// TODO: abstract away
 		GLuint textureIDOpenGL;
 

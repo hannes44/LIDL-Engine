@@ -32,6 +32,7 @@ namespace engine
 		glm::mat4 getTransform();
 		glm::mat4 getViewMatrix();
 		glm::mat4 getProjectionMatrix();
+		glm::mat4 getProjectionMatrix(int width, int height);
 
 		glm::vec3 translation {20, 20, 20};
 		glm::vec3 rotation {90, 0, 0};

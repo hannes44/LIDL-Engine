@@ -24,12 +24,12 @@ namespace engine
 		LOG_INFO("MeshComponent: Created mesh with {0} vertices and {1} indices", vertices.size(), indices.size());
 	}
 
-	std::shared_ptr<MeshComponent> MeshComponent::createMeshFromObjFile(const std::string& filename)
+	std::shared_ptr<MeshComponent> MeshComponent::createMeshFromObjFile(const std::string& filename, bool isGameAsset)
 	{
 		LOG_INFO("Creating mesh from file: {0}", filename);
 
 		std::shared_ptr<MeshComponent> mesh = std::make_shared<MeshComponent>();
-		loadMeshFromOBJFile(filename, mesh.get());
+		loadMeshFromOBJFile(filename, mesh.get(), isGameAsset);
 
 		return mesh;
 	}
@@ -51,7 +51,7 @@ namespace engine
 		this->material = material;
 	}
 
-	void MeshComponent::loadMeshFromOBJFile(const std::string& filename, MeshComponent* mesh)
+	void MeshComponent::loadMeshFromOBJFile(const std::string& filename, MeshComponent* mesh, bool isGameAsset)
 	{
 		LOG_INFO("Loading mesh from file: {0}", filename);
 
@@ -61,7 +61,8 @@ namespace engine
 		std::string err;
 		std::string warn;
 
-		if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, (ResourceManager::getInstance()->getPathToGameResource(filename)).c_str())) {
+		std::string pathToObj = isGameAsset ? ResourceManager::getInstance()->getPathToGameResource(filename) : ResourceManager::getInstance()->getPathToEditorResource(filename);
+		if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, pathToObj.c_str())) {
 			LOG_ERROR("Failed to load mesh from file: {0}", filename);
 			throw std::runtime_error(err);
 		}

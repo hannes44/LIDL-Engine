@@ -41,12 +41,9 @@ bool isAddComponentVisible = false;
 
 		AudioManager::getInstance().initialize();
 
-		editorCamera.translate(0, 0, 15);
-
 		Renderer* renderer = Renderer::getInstance();
 
 		assetManager = std::make_unique<AssetManager>(game.get());
-
 
 		InputFramework& inputFramework = InputFramework::getInstance();
 		inputFramework.addListener(this);
@@ -60,7 +57,6 @@ bool isAddComponentVisible = false;
    
 		selectedAssetNodeFolder = assetManager->rootNode;
 
-
 		rotateIconTexture = std::shared_ptr<Texture>(Texture::create("rotation_icon.png", false));
 
 		scaleIconTexture = std::shared_ptr<Texture>(Texture::create("scale_icon.png", false));
@@ -68,8 +64,6 @@ bool isAddComponentVisible = false;
 		translateIconTexture = std::shared_ptr<Texture>(Texture::create("translation_icon.png", false));
 
 		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png", false));
-
-		//ResourceManager::getPathToGameResource("");
 
 		while (!quitProgram)
 		{
@@ -924,7 +918,7 @@ bool isAddComponentVisible = false;
 	{
 		ImGui::BeginGroup();
 		{
-			int openGLTextureId = assetNode->iconTexture != nullptr ? assetNode->iconTexture->textureIDOpenGL : 0;
+			int openGLTextureId = !assetNode->getIconTexture().expired() ? assetNode->getIconTexture().lock()->textureIDOpenGL : 0;
 
 			if (ImGui::ImageButton(("##" + assetNode->uuid.id).c_str(), (void*)(intptr_t)openGLTextureId, ImVec2(70, 70), { 0, 1 }, { 1, 0 }))
 			{

@@ -6,6 +6,7 @@
 #include <vector>
 #include "Core/Game.hpp"
 #include "RendererSettings.hpp"
+#include "Components/MeshComponent.hpp"
 
 namespace engine
 {
@@ -17,6 +18,13 @@ namespace engine
 		void renderGizmos(Game* game, CameraComponent* camera, RendererSettings* renderingSettings);
 
 		void drawLine(glm::vec3 start, glm::vec3 end, glm::vec3 color, CameraComponent* camera);
+
+		// Creates a texture from the renderered GameObject. Can be used to create icons for materials, meshes etc. Position of the GameObject doesn't matter
+		// since it will be placed in frame under good lighting conditions
+		std::shared_ptr<Texture> renderTextureOfGameObject(GameObject* gameObject);
+
+		// Creates a texture from a rendered mesh using the material. 
+		std::shared_ptr<Texture> renderTextureOfMaterial(std::shared_ptr<Material> material);
 
 		void initGraphicsAPI(GraphicsAPIType type);
 
