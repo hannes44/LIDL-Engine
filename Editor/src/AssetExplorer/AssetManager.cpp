@@ -18,7 +18,6 @@ namespace engine
 			else if (dynamic_pointer_cast<Material>(lockedAsset))
 			{
 				auto material = dynamic_pointer_cast<Material>(lockedAsset);
-				RendererSettings settings{};
 				owningIconTexture = Renderer::getInstance()->renderTextureOfMaterial(material);
 			}
 		}
