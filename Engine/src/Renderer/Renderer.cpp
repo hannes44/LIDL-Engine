@@ -153,6 +153,114 @@ namespace engine
 		graphicsAPI->drawLine(start, end, color, modelViewProjection);
 	}
 
+	Texture* Renderer::renderTextureOfGameObject(GameObject* gameObject, RendererSettings* renderingSettings)
+	{
+		CameraComponent camera = CameraComponent();
+
+		camera.translation = glm::vec3(5, 0, 0);
+		camera.direction = glm::vec3(-1, 0, 0);
+
+		int width, height;
+		Window::getInstance().getWindowSize(&width, &height);
+
+		graphicsAPI->setViewport(0, 0, width, height);
+
+		graphicsAPI->setClearColor(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+
+		graphicsAPI->setCullFace(renderingSettings->enableFaceCulling);
+
+		graphicsAPI->setDepthTest(renderingSettings->enableDepthTest);
+
+		graphicsAPI->setDrawTriangleOutline(renderingSettings->drawWireframe);
+
+		if (renderingSettings->useMultiSampling)
+			glEnable(GL_MULTISAMPLE);
+		else
+			glDisable(GL_MULTISAMPLE);
+
+		baseShader->bind();
+
+		glm::mat4 projectionMatrix = camera.getProjectionMatrix();
+		glm::mat4 viewMatrix = camera.getViewMatrix();
+
+
+		PointLightComponent light = PointLightComponent();
+		light.color = glm::vec3(1, 1, 1);
+		glm::vec3 lightPosition = glm::vec3(2, 2, 0);
+
+		std::string index = "[0]";
+		baseShader->setVec3(("pointLights" + index + ".position").c_str(), lightPosition.x, lightPosition.y, lightPosition.z);
+		baseShader->setVec3(("pointLights" + index + ".ambient").c_str(), light.color.x, light.color.y, light.color.z);
+		baseShader->setVec3(("pointLights" + index + ".diffuse").c_str(), light.color.x, light.color.y, light.color.z);
+		baseShader->setVec3(("pointLights" + index + ".specular").c_str(), light.color.x, light.color.y, light.color.z);
+		baseShader->setFloat(("pointLights" + index + ".constant").c_str(), 10);
+		baseShader->setFloat(("pointLights" + index + ".linear").c_str(), 0);
+		baseShader->setFloat(("pointLights" + index + ".quadratic").c_str(), 0);
+
+
+		baseShader->setInt("numLights", 1);
+
+		baseShader->setVec3("viewPos", camera.translation.x, camera.translation.y, camera.translation.z);
+
+
+
+		MeshComponent* meshComponent = nullptr;
+
+		// TODO: Only gameobjects with a mesh should be sent to the renderer to aviod looping
+		for (auto component : gameObject->getComponents())
+		{
+			if (dynamic_cast<MeshComponent*>(component.get()))
+			{
+				meshComponent = dynamic_cast<MeshComponent*>(component.get());
+				break;
+			}
+		}
+
+		if (meshComponent == nullptr)
+		{
+			LOG_ERROR("No mesh component found in game object, can't create texture of game object");
+			return nullptr;
+		}
+			
+
+
+		glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * gameObject->transform.transformMatrix;
+		Renderer::baseShader->setMat4("modelViewProjectionMatrix", &modelViewProjectionMatrix[0].x);
+		Renderer::baseShader->setMat4("modelMatrix", &gameObject->transform.transformMatrix[0].x);
+
+		Material* material = meshComponent->getMaterial();
+		// Material
+		Renderer::baseShader->setFloat("material.shininess", material->shininess);
+		Renderer::baseShader->setVec3("material.baseColor", material->baseColor.x, material->baseColor.y, material->baseColor.z);
+		Renderer::baseShader->setInt("material.hasDiffuseTexture", !material->diffuseTexture.expired());
+		Renderer::baseShader->setInt("material.hasSpecularTexture", !material->specularTexture.expired());
+
+		if (!material->diffuseTexture.expired())
+		{
+			Renderer::baseShader->setInt("material.diffuseTexture", 0);
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, material->diffuseTexture.lock()->textureIDOpenGL);
+		}
+		if (!material->specularTexture.expired())
+		{
+			Renderer::baseShader->setInt("material.specularTexture", 1);
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_2D, material->specularTexture.lock()->textureIDOpenGL);
+		}
+
+		graphicsAPI->drawIndexed(meshComponent->getVertexArray().get(), meshComponent->indices.size());
+		return nullptr;
+	}
+
+	Texture* Renderer::renderTextureOfMaterial(std::shared_ptr<Material> material, RendererSettings* renderingSettings)
+	{
+		GameObject materialSphereGameObject = GameObject();
+		materialSphereGameObject.addComponent(MeshComponent::createPrimative(PrimativeMeshType::SPHERE));
+		materialSphereGameObject.getComponent<MeshComponent>()->setMaterial(std::shared_ptr<Material>(material));
+		renderTextureOfGameObject(&materialSphereGameObject, renderingSettings);
+		return nullptr;
+	}
+
 	void Renderer::initGraphicsAPI(GraphicsAPIType type)
 	{
 		switch (type)

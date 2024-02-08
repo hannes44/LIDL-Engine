@@ -41,7 +41,9 @@ bool isAddComponentVisible = false;
 
 		AudioManager::getInstance().initialize();
 
-		editorCamera.translate(0, 0, 15);
+		//editorCamera.translate(0, 0, 0);
+	//	editorCamera.direction = glm::vec3(0, -1, 0);
+
 
 		Renderer* renderer = Renderer::getInstance();
 
@@ -71,14 +73,23 @@ bool isAddComponentVisible = false;
 
 		//ResourceManager::getPathToGameResource("");
 
+		GameObject* testMesh = new GameObject();
+		testMesh->addComponent(MeshComponent::createPrimative(PrimativeMeshType::SPHERE));
+		testMesh->transform.setPosition(glm::vec3(0, 0, 0));
+
+		std::shared_ptr<Material> material = std::make_shared<Material>();
+		material->baseColor = glm::vec4(1, 0, 0, 1);
+
 		while (!quitProgram)
 		{
 			renderNewFrame();
 
 			inputFramework.getInput();
 
-			renderer->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
-			renderer->renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
+		//	renderer->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
+			//renderer->renderTextureOfGameObject(testMesh, &editorSettings.rendererSettings);
+			renderer->renderTextureOfMaterial(material, &editorSettings.rendererSettings);
+			//renderer->renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 
 			if (sceneState == EditorSceneState::Play)
 			{

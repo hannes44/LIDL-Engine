@@ -6,6 +6,7 @@
 #include <vector>
 #include "Core/Game.hpp"
 #include "RendererSettings.hpp"
+#include "Components/MeshComponent.hpp"
 
 namespace engine
 {
@@ -18,6 +19,13 @@ namespace engine
 
 		void drawLine(glm::vec3 start, glm::vec3 end, glm::vec3 color, CameraComponent* camera);
 
+		// Creates a texture from the renderered gameObject. Cane be used to create icons for materials, meshes etc. Position of the gameobject doesn't matter
+		// since it will be placed in frame under good lighting conditions
+		Texture* renderTextureOfGameObject(GameObject* gameObject, RendererSettings* renderingSettings);
+
+		// Creates a texture from a rendered sphere using the material. 
+		Texture* renderTextureOfMaterial(std::shared_ptr<Material> material, RendererSettings* renderingSettings);
+
 		void initGraphicsAPI(GraphicsAPIType type);
 
 		std::unique_ptr<GraphicsAPI> graphicsAPI = nullptr;
@@ -27,7 +35,7 @@ namespace engine
 		std::unique_ptr<Shader> baseShader = nullptr;
 
 		static Renderer* getInstance()
-		{
+		{ 
 			if (instance == nullptr)
 			{
 				instance = new Renderer();
