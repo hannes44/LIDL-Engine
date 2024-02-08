@@ -153,8 +153,51 @@ namespace engine
 		graphicsAPI->drawLine(start, end, color, modelViewProjection);
 	}
 
-	Texture* Renderer::renderTextureOfGameObject(GameObject* gameObject, RendererSettings* renderingSettings)
+	std::shared_ptr<Texture> Renderer::renderTextureOfGameObject(GameObject* gameObject, RendererSettings* renderingSettings)
 	{
+		GLuint textureFrameBuffer = 0;
+		glGenFramebuffers(1, &textureFrameBuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, textureFrameBuffer);
+
+		// The texture we're going to render to
+		GLuint renderedTexture;
+		glGenTextures(1, &renderedTexture);
+
+		// "Bind" the newly created texture : all future texture functions will modify this texture
+		glBindTexture(GL_TEXTURE_2D, renderedTexture);
+
+		// Give an empty image to OpenGL ( the last "0" )
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 768, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+
+		// Poor filtering. Needed !
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+		// The depth buffer
+		GLuint depthrenderbuffer;
+		glGenRenderbuffers(1, &depthrenderbuffer);
+		glBindRenderbuffer(GL_RENDERBUFFER, depthrenderbuffer);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 1024, 768);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);
+
+		// Set "renderedTexture" as our colour attachement #0
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderedTexture, 0);
+
+		// Set the list of draw buffers.
+		GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
+		glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
+
+		// Always check that our framebuffer is ok
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		{
+			LOG_FATAL("Framebuffer is not complete!");
+			return nullptr;
+		}
+
+		glBindFramebuffer(GL_FRAMEBUFFER, textureFrameBuffer);
+		glViewport(0, 0, 1024, 768); // Render on the whole framebuffer, complete from the lower left corner to the upper right
+			
+
 		CameraComponent camera = CameraComponent();
 
 		camera.translation = glm::vec3(5, 0, 0);
@@ -163,7 +206,7 @@ namespace engine
 		int width, height;
 		Window::getInstance().getWindowSize(&width, &height);
 
-		graphicsAPI->setViewport(0, 0, width, height);
+	//	graphicsAPI->setViewport(0, 0, width, height);
 
 		graphicsAPI->setClearColor(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
 
@@ -249,16 +292,21 @@ namespace engine
 		}
 
 		graphicsAPI->drawIndexed(meshComponent->getVertexArray().get(), meshComponent->indices.size());
-		return nullptr;
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(Texture::create());
+		texture->textureIDOpenGL = renderedTexture;
+		return texture;
 	}
 
-	Texture* Renderer::renderTextureOfMaterial(std::shared_ptr<Material> material, RendererSettings* renderingSettings)
+	std::shared_ptr<Texture> Renderer::renderTextureOfMaterial(std::shared_ptr<Material> material, RendererSettings* renderingSettings)
 	{
 		GameObject materialSphereGameObject = GameObject();
 		materialSphereGameObject.addComponent(MeshComponent::createPrimative(PrimativeMeshType::SPHERE));
 		materialSphereGameObject.getComponent<MeshComponent>()->setMaterial(std::shared_ptr<Material>(material));
-		renderTextureOfGameObject(&materialSphereGameObject, renderingSettings);
-		return nullptr;
+
+		return renderTextureOfGameObject(&materialSphereGameObject, renderingSettings);
 	}
 
 	void Renderer::initGraphicsAPI(GraphicsAPIType type)
