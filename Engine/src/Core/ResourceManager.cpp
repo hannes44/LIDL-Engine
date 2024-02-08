@@ -15,34 +15,29 @@ namespace engine
 	}
 	std::string ResourceManager::getPathToGameResource(const std::string& fileNameWithExtention)
 	{
+		LOG_INFO("Looking for file: {}", fileNameWithExtention);
 		if (game == nullptr)
 		{
 			LOG_ERROR("No game has been set for the ResourceManager");
 			return "";
 		}
-
-		std::string pathToSearch = PATH_TO_GAMES_FOLDER;
-
-		// TODO: This should be done with macros. PATH_TO_GAMES_FOLDER should be set to the correct path depending on if games or editor is building
-		if (std::filesystem::current_path().filename() != "Editor")
-		{
-			pathToSearch = "../" + pathToSearch;
-		}
-
-		pathToSearch += game->name + "/assets/Textures";
-
-		for (const auto& entry : fs::directory_iterator(pathToSearch))
-		{
-			std::cout << entry.path() << std::endl;
-			if (entry.path().filename().string() == fileNameWithExtention)
-			{
-				return entry.path().string();
-			}
-		}
+		std::string pathToSearch = getPathToActiveGameFolder() + "Assets/";
 
 		// Since finding resources isn't a critical part of the engine in regards to performance, we can afford to 
 		// bruteforce the search for the file. If performance becomes an issue, we can start searching the correct folders depending on the file extension
-
+		for (const auto& entry : fs::directory_iterator(pathToSearch))
+		{
+			for (const auto& entry : fs::directory_iterator(entry.path()))
+			{
+				std::cout << entry.path() << std::endl;
+				if (entry.path().filename().string() == fileNameWithExtention)
+				{
+					LOG_INFO("Found file: {}", entry.path().string());
+					return entry.path().string();
+				}
+			}
+		}
+		LOG_ERROR("Could not find file: " + fileNameWithExtention);
 		return "";
 	}
 
@@ -100,5 +95,24 @@ namespace engine
 		pathToEditorFolder = pathToEditorFolder.substr(0, pathToEditorFolder.find_last_of("\\/"));
 
 		return pathToEditorFolder + "/editor/games/";
+	}
+
+	std::string ResourceManager::getPathToActiveGameFolder()
+	{
+		std::string pathToSearch = PATH_TO_GAMES_FOLDER;
+
+		// TODO: This should be done with macros. PATH_TO_GAMES_FOLDER should be set to the correct path depending on if games or editor is building
+		if (std::filesystem::current_path().filename() != "Editor")
+		{
+			pathToSearch = "../" + pathToSearch;
+		}
+
+		pathToSearch += game->name + "/";
+
+		return pathToSearch;
+	}
+	std::string ResourceManager::getPathToActiveGameAsset3DObjectsFolder()
+	{
+		return getPathToActiveGameFolder() + "Assets/3DObjects/";
 	}
 }

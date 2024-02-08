@@ -1,15 +1,13 @@
 #include "MeshComponent.hpp"
 #include "Core/Logger.hpp"
 #include <iostream>
-
+#include "Core/ResourceManager.hpp"
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "../../vendor/tinyobjloader/tiny_obj_loader.h"
 
 
 namespace engine
 {
-#define MODELS_PATH "../../assets/3DObjects/"
-
 	MeshComponent::MeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices)
 	{
 
@@ -63,7 +61,7 @@ namespace engine
 		std::string err;
 		std::string warn;
 
-		if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, (MODELS_PATH + filename).c_str())) {
+		if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, (ResourceManager::getInstance()->getPathToGameResource(filename)).c_str())) {
 			LOG_ERROR("Failed to load mesh from file: {0}", filename);
 			throw std::runtime_error(err);
 		}

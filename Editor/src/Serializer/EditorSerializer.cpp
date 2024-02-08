@@ -18,7 +18,6 @@ namespace fs = std::filesystem;
 namespace engine
 {
 	#define EDITOR_CONFIG_FILE_NAME "editor_settings"
-	#define GAME_ASSETS_FOLDER "../../../assets/3DObjects/"
 	#define WIN32_API_ERROR_CODE_FILE_ALREADY_EXISTS 80
 
 	EditorSerializer::EditorSerializer()
@@ -134,7 +133,7 @@ namespace engine
 		std::string objFileExtension = objFilePath.extension().string();
 		int objFileSize = fs::file_size(objFilePath);
 
-		std::string destinationPath = fs::current_path().string() + GAME_ASSETS_FOLDER + objFileName;
+		std::string destinationPath = ResourceManager::getInstance()->getPathToActiveGameAsset3DObjectsFolder() + objFileName;
 		LOG_INFO("Copying file from file explorer to assets: " + destinationPath);
 		CopyFile(ofn.lpstrFile, (destinationPath).c_str(), TRUE);
 
@@ -150,10 +149,10 @@ namespace engine
 		if (GetLastError() == WIN32_API_ERROR_CODE_FILE_ALREADY_EXISTS)
 		{
 			// Assuming the file is the same one if the size is the same
-			bool sameFileExists = fs::file_size(fs::current_path().string() + GAME_ASSETS_FOLDER + objFileName) == objFileSize;
+			bool sameFileExists = fs::file_size(destinationPath) == objFileSize;
 			if (sameFileExists)
 			{
-				std::string newDestinationPath = fs::current_path().string() + GAME_ASSETS_FOLDER + objFileName;
+				std::string newDestinationPath = fs::current_path().string() + destinationPath + objFileName;
 				LOG_INFO("File: {} already exists in assets: {}", objFileName, newDestinationPath);
 				return objFileName;
 			}
@@ -163,7 +162,7 @@ namespace engine
 			// It will not recheck the size to determine if the file is the same after the initial check, not likely to happen but could fix it later
 			for (int i = 1; i < 100; i++)
 			{
-				CopyFile(ofn.lpstrFile, (fs::current_path().string() + GAME_ASSETS_FOLDER + objFileNameNoExtension + std::to_string(i) + objFileExtension).c_str(), TRUE);
+				CopyFile(ofn.lpstrFile, (fs::current_path().string() + destinationPath + objFileNameNoExtension + std::to_string(i) + objFileExtension).c_str(), TRUE);
 
 				objFileName = objFileNameNoExtension + std::to_string(i) + objFileExtension;
 

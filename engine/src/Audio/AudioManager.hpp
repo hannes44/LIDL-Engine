@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Core/ResourceManager.hpp"
 /*
 	AudioManager class | Manages audio playback
 	Use function playSound("filename") to play a sound
@@ -23,7 +23,7 @@ namespace engine {
 
 		void update();
 
-		void playSound(const char* fname);
+		void playSound(const std::string& fileName);
 
 		void stopSound();
 

@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "Game.hpp"
+#include "Core/Game.hpp"
 
 namespace engine
 {
@@ -25,6 +25,10 @@ namespace engine
 		static std::string getPathToEditorResource(const std::string& fileName);
 
 		static std::string getAbsolutePathToEditorGamesFolder();
+
+	    std::string getPathToActiveGameFolder();
+
+		std::string getPathToActiveGameAsset3DObjectsFolder();
 
 		static ResourceManager* getInstance()
 		{

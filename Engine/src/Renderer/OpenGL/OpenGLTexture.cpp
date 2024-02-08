@@ -6,8 +6,6 @@
 
 namespace engine
 {
-	#define PATH_TO_TEXTURES "../../assets/textures/"
-
 	OpenGLTexture::OpenGLTexture(const std::string& textureFilename, bool isGameAsset)
 	{
 		LOG_INFO("Creating texture " + textureFilename);
