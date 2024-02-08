@@ -48,9 +48,9 @@ namespace engine
 	// This function will return the path to the given filename in the editor's folders
 	std::string ResourceManager::getPathToEditorResource(const std::string& fileNameWithExtention)
 	{
+		LOG_INFO("Looking for file: {}", fileNameWithExtention);
 		std::string pathToEditor = PATH_TO_EDITOR_FOLDER;
 		std::string fileNameExtension = fileNameWithExtention.substr(fileNameWithExtention.find_last_of("."));
-		LOG_INFO("{}", fileNameExtension);
 
 		std::string pathToSearch = pathToEditor + "Assets/";
 

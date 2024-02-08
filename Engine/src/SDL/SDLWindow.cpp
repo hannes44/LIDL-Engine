@@ -7,7 +7,9 @@
 
 namespace engine
 {
-#define EDITOR2
+
+// TODO: fix proper macros set by the build system
+#define EDITOR
 
 	void SDLWindow::createWindow(int width, int height, std::string title)
 	{
@@ -47,7 +49,7 @@ namespace engine
 		SDL_GL_MakeCurrent(window, glContext);
 
 		// Only initialize ImGui if the editor is enabled
-		#ifdef EDITOR2
+		#ifdef EDITOR
 			ImGui::CreateContext();
 			ImGui::SetCurrentContext(ImGui::GetCurrentContext());
 			ImGui_ImplOpenGL3_Init();
