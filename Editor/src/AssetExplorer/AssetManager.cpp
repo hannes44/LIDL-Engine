@@ -19,7 +19,7 @@ namespace engine
 			{
 				auto material = dynamic_pointer_cast<Material>(lockedAsset);
 				RendererSettings settings{};
-				owningIconTexture = Renderer::getInstance()->renderTextureOfMaterial(material, &settings);
+				owningIconTexture = Renderer::getInstance()->renderTextureOfMaterial(material);
 			}
 		}
 	}

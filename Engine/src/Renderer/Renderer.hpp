@@ -21,10 +21,10 @@ namespace engine
 
 		// Creates a texture from the renderered gameObject. Cane be used to create icons for materials, meshes etc. Position of the gameobject doesn't matter
 		// since it will be placed in frame under good lighting conditions
-		std::shared_ptr<Texture> renderTextureOfGameObject(GameObject* gameObject, RendererSettings* renderingSettings);
+		std::shared_ptr<Texture> renderTextureOfGameObject(GameObject* gameObject);
 
 		// Creates a texture from a rendered sphere using the material. 
-		std::shared_ptr<Texture> renderTextureOfMaterial(std::shared_ptr<Material> material, RendererSettings* renderingSettings);
+		std::shared_ptr<Texture> renderTextureOfMaterial(std::shared_ptr<Material> material);
 
 		void initGraphicsAPI(GraphicsAPIType type);
 

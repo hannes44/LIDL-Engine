@@ -69,7 +69,7 @@ bool isAddComponentVisible = false;
 
 
 		material->baseColor = glm::vec3(1, 1, 1);
-		game->addMaterial(material);
+		//wgame->addMaterial(material);
 
 	//	game->addMaterial(material);
 		//game->addGameObject(testMesh);

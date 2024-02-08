@@ -66,6 +66,15 @@ namespace engine
 		return projectionMatrix;
 	}
 
+	glm::mat4 CameraComponent::getProjectionMatrix(int width, int height)
+	{
+		float aspectRatio = float(width) / float(height);
+
+		glm::mat4 projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
+
+		return projectionMatrix;
+	}
+
 	void CameraComponent::handleInput(const InputEvent& event) {
 
 		InputEventType EventType = event.getEventType();
