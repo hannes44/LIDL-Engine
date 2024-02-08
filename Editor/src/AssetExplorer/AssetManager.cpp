@@ -6,6 +6,15 @@ namespace engine
 	{
 		if (isFolder)
 			iconTexture = AssetManager::getIconTextureForNode(this);
+
+		if (auto lockedAsset = asset.lock())
+		{
+			if (dynamic_pointer_cast<Texture>(lockedAsset));
+			{
+				auto texture = dynamic_pointer_cast<Texture>(lockedAsset);
+				iconTexture = texture;
+			}
+		}
 	}
 
 	std::vector<std::weak_ptr<AssetNode>> AssetNode::getEntireParentage()

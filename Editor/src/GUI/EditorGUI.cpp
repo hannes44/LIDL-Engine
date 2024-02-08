@@ -924,7 +924,7 @@ bool isAddComponentVisible = false;
 	{
 		ImGui::BeginGroup();
 		{
-			int openGLTextureId = assetNode->iconTexture != nullptr ? assetNode->iconTexture->textureIDOpenGL : 0;
+			int openGLTextureId = !assetNode->iconTexture.expired() ? assetNode->iconTexture.lock()->textureIDOpenGL : 0;
 
 			if (ImGui::ImageButton(("##" + assetNode->uuid.id).c_str(), (void*)(intptr_t)openGLTextureId, ImVec2(70, 70), { 0, 1 }, { 1, 0 }))
 			{

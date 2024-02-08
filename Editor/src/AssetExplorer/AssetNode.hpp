@@ -26,7 +26,7 @@ namespace engine
 		// Returns a vector of this nodes parentage, this nodes parent, the parents parent, etc.
 		std::vector<std::weak_ptr<AssetNode>> getEntireParentage();
 
-		std::shared_ptr<Texture> iconTexture;
+		std::weak_ptr<Texture> iconTexture;
 
 		
 	};
