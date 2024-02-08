@@ -27,13 +27,15 @@ namespace engine
 		// bruteforce the search for the file. If performance becomes an issue, we can start searching the correct folders depending on the file extension
 		for (const auto& entry : fs::directory_iterator(pathToSearch))
 		{
-			for (const auto& entry : fs::directory_iterator(entry.path()))
+			if (!entry.is_directory())
+				continue;
+
+			for (const auto& subFolderEntry : fs::directory_iterator(entry.path()))
 			{
-				std::cout << entry.path() << std::endl;
-				if (entry.path().filename().string() == fileNameWithExtention)
+				if (subFolderEntry.path().filename().string() == fileNameWithExtention)
 				{
-					LOG_INFO("Found file: {}", entry.path().string());
-					return entry.path().string();
+					LOG_INFO("Found file: {}", subFolderEntry.path().string());
+					return subFolderEntry.path().string();
 				}
 			}
 		}
@@ -50,13 +52,7 @@ namespace engine
 		std::string fileNameExtension = fileNameWithExtention.substr(fileNameWithExtention.find_last_of("."));
 		LOG_INFO("{}", fileNameExtension);
 
-		std::string pathToAssetFolder = pathToEditor + "Assets/";
-
-		std::string pathToTextures = pathToAssetFolder + "Textures/";
-
-		std::vector<std::string> textureFileNames{};
-
-		std::string pathToSearch = pathToTextures;
+		std::string pathToSearch = pathToEditor + "Assets/";
 
 		// If the file is a config file, we will search in the editor's folder
 		if (fileNameExtension == CONFIG_FILE_EXTENSION)
@@ -64,15 +60,28 @@ namespace engine
 			pathToSearch = pathToEditor;
 		}
 
+		// Since finding resources isn't a critical part of the editor in regards to performance, we can afford to 
+		// bruteforce the search for the file. If performance becomes an issue, we can start searching the correct folders depending on the file extension
 		for (const auto& entry : fs::directory_iterator(pathToSearch))
 		{
-			std::string currentFileName = entry.path().filename().string();
-			
-			if (currentFileName == fileNameWithExtention)
+			// If the file is not inside a subfolder
+			if (entry.path().filename().string() == fileNameWithExtention)
 			{
-				std::string currentFilePath = entry.path().string();
-				LOG_INFO("Found file: {}, at path: {}", currentFileName, currentFilePath);
-				return currentFilePath;
+				LOG_INFO("Found file: {}", entry.path().string());
+				return entry.path().string();
+			}
+
+			if (!entry.is_directory())
+				continue;
+
+			// Check one layer deep in all subfolders
+			for (const auto& subFolderEntry : fs::directory_iterator(entry.path()))
+			{
+				if (subFolderEntry.path().filename().string() == fileNameWithExtention)
+				{
+					LOG_INFO("Found file: {}", subFolderEntry.path().string());
+					return subFolderEntry.path().string();
+				}
 			}
 		}
 
