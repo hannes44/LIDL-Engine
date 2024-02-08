@@ -67,12 +67,14 @@ bool isAddComponentVisible = false;
 		material->baseColor = glm::vec3(1, 0, 0);
 		testMesh->getComponent<MeshComponent>()->setMaterial(material);
 
-		std::shared_ptr<Texture> texture = renderer->renderTextureOfMaterial(material, &editorSettings.rendererSettings);
+
 		material->baseColor = glm::vec3(1, 1, 1);
-		material->diffuseTexture = texture;
-		game->addTexture(texture);
 		game->addMaterial(material);
-		game->addGameObject(testMesh);
+
+	//	game->addMaterial(material);
+		//game->addGameObject(testMesh);
+
+
 
 		assetManager->buildAssetTree();
    
@@ -945,7 +947,7 @@ bool isAddComponentVisible = false;
 	{
 		ImGui::BeginGroup();
 		{
-			int openGLTextureId = !assetNode->iconTexture.expired() ? assetNode->iconTexture.lock()->textureIDOpenGL : 0;
+			int openGLTextureId = !assetNode->getIconTexture().expired() ? assetNode->getIconTexture().lock()->textureIDOpenGL : 0;
 
 			if (ImGui::ImageButton(("##" + assetNode->uuid.id).c_str(), (void*)(intptr_t)openGLTextureId, ImVec2(70, 70), { 0, 1 }, { 1, 0 }))
 			{

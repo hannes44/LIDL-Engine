@@ -1,18 +1,25 @@
 #include "AssetManager.hpp"
+#include "Renderer/Renderer.hpp"
 
 namespace engine
 {
 	AssetNode::AssetNode(bool isFolder, std::weak_ptr<Selectable> asset) : isFolder(isFolder), asset(asset)
 	{
 		if (isFolder)
-			iconTexture = AssetManager::getIconTextureForNode(this);
+			nonOwningIconTexture = AssetManager::getIconTextureForNode(this);
 
 		if (auto lockedAsset = asset.lock())
 		{
-			if (dynamic_pointer_cast<Texture>(lockedAsset));
+			if (dynamic_pointer_cast<Texture>(lockedAsset))
 			{
 				auto texture = dynamic_pointer_cast<Texture>(lockedAsset);
-				iconTexture = texture;
+				nonOwningIconTexture = texture;
+			}
+			else if (dynamic_pointer_cast<Material>(lockedAsset))
+			{
+				auto material = dynamic_pointer_cast<Material>(lockedAsset);
+				RendererSettings settings{};
+				owningIconTexture = Renderer::getInstance()->renderTextureOfMaterial(material, &settings);
 			}
 		}
 	}
