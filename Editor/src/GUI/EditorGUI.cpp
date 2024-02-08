@@ -41,14 +41,9 @@ bool isAddComponentVisible = false;
 
 		AudioManager::getInstance().initialize();
 
-		//editorCamera.translate(0, 0, 0);
-	//	editorCamera.direction = glm::vec3(0, -1, 0);
-
-
 		Renderer* renderer = Renderer::getInstance();
 
 		assetManager = std::make_unique<AssetManager>(game.get());
-
 
 		InputFramework& inputFramework = InputFramework::getInstance();
 		inputFramework.addListener(this);
@@ -58,28 +53,9 @@ bool isAddComponentVisible = false;
 		EventManager& eventManager = EventManager::getInstance();
 		eventManager.subscribe(EventType::QuitProgram, this);
 
-
-		std::shared_ptr<GameObject> testMesh = std::make_shared<GameObject>();
-		testMesh->addComponent(MeshComponent::createPrimative(PrimativeMeshType::CUBE));
-		testMesh->transform.setPosition(glm::vec3(0, 0, 0));
-
-		std::shared_ptr<Material> material = std::make_shared<Material>();
-		material->baseColor = glm::vec3(1, 0, 0);
-		testMesh->getComponent<MeshComponent>()->setMaterial(material);
-
-
-		material->baseColor = glm::vec3(1, 1, 1);
-		//wgame->addMaterial(material);
-
-	//	game->addMaterial(material);
-		//game->addGameObject(testMesh);
-
-
-
 		assetManager->buildAssetTree();
    
 		selectedAssetNodeFolder = assetManager->rootNode;
-
 
 		rotateIconTexture = std::shared_ptr<Texture>(Texture::create("rotation_icon.png", false));
 
@@ -89,9 +65,6 @@ bool isAddComponentVisible = false;
 
 		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png", false));
 
-		//ResourceManager::getPathToGameResource("");
-
-
 		while (!quitProgram)
 		{
 			renderNewFrame();
@@ -99,8 +72,6 @@ bool isAddComponentVisible = false;
 			inputFramework.getInput();
 
 			renderer->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
-			//renderer->renderTextureOfGameObject(testMesh, &editorSettings.rendererSettings);
-
 			renderer->renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 
 			if (sceneState == EditorSceneState::Play)

@@ -53,6 +53,7 @@ namespace engine
 		return viewMatrix;
 	}
 
+	// Returns the projection matrix for the window size
 	glm::mat4 CameraComponent::getProjectionMatrix()
 	{
 		int width;
@@ -66,6 +67,7 @@ namespace engine
 		return projectionMatrix;
 	}
 
+	// Returns the projection matrix for the given width and height
 	glm::mat4 CameraComponent::getProjectionMatrix(int width, int height)
 	{
 		float aspectRatio = float(width) / float(height);
