@@ -202,8 +202,8 @@ namespace engine
 
 		CameraComponent camera = CameraComponent();
 
-		camera.translation = glm::vec3(3, 0, 0);
-		camera.direction = glm::vec3(-1, 0, 0);
+		camera.translation = glm::vec3(2.5, 0, 2.5);
+		camera.direction = glm::vec3(-1, 0, -1);
 
 		int width, height;
 		Window::getInstance().getWindowSize(&width, &height);
@@ -305,7 +305,7 @@ namespace engine
 	std::shared_ptr<Texture> Renderer::renderTextureOfMaterial(std::shared_ptr<Material> material)
 	{
 		GameObject materialSphereGameObject = GameObject();
-		materialSphereGameObject.addComponent(MeshComponent::createPrimative(PrimativeMeshType::SPHERE));
+		materialSphereGameObject.addComponent(MeshComponent::createMeshFromObjFile("amugus.obj"));
 		materialSphereGameObject.getComponent<MeshComponent>()->setMaterial(std::shared_ptr<Material>(material));
 
 		return renderTextureOfGameObject(&materialSphereGameObject);
