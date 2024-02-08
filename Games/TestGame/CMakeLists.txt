@@ -35,4 +35,3 @@ target_link_libraries(imguilib PRIVATE
 	imgui
 	SDL3::SDL3
 )
-add_definitions(-DBUILD_DLL)

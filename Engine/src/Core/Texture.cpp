@@ -5,12 +5,12 @@
 
 namespace engine
 {
-	Texture* Texture::create(const std::string& textureFilename)
+	Texture* Texture::create(const std::string& textureFilename, bool isGameAsset)
 	{
 		switch (Renderer::getInstance()->getAPIType())
 		{
 		case GraphicsAPIType::OpenGL:
-			return new OpenGLTexture(textureFilename);
+			return new OpenGLTexture(textureFilename, isGameAsset);
 			break;
 		default:
 			break;

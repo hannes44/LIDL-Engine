@@ -2,11 +2,15 @@
 #include <iostream>
 
 extern "C" {
-	__declspec(dllexport) engine::Game* createGame(engine::Renderer* renderer, engine::Window* window, engine::InputFramework* inputFramework) {
+	__declspec(dllexport) engine::Game* createGame(engine::Renderer* renderer, engine::Window* window, engine::InputFramework* inputFramework, engine::ResourceManager* resourceManager) {
+		engine::Game* game = new engine::TestGame();
 		engine::Renderer::instance = renderer;
 		engine::Window::instance = window; 
 		engine::InputFramework::instance = inputFramework;
-		return new engine::TestGame();
+		engine::Logger::init();
+		engine::ResourceManager::instance = resourceManager;
+		resourceManager->changeGame(game);
+		return game;
 	}
 }
 namespace engine {
@@ -25,8 +29,6 @@ namespace engine {
 	}
 
 	void TestGame::initialize() {
-		Logger::init();
-
 
 		std::shared_ptr<MeshComponent> meshComponent1 = engine::MeshComponent::createMeshFromObjFile("amugus.obj");
 		std::shared_ptr<MeshComponent> meshComponent2 = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);

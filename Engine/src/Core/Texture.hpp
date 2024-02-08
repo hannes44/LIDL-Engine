@@ -16,7 +16,7 @@ namespace engine
 
 		virtual void unbind() const = 0;
 
-		static Texture* create(const std::string& textureFilename);
+		static Texture* create(const std::string& textureFilename, bool isGameAsset = true);
 
 		// TODO: abstract away
 		GLuint textureIDOpenGL;

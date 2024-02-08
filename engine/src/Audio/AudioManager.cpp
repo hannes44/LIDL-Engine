@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include <MMSystem.h>
 
+
 namespace engine {
 
     AudioManager::AudioManager() {
@@ -21,10 +22,9 @@ namespace engine {
         
 	}
     
-    void AudioManager::playSound(const char* fname) {
-        const char file_location[100] = "../../assets/sounds/";
-        strcat((char*)file_location, fname);
-        PlaySoundA((LPCSTR)(file_location), NULL, SND_ASYNC);
+    void AudioManager::playSound(const std::string& fileName) {
+          std::string soundAssetPath = ResourceManager::getPathToEditorResource(fileName);
+          PlaySoundA((LPCSTR)(soundAssetPath.c_str()), NULL, SND_ASYNC);
     }
 
     void AudioManager::stopSound() {

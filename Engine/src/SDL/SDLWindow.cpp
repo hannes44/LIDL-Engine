@@ -7,6 +7,8 @@
 
 namespace engine
 {
+
+// TODO: fix proper macros set by the build system
 #define EDITOR
 
 	void SDLWindow::createWindow(int width, int height, std::string title)
