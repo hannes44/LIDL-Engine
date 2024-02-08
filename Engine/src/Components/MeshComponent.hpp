@@ -30,9 +30,9 @@ namespace engine
 		std::vector<uint32_t> indices{};
 
 
-		static void loadMeshFromOBJFile(const std::string& filename, MeshComponent* mesh);
+		static void loadMeshFromOBJFile(const std::string& filename, MeshComponent* mesh, bool isGameAsset = true);
 
-		static std::shared_ptr<MeshComponent> createMeshFromObjFile(const std::string& filename);
+		static std::shared_ptr<MeshComponent> createMeshFromObjFile(const std::string& filename, bool isGameAsset = true);
 		
 		static void loadPrimativeMesh(PrimativeMeshType type, MeshComponent* mesh);
 

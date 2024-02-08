@@ -153,15 +153,19 @@ namespace engine
 		graphicsAPI->drawLine(start, end, color, modelViewProjection);
 	}
 
+	// TODO: Don't use OpenGL code here
 	std::shared_ptr<Texture> Renderer::renderTextureOfGameObject(GameObject* gameObject)
 	{
+		// Resolution of the texture
+		int width = 1000;
+		int height = 1000;
+
 		RendererSettings renderingSettings{};
 
 		GLuint textureFrameBuffer = 0;
 		glGenFramebuffers(1, &textureFrameBuffer);
 		glBindFramebuffer(GL_FRAMEBUFFER, textureFrameBuffer);
 
-		// The texture we're going to render to
 		GLuint renderedTexture;
 		glGenTextures(1, &renderedTexture);
 
@@ -169,7 +173,7 @@ namespace engine
 		glBindTexture(GL_TEXTURE_2D, renderedTexture);
 
 		// Give an empty image to OpenGL ( the last "0" )
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1000, 1000, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 
 		// Poor filtering. Needed !
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -179,7 +183,7 @@ namespace engine
 		GLuint depthrenderbuffer;
 		glGenRenderbuffers(1, &depthrenderbuffer);
 		glBindRenderbuffer(GL_RENDERBUFFER, depthrenderbuffer);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 1000, 1000);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);
 
 		// Set "renderedTexture" as our colour attachement #0
@@ -197,7 +201,6 @@ namespace engine
 		}
 
 		glBindFramebuffer(GL_FRAMEBUFFER, textureFrameBuffer);
-		glViewport(0, 0, 1000, 1000); // Render on the whole framebuffer, complete from the lower left corner to the upper right
 			
 
 		CameraComponent camera = CameraComponent();
@@ -205,10 +208,7 @@ namespace engine
 		camera.translation = glm::vec3(2.5, 0, 2.5);
 		camera.direction = glm::vec3(-1, 0, -1);
 
-		int width, height;
-		Window::getInstance().getWindowSize(&width, &height);
-
-	//	graphicsAPI->setViewport(0, 0, width, height);
+		graphicsAPI->setViewport(0, 0, width, height);
 
 		graphicsAPI->setClearColor(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
 
@@ -225,9 +225,8 @@ namespace engine
 
 		baseShader->bind();
 
-		glm::mat4 projectionMatrix = camera.getProjectionMatrix(1000, 1000);
+		glm::mat4 projectionMatrix = camera.getProjectionMatrix(width, height);
 		glm::mat4 viewMatrix = camera.getViewMatrix();
-
 
 		PointLightComponent light = PointLightComponent();
 		light.color = glm::vec3(1, 1, 1);
@@ -266,8 +265,6 @@ namespace engine
 			LOG_ERROR("No mesh component found in game object, can't create texture of game object");
 			return nullptr;
 		}
-			
-
 
 		glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * gameObject->transform.transformMatrix;
 		Renderer::baseShader->setMat4("modelViewProjectionMatrix", &modelViewProjectionMatrix[0].x);
@@ -305,7 +302,7 @@ namespace engine
 	std::shared_ptr<Texture> Renderer::renderTextureOfMaterial(std::shared_ptr<Material> material)
 	{
 		GameObject materialSphereGameObject = GameObject();
-		materialSphereGameObject.addComponent(MeshComponent::createMeshFromObjFile("amugus.obj"));
+		materialSphereGameObject.addComponent(MeshComponent::createMeshFromObjFile("amugus.obj", false));
 		materialSphereGameObject.getComponent<MeshComponent>()->setMaterial(std::shared_ptr<Material>(material));
 
 		return renderTextureOfGameObject(&materialSphereGameObject);
