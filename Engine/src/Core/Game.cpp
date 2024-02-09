@@ -57,6 +57,7 @@ namespace engine {
 
 	void Game::addGameObject(std::shared_ptr<GameObject> gameObject)
 	{
+		gameObject->game = this;
 		gameObjects[gameObject->uuid.id] = std::move(gameObject);
 	}
 
