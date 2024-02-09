@@ -16,6 +16,10 @@ namespace engine
 
 		std::shared_ptr<AssetNode> rootNode;
 
+		std::shared_ptr<AssetNode> materialsFolderNode;
+
+		std::shared_ptr<AssetNode> texturesFolderNode;
+		
 		void changeGame(Game* game);
 
 		static std::shared_ptr<Texture> getIconTextureForNode(AssetNode* node);

@@ -46,11 +46,11 @@ namespace engine
 	{
 		LOG_INFO("Creating new project: {0} at {1}", name, path);
 
-		EditorSerializer::createFolder(path + "/" + name);
+		ResourceManager::createFolder(path + "/" + name);
 
-		EditorSerializer::createFolder(path + "/" + name + "/assets");
+		ResourceManager::createFolder(path + "/" + name + "/assets");
 
-		EditorSerializer::createFolder(path + "/" + name + "/scripts");
+		ResourceManager::createFolder(path + "/" + name + "/scripts");
 	}
 
 	void Editor::openProject(const std::string& gameName)

@@ -8,6 +8,16 @@ namespace engine
 	#define PATH_TO_EDITOR_FOLDER "../../Editor/"
 	#define PATH_TO_GAMES_FOLDER "../../Games/" // This is only for the editor to find the games
 
+	enum class ResourceType
+	{
+		TEXTURE,
+		OBJECT3D,
+		SOUND,
+		SCRIPT,
+		CONFIG,
+		OTHER
+	};
+
 	class ResourceManager
 	{
 	public:
@@ -28,7 +38,26 @@ namespace engine
 
 	    std::string getPathToActiveGameFolder();
 
+		std::string getPathToActiveGameSpecificAssetFolder(ResourceType type);
+
 		std::string getPathToActiveGameAsset3DObjectsFolder();
+
+		static std::vector<std::string> getAllGameNamesInGamesFolder();
+
+		static bool isProjectPathValid(const std::string& path);
+
+		static bool isProjectNameValid(const std::string& name);
+
+		static void createFolder(const std::string& path);
+
+		static std::string addFileFromWindowsExplorerToProject(char* fileExplorerFilter);
+
+		static std::string getFolderPathFromFileExplorer(const std::string initialPath = "");
+
+		static std::string getResourceFolderName(ResourceType type);
+
+		// Will map the given file name to a resource type based on the file extension
+		static ResourceType getResourceTypeFromFileName(const std::string& fileName);
 
 		static ResourceManager* getInstance()
 		{
