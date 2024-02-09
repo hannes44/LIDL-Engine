@@ -10,8 +10,9 @@
 
 namespace engine
 {
-	// Forward declaration due to circular dependency
+	// Forward declarations due to circular dependency
 	class Component;
+	class Game;
 
 	class GameObject : public Selectable
 	{
@@ -33,6 +34,8 @@ namespace engine
 		UUID uuid{};
 
 		UUID getUUID() override;
+
+		Game* game = nullptr;
 
 		void addComponent(std::shared_ptr<Component> component);
 		std::vector<std::shared_ptr<Component>>& getComponents() {
