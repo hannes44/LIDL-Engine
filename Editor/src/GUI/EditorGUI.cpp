@@ -406,7 +406,7 @@ bool isAddComponentVisible = false;
 			if (ImGui::MenuItem("Add obj file mesh"))
 			{
 				char fileFilter[64] = "obj files: .obj\0*.obj*\0\0";
-				std::string filename = EditorSerializer::addFileFromWindowsExplorerToProject(project.get(), fileFilter);
+				std::string filename = ResourceManager::addFileFromWindowsExplorerToProject(fileFilter);
 				if (filename != "")
 				{		
 					std::shared_ptr<GameObject> obj = std::make_shared<GameObject>();
