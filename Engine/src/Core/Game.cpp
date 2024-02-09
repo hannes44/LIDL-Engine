@@ -44,6 +44,17 @@ namespace engine {
 		return texture;
 	}
 
+	std::weak_ptr<Selectable> Game::getSelectable(const std::string& id)
+	{
+		if (gameObjects.count(id))
+			return gameObjects[id];
+		else if (materials.count(id))
+			return materials[id];
+		else if (textures.count(id))
+			return textures[id];
+		return std::weak_ptr<Selectable>();
+	}
+
 	void Game::addGameObject(std::shared_ptr<GameObject> gameObject)
 	{
 		gameObjects[gameObject->uuid.id] = std::move(gameObject);

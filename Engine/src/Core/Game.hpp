@@ -45,6 +45,9 @@ namespace engine
 
 		const std::map<std::string, std::shared_ptr<Material>> getMaterials() const { return materials; };
 
+		// Returns a selectable object with the given id
+		std::weak_ptr<Selectable> getSelectable(const std::string& id);
+
 		void addGameObject(std::shared_ptr<GameObject> gameObject);
 		std::weak_ptr<GameObject> getGameObject(const std::string& id);
 		void deleteGameObject(const std::string& id);

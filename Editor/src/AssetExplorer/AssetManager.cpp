@@ -37,6 +37,7 @@ namespace engine
 	AssetManager::AssetManager(Game* game) : game(game)
 	{
 		EventManager::getInstance().subscribe(EventType::SelectableDeleted, this);
+		EventManager::getInstance().subscribe(EventType::SelectableAdded, this);
 		loadIconTextures();
 	}
 
@@ -55,7 +56,7 @@ namespace engine
 		rootNode = std::make_shared<AssetNode>(true, std::weak_ptr<Selectable>());
 		rootNode->name = "Assets";
 
-		std::shared_ptr<AssetNode> texturesFolderNode = std::make_shared<AssetNode>(true, std::weak_ptr<Selectable>());
+		texturesFolderNode = std::make_shared<AssetNode>(true, std::weak_ptr<Selectable>());
 		texturesFolderNode->name = "Textures";
 		addChild(rootNode, texturesFolderNode);
 
@@ -66,7 +67,7 @@ namespace engine
 			addChild(texturesFolderNode, textureNode);
 		}
 
-		std::shared_ptr<AssetNode> materialsFolderNode = std::make_shared<AssetNode>(true, std::weak_ptr<Selectable>());
+		materialsFolderNode = std::make_shared<AssetNode>(true, std::weak_ptr<Selectable>());
 		materialsFolderNode->name = "Materials";
 		addChild(rootNode, materialsFolderNode);
 
@@ -117,6 +118,27 @@ namespace engine
 					}
 				}
 				selectableIdToAssetNode.erase(node->asset.lock()->getUUID().id);
+			}
+		}
+
+		if (type == EventType::SelectableAdded)
+		{
+			std::weak_ptr<Selectable> selectable = game->getSelectable(message);
+
+			if (auto lockedSelectable = selectable.lock())
+			{
+				if (dynamic_pointer_cast<Texture>(lockedSelectable))
+				{
+					std::shared_ptr<AssetNode> textureNode = std::make_shared<AssetNode>(false, selectable);
+					textureNode->name = lockedSelectable->getName();
+					addChild(texturesFolderNode, textureNode);
+				}
+				else if (dynamic_pointer_cast<Material>(lockedSelectable))
+				{
+					std::shared_ptr<AssetNode> materialNode = std::make_shared<AssetNode>(false, selectable);
+					materialNode->name = lockedSelectable->getName();
+					addChild(materialsFolderNode, materialNode);
+				}
 			}
 		}
 	}

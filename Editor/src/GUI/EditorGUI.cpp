@@ -354,6 +354,21 @@ bool isAddComponentVisible = false;
 			}
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("Assets"))
+		{
+			if (ImGui::MenuItem("Create Material"))
+			{
+				LOG_INFO("Create Material Pressed");
+				std::weak_ptr<Material> material = game->createMaterial("Material");
+				EventManager::getInstance().notify(EventType::SelectableAdded, material.lock()->getUUID().id);
+				selectedObject = material;
+			}
+			if (ImGui::MenuItem("Add texture file"))
+			{
+
+			}
+			ImGui::EndMenu();
+		}
 		if (ImGui::BeginMenu("GameObject"))
 		{
 			if (ImGui::MenuItem("Create Empty"))
