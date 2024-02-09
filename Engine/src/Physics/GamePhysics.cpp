@@ -30,13 +30,13 @@ namespace engine {
 			glm::vec3 force = physicsComponent->getForce();
 
 			// Apply gravity
-			if (physicsComponent->enableGravity)
+			if (settings.enableGravity && physicsComponent->enableGravity)
 				force.y -= physicsComponent->overrideGravityCoefficient ? physicsComponent->gravityCoefficient : settings.gravity;
 
-			const bool zeroResultantForce = glm::length(force) < 0.0001f;
+			const bool zeroResultantForce = settings.enableForces ? glm::length(force) < 0.0001f : true;
 
 			// Apply friction
-			if (zeroResultantForce)
+			if (settings.enableFriction && zeroResultantForce)
 				force -= physicsComponent->getVelocity() * 0.5f;
 
 			physicsComponent->currentAcceleration = force / physicsComponent->mass;
@@ -74,6 +74,9 @@ namespace engine {
     }
 
 	void GamePhysics::checkCollisions(std::map<std::string, std::shared_ptr<GameObject>> gameObjects, GamePhysicsSettings& settings) {
+		if (!settings.enableCollisions)
+			return;
+		
 		std::vector<std::pair<std::string, std::string>> detectedCollisions{};
 
 		// TODO: Change this loop to only check the combinations of GameObjects, so we can simplify some checks and avoid unnecessary iterations
@@ -106,6 +109,22 @@ namespace engine {
 					colliderComponent1->isCurrentlyColliding = true;
 					colliderComponent2->isCurrentlyColliding = true;
 
+					/* --- Temporary conversion until enums are serializable --- */
+					CollisionResolveType collisionResolveType;
+					if (settings.collisionResolveType == "FULLY_ELASTIC")
+						collisionResolveType = CollisionResolveType::FULLY_ELASTIC;
+					else if (settings.collisionResolveType == "FULLY_INELASTIC")
+						collisionResolveType = CollisionResolveType::FULLY_INELASTIC;
+					else if (settings.collisionResolveType == "DISABLED")
+						collisionResolveType = CollisionResolveType::DISABLED;
+					else
+						LOG_FATAL("Invalid collision type");
+					/* --- */
+
+					// Do not resolve collisions if they are disabled
+					if (collisionResolveType == CollisionResolveType::DISABLED)
+						continue;
+
 					auto pc1 = gameObject1->getComponent<PhysicsComponent>();
 					auto pc2 = gameObject2->getComponent<PhysicsComponent>();
                     
@@ -121,17 +140,7 @@ namespace engine {
                     else {
                         std::pair<glm::vec3,glm::vec3> finalVelocities;
                         
-                        /* --- Temporary conversion until enums are serializable --- */
-                        CollisionType collisionType;
-                        if (settings.collisionType == "FULLY_ELASTIC")
-                            collisionType = CollisionType::FULLY_ELASTIC;
-                        else if (settings.collisionType == "FULLY_INELASTIC")
-                            collisionType = CollisionType::FULLY_INELASTIC;
-                        else
-                            LOG_FATAL("Invalid collision type");
-                        /* --- */
-                        
-                        switch(collisionType) {
+                        switch(collisionResolveType) {
                             case FULLY_ELASTIC:
                                 finalVelocities = resolveCollisionFullyElastic(pc1, pc2);
                                 break;
