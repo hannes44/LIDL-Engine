@@ -354,6 +354,28 @@ bool isAddComponentVisible = false;
 			}
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("Assets"))
+		{
+			if (ImGui::MenuItem("Create Material"))
+			{
+				LOG_INFO("Create Material Pressed");
+				std::weak_ptr<Material> material = game->createMaterial("Material");
+				EventManager::getInstance().notify(EventType::SelectableAdded, material.lock()->getUUID().id);
+				selectedObject = material;
+			}
+			if (ImGui::MenuItem("Add texture file"))
+			{
+				char filter[256] = "png or jpeg: \0*.PNG;*.png;*.jpeg;*.jpg\0\0";
+				std::string textureFileName = ResourceManager::addFileFromWindowsExplorerToProject(filter);
+				if (textureFileName != "")
+				{
+					std::weak_ptr<Texture> texture = game->createTexture(textureFileName);
+					EventManager::getInstance().notify(EventType::SelectableAdded, texture.lock()->getUUID().id);
+					selectedObject = texture;
+				}
+			}
+			ImGui::EndMenu();
+		}
 		if (ImGui::BeginMenu("GameObject"))
 		{
 			if (ImGui::MenuItem("Create Empty"))
@@ -391,7 +413,7 @@ bool isAddComponentVisible = false;
 			if (ImGui::MenuItem("Add obj file mesh"))
 			{
 				char fileFilter[64] = "obj files: .obj\0*.obj*\0\0";
-				std::string filename = EditorSerializer::addFileFromWindowsExplorerToProject(project.get(), fileFilter);
+				std::string filename = ResourceManager::addFileFromWindowsExplorerToProject(fileFilter);
 				if (filename != "")
 				{		
 					std::shared_ptr<GameObject> obj = std::make_shared<GameObject>();

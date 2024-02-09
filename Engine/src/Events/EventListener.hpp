@@ -7,6 +7,7 @@ namespace engine
 	{
 		QuitProgram,
 		SelectableDeleted,
+		SelectableAdded,
 		Last
 	};
 	class EventListener

@@ -155,14 +155,14 @@ namespace engine
 		ImGui::InputText("##projectPath", projectPath, inputBufferSize, flags);
 		ImGui::SameLine();
 
-		bool isProjectNameValid = EditorSerializer::isProjectNameValid(projectName);
-		bool isProjectPathValid = EditorSerializer::isProjectPathValid(projectPath);
+		bool isProjectNameValid = ResourceManager::isProjectNameValid(projectName);
+		bool isProjectPathValid = ResourceManager::isProjectPathValid(projectPath);
 
 		if (ImGui::Button("Browse (Gunilla)"))
 		{
 			LOG_INFO("Getting path from windows file explorer");
 			// TODO: Do this on another thread to avoid blocking the main thread
-			std::string path = EditorSerializer::getFolderPathFromFileExplorer();
+			std::string path = ResourceManager::getFolderPathFromFileExplorer();
 			LOG_INFO("Got path from windows file explorer: {}", path);
 			if (!path.empty())
 			{
@@ -201,7 +201,7 @@ namespace engine
 	void MainMenuGUI::renderOpenProjectTab()
 	{
 		ImGui::Text("Projects: ");
-		for (auto gameName : EditorSerializer::getAllGameNamesInGamesFolder())
+		for (auto gameName : ResourceManager::getAllGameNamesInGamesFolder())
 		{
 			if (ImGui::Button(gameName.c_str()))
 			{
