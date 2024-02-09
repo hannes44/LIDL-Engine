@@ -13,7 +13,7 @@ namespace fs = std::filesystem;
 
 namespace engine
 {
-	#define WIN32_API_ERROR_CODE_FILE_ALREADY_EXISTS 80
+#define WIN32_API_ERROR_CODE_FILE_ALREADY_EXISTS 80
 
 	void ResourceManager::changeGame(Game* game)
 	{
@@ -49,7 +49,7 @@ namespace engine
 		return "";
 	}
 
-	
+
 
 	// This function will return the path to the given filename in the editor's folders
 	std::string ResourceManager::getPathToEditorResource(const std::string& fileNameWithExtention)
@@ -126,6 +126,15 @@ namespace engine
 
 		return pathToSearch;
 	}
+
+	// Returns the path to the asset folder with the given type
+	std::string ResourceManager::getPathToActiveGameSpecificAssetFolder(ResourceType type)
+	{
+		std::string pathToGameAssetFolder = getPathToActiveGameFolder() + "Assets/";
+
+		std::string pathToSpecificAssetFolder = pathToGameAssetFolder + getResourceFolderName(type) + "/";
+		return pathToSpecificAssetFolder;
+	}
 	std::string ResourceManager::getPathToActiveGameAsset3DObjectsFolder()
 	{
 		return getPathToActiveGameFolder() + "Assets/3DObjects/";
@@ -195,7 +204,10 @@ namespace engine
 		std::string objFileExtension = objFilePath.extension().string();
 		int objFileSize = fs::file_size(objFilePath);
 
-		std::string destinationPath = ResourceManager::getInstance()->getPathToActiveGameAsset3DObjectsFolder() + objFileName;
+		ResourceType type = getResourceTypeFromFileName(objFileName);
+		std::string destinationFolderName = getResourceFolderName(type);
+
+		std::string destinationPath = ResourceManager::getInstance()->getPathToActiveGameSpecificAssetFolder(type) + objFileName;
 		LOG_INFO("Copying file from file explorer to assets: " + destinationPath);
 		CopyFile(ofn.lpstrFile, (destinationPath).c_str(), TRUE);
 
@@ -292,5 +304,41 @@ namespace engine
 		}
 
 		return success ? folderPath : "";
+	}
+
+	// Returns the folder name of the given resource type in the format "ExampleFolderName"
+	std::string ResourceManager::getResourceFolderName(ResourceType type)
+	{
+		switch (type)
+		{
+		case ResourceType::TEXTURE:
+			return "Textures";
+		case ResourceType::OBJECT3D:
+			return "3DObjects";
+		case ResourceType::SOUND:
+			return "Sounds";
+		case ResourceType::SCRIPT:
+			return "Scripts";
+		case ResourceType::CONFIG:
+			return "Configs";
+
+			return std::string();
+		}
+	}
+
+	ResourceType ResourceManager::getResourceTypeFromFileName(const std::string& fileName)
+	{
+		std::string extension = fileName.substr(fileName.find_last_of(".") + 1);
+		if (extension == "png" || extension == "PNG" || extension == "jpg" || extension == "jpeg")
+			return ResourceType::TEXTURE;
+		else if (extension == "obj")
+			return ResourceType::OBJECT3D;
+		else if (extension == "wav")
+			return ResourceType::SOUND;
+		else if (extension == "yaml")
+			return ResourceType::CONFIG;
+
+		LOG_INFO("Unknown file extension: " + extension);
+		return ResourceType::OTHER;
 	}
 }

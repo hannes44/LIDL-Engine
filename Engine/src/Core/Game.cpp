@@ -137,6 +137,14 @@ namespace engine {
 		return std::weak_ptr<Material>(material);
 	}
 
+	std::weak_ptr<Texture> Game::createTexture(const std::string& fileName)
+	{
+		std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(Texture::create(fileName));
+		textures[texture->getUUID().id] = texture;
+		return texture;
+	}
+
+
 	CameraComponent* Game::getMainCamera()
 	{
 		if (auto lockedMainCamera = mainCamera.lock())

@@ -365,7 +365,14 @@ bool isAddComponentVisible = false;
 			}
 			if (ImGui::MenuItem("Add texture file"))
 			{
-
+				char filter[256] = "png or jpeg: \0*.PNG;*.png;*.jpeg;*.jpg\0\0";
+				std::string textureFileName = ResourceManager::addFileFromWindowsExplorerToProject(filter);
+				if (textureFileName != "")
+				{
+					std::weak_ptr<Texture> texture = game->createTexture(textureFileName);
+					EventManager::getInstance().notify(EventType::SelectableAdded, texture.lock()->getUUID().id);
+					selectedObject = texture;
+				}
 			}
 			ImGui::EndMenu();
 		}
