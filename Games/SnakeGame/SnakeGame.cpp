@@ -48,12 +48,30 @@ namespace engine
 		camera->name = "Camera";
 		addGameObject(std::unique_ptr<GameObject>(camera));
 
-		GameObject *sphere1 = new GameObject();
-		sphere1->transform.setPosition(glm::vec3(10, 0, 0));
-		sphere1->name = "Gunilla gorilla";
-		sphere1->addComponent(engine::MeshComponent::createPrimative(PrimativeMeshType::SPHERE));
+		GameObject *head = new GameObject();
+		head->transform.setPosition(glm::vec3(0, 0, 0));
+		head->name = "Head";
+		auto boxColliderComponent = engine::BoxColliderComponent(glm::vec3(0, 0, 0), glm::vec3(1.f, 1.f, 1.f));
+		auto physicsComponent = engine::PhysicsComponent(false);
+		
+		
+		auto controllableComponent = std::make_shared<engine::ControllableComponent>();
+		controllableComponent->movementSpeed = 10.f;
+		controllableComponent->movementType = MovementType::Always;
+		
+		head->addComponent(engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE));
+		head->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponent));
+		head->addComponent(std::make_unique<engine::BoxColliderComponent>(boxColliderComponent));
+		head->addComponent(controllableComponent);
 
-		addGameObject(std::unique_ptr<GameObject>(sphere1));
+		addGameObject(std::unique_ptr<GameObject>(head));
+
+		// Set custom physics settings for Snake
+		config.physicsSettings.enableGravity = false;
+		config.physicsSettings.enableFriction = false;
+		config.physicsSettings.enableCollisions = true;
+		config.physicsSettings.enableForces = false;
+		config.physicsSettings.collisionResolveType = "DISABLED";
 	}
 
 }
