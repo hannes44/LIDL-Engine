@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
 
 	engine::InputFramework& inputFramework = engine::InputFramework::getInstance();
 
-	auto game =  engine::createGame();
+	auto game = engine::createGame();
 	window.setWindowTitle(game->name);
 	game->initialize();
 	game->gameLoop();

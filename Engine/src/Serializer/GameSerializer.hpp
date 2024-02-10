@@ -8,8 +8,8 @@
 
 namespace engine
 {
-	#define GAME_FOLDER_PATH "../../games/"
-	#define GAME_CONFIG_FILE_EXTENSION ".yaml"
+#define GAME_FOLDER_PATH "../../games/"
+#define GAME_CONFIG_FILE_EXTENSION ".yaml"
 
 	class GameSerializer
 	{

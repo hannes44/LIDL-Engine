@@ -7,7 +7,7 @@ namespace engine
 	{
 		LogEntry log = LogEntry(message);
 		LogQueue.push_back(log);
-		
+
 		std::cout << message << std::endl;
 	}
 }

@@ -24,7 +24,7 @@ namespace engine {
 
 		for (auto& cornerOffset : cornerExtents) {
 			glm::vec3 corner = glm::rotate(rotation, cornerOffset);
-			
+
 			maxPoints.x = std::max(maxPoints.x, corner.x);
 			maxPoints.y = std::max(maxPoints.y, corner.y);
 			maxPoints.z = std::max(maxPoints.z, corner.z);

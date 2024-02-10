@@ -88,5 +88,5 @@ namespace engine
 		std::map<std::string, std::shared_ptr<Material>> materials{};
 	};
 
-	Game * createGame();
+	Game* createGame();
 }

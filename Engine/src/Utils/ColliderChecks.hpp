@@ -5,9 +5,9 @@
 
 namespace engine {
 
-    class ColliderChecks {
-    public:
-        static bool boxBoxCollisionCheck(BoxColliderComponent* first, BoxColliderComponent* second);
-        static bool boxSphereCollisionCheck(BoxColliderComponent* box, SphereColliderComponent* sphere);
-    };
+	class ColliderChecks {
+	public:
+		static bool boxBoxCollisionCheck(BoxColliderComponent* first, BoxColliderComponent* second);
+		static bool boxSphereCollisionCheck(BoxColliderComponent* box, SphereColliderComponent* sphere);
+	};
 }

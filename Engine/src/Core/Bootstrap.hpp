@@ -19,7 +19,7 @@ namespace engine
 
 		static double getDeltaTime();
 
-    
+
 	protected:
 		Bootstrap() {};
 

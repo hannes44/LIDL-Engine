@@ -3,7 +3,7 @@
 
 namespace engine
 {
-	class ComponentFactory 
+	class ComponentFactory
 	{
 	public:
 		static std::shared_ptr<Component> createComponent(std::string componentName);

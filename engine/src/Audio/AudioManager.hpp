@@ -28,7 +28,7 @@ namespace engine {
 		void stopSound();
 
 	private:
-			AudioManager();
+		AudioManager();
 
 	};
 }
