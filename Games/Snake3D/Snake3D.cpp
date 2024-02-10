@@ -52,7 +52,9 @@ namespace engine
 	}
 
 	void Snake3D::moveAppleToRandomPosition() {
-		apple.lock()->transform.setPosition(glm::vec3(rand() % 30 - 10, rand() % 30 - 10, rand() % 30 - 10));
+		const int bounds = 20;
+		const float offset = bounds / 2.f;
+		apple.lock()->transform.setPosition(glm::vec3(rand() % bounds - offset, rand() % bounds - offset, rand() % bounds - offset));
 	}
 
 	void Snake3D::consumeApple() {
