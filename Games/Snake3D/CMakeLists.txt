@@ -3,16 +3,16 @@ project(Snake, VERSION 0.01)
 # Create executable
 add_executable(Snake)
 target_sources(Snake PRIVATE 
-	SnakeGame.hpp
-	SnakeGame.cpp
+	Snake3D.hpp
+	Snake3D.cpp
 )
 
-add_library(SnakeGame SHARED
-	SnakeGame.hpp
-	SnakeGame.cpp
+add_library(Snake3D SHARED
+	Snake3D.hpp
+	Snake3D.cpp
 )
 
-target_include_directories(SnakeGame PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(Snake3D PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Link libraries
 target_link_libraries(Snake PRIVATE
@@ -23,7 +23,7 @@ target_link_libraries(Snake PRIVATE
 	SDL3::SDL3
 )
 
-target_link_libraries(SnakeGame PRIVATE
+target_link_libraries(Snake3D PRIVATE
 	engine
 	vendor	
 	imgui

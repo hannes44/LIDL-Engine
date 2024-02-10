@@ -2,9 +2,9 @@
 #include <vector>
 
 namespace engine {
-	class SnakeGame : public Game, public InputListener {
+	class Snake3D : public Game, public InputListener {
 	public:
-		SnakeGame();
+		Snake3D();
 		void update() override;
 		void initialize() override;
 

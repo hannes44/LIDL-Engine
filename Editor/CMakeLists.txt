@@ -51,7 +51,7 @@ target_include_directories(Editor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(Editor PRIVATE
 	TestGame
 	TestGame2
-	SnakeGame
+	Snake3D
 	engine
 	vendor
 	imgui

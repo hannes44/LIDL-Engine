@@ -1,4 +1,4 @@
-#include "SnakeGame.hpp"
+#include "Snake3D.hpp"
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -11,7 +11,7 @@ extern "C"
 		engine::Window::instance = window;
 		engine::InputFramework::instance = inputFramework;
 		engine::Logger::init();
-		engine::Game* game = new engine::SnakeGame();
+		engine::Game* game = new engine::Snake3D();
 		engine::ResourceManager::instance = resourceManager;
 		resourceManager->changeGame(game);
 		return game;
@@ -19,7 +19,7 @@ extern "C"
 }
 namespace engine
 {
-	double SnakeGame::getTargetFrameRate()
+	double Snake3D::getTargetFrameRate()
 	{
 		return 10;
 	}
@@ -37,30 +37,30 @@ namespace engine
 		return std::shared_ptr<GameObject>(body);
 	}
 
-	glm::vec3 SnakeGame::getTailDirection() {
+	glm::vec3 Snake3D::getTailDirection() {
 		if (snake.size() < 2)
 			return glm::normalize(snake[0].lock()->getComponent<engine::PhysicsComponent>()->getVelocity());
 
 		return glm::normalize(snake[snake.size() - 2].lock()->transform.getPosition() - snake.back().lock()->transform.getPosition());
 	}
 
-	void SnakeGame::addBody() {
+	void Snake3D::addBody() {
 		std::shared_ptr<GameObject> newBody = createSnakeBody(snake.size());
 		newBody->transform.setPosition(snake.back().lock()->transform.getPosition() - getTailDirection() * (1.f + bodyGap));
 		snake.push_back(newBody);
 		addGameObject(newBody);
 	}
 
-	void SnakeGame::moveAppleToRandomPosition() {
+	void Snake3D::moveAppleToRandomPosition() {
 		apple.lock()->transform.setPosition(glm::vec3(rand() % 30 - 10, rand() % 30 - 10, rand() % 30 - 10));
 	}
 
-	void SnakeGame::consumeApple() {
+	void Snake3D::consumeApple() {
 		moveAppleToRandomPosition();
 		addBody();
 	}
 
-	void SnakeGame::handleInput(const InputEvent& event) {
+	void Snake3D::handleInput(const InputEvent& event) {
 		const InputEventType eventType = event.getEventType();
 		if (eventType != InputEventType::KeyDown)
 			return;
@@ -74,9 +74,9 @@ namespace engine
 		}
 	}
 
-	SnakeGame::SnakeGame()
+	Snake3D::Snake3D()
 	{
-		name = "SnakeGame";
+		name = "Snake3D";
 		glewInit();
 		InputFramework::getInstance().addListener(this);
 	}
@@ -86,7 +86,7 @@ namespace engine
 		return abs(a.x - b.x) < e && abs(a.y - b.y) < e && abs(a.z - b.z) < e;
 	}
 
-	void SnakeGame::update()
+	void Snake3D::update()
 	{
 		for (int i = snake.size() - 1; i > 0; i--) {
 			glm::vec3 offs = (1.f + bodyGap) * -glm::normalize(snake[i - 1].lock()->transform.getPosition() - snake[i].lock()->transform.getPosition());
@@ -115,7 +115,7 @@ namespace engine
 		}
 	}
 
-	void SnakeGame::gameOver() {
+	void Snake3D::gameOver() {
 		std::cout << "Game Over!" << std::endl;
 
 		// Remove all bodies but leave the head
@@ -126,7 +126,7 @@ namespace engine
 	}
 
 	void onHeadCollision(Game* game, GameObject* other, ColliderComponent* otherCollider) {
-		SnakeGame* snakeGame = dynamic_cast<SnakeGame*>(game);
+		Snake3D* snakeGame = dynamic_cast<Snake3D*>(game);
 		if (snakeGame == nullptr)
 			return;
 
@@ -143,7 +143,7 @@ namespace engine
 		}
 	}
 
-	void SnakeGame::initialize()
+	void Snake3D::initialize()
 	{
 		engine::PointLightComponent pointLightComponent = engine::PointLightComponent();
 
@@ -218,5 +218,5 @@ namespace engine
 engine::Game* engine::createGame()
 {
 
-	return new SnakeGame();
+	return new Snake3D();
 }
