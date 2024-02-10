@@ -42,6 +42,8 @@ add_library(engine
 	src/Components/ComponentFactory.cpp
 	src/Components/ControllableComponent.hpp
 	src/Components/ControllableComponent.cpp
+	src/Components/ScriptableComponent.hpp
+	src/Components/ScriptableComponent.cpp
 	src/Renderer/Console/Display.hpp
 	src/Renderer/Console/DisplayTerminal.hpp
 	src/Renderer/Console/DisplayTerminal.cpp
@@ -113,6 +115,8 @@ source_group("Components" FILES
 	src/Components/ComponentFactory.cpp
 	src/Components/ControllableComponent.hpp
 	src/Components/ControllableComponent.cpp
+	src/Components/ScriptableComponent.hpp
+	src/Components/ScriptableComponent.cpp
 )
 
 source_group("Renderer" FILES

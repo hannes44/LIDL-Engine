@@ -8,6 +8,7 @@
 #include <Windows.h>
 #include <iostream>
 
+
 namespace engine
 {
 	// Comment out to not skip the main menu
@@ -31,11 +32,13 @@ namespace engine
 
 		#ifdef SKIP_MAIN_MENU
 		project = std::make_shared<Project>();
-		project->game = loadGameFromDLL("SnakeGame");
+		project->game = loadGameFromDLL("TestGame");
 		#endif
 
-		ScriptEngine scriptEngine{};
-		scriptEngine.start(project->game.get());
+
+		//return;
+		//while (true)
+		//	scriptableComponent->update();
 
 
 

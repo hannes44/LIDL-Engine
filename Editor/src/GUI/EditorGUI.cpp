@@ -65,6 +65,21 @@ bool isAddComponentVisible = false;
 
 		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png", false));
 
+		ScriptEngine* scriptEngine = ScriptEngine::getInstance();
+		scriptEngine->start(project->game.get());
+
+		std::weak_ptr<GameObject> scriptObject = project->game->createGameObject("LUA OBJECT");
+		std::shared_ptr<ScriptableComponent> scriptableComponent = std::make_shared<ScriptableComponent>();
+		scriptObject.lock()->addComponent(scriptableComponent);
+
+		LOG_INFO("GAME OBJCT NAME: {0}", scriptObject.lock()->getName());
+		LOG_INFO("GAME OBJECT POSITION: {0}, {1}, {2}", scriptObject.lock()->transform.getPosition().x, scriptObject.lock()->transform.getPosition().y, scriptObject.lock()->transform.getPosition().z);
+		scriptableComponent->scriptFileName = "testComponent.lua";
+		scriptableComponent->initialize();
+		LOG_INFO("GAME OBJCT NAME: {0}", scriptObject.lock()->getName());
+		LOG_INFO("GAME OBJECT POSITION: {0}, {1}, {2}", scriptObject.lock()->transform.getPosition().x, scriptObject.lock()->transform.getPosition().y, scriptObject.lock()->transform.getPosition().z);
+
+
 		while (!quitProgram)
 		{
 			renderNewFrame();
@@ -79,6 +94,8 @@ bool isAddComponentVisible = false;
 				GamePhysics::getInstance().run(game.get());
 				game->update();
 			}
+
+			scriptObject.lock()->update();
 
 			endFrame();
 			window.newFrame();

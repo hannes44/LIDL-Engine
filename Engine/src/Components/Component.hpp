@@ -34,7 +34,7 @@ namespace engine
 			this->gameObject = gameObject;
 		}
 
-	protected:
 		GameObject* gameObject = nullptr;
+		
 	};
 }

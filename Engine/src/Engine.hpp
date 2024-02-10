@@ -29,6 +29,7 @@
 #include "Components/PointLightComponent.hpp"
 #include "Components/CameraComponent.hpp"
 #include "Components/ControllableComponent.hpp"
+#include "Components/ScriptableComponent.hpp"
 
 //Events
 #include "Events/EventManager.hpp"
