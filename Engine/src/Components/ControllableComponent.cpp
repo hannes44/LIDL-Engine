@@ -68,6 +68,9 @@ namespace engine {
             return;
         }
 
+        if (!allowInstantTurnaround && applied.find(-vector) != applied.end())
+            return;
+
         applied.erase(-vector);
         applied.insert(vector);
         apply(physicsComponent, vector);
@@ -107,6 +110,9 @@ namespace engine {
         else {
             return;
         }
+
+        if (!allowInstantTurnaround && applied.find(-vector) != applied.end())
+            return;
 
         for (auto it = applied.begin(); it != applied.end();) {
             apply(physicsComponent, -*it);

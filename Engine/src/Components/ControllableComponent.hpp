@@ -25,6 +25,7 @@ namespace engine {
 
         float movementSpeed = 3;
         MovementType movementType = MovementType::Always;
+        bool allowInstantTurnaround = true;
 
         std::string getName() override;
 
