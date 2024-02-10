@@ -34,17 +34,17 @@ namespace engine
 		glm::mat4 getProjectionMatrix();
 		glm::mat4 getProjectionMatrix(int width, int height);
 
-		glm::vec3 translation {20, 20, 20};
-		glm::vec3 rotation {90, 0, 0};
-		glm::vec3 direction {-1, -1, -1};
-		glm::vec3 worldUp {0.0f, 1.0f, 0.0f};
+		glm::vec3 translation{ 20, 20, 20 };
+		glm::vec3 rotation{ 90, 0, 0 };
+		glm::vec3 direction{ -1, -1, -1 };
+		glm::vec3 worldUp{ 0.0f, 1.0f, 0.0f };
 
-		
+
 		float fov = 50;
 		float nearPlane = 0.1;
 		float farPlane = 1000;
 		float rotationSpeed = 0.005f;
-		float movementSpeed = 0.1f;	
+		float movementSpeed = 0.1f;
 		bool isMouseDragging;
 
 		std::string getName() override { return "Camera"; };

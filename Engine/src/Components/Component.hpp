@@ -20,8 +20,8 @@ namespace engine
 	class Component : public Serializable
 	{
 	public:
-		virtual void initialize(){};
-		virtual void update(){};
+		virtual void initialize() {};
+		virtual void update() {};
 
 		virtual std::string getName() = 0;
 
@@ -29,7 +29,7 @@ namespace engine
 
 		virtual std::string getDescription() { return ""; };
 
-		void setGameObject(GameObject *gameObject)
+		void setGameObject(GameObject* gameObject)
 		{
 			this->gameObject = gameObject;
 		}

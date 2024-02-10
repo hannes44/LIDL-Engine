@@ -35,7 +35,7 @@ namespace engine
 		std::ofstream outfile(filePath + fileName + GAME_CONFIG_FILE_EXTENSION);
 		outfile.close();
 	}
-	
+
 	// Serialized the game config to a YAML file at the given file path
 	void GameSerializer::serializeGameConfig(const std::string& filePath, const Game* game)
 	{
@@ -52,10 +52,10 @@ namespace engine
 
 		out << YAML::Key << "isDefaultFullscreen";
 		out << YAML::Value << game->config.isDefaultFullscreen;
-		
+
 		out << YAML::Key << "graphicsAPI";
 		out << YAML::Value << (game->config.graphicsAPIType == GraphicsAPIType::OpenGL ? "OpenGL" : "UNKNOWN");
-		
+
 		out << YAML::EndMap;
 
 		std::ofstream fout(filePath + configFileName + GAME_CONFIG_FILE_EXTENSION);
@@ -100,7 +100,7 @@ namespace engine
 			serializeGameObject(gameObject.get(), out);
 		}
 
-		out	<< YAML::EndSeq;
+		out << YAML::EndSeq;
 
 		if (out.good())
 			LOG_INFO("Serialized game objects");
@@ -201,7 +201,7 @@ namespace engine
 		{
 			serializeMaterial(material.get(), out);
 		}
-	
+
 		out << YAML::EndSeq;
 
 		if (out.good())
@@ -391,7 +391,7 @@ namespace engine
 
 		}
 	}
-	
+
 	// Deserializes all materials from the given YAML node into the game
 	void GameSerializer::deserializeMaterials(YAML::Node node, Game* game)
 	{
@@ -429,12 +429,12 @@ namespace engine
 			game->addMaterial(std::shared_ptr<Material>(material));
 		}
 	}
-	
+
 	// Deserializes all game objects from the given YAML node into the game
 	void GameSerializer::deserializeGameObjects(YAML::Node node, Game* game)
 	{
 		YAML::Node gameObjectsNode;
-		try 
+		try
 		{
 			gameObjectsNode = node["GameObjects"];
 		}
@@ -498,12 +498,12 @@ namespace engine
 	// Deserializes a component from the given YAML node into the given game object
 	void GameSerializer::deserializeComponent(YAML::Node node, GameObject* gameObject, Game* game)
 	{
-		try 
+		try
 		{
 			std::string componentName = node["name"].as<std::string>();
 
 			std::shared_ptr<Component> component = ComponentFactory::createComponent(componentName);
-			
+
 			if (component == nullptr)
 			{
 				LOG_WARN("Failed to deserialize component: " + componentName + " because it is nullptr");
@@ -511,7 +511,7 @@ namespace engine
 			}
 
 			deserializeSerializable(node, component.get());
-			
+
 			// Special case for mesh component
 			if (componentName == "Mesh")
 			{

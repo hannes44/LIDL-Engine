@@ -6,72 +6,72 @@
 #include "CameraComponent.hpp"
 
 namespace engine {
-    void ColliderComponent::drawBoundingBox(BoundingBox& box, CameraComponent* camera, bool isColliding) {
+	void ColliderComponent::drawBoundingBox(BoundingBox& box, CameraComponent* camera, bool isColliding) {
 
-        // The center position of the box
-        glm::vec3 centerPos = box.getCenter();
+		// The center position of the box
+		glm::vec3 centerPos = box.getCenter();
 
-        // The start point, top corner of the box
-        glm::vec3 currPos = centerPos + glm::vec3(-box.getExtent().x / 2, box.getExtent().y / 2, -box.getExtent().z / 2);
-        
-        // The end point of the line
-        glm::vec3 nextPos = currPos + glm::vec3(box.getExtent().x, 0, 0);
+		// The start point, top corner of the box
+		glm::vec3 currPos = centerPos + glm::vec3(-box.getExtent().x / 2, box.getExtent().y / 2, -box.getExtent().z / 2);
 
-        // We will move on the top surface of the box, so we use this offset vector to move to the mirrored bottom point
-        glm::vec3 down = glm::vec3(0, -box.getExtent().y, 0);
-        
-        glm::vec3 color = isColliding ? glm::vec3(1.0f, 0, 0) : glm::vec3(0, 1.0f, 0);
+		// The end point of the line
+		glm::vec3 nextPos = currPos + glm::vec3(box.getExtent().x, 0, 0);
 
-        // The offsets that take us to all the top surface corners of the box
-        std::vector<glm::vec3> nextPointOffsets = {
-            glm::vec3(0, 0, box.getExtent().z),
-            glm::vec3(-box.getExtent().x, 0, 0),
-            glm::vec3(0, 0, -box.getExtent().z),
-            glm::vec3(0, 0, 0) // Needed for the last rendering pass, but the actual value is never used
-        };
-        
-        Renderer* renderer = Renderer::getInstance();
-        for(auto nextPointOffset : nextPointOffsets) {
-            renderer->drawLine(currPos, nextPos, color, camera); // Top line
-            renderer->drawLine(currPos + down, nextPos + down, color, camera); // Bottom line (mirrored from top)
-            renderer->drawLine(currPos, currPos + down, color, camera); // Corner, vertically linking top and bottom
+		// We will move on the top surface of the box, so we use this offset vector to move to the mirrored bottom point
+		glm::vec3 down = glm::vec3(0, -box.getExtent().y, 0);
 
-            // Update the current position
-            currPos = nextPos;
+		glm::vec3 color = isColliding ? glm::vec3(1.0f, 0, 0) : glm::vec3(0, 1.0f, 0);
 
-            // Move to the next position
-            nextPos += nextPointOffset;
-        }
-    }
+		// The offsets that take us to all the top surface corners of the box
+		std::vector<glm::vec3> nextPointOffsets = {
+			glm::vec3(0, 0, box.getExtent().z),
+			glm::vec3(-box.getExtent().x, 0, 0),
+			glm::vec3(0, 0, -box.getExtent().z),
+			glm::vec3(0, 0, 0) // Needed for the last rendering pass, but the actual value is never used
+		};
 
-    bool ColliderComponent::isColliding(ColliderComponent* other) {
-        BoundingBox otherBoundingBox = other->getBoundingBox();
-        // For performance reasons, first check whether the bounding boxes are intersecting, since the collider is contained within its bounding box
-        bool lazyCheck = getBoundingBox().isIntersecting(&otherBoundingBox);
-        if (!lazyCheck) 
-            return false;
+		Renderer* renderer = Renderer::getInstance();
+		for (auto nextPointOffset : nextPointOffsets) {
+			renderer->drawLine(currPos, nextPos, color, camera); // Top line
+			renderer->drawLine(currPos + down, nextPos + down, color, camera); // Bottom line (mirrored from top)
+			renderer->drawLine(currPos, currPos + down, color, camera); // Corner, vertically linking top and bottom
 
-        // If the bounding boxes are intersecting, perform a deep collision check to check whether the colliders themselves are intersecting
-        return deepCollisionCheck(other);
-    }
+			// Update the current position
+			currPos = nextPos;
 
-    bool ColliderComponent::deepCollisionCheck(ColliderComponent* other) {
-        auto firstBox = dynamic_cast<BoxColliderComponent*>(this);
-        auto secondBox = dynamic_cast<BoxColliderComponent*>(other);
+			// Move to the next position
+			nextPos += nextPointOffset;
+		}
+	}
 
-        auto firstSphere = dynamic_cast<SphereColliderComponent*>(this);
-        auto secondSphere = dynamic_cast<SphereColliderComponent*>(other);
-        
-        if(firstBox && secondBox) {
-            return ColliderChecks::boxBoxCollisionCheck(firstBox, secondBox);
-        }
-        else if(firstBox && secondSphere) {
-            return ColliderChecks::boxSphereCollisionCheck(firstBox, secondSphere);
-        }
-        else if(firstSphere && secondBox) {
-            return ColliderChecks::boxSphereCollisionCheck(secondBox, firstSphere);
-        }
+	bool ColliderComponent::isColliding(ColliderComponent* other) {
+		BoundingBox otherBoundingBox = other->getBoundingBox();
+		// For performance reasons, first check whether the bounding boxes are intersecting, since the collider is contained within its bounding box
+		bool lazyCheck = getBoundingBox().isIntersecting(&otherBoundingBox);
+		if (!lazyCheck)
+			return false;
 
-        return false;
-    }
+		// If the bounding boxes are intersecting, perform a deep collision check to check whether the colliders themselves are intersecting
+		return deepCollisionCheck(other);
+	}
+
+	bool ColliderComponent::deepCollisionCheck(ColliderComponent* other) {
+		auto firstBox = dynamic_cast<BoxColliderComponent*>(this);
+		auto secondBox = dynamic_cast<BoxColliderComponent*>(other);
+
+		auto firstSphere = dynamic_cast<SphereColliderComponent*>(this);
+		auto secondSphere = dynamic_cast<SphereColliderComponent*>(other);
+
+		if (firstBox && secondBox) {
+			return ColliderChecks::boxBoxCollisionCheck(firstBox, secondBox);
+		}
+		else if (firstBox && secondSphere) {
+			return ColliderChecks::boxSphereCollisionCheck(firstBox, secondSphere);
+		}
+		else if (firstSphere && secondBox) {
+			return ColliderChecks::boxSphereCollisionCheck(secondBox, firstSphere);
+		}
+
+		return false;
+	}
 }

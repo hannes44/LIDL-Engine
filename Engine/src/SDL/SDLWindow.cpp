@@ -8,7 +8,7 @@
 namespace engine
 {
 
-// TODO: fix proper macros set by the build system
+	// TODO: fix proper macros set by the build system
 #define EDITOR
 
 	void SDLWindow::createWindow(int width, int height, std::string title)
@@ -49,12 +49,12 @@ namespace engine
 		SDL_GL_MakeCurrent(window, glContext);
 
 		// Only initialize ImGui if the editor is enabled
-		#ifdef EDITOR
-			ImGui::CreateContext();
-			ImGui::SetCurrentContext(ImGui::GetCurrentContext());
-			ImGui_ImplOpenGL3_Init();
-			ImGui_ImplSDL3_InitForOpenGL(window, glContext);
-		#endif 
+#ifdef EDITOR
+		ImGui::CreateContext();
+		ImGui::SetCurrentContext(ImGui::GetCurrentContext());
+		ImGui_ImplOpenGL3_Init();
+		ImGui_ImplSDL3_InitForOpenGL(window, glContext);
+#endif 
 
 		// flip textures
 		stbi_set_flip_vertically_on_load(true);

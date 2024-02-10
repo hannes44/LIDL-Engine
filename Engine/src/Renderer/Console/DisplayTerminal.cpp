@@ -27,19 +27,19 @@ namespace engine {
 	}
 
 	void DisplayTerminal::setCursorPosition(short x, short y) {
-		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), {x, y});
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { x, y });
 	}
 
 	void DisplayTerminal::show() {
 		std::sort(objects.begin(), objects.end());
-		
+
 		while (!objects.empty()) {
 			auto content = objects.back();
 
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), content->color);
-			
+
 			auto repr = content->getRepresentation();
-			for(auto it = repr.begin(); it != repr.end(); it++) {
+			for (auto it = repr.begin(); it != repr.end(); it++) {
 				setCursorPosition(it->first.x, it->first.y);
 				std::cout << it->second;
 			}
@@ -55,11 +55,11 @@ namespace engine {
 	}
 
 	void DisplayTerminal::drawText(std::string text, int x, int y, Color color = Color::WHITE) {
-		auto *content = new DisplayTextContent(text, x, y, 0, color);
+		auto* content = new DisplayTextContent(text, x, y, 0, color);
 		objects.push_back(content);
 	}
 
-	void DisplayTerminal::drawGameObject(GameObject *gameObject) {
+	void DisplayTerminal::drawGameObject(GameObject* gameObject) {
 		auto content = new DisplayGameObjectContent(gameObject, gameObject->transform.getPosition().x, gameObject->transform.getPosition().y, gameObject->transform.getPosition().z, Color::BLUE);
 		objects.push_back(content);
 	}

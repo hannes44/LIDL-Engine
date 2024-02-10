@@ -74,6 +74,11 @@ namespace engine {
 		gameObjects.erase(id);
 	}
 
+	void Game::deleteGameObject(GameObject* gameObject)
+	{
+		gameObjects.erase(gameObject->uuid.id);
+	}
+
 	void Game::addTexture(std::shared_ptr<Texture> texture)
 	{
 		textures[texture->getUUID().id] = texture;

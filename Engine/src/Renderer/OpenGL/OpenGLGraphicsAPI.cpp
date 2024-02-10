@@ -114,7 +114,7 @@ namespace engine
 		glDrawArrays(GL_LINES, 0, 2);
 		glBindVertexArray(0);
 		glUseProgram(0);
-		
+
 
 		glDeleteVertexArrays(1, &VAO);
 		glDeleteBuffers(1, &VBO);

@@ -33,7 +33,7 @@ namespace engine
 		static void loadMeshFromOBJFile(const std::string& filename, MeshComponent* mesh, bool isGameAsset = true);
 
 		static std::shared_ptr<MeshComponent> createMeshFromObjFile(const std::string& filename, bool isGameAsset = true);
-		
+
 		static void loadPrimativeMesh(PrimativeMeshType type, MeshComponent* mesh);
 
 		static std::shared_ptr<MeshComponent> createPrimative(PrimativeMeshType type);
@@ -55,14 +55,14 @@ namespace engine
 
 		void setMaterial(std::weak_ptr<Material> material);
 
-		virtual std::vector<SerializableVariable> getSerializableVariables() 
-		{ 
-			return 
+		virtual std::vector<SerializableVariable> getSerializableVariables()
+		{
+			return
 			{
 				{SerializableType::STRING, "OBJ File", "The file path to the obj file", &objFileName},
 				{SerializableType::STRING, "Primative Type", "The type of primative to create", &primativeTypeAsString},
 				{SerializableType::STRING, "Material", "Id of the meshes material", &getMaterial()->uuid.id}
-			}; 
+			};
 		};
 
 		// Generating the vertex array on demand

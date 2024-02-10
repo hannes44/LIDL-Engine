@@ -39,7 +39,7 @@ namespace engine
 		{
 			std::string* diffuseId = diffuseTexture.expired() ? &dummyId : &diffuseTexture.lock()->uuid.id;
 			std::string* specularId = specularTexture.expired() ? &dummyId : &specularTexture.lock()->uuid.id;
-			return 
+			return
 			{
 				{ SerializableType::VECTOR3, "Base Color", "", &baseColor},
 				{ SerializableType::FLOAT, "Transparency", "", &transparency},
@@ -51,7 +51,7 @@ namespace engine
 				{ SerializableType::STRING, "Specular Texture", "", specularId},
 				{ SerializableType::STRING, "Id", "", &uuid}
 			};
-			 
+
 		};
 	private:
 		std::string dummyId = "";

@@ -51,6 +51,7 @@ namespace engine
 		void addGameObject(std::shared_ptr<GameObject> gameObject);
 		std::weak_ptr<GameObject> getGameObject(const std::string& id);
 		void deleteGameObject(const std::string& id);
+		void deleteGameObject(GameObject* gameObject);
 
 		void addTexture(std::shared_ptr<Texture> texture);
 		std::weak_ptr<Texture> getTexture(const std::string& id);
@@ -87,5 +88,5 @@ namespace engine
 		std::map<std::string, std::shared_ptr<Material>> materials{};
 	};
 
-	Game * createGame();
+	Game* createGame();
 }

@@ -28,7 +28,7 @@ namespace engine
 
 		#ifdef SKIP_MAIN_MENU
 		project = std::make_shared<Project>();
-		project->game = loadGameFromDLL("SnakeGame");
+		project->game = loadGameFromDLL("Snake3D");
 		#endif
 
 		if (!project)
