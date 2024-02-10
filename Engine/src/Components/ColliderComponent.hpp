@@ -4,16 +4,19 @@
 #include "CameraComponent.hpp"
 #include "Core/BoundingBox.hpp"
 #include "glm/glm.hpp"
+#include "Core/GameObject.hpp"
 
 namespace engine {
 
     class ColliderComponent : public Component {
     public:
         friend class GamePhysics;
-        bool isColliding(ColliderComponent* other);
+        bool isColliding(ColliderComponent *other);
         virtual void drawCollider(CameraComponent* camera) = 0;
         virtual BoundingBox getBoundingBox() = 0;
         ColliderComponent(glm::vec3 offset, glm::vec3 extent) : offset(offset), extent(extent) {}
+
+        void subscribeToCollision(std::function<void(Game*, GameObject*, ColliderComponent*)> callback) { onCollision = callback; }
         
         std::vector<SerializableVariable> getSerializableVariables() override 
         {
@@ -33,5 +36,6 @@ namespace engine {
         glm::vec3 extent{0};
 
         bool isCurrentlyColliding = false;
+        std::function<void(Game*, GameObject*, ColliderComponent*)> onCollision;
     };
 }

@@ -73,7 +73,7 @@ namespace engine {
         return std::make_pair(v, v);
     }
 
-	void GamePhysics::checkCollisions(std::map<std::string, std::shared_ptr<GameObject>> gameObjects, GamePhysicsSettings& settings) {
+	void GamePhysics::checkCollisions(Game* game, std::map<std::string, std::shared_ptr<GameObject>> gameObjects, GamePhysicsSettings& settings) {
 		if (!settings.enableCollisions)
 			return;
 		
@@ -104,6 +104,10 @@ namespace engine {
 
 				if (colliderComponent1->isColliding(colliderComponent2.get())) {
                     LOG_TRACE("Collision detected between " + firstName + " and " + secondName);
+					if (colliderComponent1->onCollision)
+						colliderComponent1->onCollision(game, colliderComponent2.get()->gameObject, colliderComponent2.get());
+					if (colliderComponent2->onCollision)
+						colliderComponent2->onCollision(game, colliderComponent1.get()->gameObject, colliderComponent1.get());
 					
                     detectedCollisions.push_back(std::make_pair(firstName, secondName));
 					colliderComponent1->isCurrentlyColliding = true;
@@ -168,6 +172,6 @@ namespace engine {
 
 		lastPhysicsUpdateTimestamp = Utils::getTimestampNS();
 		fixedUpdate(game->getGameObjects(), game->config.physicsSettings);
-		checkCollisions(game->getGameObjects(), game->config.physicsSettings);
+		checkCollisions(game, game->getGameObjects(), game->config.physicsSettings);
 	}
 }
