@@ -38,3 +38,6 @@
 #include "Input/InputFrameWork.hpp"
 #include "Input/InputListener.hpp"
 #include "Input/InputFrameWork.hpp"
+
+//Scripting
+#include "ScriptEngine/ScriptEngine.hpp"

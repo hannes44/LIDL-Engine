@@ -89,6 +89,8 @@ add_library(engine
 	src/Input/InputFramework.cpp
 	src/Audio/AudioManager.cpp
 	src/Audio/AudioManager.hpp
+	src/ScriptEngine/ScriptEngine.hpp
+	src/ScriptEngine/ScriptEngine.cpp
 	${SHADERS}
 )
 target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -141,6 +143,12 @@ source_group("Events" FILES
 	src/Events/EventManager.cpp
 	src/Events/EventListener.hpp
 )
+
+source_group("ScriptEngine" FILES
+	src/ScriptEngine/ScriptEngine.hpp
+	src/ScriptEngine/ScriptEngine.cpp
+)
+
 
 source_group("Serializer" FILES
 	src/Serializer/GameSerializer.hpp

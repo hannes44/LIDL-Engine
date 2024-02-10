@@ -13,9 +13,12 @@ namespace engine
 	// Comment out to not skip the main menu
 	#define SKIP_MAIN_MENU
 
+
+
 	void engine::Editor::start()
 	{
 		engine::Logger::init();
+
 		LOG_INFO("Starting Editor");
 
 		Window& window = Window::getInstance();
@@ -30,6 +33,11 @@ namespace engine
 		project = std::make_shared<Project>();
 		project->game = loadGameFromDLL("SnakeGame");
 		#endif
+
+		ScriptEngine scriptEngine{};
+		scriptEngine.start();
+
+		return;
 
 		if (!project)
 		{
