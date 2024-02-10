@@ -1,5 +1,7 @@
 #include "ScriptEngine.hpp"
 #include "Core/Logger.hpp"
+#include <string>
+#include <sol/sol.hpp>
 
 namespace engine
 {
@@ -13,9 +15,43 @@ namespace engine
 
 	#pragma comment(lib, "../../vendor/Lua/lua54.lib")
 
-	void ScriptEngine::start()
+	struct vars {
+		int boop = 0;
+	};
+
+	void meow()
 	{
+		LOG_INFO("Meow");
+	}
+
+	void ScriptEngine::addGameObject()
+	{
+		LOG_INFO("Adding game object");
+		game->createGameObject("Lua gameobject");
+	}
+
+	void ScriptEngine::start(Game* game)
+	{
+		this->game = game;
 		LOG_INFO("Starting script engine");
+
+		sol::state lua;
+		lua.open_libraries(sol::lib::base);
+
+		lua.set_function("meow", &meow);
+		
+		
+		lua.set("scriptClass", this);
+		lua["m1"] = &ScriptEngine::addGameObject;
+		//lua.set_function("")
+
+		lua.script_file("../../test.lua");
+
+
+
+
+		/*
+		
 
 		lua_State* L = luaL_newstate();
 		luaL_openlibs(L);
@@ -40,5 +76,6 @@ namespace engine
 
 		system("pause");
 		lua_close(L);
+				*/
 	}
 }

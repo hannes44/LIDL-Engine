@@ -35,9 +35,9 @@ namespace engine
 		#endif
 
 		ScriptEngine scriptEngine{};
-		scriptEngine.start();
+		scriptEngine.start(project->game.get());
 
-		return;
+
 
 		if (!project)
 		{

@@ -239,6 +239,7 @@ target_link_libraries(engine PRIVATE
 	imgui
 	imguilib
 	SDL3::SDL3
+	sol2::sol2
 	winmm.lib
 )
 
