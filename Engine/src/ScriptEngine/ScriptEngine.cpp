@@ -92,7 +92,9 @@ namespace engine
 		lua.open_libraries(sol::lib::base);
 		//bindGameObjectToLueState(component);
 
-		lua.script_file("../../test.lua");
+	//	lua.load_file("../Debug/out/manifest.lua");
+		lua.script_file("../../LuaScripts/launcher.lua");
+
 	//	sol::load_result script2 = component->state.load_file("../../engineAPI.lua");
 	//	script1();
 		

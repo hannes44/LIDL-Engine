@@ -3,7 +3,7 @@ engineAPI = require("engineAPI")
 
 
 GameObject = {
-	xd = 2
+	xd = 2,
 	components = {}
 }
 

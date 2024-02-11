@@ -1,6 +1,6 @@
 local engineAPI = {}
 
-function engineAPI.createGameObject()
+function engineAPI.CreateGameObject()
     print("engine hehe")
 end
 
