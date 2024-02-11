@@ -60,7 +60,7 @@ namespace engine
 	void ScriptEngine::initializeLuaStateForScriptableComponent(ScriptableComponent* component)
 	{
 		
-		system("dotnet ../../C#ToLuaCompiler/CSharp.Lua.Launcher.dll -s ../../Scripting -d ../../LuaScripts/CompiledScripts");
+		//system("dotnet ../../C#ToLuaCompiler/CSharp.Lua.Launcher.dll -s ../../Scripting -d ../../LuaScripts/CompiledScripts");
 
 
 		// Require doesn't work if only sol is used, using base lua for loading state and sol for the rest
@@ -94,14 +94,24 @@ namespace engine
 		lua.open_libraries(sol::lib::base);
 		//bindGameObjectToLueState(component);
 
-	//	lua.load_file("../Debug/out/manifest.lua");
 		lua.script_file("../../LuaScripts/launcher.lua");
-		lua.load_file("../../LuaScripts/CompiledScripts/test.lua");
 
-		int num = lua["Program"]["hehe"];
-		sol::function func = lua["Program"]["AddComponent"];
-		std::cout << num << std::endl;
+
+		//lua["Scripting"]["EngineAPI"]["AddGameObject"] = &ScriptEngine::addGameObject;
+
+		//lua["_addGameObject"] = &ScriptEngine::addGameObject;
+		
+		
+		lua.set_function("_addGameObject", [this]() -> void { ScriptEngine::addGameObject(); });
+
+
+		sol::function func = lua["Scripting"]["EngineAPI"]["Log"];
 		func();
+		//func();
+		//int num = lua["Program"]["hehe"];
+		//sol::function func = lua["Program"]["AddComponent"];
+		//std::cout << num << std::endl;
+		//func();
 
 		//sol::function func = lua["Main"];
 		//func();

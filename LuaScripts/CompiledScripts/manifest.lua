@@ -3,12 +3,14 @@ return function (path)
   return System.init({
     path = path,
     files = {
+      "EngineAPI",
       "Library",
       "test"
     },
     types = {
       "Potatis.Library",
-      "Program"
+      "Program",
+      "Scripting.EngineAPI"
     },
     Main = "Program.Main"
   })

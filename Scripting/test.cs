@@ -1,4 +1,5 @@
 ﻿using Potatis;
+using Scripting;
 using System;
 
 public static class Program
@@ -17,6 +18,7 @@ public static class Program
         Console.WriteLine(Library.kebabrulle);
         Library.yes();
 
+        EngineAPI.AddGameObject();
         // Console.WriteLine(Library.getInt());
     }
 

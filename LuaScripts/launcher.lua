@@ -5,17 +5,19 @@ require("All")() -- coresystem.lua/All.lua
 System.init({
     path = "",
     files = {
-        "library",
+        "Library",
+        "EngineAPI",
         "test"
     },
     types = {
         "Potatis.Library",
+        "Scripting.EngineAPI",
         "Program"
     },
     Main = "Program.Main"
 })
 
-Program.Main()
+
 
 --Program.AddComponent()
 --Test.Program.Main() -- run main method
