@@ -12,8 +12,10 @@ public static class Program
     public static void AddComponent()
     {
         Console.WriteLine("Adding Component");
-        Console.WriteLine("HEHE KEBABf");
+        Console.WriteLine("HEHE KEBABXDXDXXD");
     }
+
+    public static int hehe = 10;
 }
 
 

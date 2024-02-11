@@ -9,10 +9,12 @@ System.namespace("", function (namespace)
     end
     AddComponent = function ()
       System.Console.WriteLine("Adding Component")
+      System.Console.WriteLine("HEHE KEBABXDXDXXD")
     end
     return {
       Main = Main,
-      AddComponent = AddComponent
+      AddComponent = AddComponent,
+      hehe = 10
     }
   end)
 end)

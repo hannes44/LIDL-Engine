@@ -60,6 +60,8 @@ namespace engine
 	void ScriptEngine::initializeLuaStateForScriptableComponent(ScriptableComponent* component)
 	{
 		
+		system("dotnet ../../C#ToLuaCompiler/CSharp.Lua.Launcher.dll -s ../../C#Scripts -d ../../LuaScripts/CompiledScripts");
+
 
 		// Require doesn't work if only sol is used, using base lua for loading state and sol for the rest
 		lua_State* L = luaL_newstate();
@@ -94,7 +96,15 @@ namespace engine
 
 	//	lua.load_file("../Debug/out/manifest.lua");
 		lua.script_file("../../LuaScripts/launcher.lua");
+		lua.load_file("../../LuaScripts/CompiledScripts/test.lua");
 
+		int num = lua["Program"]["hehe"];
+		sol::function func = lua["Program"]["AddComponent"];
+		std::cout << num << std::endl;
+		func();
+
+		//sol::function func = lua["Main"];
+		//func();
 	//	sol::load_result script2 = component->state.load_file("../../engineAPI.lua");
 	//	script1();
 		

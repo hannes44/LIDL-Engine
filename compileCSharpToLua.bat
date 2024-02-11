@@ -1,1 +1,0 @@
-dotnet ./C#ToLuaCompiler/CSharp.Lua.Launcher.dll -s ./C#Scripts -d ./LuaScripts 
