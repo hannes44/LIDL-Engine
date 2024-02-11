@@ -1,10 +1,8 @@
-local engineAPI = {
+local engineAPI = {}
 
-    kek = function()
-        print("engine hehe")
-    end
-
-}
+function engineAPI.createGameObject()
+    print("engine hehe")
+end
 
 function engineAPI.test()
     print("engine hehe")
