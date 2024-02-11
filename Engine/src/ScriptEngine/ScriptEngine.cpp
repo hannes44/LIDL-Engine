@@ -3,6 +3,7 @@
 #include <string>
 #include <sol/sol.hpp>
 
+
 namespace engine
 {
 
@@ -58,11 +59,43 @@ namespace engine
 
 	void ScriptEngine::initializeLuaStateForScriptableComponent(ScriptableComponent* component)
 	{
-		component->state.open_libraries(sol::lib::base);
-		bindGameObjectToLueState(component);
+		
 
-		component->state.script_file("../../test.lua");
+		// Require doesn't work if only sol is used, using base lua for loading state and sol for the rest
+		lua_State* L = luaL_newstate();
+		luaL_openlibs(L);
 
+		/*
+		
+		int r = luaL_dofile(L, "../../test.lua");
+
+		if (r != LUA_OK)
+		{
+			LOG_ERROR("Error: {0}", lua_tostring(L, -1));
+		}
+		else
+		{
+			LOG_INFO("Success");
+
+			lua_getglobal(L, "a");
+
+			if (lua_isnumber(L, -1))
+			{
+				LOG_INFO("Result: {0}", lua_tonumber(L, -1));
+			}
+		}
+
+		*/
+		
+				
+		sol::state_view lua(L);
+		lua.open_libraries(sol::lib::base);
+		//bindGameObjectToLueState(component);
+
+		lua.script_file("../../test.lua");
+	//	sol::load_result script2 = component->state.load_file("../../engineAPI.lua");
+	//	script1();
+		
 
 	}
 
@@ -70,7 +103,7 @@ namespace engine
 	{
 		component->state["gameObject"] = component->gameObject;
 
-		sol::usertype<GameObject> gameObjectType = component->state.new_usertype<GameObject>("GameObject", sol::constructors<GameObject()>());
+		sol::usertype<GameObject> gameObjectType = component->state.new_usertype<GameObject>("_GameObject", sol::constructors<GameObject()>());
 		gameObjectType["name"] = &GameObject::name;
 
 		bindTransformToLuaState(component);
@@ -80,9 +113,13 @@ namespace engine
 	{
 		component->state["transform"] = &component->gameObject->transform;
 
-		sol::usertype<glm::vec3> vec3Type = component->state.new_usertype<glm::vec3>("vec3", sol::constructors<glm::vec3(), glm::vec3(float, float, float)>());
+		sol::usertype<glm::vec3> vec3Type = component->state.new_usertype<glm::vec3>("_vec3", sol::constructors<glm::vec3(), glm::vec3(float, float, float)>());
+		vec3Type["x"] = &glm::vec3::x;
+		vec3Type["y"] = &glm::vec3::y;
+		vec3Type["z"] = &glm::vec3::z;
 
-		sol::usertype<Transform> transformType = component->state.new_usertype<Transform>("Transform", sol::constructors<Transform()>());
+
+		sol::usertype<Transform> transformType = component->state.new_usertype<Transform>("_Transform", sol::constructors<Transform()>());
 		transformType["getPosition"] = &Transform::getPosition;
 		transformType["setPosition"] = &Transform::setPosition;
 		transformType["shiftPosition"] = &Transform::shiftPosition;

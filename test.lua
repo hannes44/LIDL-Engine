@@ -1,21 +1,21 @@
-
-gameObject.name = "HEHEHEKEBAB"
-
-test = vec3.new(0.1, 0, 0)
+engineAPI = require("engineAPI")
 
 
+--test = vec3.new(0.1, 0, 0)
+print("dfgdgfdg")
+engineAPI.kek();
 
 
-function createGameObject()
 
-end
+engineAPI.test()
+
 
 function update()
-print("LUA: Update()");
-transform:shiftPosition(test)
+	print("LUA: Update()");
+
+	transform:shiftPosition(test)
 end
 
 function initialize()
-print("LUA: Initialize()");
-
+	print("LUA: Initialize()");
 end

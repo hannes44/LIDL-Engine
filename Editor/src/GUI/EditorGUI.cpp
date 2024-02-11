@@ -76,10 +76,11 @@ bool isAddComponentVisible = false;
 		LOG_INFO("GAME OBJECT POSITION: {0}, {1}, {2}", scriptObject.lock()->transform.getPosition().x, scriptObject.lock()->transform.getPosition().y, scriptObject.lock()->transform.getPosition().z);
 		scriptableComponent->scriptFileName = "testComponent.lua";
 		scriptableComponent->initialize();
+	//	scriptableComponent->update();
 		LOG_INFO("GAME OBJCT NAME: {0}", scriptObject.lock()->getName());
 		LOG_INFO("GAME OBJECT POSITION: {0}, {1}, {2}", scriptObject.lock()->transform.getPosition().x, scriptObject.lock()->transform.getPosition().y, scriptObject.lock()->transform.getPosition().z);
-
-
+		
+		return;
 		while (!quitProgram)
 		{
 			renderNewFrame();
