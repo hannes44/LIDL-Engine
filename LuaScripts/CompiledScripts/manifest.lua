@@ -3,9 +3,11 @@ return function (path)
   return System.init({
     path = path,
     files = {
+      "Library",
       "test"
     },
     types = {
+      "Potatis.Library",
       "Program"
     },
     Main = "Program.Main"

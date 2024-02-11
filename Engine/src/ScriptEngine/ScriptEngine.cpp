@@ -60,7 +60,7 @@ namespace engine
 	void ScriptEngine::initializeLuaStateForScriptableComponent(ScriptableComponent* component)
 	{
 		
-		system("dotnet ../../C#ToLuaCompiler/CSharp.Lua.Launcher.dll -s ../../C#Scripts -d ../../LuaScripts/CompiledScripts");
+		system("dotnet ../../C#ToLuaCompiler/CSharp.Lua.Launcher.dll -s ../../Scripting -d ../../LuaScripts/CompiledScripts");
 
 
 		// Require doesn't work if only sol is used, using base lua for loading state and sol for the rest

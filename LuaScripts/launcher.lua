@@ -5,9 +5,11 @@ require("All")() -- coresystem.lua/All.lua
 System.init({
     path = "",
     files = {
+        "library",
         "test"
     },
     types = {
+        "Potatis.Library",
         "Program"
     },
     Main = "Program.Main"

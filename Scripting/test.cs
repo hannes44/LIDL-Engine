@@ -1,5 +1,5 @@
+﻿using Potatis;
 using System;
-
 
 public static class Program
 {
@@ -12,10 +12,17 @@ public static class Program
     public static void AddComponent()
     {
         Console.WriteLine("Adding Component");
-        Console.WriteLine("HEHE KEBABXDXDXXD");
+        Console.WriteLine("HEHE KEBAB");
+
+        Console.WriteLine(Library.kebabrulle);
+        Library.yes();
+
+        // Console.WriteLine(Library.getInt());
     }
 
     public static int hehe = 10;
 }
+
+
 
 
