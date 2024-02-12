@@ -1,5 +1,4 @@
-﻿using Potatis;
-using Scripting;
+﻿using Engine;
 using System;
 
 public static class Program
@@ -15,10 +14,11 @@ public static class Program
         Console.WriteLine("Adding Component");
         Console.WriteLine("HEHE KEBAB");
 
-        Console.WriteLine(Library.kebabrulle);
-        Library.yes();
+        GameObject gameObject = new GameObject();
+        Console.WriteLine(gameObject.name);
 
-        EngineAPI.AddGameObject();
+
+        // EngineAPI.AddGameObject();
         // Console.WriteLine(Library.getInt());
     }
 

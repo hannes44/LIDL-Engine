@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Scripting
+namespace Engine
 {
     static class EngineAPI
     {
@@ -13,6 +13,12 @@ namespace Scripting
         {
             Console.WriteLine("Log()");
             AddGameObject();
+        }
+
+        public static GameObject GetComponentGameObject()
+        {
+            GameObject gameObject = new GameObject();
+            return gameObject;
         }
     }
 }

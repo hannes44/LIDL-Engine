@@ -4,13 +4,13 @@ return function (path)
     path = path,
     files = {
       "EngineAPI",
-      "Library",
+      "GameObject",
       "test"
     },
     types = {
-      "Potatis.Library",
-      "Program",
-      "Scripting.EngineAPI"
+      "Engine.EngineAPI",
+      "Engine.GameObject",
+      "Program"
     },
     Main = "Program.Main"
   })

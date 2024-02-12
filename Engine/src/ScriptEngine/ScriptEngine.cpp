@@ -28,7 +28,7 @@ namespace engine
 	void ScriptEngine::addGameObject()
 	{
 		LOG_INFO("Adding game object");
-		game->createGameObject("Lua gameobject");
+		game->createGameObject("Very cool game object");
 	}
 
 	void ScriptEngine::updateScriptableComponent(ScriptableComponent* component)
@@ -60,34 +60,12 @@ namespace engine
 	void ScriptEngine::initializeLuaStateForScriptableComponent(ScriptableComponent* component)
 	{
 		
-		//system("dotnet ../../C#ToLuaCompiler/CSharp.Lua.Launcher.dll -s ../../Scripting -d ../../LuaScripts/CompiledScripts");
+//		system("dotnet ../../C#ToLuaCompiler/CSharp.Lua.Launcher.dll -s ../../Scripting -d ../../LuaScripts/CompiledScripts");
 
 
 		// Require doesn't work if only sol is used, using base lua for loading state and sol for the rest
 		lua_State* L = luaL_newstate();
 		luaL_openlibs(L);
-
-		/*
-		
-		int r = luaL_dofile(L, "../../test.lua");
-
-		if (r != LUA_OK)
-		{
-			LOG_ERROR("Error: {0}", lua_tostring(L, -1));
-		}
-		else
-		{
-			LOG_INFO("Success");
-
-			lua_getglobal(L, "a");
-
-			if (lua_isnumber(L, -1))
-			{
-				LOG_INFO("Result: {0}", lua_tonumber(L, -1));
-			}
-		}
-
-		*/
 		
 				
 		sol::state_view lua(L);
@@ -96,27 +74,18 @@ namespace engine
 
 		lua.script_file("../../LuaScripts/launcher.lua");
 
-
-		//lua["Scripting"]["EngineAPI"]["AddGameObject"] = &ScriptEngine::addGameObject;
-
-		//lua["_addGameObject"] = &ScriptEngine::addGameObject;
-		
-		
-		lua.set_function("_addGameObject", [this]() -> void { ScriptEngine::addGameObject(); });
+		sol::usertype<GameObject> gameObjectType = lua.new_usertype<GameObject>("_GameObject", sol::constructors<GameObject()>());
+		gameObjectType["name"] = &GameObject::name;
+		lua["gameobjects"] = std::vector<GameObject*>{ component->gameObject, component->gameObject  };
 
 
-		sol::function func = lua["Scripting"]["EngineAPI"]["Log"];
+		std::cout << "Name: " << component->gameObject->name << std::endl;
+	//	lua["name"] = component->gameObject->name;
+		sol::function func = lua["Program"]["AddComponent"];
 		func();
-		//func();
-		//int num = lua["Program"]["hehe"];
-		//sol::function func = lua["Program"]["AddComponent"];
-		//std::cout << num << std::endl;
-		//func();
 
-		//sol::function func = lua["Main"];
-		//func();
-	//	sol::load_result script2 = component->state.load_file("../../engineAPI.lua");
-	//	script1();
+		std::cout << "Name: " << component->gameObject->name << std::endl;
+		
 		
 
 	}

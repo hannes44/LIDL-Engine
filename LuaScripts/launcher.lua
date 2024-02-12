@@ -5,13 +5,13 @@ require("All")() -- coresystem.lua/All.lua
 System.init({
     path = "",
     files = {
-        "Library",
+        "GameObject",
         "EngineAPI",
         "test"
     },
     types = {
-        "Potatis.Library",
-        "Scripting.EngineAPI",
+        "Engine.GameObject",
+        "Engine.EngineAPI",
         "Program"
     },
     Main = "Program.Main"
