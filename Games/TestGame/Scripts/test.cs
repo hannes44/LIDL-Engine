@@ -1,5 +1,6 @@
 ﻿using Engine;
 using System;
+using System.Numerics;
 
 public class TestComponent
 {
@@ -18,8 +19,9 @@ public class TestComponent
         Console.WriteLine("Initialize TestComponent");
         Console.WriteLine(gameObject.name);
         Console.WriteLine(Id);
-        Console.WriteLine(gameObject.transform.position.X);
 
+        gameObject.transform.transformMatrix.Translation = new Vector3(1, 10, 1);
+        Console.WriteLine(gameObject.transform.transformMatrix);
         EngineAPI.Log();
 
     }

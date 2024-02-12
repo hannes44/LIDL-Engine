@@ -79,23 +79,46 @@ namespace engine
 
 		lua["testComponent"]["Id"] = component->uuid.id;
 
+		syncTransformStateEngineToScript(component);
+
 		lua.script("TestComponent.Initialize(testComponent)");
 
-		//int te = lua["testComponent"]["hejsan"];
-	//	std::cout << "dflkgjödslkgd" << te << std::endl;
-		//lua.script("testComponent:initialize()");
-	//	sol::function initializefunc = lua["TestComponent"]["Initialize"];
-	//	initializefunc("testComponent");
-		//lua["testComponent"]["Initialize"]();
-//
+		syncTransformStateScriptToEngine(component);
 
-	//	std::cout << "Name: " << component->gameObject->name << std::endl;
 	}
 
 	void ScriptEngine::bindEngineAPIToLuaState(ScriptableComponent* component)
 	{
 		sol::state_view lua(component->L);
 		lua["__log__"] = &ScriptEngine::log;
+	}
+
+	void ScriptEngine::syncTransformStateEngineToScript(ScriptableComponent* component)
+	{
+		sol::state_view lua(component->L);
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				// This is conversion to CSharp Matrix4x4 index format
+				std::string indexString = "M" + std::to_string(i + 1) + std::to_string(j + 1);
+				lua["testComponent"]["gameObject"]["transform"]["transformMatrix"][indexString] = component->gameObject->transform.transformMatrix[i][j];
+			}
+		}
+	}
+
+	void ScriptEngine::syncTransformStateScriptToEngine(ScriptableComponent* component)
+	{
+		sol::state_view lua(component->L);
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				// This is conversion to CSharp Matrix4x4 index format
+				std::string indexString = "M" + std::to_string(i + 1) + std::to_string(j + 1);
+				component->gameObject->transform.transformMatrix[i][j] = lua["testComponent"]["gameObject"]["transform"]["transformMatrix"][indexString];
+			}
+		}
 	}
 
 
