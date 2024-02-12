@@ -3,6 +3,10 @@
 #include <string>
 #include <sol/sol.hpp>
 #include <filesystem>
+#include <fstream>
+#include <sstream>
+#include<iostream>
+#include<algorithm>
 
 namespace engine
 {
@@ -29,6 +33,11 @@ namespace engine
 	{
 		LOG_INFO("Adding game object");
 		game->createGameObject("Very cool game object");
+	}
+
+	void ScriptEngine::log()
+	{
+		LOG_FATAL("Log from LUA FILE");
 	}
 
 	void ScriptEngine::updateScriptableComponent(ScriptableComponent* component)
@@ -73,6 +82,9 @@ namespace engine
 		//lua["gameobjects"] = std::vector<GameObject*>{ component->gameObject, component->gameObject  };
 
 		lua.script("testComponent = TestComponent.create()");
+
+
+
 		//std::cout << "Name: " << component->gameObject->name << std::endl;
 		//	lua["name"] = component->gameObject->name;
 		sol::function initializefunc = lua["testComponent"]["Initialize"];
@@ -83,6 +95,13 @@ namespace engine
 		
 
 	}
+
+	void ScriptEngine::bindEngineAPIToLuaState(ScriptableComponent* component)
+	{
+		sol::state_view lua(L);
+		lua["__log__"] = &ScriptEngine::log;
+	}
+
 
 	void ScriptEngine::bindGameObjectToLueState(ScriptableComponent* component)
 	{
@@ -111,17 +130,54 @@ namespace engine
 		transformType["Test"] = &Transform::Test;
 	}
 
+
+	void ScriptEngine::decodeCompiledAPILuaFiles()
+	{
+		// We need to loop through all API files and remove the comments with the pattern "--(c++_API)" from the compiled lua files
+		// This is a hack to get the c++ binding to work with the lua files
+		std::ostringstream text;
+		std::ifstream in_file("../../Games/TestGame/Scripts/Compiled/API/EngineAPI.lua");
+
+		text << in_file.rdbuf();
+		std::string str = text.str();
+
+		std::string apiPattern = "--(c++_API)";
+
+		// Removing all occurences of the pattern
+		// This will remove the commented out functions that bind the c++ functions to the lua functions
+		std::string::size_type n = apiPattern.length();
+		for (std::string::size_type i = str.find(apiPattern);
+			i != std::string::npos;
+			i = str.find(apiPattern))
+			str.erase(i, n);
+
+		std::cout << str << std::endl;
+		in_file.close();
+
+
+
+		std::ofstream out_file("../../Games/TestGame/Scripts/Compiled/API/EngineAPI.lua");
+		out_file << str;
+	}
+
 	void ScriptEngine::start(Game* game)
 	{
 		this->game = game;
 		LOG_INFO("Starting script engine");
 
+		LOG_INFO("Compiling C# scripts to lua");
 		// Compiling the C# scripts to Lua
 		system("dotnet ../../engine/src/ScriptingAPI/C#ToLuaCompiler/CSharp.Lua.Launcher.dll -s ../../Games/TestGame/Scripts -d ../../Games/TestGame/Scripts/Compiled");
+		LOG_INFO("C# scripts compiled to lua");
 
+
+		decodeCompiledAPILuaFiles();
+
+		LOG_INFO("Copying compiled scripts to build directory");
 		// Copying the compiled scripts to the build directory. 
 		// TODO: It should be possible to change the path of the lua launcher script instead
-		std::filesystem::copy("C:/Users/hanne/OneDrive/Skrivbord/GameEngineTDA572/Games/TestGame/Scripts/Compiled/", "C:/Users/hanne/OneDrive/Skrivbord/GameEngineTDA572/build/Debug/", std::filesystem::copy_options::overwrite_existing);
-		std::filesystem::copy("C:/Users/hanne/OneDrive/Skrivbord/GameEngineTDA572/Games/TestGame/Scripts/Compiled/API/", "C:/Users/hanne/OneDrive/Skrivbord/GameEngineTDA572/build/Debug/", std::filesystem::copy_options::overwrite_existing);
+		std::filesystem::copy("../../Games/TestGame/Scripts/Compiled/", "../Debug/", std::filesystem::copy_options::overwrite_existing);
+		std::filesystem::copy("../../Games/TestGame/Scripts/Compiled/API/", "../Debug/", std::filesystem::copy_options::overwrite_existing);
+		LOG_INFO("Compiled scripts copied to build directory");
 	}
 }

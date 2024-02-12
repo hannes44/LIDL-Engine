@@ -18,6 +18,8 @@ namespace engine
 
 		void addGameObject();
 
+		static void log();
+
 		void updateScriptableComponent(ScriptableComponent* component);
 
 		void initializeScriptableComponent(ScriptableComponent* component);
@@ -34,6 +36,13 @@ namespace engine
 		void bindGameObjectToLueState(ScriptableComponent* component);
 
 		void bindTransformToLuaState(ScriptableComponent* component);
+
+		void bindEngineAPIToLuaState(ScriptableComponent* component);
+
+
+		// Since the c++ binding is done with lua files, we leave empty functions in the c# API with the binding lua binding functions
+		// commented out. After it is compiled to lua, we remove the commented functinos and the API will now be binded to the c++ functions
+		void decodeCompiledAPILuaFiles();
 
 		ScriptEngine() = default;
 
