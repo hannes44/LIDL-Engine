@@ -73,7 +73,7 @@ namespace engine
 		}
 
 		baseShader->setInt("numLights", lightIndex);
-		baseShader->setVec3("viewPos", camera->translation.x, camera->translation.y, camera->translation.z);
+		baseShader->setVec3("viewPos", camera->getTransform().getPosition().x, camera->getTransform().getPosition().y, camera->getTransform().getPosition().z);
 
 
 		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
@@ -202,11 +202,12 @@ namespace engine
 
 		glBindFramebuffer(GL_FRAMEBUFFER, textureFrameBuffer);
 
+		auto cameraGO = std::make_shared<GameObject>();
+		auto camera = std::make_shared<CameraComponent>();
+		cameraGO->addComponent(camera);
 
-		CameraComponent camera = CameraComponent();
-
-		camera.translation = glm::vec3(2.5, 0, 2.5);
-		camera.direction = glm::vec3(-1, 0, -1);
+		camera->getTransform().setPosition(glm::vec3(2.5, 0, 2.5));
+		camera->direction = glm::vec3(-1, 0, -1);
 
 		graphicsAPI->setViewport(0, 0, width, height);
 
@@ -225,8 +226,8 @@ namespace engine
 
 		baseShader->bind();
 
-		glm::mat4 projectionMatrix = camera.getProjectionMatrix(width, height);
-		glm::mat4 viewMatrix = camera.getViewMatrix();
+		glm::mat4 projectionMatrix = camera->getProjectionMatrix(width, height);
+		glm::mat4 viewMatrix = camera->getViewMatrix();
 
 		PointLightComponent light = PointLightComponent();
 		light.color = glm::vec3(1, 1, 1);
@@ -244,7 +245,7 @@ namespace engine
 
 		baseShader->setInt("numLights", 1);
 
-		baseShader->setVec3("viewPos", camera.translation.x, camera.translation.y, camera.translation.z);
+		baseShader->setVec3("viewPos", camera->getTransform().getPosition().x, camera->getTransform().getPosition().y, camera->getTransform().getPosition().z);
 
 
 

@@ -4,6 +4,7 @@
 #include "Core/GameObject.hpp"
 #include "Core/Game.hpp"
 #include "Input/InputFramework.hpp"
+#include <iostream>
 
 #include <set>
 #include <string>
@@ -12,6 +13,11 @@ namespace engine {
 
 	ControllableComponent::ControllableComponent() {
 		InputFramework::getInstance().addListener(this);
+	}
+
+	void ControllableComponent::initialize() {
+		if (gameObject->game)
+			enableForces = gameObject->game->config.physicsSettings.enableForces;
 	}
 
 	std::set<std::string> ControllableComponent::getRequiredComponents() {
@@ -23,7 +29,7 @@ namespace engine {
 	}
 
 	void ControllableComponent::apply(std::shared_ptr<PhysicsComponent> physicsComponent, glm::vec3 vector) {
-		if (gameObject->game->config.physicsSettings.enableForces)
+		if (enableForces)
 			physicsComponent->applyForce(vector);
 		else
 			physicsComponent->applyVelocity(vector);

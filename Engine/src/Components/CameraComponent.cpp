@@ -13,7 +13,6 @@ namespace engine
 {
 	CameraComponent::CameraComponent()
 	{
-
 	}
 
 	void CameraComponent::update() {
@@ -21,7 +20,7 @@ namespace engine
 
 	void CameraComponent::translate(float x, float y, float z)
 	{
-		translation += glm::vec3(x, y, z);
+		//translation += glm::vec3(x, y, z);
 	}
 
 	void CameraComponent::rotate(float angle, float x, float y, float z)
@@ -29,8 +28,10 @@ namespace engine
 		rotation += glm::vec3(angle * x, angle * y, angle * z);
 	}
 
-	glm::mat4 CameraComponent::getTransform()
+	Transform CameraComponent::getTransform()
 	{
+		return gameObject->transform;
+		/*
 		glm::mat4 lookAtMatrix = glm::lookAt(glm::vec3(0, 0, 0), direction, glm::vec3(0, 1, 0));
 
 		return lookAtMatrix;
@@ -38,7 +39,7 @@ namespace engine
 			* glm::rotate(glm::mat4(1.0f), rotation.y, { 0, 1, 0 })
 			* glm::rotate(glm::mat4(1.0f), rotation.z, { 0, 0, 1 });
 
-		return glm::translate(glm::mat4(1.0f), translation) * rotationMat;
+		return glm::translate(glm::mat4(1.0f), translation) * rotationMat;*/
 	}
 
 	glm::mat4 CameraComponent::getViewMatrix()
@@ -49,7 +50,7 @@ namespace engine
 
 		glm::mat3 cameraBaseVectorsWorldSpace(cameraRight, cameraUp, -direction);
 		glm::mat4 cameraRotation = glm::mat4(transpose(cameraBaseVectorsWorldSpace));
-		glm::mat4 viewMatrix = cameraRotation * glm::translate(-translation);
+		glm::mat4 viewMatrix = cameraRotation * glm::translate(-gameObject->transform.getPosition());
 		return viewMatrix;
 	}
 
@@ -100,6 +101,7 @@ namespace engine
 				direction = glm::vec3(pitch * yaw * glm::vec4(direction, 0.0f));
 
 				if (!ImGui::GetIO().WantCaptureKeyboard) {
+					/*
 					if (event.getKey() == Key::W) {
 						translate(direction.x * movementSpeed, direction.y * movementSpeed, direction.z * movementSpeed);
 					}
@@ -125,6 +127,7 @@ namespace engine
 					else if (event.getKey() == Key::LSHIFT) {
 						translate(worldUp.x * -movementSpeed, worldUp.y * -movementSpeed, worldUp.z * -movementSpeed);
 					}
+					*/
 				}
 			}
 		}

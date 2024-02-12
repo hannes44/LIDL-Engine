@@ -3,6 +3,7 @@
 #include "Component.hpp"
 #include "Input/InputListener.hpp"
 #include "ControllableComponent.hpp"
+#include "PhysicsComponent.hpp"
 #include "Core/GameObject.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -24,10 +25,12 @@ namespace engine {
 		ControllableComponent();
 
 		float movementSpeed = 3;
-		MovementType movementType = MovementType::Always;
+		MovementType movementType = MovementType::OnHold;
 		bool allowInstantTurnaround = true;
+		bool enableForces = true;
 
 		std::string getName() override;
+		void initialize() override;
 
 		std::set<std::string> getRequiredComponents() override;
 
