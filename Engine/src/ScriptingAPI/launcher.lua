@@ -12,7 +12,7 @@ System.init({
     types = {
         "Engine.GameObject",
         "Engine.EngineAPI",
-        "Program"
+        "TestComponent"
     },
     Main = "Program.Main"
 })

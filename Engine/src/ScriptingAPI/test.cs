@@ -1,28 +1,39 @@
 ﻿using Engine;
 using System;
 
-public static class Program
+public class TestComponent
 {
-    public static void Main()
+    public static TestComponent create()
+    {
+        return new TestComponent();
+    }
+
+    public void Main()
     {
         Console.WriteLine("hello lua!");
         AddComponent();
     }
 
-    public static void AddComponent()
+    public void AddComponent()
     {
         Console.WriteLine("Adding Component");
-        Console.WriteLine("HEHE KEBAB");
+        Console.WriteLine("HEHE KEBAB22");
 
         GameObject gameObject = new GameObject();
         Console.WriteLine(gameObject.name);
-
-
-        // EngineAPI.AddGameObject();
-        // Console.WriteLine(Library.getInt());
     }
 
-    public static int hehe = 10;
+    public void Update()
+    {
+        Console.WriteLine("Update TestComponent");
+    }
+
+    public void Initialize()
+    {
+        Console.WriteLine("Initialize TestComponent");
+    }
+
+    public int hehe = 10;
 }
 
 

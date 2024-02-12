@@ -10,8 +10,7 @@ return function (path)
     types = {
       "Engine.EngineAPI",
       "Engine.GameObject",
-      "Program"
-    },
-    Main = "Program.Main"
+      "TestComponent"
+    }
   })
 end

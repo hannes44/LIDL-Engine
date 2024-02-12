@@ -36,6 +36,9 @@ namespace engine
 		void bindTransformToLuaState(ScriptableComponent* component);
 
 		ScriptEngine() = default;
+
+		lua_State* L = luaL_newstate();
+
 	};
 
 	class Cat

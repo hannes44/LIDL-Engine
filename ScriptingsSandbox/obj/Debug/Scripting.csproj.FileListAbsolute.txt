@@ -6,3 +6,11 @@ C:\Users\hanne\OneDrive\Skrivbord\GameEngineTDA572\Scripting\obj\Debug\Scripting
 C:\Users\hanne\OneDrive\Skrivbord\GameEngineTDA572\Scripting\obj\Debug\Scripting.csproj.CoreCompileInputs.cache
 C:\Users\hanne\OneDrive\Skrivbord\GameEngineTDA572\Scripting\obj\Debug\Scripting.exe
 C:\Users\hanne\OneDrive\Skrivbord\GameEngineTDA572\Scripting\obj\Debug\Scripting.pdb
+C:\Users\hanne\OneDrive\Skrivbord\GameEngineTDA572\ScriptingsSandbox\bin\Debug\Scripting.exe.config
+C:\Users\hanne\OneDrive\Skrivbord\GameEngineTDA572\ScriptingsSandbox\bin\Debug\Scripting.exe
+C:\Users\hanne\OneDrive\Skrivbord\GameEngineTDA572\ScriptingsSandbox\bin\Debug\Scripting.pdb
+C:\Users\hanne\OneDrive\Skrivbord\GameEngineTDA572\ScriptingsSandbox\obj\Debug\Scripting.csproj.AssemblyReference.cache
+C:\Users\hanne\OneDrive\Skrivbord\GameEngineTDA572\ScriptingsSandbox\obj\Debug\Scripting.csproj.SuggestedBindingRedirects.cache
+C:\Users\hanne\OneDrive\Skrivbord\GameEngineTDA572\ScriptingsSandbox\obj\Debug\Scripting.csproj.CoreCompileInputs.cache
+C:\Users\hanne\OneDrive\Skrivbord\GameEngineTDA572\ScriptingsSandbox\obj\Debug\Scripting.exe
+C:\Users\hanne\OneDrive\Skrivbord\GameEngineTDA572\ScriptingsSandbox\obj\Debug\Scripting.pdb

@@ -33,12 +33,10 @@ namespace engine
 
 	void ScriptEngine::updateScriptableComponent(ScriptableComponent* component)
 	{
-		//LOG_INFO("Updating scriptable component");
-
-		sol::function update = component->state["update"];
-		update();
-
-
+		LOG_INFO("Updating scriptable component");
+		sol::state_view lua(L);
+		sol::function Updatefunc = lua["testComponent"]["Update"];
+		Updatefunc();
 	}
 
 	void ScriptEngine::initializeScriptableComponent(ScriptableComponent* component)
@@ -64,7 +62,6 @@ namespace engine
 
 
 		// Require doesn't work if only sol is used, using base lua for loading state and sol for the rest
-		lua_State* L = luaL_newstate();
 		luaL_openlibs(L);
 		
 				
@@ -74,15 +71,15 @@ namespace engine
 
 		lua.script_file("../../engine/src/ScriptingAPI/launcher.lua");
 
-		sol::usertype<GameObject> gameObjectType = lua.new_usertype<GameObject>("_GameObject", sol::constructors<GameObject()>());
-		gameObjectType["name"] = &GameObject::name;
-		lua["gameobjects"] = std::vector<GameObject*>{ component->gameObject, component->gameObject  };
+		//sol::usertype<GameObject> gameObjectType = lua.new_usertype<GameObject>("_GameObject", sol::constructors<GameObject()>());
+		//gameObjectType["name"] = &GameObject::name;
+		//lua["gameobjects"] = std::vector<GameObject*>{ component->gameObject, component->gameObject  };
 
-
-		std::cout << "Name: " << component->gameObject->name << std::endl;
+		lua.script("testComponent = TestComponent.create()");
+		//std::cout << "Name: " << component->gameObject->name << std::endl;
 		//	lua["name"] = component->gameObject->name;
-		sol::function func = lua["Program"]["AddComponent"];
-		func();
+		sol::function initializefunc = lua["testComponent"]["Initialize"];
+		initializefunc();
 
 		std::cout << "Name: " << component->gameObject->name << std::endl;
 		
@@ -122,51 +119,6 @@ namespace engine
 		this->game = game;
 		LOG_INFO("Starting script engine");
 
-		//lua.open_libraries(sol::lib::base);
 
-		
-		
-		//lua.set("scriptClass", this);
-		//lua["m1"] = &ScriptEngine::addGameObject;
-		//lua.set_function("")
-
-		//lua.script_file("../../test.lua");
-		
-	//	sol::function initialize = lua["initialize"];
-		//initialize();
-
-		//sol::function update = lua["update"];
-	//	update();
-
-
-
-
-		/*
-		
-
-		lua_State* L = luaL_newstate();
-		luaL_openlibs(L);
-
-		int r = luaL_dofile(L, "../../test.lua");
-
-		if (r != LUA_OK)
-		{
-			LOG_ERROR("Error: {0}", lua_tostring(L, -1));
-		}
-		else
-		{
-			LOG_INFO("Success");
-
-			lua_getglobal(L, "a");
-
-			if (lua_isnumber(L, -1))
-			{
-				LOG_INFO("Result: {0}", lua_tonumber(L, -1));
-			}
-		}
-
-		system("pause");
-		lua_close(L);
-				*/
 	}
 }
