@@ -1,4 +1,4 @@
-package.path = package.path .. ";../../C#ToLuaCompiler/Coresystem.lua/?.lua"
+package.path = package.path .. ";../../engine/src/ScriptingAPI/C#ToLuaCompiler/Coresystem.lua/?.lua"
 
 require("All")() -- coresystem.lua/All.lua
 --require("out.manifest")("out")

@@ -37,7 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EngineAPI.cs" />
-    <Compile Include="Library.cs" />
+    <Compile Include="GameObject.cs" />
     <Compile Include="test.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -11,9 +11,9 @@ add_subdirectory(engine)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/vendor/Lua/lua54.dll DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Debug)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/LuaScripts/CompiledScripts/test.lua ${CMAKE_CURRENT_BINARY_DIR}/Debug/test.lua COPYONLY)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/LuaScripts/CompiledScripts/GameObject.lua ${CMAKE_CURRENT_BINARY_DIR}/Debug/GameObject.lua COPYONLY)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/LuaScripts/CompiledScripts/EngineAPI.lua ${CMAKE_CURRENT_BINARY_DIR}/Debug/EngineAPI.lua COPYONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Engine/src/ScriptingAPI/Compiled/test.lua ${CMAKE_CURRENT_BINARY_DIR}/Debug/test.lua COPYONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Engine/src/ScriptingAPI/Compiled/GameObject.lua ${CMAKE_CURRENT_BINARY_DIR}/Debug/GameObject.lua COPYONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Engine/src/ScriptingAPI/Compiled/EngineAPI.lua ${CMAKE_CURRENT_BINARY_DIR}/Debug/EngineAPI.lua COPYONLY)
 
 file(GLOB sources_list LIST_DIRECTORIES true ./Games/*)
 foreach(dir ${sources_list})
