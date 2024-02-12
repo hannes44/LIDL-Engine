@@ -20,8 +20,6 @@ namespace engine
 
 		sol::state state;
 
-		lua_State* L = luaL_newstate();
-
 		std::string name = "Scriptable component";
 
 

@@ -37,7 +37,7 @@ namespace engine
 	void ScriptEngine::updateScriptableComponent(ScriptableComponent* component)
 	{
 		LOG_INFO("Updating scriptable component");
-		sol::state_view lua(component->L);
+		sol::state_view lua(L);
 
 		syncTransformStateEngineToScript(component);
 		lua.script("TestComponent.Update(testComponent)");
@@ -64,56 +64,53 @@ namespace engine
 
 	void ScriptEngine::initializeLuaStateForScriptableComponent(ScriptableComponent* component)
 	{
-		// Require doesn't work if only sol is used, using base lua for loading state and sol for the rest
-		luaL_openlibs(component->L);
 		
-		sol::state_view lua(component->L);
-		lua.open_libraries(sol::lib::base);
+		sol::state_view lua(L);
 
-		bindEngineAPIToLuaState(component);
-
-		lua.script_file("../../Games/TestGame/Scripts/launcher.lua");
 		
-		lua.script("testComponent = TestComponent()");
-		lua["testComponent"]["Id"] = component->uuid.id;
+		// The id will be used as variable names for the different components
+		std::string Id = component->uuid.id;
+
+		lua.script(Id + " = TestComponent()");
+		lua[Id]["Id"] = component->uuid.id;
 
 		syncTransformStateEngineToScript(component);
 
-		lua.script("TestComponent.Initialize(testComponent)");
+		lua.script("TestComponent.Initialize(" + Id +")");
 
 		syncTransformStateScriptToEngine(component);
 	}
 
-	void ScriptEngine::bindEngineAPIToLuaState(ScriptableComponent* component)
+	void ScriptEngine::bindEngineAPIToLuaState()
 	{
-		sol::state_view lua(component->L);
+		sol::state_view lua(L);
 		lua["__log__"] = &ScriptEngine::log;
 	}
 
 	void ScriptEngine::syncTransformStateEngineToScript(ScriptableComponent* component)
 	{
-		sol::state_view lua(component->L);
+		sol::state_view lua(L);
 		for (int i = 0; i < 4; i++)
 		{
 			for (int j = 0; j < 4; j++)
 			{
 				// This is conversion to CSharp Matrix4x4 index format
 				std::string indexString = "M" + std::to_string(i + 1) + std::to_string(j + 1);
-				lua["testComponent"]["gameObject"]["transform"]["transformMatrix"][indexString] = component->gameObject->transform.transformMatrix[i][j];
+				lua[component->uuid.id]["gameObject"]["transform"]["transformMatrix"][indexString] = component->gameObject->transform.transformMatrix[i][j];
 			}
 		}
 	}
 
 	void ScriptEngine::syncTransformStateScriptToEngine(ScriptableComponent* component)
 	{
-		sol::state_view lua(component->L);
+		sol::state_view lua(L);
 		for (int i = 0; i < 4; i++)
 		{
 			for (int j = 0; j < 4; j++)
 			{
 				// This is conversion to CSharp Matrix4x4 index format
 				std::string indexString = "M" + std::to_string(i + 1) + std::to_string(j + 1);
-				component->gameObject->transform.transformMatrix[i][j] = lua["testComponent"]["gameObject"]["transform"]["transformMatrix"][indexString];
+				component->gameObject->transform.transformMatrix[i][j] = lua[component->uuid.id]["gameObject"]["transform"]["transformMatrix"][indexString];
 			}
 		}
 	}
@@ -181,6 +178,10 @@ namespace engine
 		this->game = game;
 		LOG_INFO("Starting script engine");
 
+		sol::state_view lua(L);
+		lua.open_libraries(sol::lib::base);
+		bindEngineAPIToLuaState();
+
 		LOG_INFO("Compiling C# scripts to lua");
 
 		std::string compileCommand = "dotnet ../../engine/src/ScriptingAPI/C#ToLuaCompiler/CSharp.Lua.Launcher.dll -s ../../Games/TestGame/Scripts -d ../../Games/TestGame/Scripts/Compiled";
@@ -199,7 +200,6 @@ namespace engine
 		LOG_INFO("{}", resultString);
 		LOG_INFO("C# scripts compiled to lua");
 
-
 		decodeCompiledAPILuaFiles();
 
 		LOG_INFO("Copying compiled scripts to build directory");
@@ -208,5 +208,10 @@ namespace engine
 		std::filesystem::copy("../../Games/TestGame/Scripts/Compiled/", "../Debug/", std::filesystem::copy_options::overwrite_existing);
 		std::filesystem::copy("../../Games/TestGame/Scripts/Compiled/API/", "../Debug/", std::filesystem::copy_options::overwrite_existing);
 		LOG_INFO("Compiled scripts copied to build directory");
+		
+		// Require doesn't work if only sol is used, using base lua for loading state and sol for the rest
+		luaL_openlibs(L);
+		// Launcher script loads all other component scripts into the lua state
+		lua.script_file("../../Games/TestGame/Scripts/launcher.lua");
 	}
 }

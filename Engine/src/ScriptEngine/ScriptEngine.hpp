@@ -39,12 +39,13 @@ namespace engine
 
 		void bindTransformToLuaState(ScriptableComponent* component);
 
-		void bindEngineAPIToLuaState(ScriptableComponent* component);
+		void bindEngineAPIToLuaState();
 
 		void syncTransformStateEngineToScript(ScriptableComponent* component);
 
 		void syncTransformStateScriptToEngine(ScriptableComponent* component);
 
+		lua_State* L = luaL_newstate();
 
 		// Since the c++ binding is done with lua files, we leave empty functions in the c# API with the binding lua binding functions
 		// commented out. After it is compiled to lua, we remove the commented functinos and the API will now be binded to the c++ functions

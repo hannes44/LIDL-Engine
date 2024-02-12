@@ -77,13 +77,20 @@ bool isAddComponentVisible = false;
 		std::shared_ptr<MeshComponent> meshComponent = MeshComponent::createPrimative(PrimativeMeshType::CUBE);
 		scriptObject.lock()->addComponent(meshComponent);
 
-		LOG_INFO("GAME OBJCT NAME: {0}", scriptObject.lock()->getName());
-		LOG_INFO("GAME OBJECT POSITION: {0}, {1}, {2}", scriptObject.lock()->transform.getPosition().x, scriptObject.lock()->transform.getPosition().y, scriptObject.lock()->transform.getPosition().z);
 		scriptableComponent->scriptFileName = "testComponent.lua";
 		scriptableComponent->initialize();
-	//	scriptableComponent->update();
-		LOG_INFO("GAME OBJCT NAME: {0}", scriptObject.lock()->getName());
-		LOG_INFO("GAME OBJECT POSITION: {0}, {1}, {2}", scriptObject.lock()->transform.getPosition().x, scriptObject.lock()->transform.getPosition().y, scriptObject.lock()->transform.getPosition().z);
+
+		std::weak_ptr<GameObject> scriptObject2 = project->game->createGameObject("LUA OBJECT");
+		scriptObject2.lock()->transform.setPosition({ 5, 5, 5 });
+		std::shared_ptr<ScriptableComponent> scriptableComponent2 = std::make_shared<ScriptableComponent>();
+		scriptableComponent2->name = "TestComponent";
+		scriptObject2.lock()->addComponent(scriptableComponent2);
+
+		std::shared_ptr<MeshComponent> meshComponent2 = MeshComponent::createPrimative(PrimativeMeshType::CUBE);
+		scriptObject2.lock()->addComponent(meshComponent2);
+
+		scriptableComponent2->scriptFileName = "testComponent.lua";
+		scriptableComponent2->initialize();
 	
 
 		
