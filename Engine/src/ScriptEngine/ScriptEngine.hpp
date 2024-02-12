@@ -46,8 +46,6 @@ namespace engine
 
 		ScriptEngine() = default;
 
-		lua_State* L = luaL_newstate();
-
 	};
 
 	class Cat

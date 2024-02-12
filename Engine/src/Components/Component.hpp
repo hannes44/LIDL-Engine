@@ -7,6 +7,7 @@
 #include <vector>
 #include "Serializer/Serializable.hpp"
 #include <set>
+#include "Core/UUID.hpp"
 
 namespace engine
 {
@@ -28,6 +29,8 @@ namespace engine
 		virtual std::set<std::string> getRequiredComponents() { return {}; };
 
 		virtual std::string getDescription() { return ""; };
+
+		UUID uuid{};
 
 		void setGameObject(GameObject *gameObject)
 		{

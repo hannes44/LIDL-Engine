@@ -70,6 +70,7 @@ bool isAddComponentVisible = false;
 
 		std::weak_ptr<GameObject> scriptObject = project->game->createGameObject("LUA OBJECT");
 		std::shared_ptr<ScriptableComponent> scriptableComponent = std::make_shared<ScriptableComponent>();
+		scriptableComponent->name = "TestComponent";
 		scriptObject.lock()->addComponent(scriptableComponent);
 
 		LOG_INFO("GAME OBJCT NAME: {0}", scriptObject.lock()->getName());

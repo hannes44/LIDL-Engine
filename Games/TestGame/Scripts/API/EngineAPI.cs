@@ -17,7 +17,7 @@ namespace Engine
 
         public static void Log()
         {
-            Console.WriteLine("Log()");
+            Console.WriteLine("Log()22");
             //(c++_API) __log__();
         }
 

@@ -40,5 +40,8 @@
     <Compile Include="GameObject.cs" />
     <Compile Include="test.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Numerics" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -10,7 +10,7 @@ namespace engine
 	class ScriptableComponent : public Component
 	{
 	public:
-		std::string getName() override { return "Scriptable component"; };
+		std::string getName() override { return name; };
 
 		void update() override;
 
@@ -19,5 +19,11 @@ namespace engine
 		std::string scriptFileName = "";
 
 		sol::state state;
+
+		lua_State* L = luaL_newstate();
+
+		std::string name = "Scriptable component";
+
+
 	};
 }

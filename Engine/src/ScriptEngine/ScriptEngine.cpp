@@ -20,15 +20,6 @@ namespace engine
 
 	#pragma comment(lib, "../../vendor/Lua/lua54.lib")
 
-	struct vars {
-		int boop = 0;
-	};
-
-	void meow()
-	{
-		LOG_INFO("Meow");
-	}
-
 	void ScriptEngine::addGameObject()
 	{
 		LOG_INFO("Adding game object");
@@ -43,7 +34,7 @@ namespace engine
 	void ScriptEngine::updateScriptableComponent(ScriptableComponent* component)
 	{
 		LOG_INFO("Updating scriptable component");
-		sol::state_view lua(L);
+		sol::state_view lua(component->L);
 		sol::function Updatefunc = lua["testComponent"]["Update"];
 		Updatefunc();
 	}
@@ -68,37 +59,42 @@ namespace engine
 	{
 
 		// Require doesn't work if only sol is used, using base lua for loading state and sol for the rest
-		luaL_openlibs(L);
+		luaL_openlibs(component->L);
 		
 				
-		sol::state_view lua(L);
+		sol::state_view lua(component->L);
 		lua.open_libraries(sol::lib::base);
 		//bindGameObjectToLueState(component);
 
-		lua.script_file("../../Games/TestGame/Scripts/launcher.lua");
+		bindEngineAPIToLuaState(component);
 
+		lua.script_file("../../Games/TestGame/Scripts/launcher.lua");
+		//lua.script_file("../../Games/TestGame/Scripts/Compiled/test.lua");
 		//sol::usertype<GameObject> gameObjectType = lua.new_usertype<GameObject>("_GameObject", sol::constructors<GameObject()>());
 		//gameObjectType["name"] = &GameObject::name;
 		//lua["gameobjects"] = std::vector<GameObject*>{ component->gameObject, component->gameObject  };
 
-		lua.script("testComponent = TestComponent.create()");
-
-
-
-		//std::cout << "Name: " << component->gameObject->name << std::endl;
-		//	lua["name"] = component->gameObject->name;
-		sol::function initializefunc = lua["testComponent"]["Initialize"];
-		initializefunc();
-
-		std::cout << "Name: " << component->gameObject->name << std::endl;
 		
-		
+		lua.script("testComponent = TestComponent()");
 
+		lua["testComponent"]["Id"] = component->uuid.id;
+
+		lua.script("TestComponent.Initialize(testComponent)");
+
+		//int te = lua["testComponent"]["hejsan"];
+	//	std::cout << "dflkgjödslkgd" << te << std::endl;
+		//lua.script("testComponent:initialize()");
+	//	sol::function initializefunc = lua["TestComponent"]["Initialize"];
+	//	initializefunc("testComponent");
+		//lua["testComponent"]["Initialize"]();
+//
+
+	//	std::cout << "Name: " << component->gameObject->name << std::endl;
 	}
 
 	void ScriptEngine::bindEngineAPIToLuaState(ScriptableComponent* component)
 	{
-		sol::state_view lua(L);
+		sol::state_view lua(component->L);
 		lua["__log__"] = &ScriptEngine::log;
 	}
 

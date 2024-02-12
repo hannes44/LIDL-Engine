@@ -7,12 +7,18 @@ System.init({
     files = {
         "GameObject",
         "EngineAPI",
-        "test"
+        "test",
+        "TestComponent2",
+        "Component",
+        "Transform"
     },
     types = {
         "Engine.GameObject",
         "Engine.EngineAPI",
-        "TestComponent"
+        "TestComponent",
+        "TestComponent2",
+        "Engine.Component",
+        "Engine.Transform"
     },
     Main = "Program.Main"
 })

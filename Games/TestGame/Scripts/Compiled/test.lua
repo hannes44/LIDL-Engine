@@ -6,36 +6,25 @@ System.import(function (out)
 end)
 System.namespace("", function (namespace)
   namespace.class("TestComponent", function (namespace)
-    local create, Main, AddComponent, Update, Initialize, class
-    create = function ()
-      return class()
-    end
-    Main = function (this)
-      System.Console.WriteLine("hello lua!")
-      AddComponent(this)
-    end
-    AddComponent = function (this)
-      System.Console.WriteLine("Adding Component")
-      System.Console.WriteLine("HEHE KEBAB22")
-
-      local gameObject = Engine.GameObject()
-      System.Console.WriteLine(gameObject.name)
+    local Update, Initialize, __ctor__
+    __ctor__ = function (this)
+      this.gameObject = Engine.GameObject()
     end
     Update = function (this)
       System.Console.WriteLine("Update TestComponent")
     end
     Initialize = function (this)
       System.Console.WriteLine("Initialize TestComponent")
+      System.Console.WriteLine(this.gameObject.name)
+      System.Console.WriteLine(this.Id)
+      System.Console.WriteLine(this.gameObject.transform.position.X)
+
       Engine.EngineAPI.Log()
     end
-    class = {
-      create = create,
-      Main = Main,
-      AddComponent = AddComponent,
+    return {
       Update = Update,
       Initialize = Initialize,
-      hehe = 10
+      __ctor__ = __ctor__
     }
-    return class
   end)
 end)

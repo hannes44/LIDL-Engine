@@ -3,25 +3,9 @@ using System;
 
 public class TestComponent
 {
-    public static TestComponent create()
-    {
-        return new TestComponent();
-    }
+    public string Id;
 
-    public void Main()
-    {
-        Console.WriteLine("hello lua!");
-        AddComponent();
-    }
-
-    public void AddComponent()
-    {
-        Console.WriteLine("Adding Component");
-        Console.WriteLine("HEHE KEBAB22");
-
-        GameObject gameObject = new GameObject();
-        Console.WriteLine(gameObject.name);
-    }
+    public GameObject gameObject = new GameObject();
 
     public void Update()
     {
@@ -30,13 +14,13 @@ public class TestComponent
 
     public void Initialize()
     {
+
         Console.WriteLine("Initialize TestComponent");
+        Console.WriteLine(gameObject.name);
+        Console.WriteLine(Id);
+        Console.WriteLine(gameObject.transform.position.X);
+
         EngineAPI.Log();
+
     }
-
-    public int hehe = 10;
 }
-
-
-
-

@@ -3,14 +3,20 @@ return function (path)
   return System.init({
     path = path,
     files = {
+      "API.Component",
       "API.EngineAPI",
       "API.GameObject",
-      "test"
+      "API.Transform",
+      "test",
+      "testComponent2"
     },
     types = {
+      "Engine.Component",
       "Engine.EngineAPI",
       "Engine.GameObject",
-      "TestComponent"
+      "Engine.Transform",
+      "TestComponent",
+      "TestComponent2"
     }
   })
 end

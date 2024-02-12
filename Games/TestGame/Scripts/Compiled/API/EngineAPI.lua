@@ -5,14 +5,19 @@ System.import(function (out)
   Engine = out.Engine
 end)
 System.namespace("Engine", function (namespace)
+  -- The EngineAPI, responsible for abstracting away the c++ binding away from the user
+  -- Since the c++ bindings only work with lua, we compile the C# files to lua
+  -- We encode the bindings in this file under the pattern "//(c++_API) bindingFunctionName();"
+  -- All binding functions have 2 underscores before and after the function name to avoid the user
+  -- from accidentally naming their own functions the same as the binding functions
   namespace.class("EngineAPI", function (namespace)
     local AddGameObject, Log, GetComponentGameObject
     AddGameObject = function ()
       System.Console.WriteLine("AddGameObject()")
     end
     Log = function ()
-      System.Console.WriteLine("Log()")
-       _log();
+      System.Console.WriteLine("Log()22")
+       __log__();
     end
     GetComponentGameObject = function ()
       local gameObject = Engine.GameObject()
