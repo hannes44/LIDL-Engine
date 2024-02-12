@@ -12,14 +12,15 @@ System.namespace("", function (namespace)
       this.gameObject = Engine.GameObject()
     end
     Update = function (this)
-      System.Console.WriteLine("Update TestComponent")
+      this.gameObject.transform:Translate(SystemNumerics.Vector3(0.1, 0, 0))
     end
     Initialize = function (this)
       System.Console.WriteLine("Initialize TestComponent")
       System.Console.WriteLine(this.gameObject.name)
       System.Console.WriteLine(this.Id)
 
-      this.gameObject.transform.transformMatrix:setTranslation(SystemNumerics.Vector3(1, 10, 1))
+      this.gameObject.transform:SetTranslation(SystemNumerics.Vector3(1, 10, 1))
+
       System.Console.WriteLine(this.gameObject.transform.transformMatrix)
       Engine.EngineAPI.Log()
     end

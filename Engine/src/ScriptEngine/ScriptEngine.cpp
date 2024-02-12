@@ -35,8 +35,10 @@ namespace engine
 	{
 		LOG_INFO("Updating scriptable component");
 		sol::state_view lua(component->L);
-		sol::function Updatefunc = lua["testComponent"]["Update"];
-		Updatefunc();
+
+		syncTransformStateEngineToScript(component);
+		lua.script("TestComponent.Update(testComponent)");
+		syncTransformStateScriptToEngine(component);
 	}
 
 	void ScriptEngine::initializeScriptableComponent(ScriptableComponent* component)

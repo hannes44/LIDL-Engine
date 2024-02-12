@@ -10,7 +10,9 @@ public class TestComponent
 
     public void Update()
     {
-        Console.WriteLine("Update TestComponent");
+
+        gameObject.transform.Translate(new Vector3(0.1f, 0, 0));
+
     }
 
     public void Initialize()
@@ -20,7 +22,8 @@ public class TestComponent
         Console.WriteLine(gameObject.name);
         Console.WriteLine(Id);
 
-        gameObject.transform.transformMatrix.Translation = new Vector3(1, 10, 1);
+        gameObject.transform.SetTranslation(new Vector3(1, 10, 1));
+
         Console.WriteLine(gameObject.transform.transformMatrix);
         EngineAPI.Log();
 
