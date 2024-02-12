@@ -2,7 +2,7 @@
 #include "Core/Logger.hpp"
 #include <string>
 #include <sol/sol.hpp>
-
+#include <filesystem>
 
 namespace engine
 {
@@ -57,9 +57,6 @@ namespace engine
 
 	void ScriptEngine::initializeLuaStateForScriptableComponent(ScriptableComponent* component)
 	{
-		
-		system("dotnet ../../engine/src/ScriptingAPI/C#ToLuaCompiler/CSharp.Lua.Launcher.dll -s ../../Games/TestGame/Scripts -d ../../Games/TestGame/Scripts/Compiled");
-
 
 		// Require doesn't work if only sol is used, using base lua for loading state and sol for the rest
 		luaL_openlibs(L);
@@ -119,6 +116,12 @@ namespace engine
 		this->game = game;
 		LOG_INFO("Starting script engine");
 
+		// Compiling the C# scripts to Lua
+		system("dotnet ../../engine/src/ScriptingAPI/C#ToLuaCompiler/CSharp.Lua.Launcher.dll -s ../../Games/TestGame/Scripts -d ../../Games/TestGame/Scripts/Compiled");
 
+		// Copying the compiled scripts to the build directory. 
+		// TODO: It should be possible to change the path of the lua launcher script instead
+		std::filesystem::copy("C:/Users/hanne/OneDrive/Skrivbord/GameEngineTDA572/Games/TestGame/Scripts/Compiled/", "C:/Users/hanne/OneDrive/Skrivbord/GameEngineTDA572/build/Debug/", std::filesystem::copy_options::overwrite_existing);
+		std::filesystem::copy("C:/Users/hanne/OneDrive/Skrivbord/GameEngineTDA572/Games/TestGame/Scripts/Compiled/API/", "C:/Users/hanne/OneDrive/Skrivbord/GameEngineTDA572/build/Debug/", std::filesystem::copy_options::overwrite_existing);
 	}
 }

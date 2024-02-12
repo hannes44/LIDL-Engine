@@ -11,7 +11,7 @@ System.namespace("Engine", function (namespace)
       System.Console.WriteLine("AddGameObject()")
     end
     Log = function ()
-      System.Console.WriteLine("Log()2")
+      System.Console.WriteLine("Log()223")
     end
     GetComponentGameObject = function ()
       local gameObject = Engine.GameObject()
