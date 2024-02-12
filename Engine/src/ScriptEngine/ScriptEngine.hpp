@@ -31,6 +31,8 @@ namespace engine
 		static inline ScriptEngine* instance;
 	private:
 		
+		void compileCSharpFiles();
+
 		void initializeLuaStateForScriptableComponent(ScriptableComponent* component);
 
 		void bindGameObjectToLueState(ScriptableComponent* component);

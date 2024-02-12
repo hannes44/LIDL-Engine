@@ -102,7 +102,7 @@ bool isAddComponentVisible = false;
 				game->update();
 			}
 
-			scriptObject.lock()->update();
+			//scriptObject.lock()->update();
 
 			endFrame();
 			window.newFrame();
