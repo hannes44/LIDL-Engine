@@ -31,6 +31,7 @@ public class TestComponent
     public void Initialize()
     {
         Console.WriteLine("Initialize TestComponent");
+        EngineAPI.Log();
     }
 
     public int hehe = 10;

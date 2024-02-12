@@ -11,7 +11,7 @@ namespace Engine
 
         public static void Log()
         {
-            Console.WriteLine("Log()");
+            Console.WriteLine("Log()2");
         }
 
         public static GameObject GetComponentGameObject()

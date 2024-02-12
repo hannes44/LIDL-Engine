@@ -3,8 +3,8 @@ return function (path)
   return System.init({
     path = path,
     files = {
-      "EngineAPI",
-      "GameObject",
+      "API.EngineAPI",
+      "API.GameObject",
       "test"
     },
     types = {

@@ -26,6 +26,7 @@ System.namespace("", function (namespace)
     end
     Initialize = function (this)
       System.Console.WriteLine("Initialize TestComponent")
+      Engine.EngineAPI.Log()
     end
     class = {
       create = create,
