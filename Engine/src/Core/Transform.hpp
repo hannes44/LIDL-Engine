@@ -2,7 +2,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
-#include <iostream>
+
 namespace engine
 {
 	class Transform
@@ -21,7 +21,5 @@ namespace engine
 		void setScale(glm::vec3 scale);
 
 		glm::mat4 transformMatrix{ 1 };
-
-		void Test() { std::cout << "TEST" << std::endl; };
 	};
 }

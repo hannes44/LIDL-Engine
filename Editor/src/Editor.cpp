@@ -35,13 +35,6 @@ namespace engine
 		project->game = loadGameFromDLL("TestGame");
 		#endif
 
-
-		//return;
-		//while (true)
-		//	scriptableComponent->update();
-
-
-
 		if (!project)
 		{
 			MainMenuGUI mainMenuGui{};
