@@ -27,9 +27,11 @@ namespace engine
 		Renderer::getInstance()->initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
 		renderer->baseShader = engine::Shader::create("simple.vert", "simple.frag");
 
+		EditorSettings editorSettings = EditorSerializer::deSerializeEditorSettings();
+
 #ifdef SKIP_MAIN_MENU
 		project = std::make_shared<Project>();
-		project->game = loadGameFromDLL("Snake3D");
+		project->game = loadGameFromDLL(editorSettings.defaultGame);
 #endif
 
 		if (!project)
@@ -38,7 +40,7 @@ namespace engine
 			mainMenuGui.MainMenu();
 		}
 
-		EditorGUI editorGui{project};
+		EditorGUI editorGui{project, editorSettings};
 		editorGui.start();
 	}
 

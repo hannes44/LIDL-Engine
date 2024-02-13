@@ -28,7 +28,7 @@ namespace engine
 	class EditorGUI : public InputListener, public EventListener
 	{
 	public:
-		EditorGUI(std::shared_ptr<Project> project);
+		EditorGUI(std::shared_ptr<Project> project, EditorSettings& editorSettings);
 
 		void start();
 

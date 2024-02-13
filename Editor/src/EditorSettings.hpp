@@ -21,16 +21,19 @@ namespace engine
 		bool enableUserRetention = false;
 
 		bool enableScripting = true;
+
+		std::string defaultGame = "Snake3D";
 		
 		std::vector<SerializableVariable> getSerializableVariables() override
 		{
-			return 
+			return
 			{
 				{SerializableType::BOOLEAN, "Use Dark Theme", "Use Dark theme for the editor", &useDarkTheme},
 				{SerializableType::BOOLEAN, "Show Gizmos", "Show Gizmos", &showGizmos},
 				{SerializableType::BOOLEAN, "Use Serialization", "Should the editor load the inital gamestate from save file or from initiation function. With this turned of, the editor state will not save", &useSerialization},
 				{SerializableType::BOOLEAN, "Enable User Retention", "Shows the user retention panel", &enableUserRetention},
-				{SerializableType::BOOLEAN, "Enable Scripting", "Enables C# and Lua scripting", &enableScripting}
+				{SerializableType::BOOLEAN, "Enable Scripting", "Enables C# and Lua scripting", &enableScripting},
+				{SerializableType::STRING, "Default Game", "The default game to load", &defaultGame}
 			};
 		};
 		

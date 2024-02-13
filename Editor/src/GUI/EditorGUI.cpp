@@ -19,15 +19,13 @@ namespace engine
 
 bool isAddComponentVisible = false;
 
-	EditorGUI::EditorGUI(std::shared_ptr<Project> project) :  window(Window::getInstance()), project(project)
+	EditorGUI::EditorGUI(std::shared_ptr<Project> project, EditorSettings& editorSettings) :  window(Window::getInstance()), project(project), editorSettings(editorSettings)
 	{
 		game = project->game;
 	}
 
 	void EditorGUI::start()
 	{
-		editorSettings = EditorSerializer::deSerializeEditorSettings();
-
 		// We have to save the initial serialization state to avoid serializing the initiated game if the user changes settings
 		bool initialUseSerialization = editorSettings.useSerialization;
 		if (initialUseSerialization)
