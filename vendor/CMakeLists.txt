@@ -4,7 +4,7 @@ add_subdirectory(glm)
 add_subdirectory(spdlog)
 add_subdirectory(glew-cmake)
 add_subdirectory(yaml-cpp)
-add_subdirectory(sol2)
+add_subdirectory(sol2-3.3.0)
 
 add_subdirectory ( ${CMAKE_SOURCE_DIR}/vendor/imgui-cmake ${CMAKE_CURRENT_BINARY_DIR}/imgui )
 set_target_properties(imgui PROPERTIES FOLDER external)
