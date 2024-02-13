@@ -69,32 +69,7 @@ bool isAddComponentVisible = false;
 		{
 			ScriptEngine* scriptEngine = ScriptEngine::getInstance();
 			scriptEngine->start(project->game.get());
-		}
-		
-	
-		std::weak_ptr<GameObject> scriptObject = project->game->createGameObject("LUA OBJECT");
-		scriptObject.lock()->transform.setPosition({ 5, 5, 5 });
-		std::shared_ptr<ScriptableComponent> scriptableComponent = std::make_shared<ScriptableComponent>();
-		scriptObject.lock()->addComponent(scriptableComponent);
-
-		std::shared_ptr<MeshComponent> meshComponent = MeshComponent::createPrimative(PrimativeMeshType::CUBE);
-		scriptObject.lock()->addComponent(meshComponent);
-
-		scriptableComponent->scriptFileName = "TestComponent.lua";
-		scriptableComponent->initialize();
-
-		std::weak_ptr<GameObject> scriptObject2 = project->game->createGameObject("LUA OBJECT");
-		scriptObject2.lock()->transform.setPosition({ 5, 5, 5 });
-		std::shared_ptr<ScriptableComponent> scriptableComponent2 = std::make_shared<ScriptableComponent>();
-		scriptObject2.lock()->addComponent(scriptableComponent2);
-
-		std::shared_ptr<MeshComponent> meshComponent2 = MeshComponent::createPrimative(PrimativeMeshType::CUBE);
-		scriptObject2.lock()->addComponent(meshComponent2);
-
-		scriptableComponent2->scriptFileName = "TestComponent.lua";
-		scriptableComponent2->initialize();
-			
-				
+		}				
 		
 		while (!quitProgram)
 		{
@@ -110,8 +85,6 @@ bool isAddComponentVisible = false;
 				GamePhysics::getInstance().run(game.get());
 				game->update();
 			}
-
-			//scriptObject.lock()->update();
 
 			endFrame();
 			window.newFrame();
