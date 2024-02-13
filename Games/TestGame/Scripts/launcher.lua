@@ -8,14 +8,12 @@ System.init({
         "GameObject",
         "EngineAPI",
         "TestComponent",
-        "TestComponent2",
         "Transform"
     },
     types = {
         "Engine.GameObject",
         "Engine.EngineAPI",
         "TestComponent",
-        "TestComponent2",
         "Engine.Transform"
     },
     Main = "Program.Main"

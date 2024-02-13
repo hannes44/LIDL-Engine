@@ -71,9 +71,6 @@ bool isAddComponentVisible = false;
 			scriptEngine->start(project->game.get());
 		}
 		
-		
-
-		/*
 	
 		std::weak_ptr<GameObject> scriptObject = project->game->createGameObject("LUA OBJECT");
 		scriptObject.lock()->transform.setPosition({ 5, 5, 5 });
@@ -97,7 +94,7 @@ bool isAddComponentVisible = false;
 		scriptableComponent2->scriptFileName = "TestComponent.lua";
 		scriptableComponent2->initialize();
 			
-				*/
+				
 		
 		while (!quitProgram)
 		{

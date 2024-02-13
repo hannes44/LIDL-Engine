@@ -6,15 +6,13 @@ return function (path)
       "API.EngineAPI",
       "API.GameObject",
       "API.Transform",
-      "TestComponent",
-      "TestComponent2"
+      "TestComponent"
     },
     types = {
       "Engine.EngineAPI",
       "Engine.GameObject",
       "Engine.Transform",
-      "TestComponent",
-      "TestComponent2"
+      "TestComponent"
     }
   })
 end

@@ -14,30 +14,20 @@ namespace engine
 		~ScriptEngine() = default;
 		ScriptEngine(const ScriptEngine&) = delete;
 
+		// Sets up the lua states and binds the engine API to the lua state
 		void start(Game* game);
-
-		void addGameObject();
-
-		static void log(std::string message);
 
 		void updateScriptableComponent(ScriptableComponent* component);
 
 		void initializeScriptableComponent(ScriptableComponent* component);
 
-		Game* game;
-
 		static ScriptEngine* getInstance();
 
 		static inline ScriptEngine* instance;
 	private:
-		
-		void compileCSharpFiles();
+		Game* game;
 
 		void initializeLuaStateForScriptableComponent(ScriptableComponent* component);
-
-		void bindGameObjectToLueState(ScriptableComponent* component);
-
-		void bindTransformToLuaState(ScriptableComponent* component);
 
 		void bindEngineAPIToLuaState();
 
@@ -52,15 +42,5 @@ namespace engine
 		void decodeCompiledAPILuaFiles();
 
 		ScriptEngine() = default;
-
-	};
-
-	class Cat
-	{
-	public:
-		Cat() {};
-		virtual ~Cat() {};
-	public:
-		void meow() { std::cout << "MEOWW" << std::endl; };
 	};
 }

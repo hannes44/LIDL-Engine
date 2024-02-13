@@ -23,17 +23,6 @@ namespace engine
 
 	#pragma comment(lib, "../../vendor/Lua/lua54.lib")
 
-	void ScriptEngine::addGameObject()
-	{
-		LOG_INFO("Adding game object");
-		game->createGameObject("Very cool game object");
-	}
-
-	void ScriptEngine::log(std::string message)
-	{
-		LOG_FATAL("Log from LUA FILE");
-	}
-
 	void ScriptEngine::updateScriptableComponent(ScriptableComponent* component)
 	{
 		LOG_INFO("Updating scriptable component");
@@ -114,35 +103,6 @@ namespace engine
 		}
 	}
 
-
-	void ScriptEngine::bindGameObjectToLueState(ScriptableComponent* component)
-	{
-		component->state["gameObject"] = component->gameObject;
-
-		sol::usertype<GameObject> gameObjectType = component->state.new_usertype<GameObject>("_GameObject", sol::constructors<GameObject()>());
-		gameObjectType["name"] = &GameObject::name;
-
-		bindTransformToLuaState(component);
-	}
-
-	void ScriptEngine::bindTransformToLuaState(ScriptableComponent* component)
-	{
-		component->state["transform"] = &component->gameObject->transform;
-
-		sol::usertype<glm::vec3> vec3Type = component->state.new_usertype<glm::vec3>("_vec3", sol::constructors<glm::vec3(), glm::vec3(float, float, float)>());
-		vec3Type["x"] = &glm::vec3::x;
-		vec3Type["y"] = &glm::vec3::y;
-		vec3Type["z"] = &glm::vec3::z;
-
-
-		sol::usertype<Transform> transformType = component->state.new_usertype<Transform>("_Transform", sol::constructors<Transform()>());
-		transformType["getPosition"] = &Transform::getPosition;
-		transformType["setPosition"] = &Transform::setPosition;
-		transformType["shiftPosition"] = &Transform::shiftPosition;
-		transformType["Test"] = &Transform::Test;
-	}
-
-
 	void ScriptEngine::decodeCompiledAPILuaFiles()
 	{
 		// We need to loop through all API files and remove the comments with the pattern "--(c++_API)" from the compiled lua files
@@ -163,7 +123,6 @@ namespace engine
 			i = str.find(apiPattern))
 			str.erase(i, n);
 
-		std::cout << str << std::endl;
 		in_file.close();
 
 		std::ofstream out_file("../../Games/TestGame/Scripts/Compiled/API/EngineAPI.lua");
