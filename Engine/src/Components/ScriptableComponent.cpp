@@ -13,4 +13,10 @@ namespace engine
 		ScriptEngine::getInstance()->initializeScriptableComponent(this);
 	}
 
+	std::string ScriptableComponent::getScriptClassName()
+	{
+		std::string fileNameNoExtension = scriptFileName.substr(0, scriptFileName.find_last_of("."));
+		return fileNameNoExtension;
+	}
+
 }

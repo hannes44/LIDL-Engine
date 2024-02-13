@@ -40,7 +40,7 @@ namespace engine
 		sol::state_view lua(L);
 
 		syncTransformStateEngineToScript(component);
-		lua.script("TestComponent.Update(testComponent)");
+		lua.script(component->getScriptClassName() + ".Update(" + component->uuid.id + ")");
 		syncTransformStateScriptToEngine(component);
 	}
 
@@ -62,19 +62,18 @@ namespace engine
 
 	void ScriptEngine::initializeLuaStateForScriptableComponent(ScriptableComponent* component)
 	{
-		
 		sol::state_view lua(L);
 
-		
 		// The id will be used as variable names for the different components
 		std::string Id = component->uuid.id;
 
-		lua.script(Id + " = TestComponent()");
+		// Initializing the component in the lua state
+		lua.script(Id + " = " + component->getScriptClassName() + "()");
 		lua[Id]["Id"] = component->uuid.id;
 
 		syncTransformStateEngineToScript(component);
 
-		lua.script("TestComponent.Initialize(" + Id +")");
+		lua.script(component->getScriptClassName()  + ".Initialize(" + Id + ")");
 
 		syncTransformStateScriptToEngine(component);
 	}
@@ -86,6 +85,7 @@ namespace engine
 		lua.set_function("__addGameObject__", &Game::createGameObject, game);
 	}
 
+	// Syncs the transform state of the components gameObject to the lua state
 	void ScriptEngine::syncTransformStateEngineToScript(ScriptableComponent* component)
 	{
 		sol::state_view lua(L);
