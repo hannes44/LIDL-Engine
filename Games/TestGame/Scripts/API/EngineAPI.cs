@@ -10,15 +10,14 @@ namespace Engine
     // from accidentally naming their own functions the same as the binding functions
     static class EngineAPI
     {
-        public static void AddGameObject()
+        public static void AddGameObject(string name)
         {
-            System.Console.WriteLine("AddGameObject()");
+            //(c++_API) __addGameObject__(name);
         }
 
-        public static void Log()
+        public static void Log(string message)
         {
-            Console.WriteLine("Log()22");
-            //(c++_API) __log__();
+            //(c++_API) __log__(message);
         }
 
         public static GameObject GetComponentGameObject()

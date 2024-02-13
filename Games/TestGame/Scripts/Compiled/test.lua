@@ -22,7 +22,9 @@ System.namespace("", function (namespace)
       this.gameObject.transform:SetTranslation(SystemNumerics.Vector3(1, 10, 1))
 
       System.Console.WriteLine(this.gameObject.transform.transformMatrix)
-      Engine.EngineAPI.Log()
+      Engine.EngineAPI.Log("hejsan potatismos")
+
+      Engine.EngineAPI.AddGameObject("GIAGACHAD CSHARP GAMEOBJECT")
     end
     return {
       Update = Update,

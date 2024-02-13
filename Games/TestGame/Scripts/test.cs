@@ -25,7 +25,9 @@ public class TestComponent
         gameObject.transform.SetTranslation(new Vector3(1, 10, 1));
 
         Console.WriteLine(gameObject.transform.transformMatrix);
-        EngineAPI.Log();
+        EngineAPI.Log("hejsan potatismos");
+
+        EngineAPI.AddGameObject("GIAGACHAD CSHARP GAMEOBJECT");
 
     }
 }

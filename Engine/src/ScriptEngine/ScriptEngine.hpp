@@ -18,7 +18,7 @@ namespace engine
 
 		void addGameObject();
 
-		static void log();
+		static void log(std::string message);
 
 		void updateScriptableComponent(ScriptableComponent* component);
 

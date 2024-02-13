@@ -10,10 +10,10 @@
 #include <windows.h>
 #include <atlstr.h>
 #include "Utils/Utils.hpp"
+#include "Core/Debug.hpp"
 
 namespace engine
 {
-
 	extern "C"
 	{
 		#include "../../vendor/Lua/include/lua.h"
@@ -29,7 +29,7 @@ namespace engine
 		game->createGameObject("Very cool game object");
 	}
 
-	void ScriptEngine::log()
+	void ScriptEngine::log(std::string message)
 	{
 		LOG_FATAL("Log from LUA FILE");
 	}
@@ -60,8 +60,6 @@ namespace engine
 		return instance;
 	}
 
-	
-
 	void ScriptEngine::initializeLuaStateForScriptableComponent(ScriptableComponent* component)
 	{
 		
@@ -84,7 +82,8 @@ namespace engine
 	void ScriptEngine::bindEngineAPIToLuaState()
 	{
 		sol::state_view lua(L);
-		lua["__log__"] = &ScriptEngine::log;
+		lua["__log__"] = Debug::Log;
+		lua.set_function("__addGameObject__", &Game::createGameObject, game);
 	}
 
 	void ScriptEngine::syncTransformStateEngineToScript(ScriptableComponent* component)
@@ -166,8 +165,6 @@ namespace engine
 
 		std::cout << str << std::endl;
 		in_file.close();
-
-
 
 		std::ofstream out_file("../../Games/TestGame/Scripts/Compiled/API/EngineAPI.lua");
 		out_file << str;

@@ -12,12 +12,11 @@ System.namespace("Engine", function (namespace)
   -- from accidentally naming their own functions the same as the binding functions
   namespace.class("EngineAPI", function (namespace)
     local AddGameObject, Log, GetComponentGameObject
-    AddGameObject = function ()
-      System.Console.WriteLine("AddGameObject()")
+    AddGameObject = function (name)
+       __addGameObject__(name);
     end
-    Log = function ()
-      System.Console.WriteLine("Log()22")
-       __log__();
+    Log = function (message)
+       __log__(message);
     end
     GetComponentGameObject = function ()
       local gameObject = Engine.GameObject()
