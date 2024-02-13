@@ -150,6 +150,14 @@ namespace engine {
 		return texture;
 	}
 
+	std::weak_ptr<GameObject> Game::createGameObject(const std::string& name)
+	{
+		std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>();
+		gameObject->name = name;
+		gameObjects[gameObject->uuid.id] = gameObject;
+		return gameObject;
+	}
+
 
 	CameraComponent* Game::getMainCamera()
 	{

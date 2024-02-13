@@ -9,6 +9,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_subdirectory(vendor)
 add_subdirectory(engine)
 
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/vendor/Lua/lua54.dll DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Debug)
+
 file(GLOB sources_list LIST_DIRECTORIES true ./Games/*)
 foreach(dir ${sources_list})
     IF(IS_DIRECTORY ${dir})
