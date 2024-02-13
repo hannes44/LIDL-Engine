@@ -10,16 +10,16 @@ namespace engine
 	public:
 		friend class GamePhysics;
 		PhysicsComponent(bool enableGravity = true) : enableGravity(enableGravity) {};
-		
+
 		bool enableGravity = true;
 		bool overrideGravityCoefficient = false;
 
 		float gravityCoefficient = 9.82f;
 		float mass = 1.f;
 
-		glm::vec3 currentForce { 0 };
-		glm::vec3 currentAcceleration { 0 };
-		glm::vec3 currentVelocity { 0 };
+		glm::vec3 currentForce{ 0 };
+		glm::vec3 currentAcceleration{ 0 };
+		glm::vec3 currentVelocity{ 0 };
 
 		glm::vec3 getAcceleration() { return currentAcceleration; };
 		glm::vec3 getForce() { return currentForce; };

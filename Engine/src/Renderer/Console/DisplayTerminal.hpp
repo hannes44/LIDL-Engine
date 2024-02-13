@@ -9,7 +9,7 @@
 
 namespace engine {
 
-    constexpr auto TERMINAL_GAMEOBJECT_CHAR = 219U;
+	constexpr auto TERMINAL_GAMEOBJECT_CHAR = 219U;
 
 	struct Point {
 		int x;
@@ -22,7 +22,7 @@ namespace engine {
 		bool operator < (const Point& point) const
 		{
 			return (y < point.y) || (!(point.y < y) && x < point.x);
-		} 
+		}
 	};
 
 	struct DisplayContent {

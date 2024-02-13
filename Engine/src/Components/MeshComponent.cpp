@@ -159,10 +159,10 @@ namespace engine
 			LOG_ERROR("loadPrimativeMesh: {0} is not a valid primative mesh type", type);
 
 		}
-			if (primative == nullptr)
-			{
-				return;
-			}
+		if (primative == nullptr)
+		{
+			return;
+		}
 		mesh->vertices = primative->vertices;
 		mesh->indices = primative->indices;
 	}

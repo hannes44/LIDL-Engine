@@ -52,31 +52,31 @@ namespace engine {
 		}
 	}
 
-    // In a fully elastic collision, the kinetic energy is conserved (they bounce off each other)
-    std::pair<glm::vec3, glm::vec3> GamePhysics::resolveCollisionFullyElastic(std::shared_ptr<PhysicsComponent> pc1, std::shared_ptr<PhysicsComponent> pc2) {
-        const glm::vec3 u1 = pc1->currentVelocity;
-        const glm::vec3 u2 = pc2->currentVelocity;
-        
-        const glm::vec3 v1 = (pc1->mass - pc2->mass) / (pc1->mass + pc2->mass) * u1 + (2 * pc2->mass) / (pc1->mass + pc2->mass) * u2;
-        const glm::vec3 v2 = 2 * pc1->mass / (pc1->mass + pc2->mass) * u1 + (pc2->mass - pc1->mass) / (pc1->mass + pc2->mass) * u2;
+	// In a fully elastic collision, the kinetic energy is conserved (they bounce off each other)
+	std::pair<glm::vec3, glm::vec3> GamePhysics::resolveCollisionFullyElastic(std::shared_ptr<PhysicsComponent> pc1, std::shared_ptr<PhysicsComponent> pc2) {
+		const glm::vec3 u1 = pc1->currentVelocity;
+		const glm::vec3 u2 = pc2->currentVelocity;
 
-        return std::make_pair(v1, v2);
-    }
+		const glm::vec3 v1 = (pc1->mass - pc2->mass) / (pc1->mass + pc2->mass) * u1 + (2 * pc2->mass) / (pc1->mass + pc2->mass) * u2;
+		const glm::vec3 v2 = 2 * pc1->mass / (pc1->mass + pc2->mass) * u1 + (pc2->mass - pc1->mass) / (pc1->mass + pc2->mass) * u2;
 
-    // In a fully inelastic collision, the kinetic energy is not conserved (they stick together)
-    std::pair<glm::vec3, glm::vec3> GamePhysics::resolveCollisionFullyInelastic(std::shared_ptr<PhysicsComponent> pc1, std::shared_ptr<PhysicsComponent> pc2) {
-        const glm::vec3 u1 = pc1->currentVelocity;
-        const glm::vec3 u2 = pc2->currentVelocity;
-        
-        const glm::vec3 v = (pc1->mass * u1 + pc2->mass * u2) / (pc1->mass + pc2->mass);
+		return std::make_pair(v1, v2);
+	}
 
-        return std::make_pair(v, v);
-    }
+	// In a fully inelastic collision, the kinetic energy is not conserved (they stick together)
+	std::pair<glm::vec3, glm::vec3> GamePhysics::resolveCollisionFullyInelastic(std::shared_ptr<PhysicsComponent> pc1, std::shared_ptr<PhysicsComponent> pc2) {
+		const glm::vec3 u1 = pc1->currentVelocity;
+		const glm::vec3 u2 = pc2->currentVelocity;
 
-	void GamePhysics::checkCollisions(std::map<std::string, std::shared_ptr<GameObject>> gameObjects, GamePhysicsSettings& settings) {
+		const glm::vec3 v = (pc1->mass * u1 + pc2->mass * u2) / (pc1->mass + pc2->mass);
+
+		return std::make_pair(v, v);
+	}
+
+	void GamePhysics::checkCollisions(Game* game, std::map<std::string, std::shared_ptr<GameObject>> gameObjects, GamePhysicsSettings& settings) {
 		if (!settings.enableCollisions)
 			return;
-		
+
 		std::vector<std::pair<std::string, std::string>> detectedCollisions{};
 
 		// TODO: Change this loop to only check the combinations of GameObjects, so we can simplify some checks and avoid unnecessary iterations
@@ -103,9 +103,13 @@ namespace engine {
 					continue;
 
 				if (colliderComponent1->isColliding(colliderComponent2.get())) {
-                    LOG_TRACE("Collision detected between " + firstName + " and " + secondName);
-					
-                    detectedCollisions.push_back(std::make_pair(firstName, secondName));
+					LOG_TRACE("Collision detected between " + firstName + " and " + secondName);
+					if (colliderComponent1->onCollision)
+						colliderComponent1->onCollision(game, colliderComponent2.get()->gameObject, colliderComponent2.get());
+					if (colliderComponent2->onCollision)
+						colliderComponent2->onCollision(game, colliderComponent1.get()->gameObject, colliderComponent1.get());
+
+					detectedCollisions.push_back(std::make_pair(firstName, secondName));
 					colliderComponent1->isCurrentlyColliding = true;
 					colliderComponent2->isCurrentlyColliding = true;
 
@@ -127,30 +131,30 @@ namespace engine {
 
 					auto pc1 = gameObject1->getComponent<PhysicsComponent>();
 					auto pc2 = gameObject2->getComponent<PhysicsComponent>();
-                    
-                    // We cannot resolve collisions if both objects are static
-                    if (!pc1 && !pc2)
-                        continue;
-                    
-                    // If only one of the objects has a PhysicsComponent, reflect it
-                    if (pc1 && !pc2)
-                        pc1->setVelocity(-pc1->currentVelocity);
-                    else if (!pc1 && pc2)
-                        pc2->setVelocity(-pc2->currentVelocity);
-                    else {
-                        std::pair<glm::vec3,glm::vec3> finalVelocities;
-                        
-                        switch(collisionResolveType) {
-                            case FULLY_ELASTIC:
-                                finalVelocities = resolveCollisionFullyElastic(pc1, pc2);
-                                break;
-                            case FULLY_INELASTIC:
-                                finalVelocities = resolveCollisionFullyInelastic(pc1, pc2);
-                                break;
-                        }
 
-                        pc1->setVelocity(finalVelocities.first);
-                        pc2->setVelocity(finalVelocities.second);
+					// We cannot resolve collisions if both objects are static
+					if (!pc1 && !pc2)
+						continue;
+
+					// If only one of the objects has a PhysicsComponent, reflect it
+					if (pc1 && !pc2)
+						pc1->setVelocity(-pc1->currentVelocity);
+					else if (!pc1 && pc2)
+						pc2->setVelocity(-pc2->currentVelocity);
+					else {
+						std::pair<glm::vec3, glm::vec3> finalVelocities;
+
+						switch (collisionResolveType) {
+						case FULLY_ELASTIC:
+							finalVelocities = resolveCollisionFullyElastic(pc1, pc2);
+							break;
+						case FULLY_INELASTIC:
+							finalVelocities = resolveCollisionFullyInelastic(pc1, pc2);
+							break;
+						}
+
+						pc1->setVelocity(finalVelocities.first);
+						pc2->setVelocity(finalVelocities.second);
 					}
 				}
 				else {
@@ -168,6 +172,6 @@ namespace engine {
 
 		lastPhysicsUpdateTimestamp = Utils::getTimestampNS();
 		fixedUpdate(game->getGameObjects(), game->config.physicsSettings);
-		checkCollisions(game->getGameObjects(), game->config.physicsSettings);
+		checkCollisions(game, game->getGameObjects(), game->config.physicsSettings);
 	}
 }

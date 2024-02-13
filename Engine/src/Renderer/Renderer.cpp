@@ -39,7 +39,7 @@ namespace engine
 
 		if (renderingSettings->useMultiSampling)
 			glEnable(GL_MULTISAMPLE);
-		else 
+		else
 			glDisable(GL_MULTISAMPLE);
 
 		baseShader->bind();
@@ -50,7 +50,7 @@ namespace engine
 
 		int lightIndex = 0;
 		// TODO: There should be a list of all the lights in the game to avoid this loop
-		for (const auto& [gameObjectId, gameObject] : game->getGameObjects()) 
+		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
 		{
 			for (auto component : gameObject->getComponents())
 			{
@@ -92,7 +92,7 @@ namespace engine
 
 			if (meshComponent == nullptr)
 				continue;
-			
+
 
 			glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * gameObject->transform.transformMatrix;
 			Renderer::baseShader->setMat4("modelViewProjectionMatrix", &modelViewProjectionMatrix[0].x);
@@ -117,7 +117,7 @@ namespace engine
 				glActiveTexture(GL_TEXTURE1);
 				glBindTexture(GL_TEXTURE_2D, material->specularTexture.lock()->textureIDOpenGL);
 			}
-			
+
 			graphicsAPI->drawIndexed(meshComponent->getVertexArray().get(), meshComponent->indices.size());
 		}
 
@@ -140,7 +140,7 @@ namespace engine
 
 			if (colliderComponent == nullptr)
 				continue;
-			
+
 			if (renderingSettings->drawBoundingBoxes)
 				colliderComponent->drawCollider(camera);
 		}
@@ -201,7 +201,7 @@ namespace engine
 		}
 
 		glBindFramebuffer(GL_FRAMEBUFFER, textureFrameBuffer);
-			
+
 
 		CameraComponent camera = CameraComponent();
 
@@ -327,7 +327,7 @@ namespace engine
 			LOG_FATAL("Graphics API is not initialized!");
 			abort();
 		}
-			
+
 		return graphicsAPI->getType();
 	}
 }

@@ -7,7 +7,7 @@ namespace engine
 	class PointLightComponent : public Component
 	{
 	public:
-		glm::vec3 color{1, 1, 1};
+		glm::vec3 color{ 1, 1, 1 };
 
 		float intensity = 10;
 
@@ -17,11 +17,11 @@ namespace engine
 
 		std::vector<SerializableVariable> getSerializableVariables() override
 		{
-			return 
+			return
 			{
 				{SerializableType::VECTOR3, "Color", "The color or the pointlight", &color},
 				{SerializableType::FLOAT, "Intensity", "The intensity of the pointlight", &intensity}
-			}; 
+			};
 		};
 	};
 }

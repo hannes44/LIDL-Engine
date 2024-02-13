@@ -9,11 +9,11 @@ namespace engine
 	{
 		switch (Renderer::getInstance()->getAPIType())
 		{
-			case GraphicsAPIType::OpenGL:
-				return std::make_unique<OpenGLVertexBuffer>(vertices, size);
-			default:
-				LOG_FATAL("ERROR creating vertex buffer, Unknown Graphics API");
-				abort();
+		case GraphicsAPIType::OpenGL:
+			return std::make_unique<OpenGLVertexBuffer>(vertices, size);
+		default:
+			LOG_FATAL("ERROR creating vertex buffer, Unknown Graphics API");
+			abort();
 		}
 
 		return nullptr;

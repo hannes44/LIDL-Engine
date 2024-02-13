@@ -20,6 +20,16 @@ glm::quat engine::Transform::getRotation() {
 	return glm::quat(transformMatrix);
 }
 
+// TODO: Fix this, I do not trust it at all
+void engine::Transform::setRotation(glm::quat rotation) {
+	transformMatrix = glm::rotate(transformMatrix, glm::angle(rotation) - glm::angle(getRotation()), glm::vec3(0, 1, 0));
+}
+
+// TODO: Fix this, I do not trust it at all
+void engine::Transform::setRotationFromDirection(glm::vec3 direction) {
+	setRotation(glm::quatLookAt(glm::normalize(direction), glm::vec3(0, 1, 0)));
+}
+
 void engine::Transform::shiftPosition(glm::vec3 offset)
 {
 	engine::Transform::setPosition(engine::Transform::getPosition() + offset);

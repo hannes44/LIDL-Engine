@@ -37,7 +37,6 @@ namespace engine
 			this->gameObject = gameObject;
 		}
 
-		GameObject* gameObject = nullptr;
-		
+		GameObject *gameObject = nullptr;
 	};
 }

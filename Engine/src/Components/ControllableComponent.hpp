@@ -14,28 +14,29 @@
 
 namespace engine {
 
-    enum MovementType {
-        OnHold,
-        Always
-    };
+	enum MovementType {
+		OnHold,
+		Always
+	};
 
-    class ControllableComponent : public Component, public InputListener {
-    public:
-        ControllableComponent();
+	class ControllableComponent : public Component, public InputListener {
+	public:
+		ControllableComponent();
 
-        float movementSpeed = 3;
-        MovementType movementType = MovementType::Always;
+		float movementSpeed = 3;
+		MovementType movementType = MovementType::Always;
+		bool allowInstantTurnaround = true;
 
-        std::string getName() override;
+		std::string getName() override;
 
-        std::set<std::string> getRequiredComponents() override;
+		std::set<std::string> getRequiredComponents() override;
 
-        void handleInput(const InputEvent& event) override;
-    protected:
-        std::unordered_set<glm::vec3> applied{};
-        void apply(std::shared_ptr<PhysicsComponent> physicsComponent, glm::vec3 vector);
+		void handleInput(const InputEvent& event) override;
+	protected:
+		std::unordered_set<glm::vec3> applied{};
+		void apply(std::shared_ptr<PhysicsComponent> physicsComponent, glm::vec3 vector);
 
-        void moveOnHold(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent);
-        void alwaysMove(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent);
-    };
+		void moveOnHold(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent);
+		void alwaysMove(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent);
+	};
 }
