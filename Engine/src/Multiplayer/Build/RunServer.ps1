@@ -1,0 +1,1 @@
+Invoke-Expression "D:\Repos\GameEngineTDA572\Engine\src\Multiplayer\Build\bin\GameServer.exe"
