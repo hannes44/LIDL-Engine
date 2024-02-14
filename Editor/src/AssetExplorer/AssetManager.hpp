@@ -29,6 +29,8 @@ namespace engine
 		void onEvent(EventType type, std::string message);
 
 		void addChild(std::shared_ptr<AssetNode> parent, std::shared_ptr<AssetNode> child);
+
+		bool isNameInUse(std::shared_ptr<AssetNode> parent, std::string name);
 	private:
 		void loadIconTextures();
 

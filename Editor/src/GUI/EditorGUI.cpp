@@ -752,6 +752,26 @@ bool isAddComponentVisible = false;
 		{
 			if (ImGui::BeginTabItem("Assets"))
 			{
+				if(ImGui::SmallButton("New Folder"))
+				{
+					if (auto lockedSelectedAssetNodeFolder = selectedAssetNodeFolder.lock())
+					{
+						std::shared_ptr<AssetNode> newFolder = std::make_shared<AssetNode>(true, std::weak_ptr<Selectable>());
+						newFolder->name = "New Folder";
+						
+						int i = 1;
+						std::string newFolderName = newFolder->name;
+						while (assetManager->isNameInUse(lockedSelectedAssetNodeFolder, newFolderName))
+						{
+							newFolderName = newFolder->name + " (" + std::to_string(i) + ")";
+							i++;
+						}
+						newFolder->name = newFolderName;
+
+						assetManager->addChild(lockedSelectedAssetNodeFolder, newFolder);
+					}
+
+				}
 				drawAssetsSection();
 				ImGui::EndTabItem();
 			}
