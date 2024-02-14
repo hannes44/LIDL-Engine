@@ -89,6 +89,8 @@ add_library(engine
 	src/Input/InputFramework.cpp
 	src/Audio/AudioManager.cpp
 	src/Audio/AudioManager.hpp
+	src/Multiplayer/Client/Client.hpp
+	src/Multiplayer/Client/Client.cpp
 	${SHADERS}
 )
 target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -214,6 +216,11 @@ source_group("Input" FILES
 source_group("Audio" FILES
 	src/Audio/AudioManager.cpp
 	src/Audio/AudioManager.hpp
+)
+
+source_group("Multiplayer" FILES
+	src/Multiplayer/Client/Client.hpp
+	src/Multiplayer/Client/Client.cpp
 )
 
 
