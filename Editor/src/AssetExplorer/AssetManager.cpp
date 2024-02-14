@@ -51,6 +51,16 @@ namespace engine
 		}
 	}
 
+	bool AssetManager::isNameInUse(std::shared_ptr<AssetNode> parent, std::string name)
+	{
+		for (auto& child : parent->children)
+		{
+			if (child->name == name)
+				return true;
+		}
+		return false;
+	}
+
 	void AssetManager::buildAssetTree()
 	{
 		rootNode = std::make_shared<AssetNode>(true, std::weak_ptr<Selectable>());
