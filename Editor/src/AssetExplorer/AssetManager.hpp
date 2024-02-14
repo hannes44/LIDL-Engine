@@ -19,6 +19,8 @@ namespace engine
 		std::shared_ptr<AssetNode> materialsFolderNode;
 
 		std::shared_ptr<AssetNode> texturesFolderNode;
+
+		std::shared_ptr<AssetNode> scriptsFolderNode;
 		
 		void changeGame(Game* game);
 
@@ -36,5 +38,7 @@ namespace engine
 		Game* game;
 
 		static inline std::shared_ptr<Texture> folderIconTexture;
+
+		static inline std::shared_ptr<Texture> csharpIconTexture;
 	};
 }
