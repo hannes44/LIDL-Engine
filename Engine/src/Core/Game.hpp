@@ -67,6 +67,8 @@ namespace engine
 
 		std::weak_ptr<Texture> createTexture(const std::string& name);
 
+		std::weak_ptr<GameObject> createGameObject(const std::string& name);
+
 		CameraComponent* getMainCamera();
 
 		RendererSettings renderingSettings{};

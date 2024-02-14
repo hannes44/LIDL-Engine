@@ -29,6 +29,7 @@
 #include "Components/PointLightComponent.hpp"
 #include "Components/CameraComponent.hpp"
 #include "Components/ControllableComponent.hpp"
+#include "Components/ScriptableComponent.hpp"
 
 //Events
 #include "Events/EventManager.hpp"
@@ -38,3 +39,6 @@
 #include "Input/InputFrameWork.hpp"
 #include "Input/InputListener.hpp"
 #include "Input/InputFrameWork.hpp"
+
+//Scripting
+#include "ScriptEngine/ScriptEngine.hpp"

@@ -7,6 +7,7 @@
 #include <vector>
 #include "Serializer/Serializable.hpp"
 #include <set>
+#include "Core/UUID.hpp"
 
 namespace engine
 {
@@ -20,8 +21,8 @@ namespace engine
 	class Component : public Serializable
 	{
 	public:
-		virtual void initialize() {};
-		virtual void update() {};
+		virtual void initialize(){};
+		virtual void update(){};
 
 		virtual std::string getName() = 0;
 
@@ -29,12 +30,13 @@ namespace engine
 
 		virtual std::string getDescription() { return ""; };
 
-		void setGameObject(GameObject* gameObject)
+		UUID uuid{};
+
+		void setGameObject(GameObject *gameObject)
 		{
 			this->gameObject = gameObject;
 		}
 
-	protected:
-		GameObject* gameObject = nullptr;
+		GameObject *gameObject = nullptr;
 	};
 }
