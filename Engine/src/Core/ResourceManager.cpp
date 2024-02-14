@@ -45,6 +45,19 @@ namespace engine
 				}
 			}
 		}
+			
+		// We also need to search the scripts folder
+		pathToSearch = getPathToActiveGameFolder() + "Scripts/";
+
+		for (const auto& entry : fs::directory_iterator(pathToSearch))
+		{
+			if (entry.path().filename().string() == fileNameWithExtention)
+			{
+				LOG_INFO("Found file: {}", entry.path().string());
+				return entry.path().string();
+			}
+		}
+
 		LOG_ERROR("Could not find file: " + fileNameWithExtention);
 		return "";
 	}
@@ -139,6 +152,20 @@ namespace engine
 	{
 		return getPathToActiveGameFolder() + "Assets/3DObjects/";
 	}
+
+	std::vector<std::string> ResourceManager::getAllCSharpScriptsInActiveGame()
+	{
+		std::string path = getPathToActiveGameFolder() + "Scripts/";
+		std::vector<std::string> scriptNames{};
+		for (const auto& entry : fs::directory_iterator(path))
+		{
+			if (entry.path().extension() == ".cs")
+				scriptNames.push_back(entry.path().filename().string());
+		}
+			
+		return scriptNames;
+	}
+	
 	std::vector<std::string> ResourceManager::getAllGameNamesInGamesFolder()
 	{
 		std::string path = "../../games/";

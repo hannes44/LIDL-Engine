@@ -13,6 +13,8 @@ namespace engine
 
 		bool isFolder = false;
 
+		bool isScript = false;
+
 		std::weak_ptr<Selectable> asset;
 
 		std::weak_ptr<AssetNode> parent;

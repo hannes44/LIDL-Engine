@@ -10,12 +10,16 @@
 #include "Components/ComponentFactory.hpp"
 #include <memory>
 #include <imgui_internal.h>
-
+#include <Windows.h>
+#include <regex>
 
 namespace engine
 {
 #define IMGUI_TOP_MENU_HEIGHT 18
 #define IMGUI_SHOW_DEMO_WINDOWS false
+
+// We have to undefine DELETE because it is causing a conflict with the InputEvent DELETE
+#undef DELETE
 
 bool isAddComponentVisible = false;
 
@@ -36,7 +40,7 @@ bool isAddComponentVisible = false;
 		{
 			game->initialize();
 		}
-
+		
 		AudioManager::getInstance().initialize();
 
 		Renderer* renderer = Renderer::getInstance();
@@ -948,7 +952,16 @@ bool isAddComponentVisible = false;
 
 			if (ImGui::ImageButton(("##" + assetNode->uuid.id).c_str(), (void*)(intptr_t)openGLTextureId, ImVec2(70, 70), { 0, 1 }, { 1, 0 }))
 			{
-				if (assetNode->isFolder)
+				// Special case for script
+				if (assetNode->isScript)
+				{
+					// Opening the script in the default editor for the user
+					std::string path = ResourceManager::getInstance()->getPathToGameResource(assetNode->name);
+					std::string const pathCorrectFormat = std::regex_replace(path, std::regex("/"), "\\");
+					LPCSTR filePath = pathCorrectFormat.c_str();
+					ShellExecute(0, 0, filePath, NULL, NULL, SW_SHOW);
+				}
+				else if (assetNode->isFolder)
 					selectedAssetNodeFolder = assetNode;
 				else
 					selectedObject = assetNode->asset;
