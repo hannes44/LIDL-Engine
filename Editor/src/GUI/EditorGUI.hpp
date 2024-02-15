@@ -74,6 +74,8 @@ namespace engine
 
 		bool defaultCheckBox(const std::string& label, bool* value);
 
+		void playGame();
+
 		void changeGame(std::shared_ptr<Game> game);
 
 		Window& window;
