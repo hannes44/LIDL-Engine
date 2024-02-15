@@ -9,6 +9,9 @@
 #include <filesystem>
 #include <ShObjIdl_core.h>
 
+#include <fstream>
+#include <sstream>
+#include <regex>
 
 
 namespace fs = std::filesystem;
@@ -76,7 +79,7 @@ namespace engine
 		std::string pathToSearch = pathToEditor + "Assets/";
 
 		// If the file is a config file or a script file, we will search in the editor's folder
-		if (fileNameExtension == CONFIG_FILE_EXTENSION || fileNameExtension == ".cs")
+		if (fileNameExtension == CONFIG_FILE_EXTENSION || fileNameExtension == ".cs" || fileNameExtension == ".lua")
 		{
 			pathToSearch = pathToEditor;
 		}
@@ -170,9 +173,26 @@ namespace engine
 
 	void ResourceManager::createNewScriptForActiveGame(const std::string& scriptFileName)
 	{
+		// Copying the template script to the active game's script folder
 		std::string sourcePath = getPathToEditorResource("ComponentTemplate.cs");
 		std::string destinationPath = getPathToActiveGameFolder() + "Scripts/" + scriptFileName;
 		CopyFile(sourcePath.c_str(), destinationPath.c_str(), TRUE);
+
+		// Modifying the script to have the correct class name
+		std::ostringstream text;
+		std::ifstream in_file(destinationPath);
+		text << in_file.rdbuf();
+		std::string str = text.str();
+
+		std::string className = scriptFileName.substr(0, scriptFileName.find_last_of("."));
+		std::string oldClassName = "TemplateComponent";
+		
+		std::string const result = std::regex_replace(str, std::regex(oldClassName), className);
+
+		in_file.close();
+
+		std::ofstream out_file(destinationPath);
+		out_file << result;
 	}
 	
 	std::vector<std::string> ResourceManager::getAllGameNamesInGamesFolder()

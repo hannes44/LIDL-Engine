@@ -11,6 +11,10 @@
 #include <atlstr.h>
 #include "Utils/Utils.hpp"
 #include "Core/Debug.hpp"
+#include "Core/ResourceManager.hpp"
+#include <fstream>
+#include <sstream>
+#include <regex>
 
 namespace engine
 {
@@ -172,7 +176,43 @@ namespace engine
 		
 		// Require doesn't work if only sol is used, using base lua for loading state and sol for the rest
 		luaL_openlibs(L);
+
+		// We need to insert the file names into the launcher script
+		// In the script the pattern "--FileNames--" will be replaced with the file names'
+		
+
+		std::vector<std::string> fileNames = ResourceManager::getInstance()->getAllCSharpScriptsInActiveGame();
+		std::string fileNamesString = "";
+		for (const auto& fileName : fileNames)
+		{
+			std::string fileNameNoExtension = fileName.substr(0, fileName.find_last_of("."));
+			fileNamesString += "\"" + fileNameNoExtension + "\"" + ",";
+		}
+
+		// The launcher script is responsible for loading all other scripts into the lua state
+		std::string pathToLauncherScript = ResourceManager::getInstance()->getPathToGameResource("launcher.lua");
+		std::string sourcePath = ResourceManager::getPathToEditorResource("launcherTemplate.lua");
+
+		std::filesystem::copy(sourcePath, pathToLauncherScript, std::filesystem::copy_options::overwrite_existing);
+
+
+		std::ostringstream text;
+		std::ifstream in_file(pathToLauncherScript);
+
+		text << in_file.rdbuf();
+		std::string str = text.str();
+
+		std::string fileNamesPattern = "--FileNames--";
+		std::string const modifiedScript = std::regex_replace(str, std::regex(fileNamesPattern), fileNamesString);
+
+		in_file.close();
+
+		std::ofstream out_file(pathToLauncherScript);
+		out_file << modifiedScript;
+		out_file.close();
+				
+
 		// Launcher script loads all other component scripts into the lua state
-		lua.script_file("../../Games/TestGame/Scripts/launcher.lua");
+		lua.script_file(pathToLauncherScript);
 	}
 }

@@ -786,8 +786,8 @@ bool isAddComponentVisible = false;
 
 				if (ImGui::SmallButton("New Script"))
 				{
-					ResourceManager::getInstance()->createNewScriptForActiveGame("NEW SCRIPT.cs");
-					assetManager->addNewScriptNode("NEW SCRIPT.cs");
+					ResourceManager::getInstance()->createNewScriptForActiveGame("NewComponent.cs");
+					assetManager->addNewScriptNode("NewComponent.cs");
 				}
 
 				drawAssetsSection();
