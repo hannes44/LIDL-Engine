@@ -9,6 +9,8 @@
 #include <filesystem>
 #include <ShObjIdl_core.h>
 
+
+
 namespace fs = std::filesystem;
 
 namespace engine
@@ -73,8 +75,8 @@ namespace engine
 
 		std::string pathToSearch = pathToEditor + "Assets/";
 
-		// If the file is a config file, we will search in the editor's folder
-		if (fileNameExtension == CONFIG_FILE_EXTENSION)
+		// If the file is a config file or a script file, we will search in the editor's folder
+		if (fileNameExtension == CONFIG_FILE_EXTENSION || fileNameExtension == ".cs")
 		{
 			pathToSearch = pathToEditor;
 		}
@@ -164,6 +166,13 @@ namespace engine
 		}
 			
 		return scriptNames;
+	}
+
+	void ResourceManager::createNewScriptForActiveGame(const std::string& scriptFileName)
+	{
+		std::string sourcePath = getPathToEditorResource("ComponentTemplate.cs");
+		std::string destinationPath = getPathToActiveGameFolder() + "Scripts/" + scriptFileName;
+		CopyFile(sourcePath.c_str(), destinationPath.c_str(), TRUE);
 	}
 	
 	std::vector<std::string> ResourceManager::getAllGameNamesInGamesFolder()

@@ -61,6 +61,14 @@ namespace engine
 		return false;
 	}
 
+	void AssetManager::addNewScriptNode(const std::string& scriptFileName)
+	{
+		std::shared_ptr<AssetNode> scriptNode = std::make_shared<AssetNode>(false, csharpIconTexture);
+		scriptNode->name = scriptFileName;
+		scriptNode->isScript = true;
+		addChild(scriptsFolderNode, scriptNode);
+	}
+
 	void AssetManager::buildAssetTree()
 	{
 		rootNode = std::make_shared<AssetNode>(true, std::weak_ptr<Selectable>());
@@ -94,10 +102,7 @@ namespace engine
 
 		for (const auto& scriptFileName : ResourceManager::getInstance()->getAllCSharpScriptsInActiveGame())
 		{
-			std::shared_ptr<AssetNode> scriptNode = std::make_shared<AssetNode>(false, csharpIconTexture);
-			scriptNode->name = scriptFileName;
-			scriptNode->isScript = true;
-			addChild(scriptsFolderNode, scriptNode);
+			addNewScriptNode(scriptFileName);
 		}
 
 	}

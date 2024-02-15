@@ -16,7 +16,7 @@
 namespace engine
 {
 #define IMGUI_TOP_MENU_HEIGHT 18
-#define IMGUI_SHOW_DEMO_WINDOWS false
+#define IMGUI_SHOW_DEMO_WINDOWS true
 
 // We have to undefine DELETE because it is causing a conflict with the InputEvent DELETE
 #undef DELETE
@@ -781,6 +781,15 @@ bool isAddComponentVisible = false;
 					}
 
 				}
+
+				ImGui::SameLine();
+
+				if (ImGui::SmallButton("New Script"))
+				{
+					ResourceManager::getInstance()->createNewScriptForActiveGame("NEW SCRIPT.cs");
+					assetManager->addNewScriptNode("NEW SCRIPT.cs");
+				}
+
 				drawAssetsSection();
 				ImGui::EndTabItem();
 			}
