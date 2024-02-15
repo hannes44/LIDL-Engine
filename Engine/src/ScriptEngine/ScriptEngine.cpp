@@ -25,7 +25,6 @@ namespace engine
 
 	void ScriptEngine::updateScriptableComponent(ScriptableComponent* component)
 	{
-		LOG_INFO("Updating scriptable component");
 		sol::state_view lua(L);
 
 		syncTransformStateEngineToScript(component);
@@ -35,7 +34,19 @@ namespace engine
 
 	void ScriptEngine::initializeScriptableComponent(ScriptableComponent* component)
 	{
-		initializeLuaStateForScriptableComponent(component);
+		if (!component->stateIsInitialized)
+		{
+			initializeLuaStateForScriptableComponent(component);
+			component->stateIsInitialized = true;
+		}
+
+		sol::state_view lua(L);
+
+		syncTransformStateEngineToScript(component);
+
+		lua.script(component->getScriptClassName() + ".Initialize(" + component->uuid.id + ")");
+
+		syncTransformStateScriptToEngine(component);
 
 		LOG_INFO("Initializing scriptable component");
 	}
@@ -59,12 +70,6 @@ namespace engine
 		// Initializing the component in the lua state
 		lua.script(Id + " = " + component->getScriptClassName() + "()");
 		lua[Id]["Id"] = component->uuid.id;
-
-		syncTransformStateEngineToScript(component);
-
-		lua.script(component->getScriptClassName()  + ".Initialize(" + Id + ")");
-
-		syncTransformStateScriptToEngine(component);
 	}
 
 	void ScriptEngine::bindEngineAPIToLuaState()

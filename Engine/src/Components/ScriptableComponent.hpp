@@ -22,6 +22,9 @@ namespace engine
 
 		std::string name = "Scriptable";
 
+		// Since initialize can be called multiple times if we are using the editor, we need this flag to make sure that the state is only initialized once
+		bool stateIsInitialized = false;
+
 		// Currently assuming that the class name is the same as the file name
 		std::string getScriptClassName();
 

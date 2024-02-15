@@ -86,6 +86,11 @@ bool isAddComponentVisible = false;
 			{
 				GamePhysics::getInstance().run(game.get());
 				game->update();
+
+				for (auto& [gameObjectId, gameObject] : game->getGameObjects())
+				{
+					gameObject->update();
+				}
 			}
 
 			endFrame();
@@ -520,8 +525,11 @@ bool isAddComponentVisible = false;
 		{
 			wasPlayButtonPressed = true;
 
-			sceneState = EditorSceneState::Play;
-
+			// Only start the game if it isn't already playing
+			if (sceneState != EditorSceneState::Play)
+			{
+				playGame();
+			}
 		}
 		if (sceneState == EditorSceneState::Play && pushedStyleColor)
 		{
@@ -649,36 +657,37 @@ bool isAddComponentVisible = false;
 			ImGui::Text("Add Component");
 			ImGui::Separator();
 
-			const char* lines[] = { "Box Collider", "Camera", "Mesh", "Physics", "PointLight", "Sphere Collider" };
-			
-			static int item_current_idx = 0;
+			std::vector<std::string> allComponentNames = { "Box Collider", "Camera", "Mesh", "Physics", "PointLight", "Sphere Collider" };
+			std::vector<std::string> scriptComponentNames = ResourceManager::getInstance()->getAllCSharpScriptsInActiveGame();
+		
+			// Remove the extension from the script names
+			for (auto& scriptName : scriptComponentNames)
+			{
+				scriptName = scriptName.substr(0, scriptName.find_last_of('.'));
+			}
+
+			allComponentNames.insert(allComponentNames.end(), scriptComponentNames.begin(), scriptComponentNames.end());
 
 			if (ImGui::BeginListBox("##"))
 			{
-				for (int n = 0; n < IM_ARRAYSIZE(lines); n++)
+				for (auto componentName : allComponentNames)
 				{
-					bool is_selected = (item_current_idx == n);
-					if (ImGui::Selectable(lines[n], is_selected, ImGuiSelectableFlags_AllowDoubleClick))
+					if (ImGui::Selectable(componentName.c_str(), false, ImGuiSelectableFlags_AllowDoubleClick))
 					{
 						if (ImGui::IsMouseDoubleClicked(0))
 						{
-							item_current_idx = n;
-							Debug::Log(lines[item_current_idx]);
 							isAddComponentVisible = !isAddComponentVisible;
 
 							if (auto lockedSelectedObject = selectedObject.lock())
 							{
 								if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
 								{
-									std::string componentName = lines[item_current_idx];
 									lockedGameObject->addComponent(ComponentFactory::createComponent(componentName));
 								}
 							}
 
 						}
 					}
-					if (is_selected)
-						ImGui::SetItemDefaultFocus();
 				}
 				ImGui::EndListBox();
 			}
@@ -1006,6 +1015,15 @@ bool isAddComponentVisible = false;
 	bool EditorGUI::defaultCheckBox(const std::string& label, bool* value)
 	{
 		return ImGui::Checkbox(label.c_str(), value);
+	}
+
+	void EditorGUI::playGame()
+	{
+		for (auto& [gameObjectId, gameObject] : game->getGameObjects())
+		{
+			gameObject->initialize();
+		}
+		sceneState = EditorSceneState::Play;
 	}
 
 	CameraComponent* EditorGUI::getActiveCamera()
