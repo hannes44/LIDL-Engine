@@ -782,13 +782,21 @@ bool isAddComponentVisible = false;
 
 				}
 
+
+				static char newScriptName[64];
+
 				ImGui::SameLine();
 
 				if (ImGui::SmallButton("New Script"))
 				{
-					ResourceManager::getInstance()->createNewScriptForActiveGame("NewComponent.cs");
-					assetManager->addNewScriptNode("NewComponent.cs");
+					std::string scriptName = std::string(newScriptName) + std::string(".cs");
+					ResourceManager::getInstance()->createNewScriptForActiveGame(scriptName);
+					assetManager->addNewScriptNode(scriptName);
 				}
+
+				ImGui::SameLine();
+
+				ImGui::InputText("##newScriptName", newScriptName, 64);
 
 				drawAssetsSection();
 				ImGui::EndTabItem();
