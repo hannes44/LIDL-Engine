@@ -557,6 +557,15 @@ bool isAddComponentVisible = false;
 			ImGui::PopStyleColor();
 		}
 
+		ImGui::SameLine();
+
+		ImGui::Dummy(ImVec2(10.0f, 20.0f));
+		ImGui::SameLine();
+		if (ImGui::Button("Recompile scripts"))
+		{
+			ScriptEngine::getInstance()->start(game.get());
+		}
+
 		ImGui::End();
 	}
 
@@ -789,7 +798,7 @@ bool isAddComponentVisible = false;
 
 				if (ImGui::SmallButton("New Script"))
 				{
-					std::string scriptName = std::string(newScriptName) + std::string(".cs");
+					std::string scriptName = newScriptName + std::string(".cs");
 					ResourceManager::getInstance()->createNewScriptForActiveGame(scriptName);
 					assetManager->addNewScriptNode(scriptName);
 				}

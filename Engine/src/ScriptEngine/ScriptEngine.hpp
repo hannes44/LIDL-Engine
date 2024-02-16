@@ -21,6 +21,8 @@ namespace engine
 
 		void initializeScriptableComponent(ScriptableComponent* component);
 
+		void recompileScripts();
+
 		static ScriptEngine* getInstance();
 
 		static inline ScriptEngine* instance;
@@ -35,11 +37,15 @@ namespace engine
 
 		void syncTransformStateScriptToEngine(ScriptableComponent* component);
 
+		void updateLauncherScript();
+
 		lua_State* L = luaL_newstate();
 
 		// Since the c++ binding is done with lua files, we leave empty functions in the c# API with the binding lua binding functions
 		// commented out. After it is compiled to lua, we remove the commented functinos and the API will now be binded to the c++ functions
 		void decodeCompiledAPILuaFiles();
+
+		void compileCSharpFilesToLua();
 
 		ScriptEngine() = default;
 	};

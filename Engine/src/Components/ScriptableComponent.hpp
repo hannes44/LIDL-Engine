@@ -2,14 +2,17 @@
 #include "Component.hpp"
 #include "ScriptEngine/ScriptEngine.hpp"
 #include <sol/sol.hpp>
+#include "Events/EventManager.hpp"
 
 namespace engine
 {
 	class ScriptEngine;
 
-	class ScriptableComponent : public Component
+	class ScriptableComponent : public Component, public EventListener
 	{
 	public:
+		ScriptableComponent();
+
 		std::string getName() override { return name; };
 
 		void update() override;
@@ -35,5 +38,7 @@ namespace engine
 			{SerializableType::STRING, "scriptFileName", "The file name of the C# or Lua files", &scriptFileName},
 			}; 
 		};
+
+		void onEvent(EventType type, std::string message) override;
 	};
 }

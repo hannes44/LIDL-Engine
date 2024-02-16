@@ -55,6 +55,21 @@ namespace engine
 		LOG_INFO("Initializing scriptable component");
 	}
 
+	void ScriptEngine::recompileScripts()
+	{
+		sol::state_view lua(L);
+
+		compileCSharpFilesToLua();
+
+		updateLauncherScript();
+
+		// The launcher script is responsible for loading all other scripts into the lua state
+		std::string pathToLauncherScript = ResourceManager::getInstance()->getPathToGameResource("launcher.lua");
+
+		// Launcher script loads all other component scripts into the lua state
+		lua.script_file(pathToLauncherScript);
+	}
+
 	ScriptEngine* ScriptEngine::getInstance()
 	{
 		if (instance == nullptr)
@@ -112,75 +127,8 @@ namespace engine
 		}
 	}
 
-	void ScriptEngine::decodeCompiledAPILuaFiles()
+	void ScriptEngine::updateLauncherScript()
 	{
-		// We need to loop through all API files and remove the comments with the pattern "--(c++_API)" from the compiled lua files
-		// This is a hack to get the c++ binding to work with the lua files
-		std::ostringstream text;
-		std::ifstream in_file("../../Games/TestGame/Scripts/Compiled/API/EngineAPI.lua");
-
-		text << in_file.rdbuf();
-		std::string str = text.str();
-
-		std::string apiPattern = "--(c++_API)";
-
-		// Removing all occurences of the pattern
-		// This will remove the commented out functions that bind the c++ functions to the lua functions
-		std::string::size_type n = apiPattern.length();
-		for (std::string::size_type i = str.find(apiPattern);
-			i != std::string::npos;
-			i = str.find(apiPattern))
-			str.erase(i, n);
-
-		in_file.close();
-
-		std::ofstream out_file("../../Games/TestGame/Scripts/Compiled/API/EngineAPI.lua");
-		out_file << str;
-	}
-
-	void ScriptEngine::start(Game* game)
-	{
-		this->game = game;
-		LOG_INFO("Starting script engine");
-
-		sol::state_view lua(L);
-		lua.open_libraries(sol::lib::base);
-		bindEngineAPIToLuaState();
-
-		LOG_INFO("Compiling C# scripts to lua");
-
-		std::string compileCommand = "dotnet ../../engine/src/ScriptingAPI/C#ToLuaCompiler/CSharp.Lua.Launcher.dll -s ../../Games/TestGame/Scripts -d ../../Games/TestGame/Scripts/Compiled";
-		std::wstring widestr = std::wstring(compileCommand.begin(), compileCommand.end());
-		const wchar_t* widecstr = widestr.c_str();
-		
-		CStringA result = Utils::ExecCmd(widecstr);
-
-		std::string resultString = result.GetString();
-		std::string errorPattern = "error";
-		if (resultString.find(errorPattern) != std::string::npos) {
-			LOG_FATAL("C# COMPILE ERROR");
-			LOG_ERROR("{}", resultString);
-			abort();
-		}
-		LOG_INFO("{}", resultString);
-		LOG_INFO("C# scripts compiled to lua");
-
-		decodeCompiledAPILuaFiles();
-
-		LOG_INFO("Copying compiled scripts to build directory");
-		// Copying the compiled scripts to the build directory. 
-		// TODO: It should be possible to change the path of the lua launcher script instead
-		std::filesystem::copy("../../Games/TestGame/Scripts/Compiled/", "../Debug/", std::filesystem::copy_options::overwrite_existing);
-		std::filesystem::copy("../../Games/TestGame/Scripts/Compiled/API/", "../Debug/", std::filesystem::copy_options::overwrite_existing);
-		LOG_INFO("Compiled scripts copied to build directory");
-		
-		// Require doesn't work if only sol is used, using base lua for loading state and sol for the rest
-		luaL_openlibs(L);
-
-		// We need to insert the file names into the launcher script
-		// In the script the pattern "--FileNames--" will be replaced with the file names'
-		
-
 		std::vector<std::string> fileNames = ResourceManager::getInstance()->getAllCSharpScriptsInActiveGame();
 		std::string fileNamesString = "";
 		for (const auto& fileName : fileNames)
@@ -210,9 +158,94 @@ namespace engine
 		std::ofstream out_file(pathToLauncherScript);
 		out_file << modifiedScript;
 		out_file.close();
-				
+
+	}
+
+	void ScriptEngine::decodeCompiledAPILuaFiles()
+	{
+		// We need to loop through all API files and remove the comments with the pattern "--(c++_API)" from the compiled lua files
+		// This is a hack to get the c++ binding to work with the lua files
+		std::ostringstream text;
+		std::ifstream in_file("../../Games/TestGame/Scripts/Compiled/API/EngineAPI.lua");
+
+		text << in_file.rdbuf();
+		std::string str = text.str();
+
+		std::string apiPattern = "--(c++_API)";
+
+		// Removing all occurences of the pattern
+		// This will remove the commented out functions that bind the c++ functions to the lua functions
+		std::string::size_type n = apiPattern.length();
+		for (std::string::size_type i = str.find(apiPattern);
+			i != std::string::npos;
+			i = str.find(apiPattern))
+			str.erase(i, n);
+
+		in_file.close();
+
+		std::ofstream out_file("../../Games/TestGame/Scripts/Compiled/API/EngineAPI.lua");
+		out_file << str;
+	}
+
+	void ScriptEngine::compileCSharpFilesToLua()
+	{
+		LOG_INFO("Compiling C# scripts to lua");
+
+		std::string compileCommand = "dotnet ../../engine/src/ScriptingAPI/C#ToLuaCompiler/CSharp.Lua.Launcher.dll -s ../../Games/TestGame/Scripts -d ../../Games/TestGame/Scripts/Compiled";
+		std::wstring widestr = std::wstring(compileCommand.begin(), compileCommand.end());
+		const wchar_t* widecstr = widestr.c_str();
+
+		CStringA result = Utils::ExecCmd(widecstr);
+
+		std::string resultString = result.GetString();
+		std::string errorPattern = "error";
+		if (resultString.find(errorPattern) != std::string::npos) {
+			LOG_FATAL("C# COMPILE ERROR");
+			LOG_ERROR("{}", resultString);
+			abort();
+		}
+		LOG_INFO("{}", resultString);
+		LOG_INFO("C# scripts compiled to lua");
+
+		decodeCompiledAPILuaFiles();
+
+		LOG_INFO("Copying compiled scripts to build directory");
+		// Copying the compiled scripts to the build directory. 
+		// TODO: It should be possible to change the path of the lua launcher script instead
+		std::filesystem::copy("../../Games/TestGame/Scripts/Compiled/", "../Debug/", std::filesystem::copy_options::overwrite_existing);
+		std::filesystem::copy("../../Games/TestGame/Scripts/Compiled/API/", "../Debug/", std::filesystem::copy_options::overwrite_existing);
+		LOG_INFO("Compiled scripts copied to build directory");
+
+	}
+
+	void ScriptEngine::start(Game* game)
+	{
+		L = luaL_newstate();
+		sol::state_view lua(L);
+
+		this->game = game;
+		LOG_INFO("Starting script engine");
+
+		lua.open_libraries(sol::lib::base);
+		bindEngineAPIToLuaState();
+
+
+		compileCSharpFilesToLua();
+		
+		// Require doesn't work if only sol is used, using base lua for loading state and sol for the rest
+		luaL_openlibs(L);
+
+		// We need to insert the file names into the launcher script
+		// In the script the pattern "--FileNames--" will be replaced with the file names'
+		
+
+		updateLauncherScript();
+
+		std::string pathToLauncherScript = ResourceManager::getInstance()->getPathToGameResource("launcher.lua");
 
 		// Launcher script loads all other component scripts into the lua state
 		lua.script_file(pathToLauncherScript);
+
+		EventManager::getInstance().notify(EventType::ScriptsRecompiled, "");
 	}
 }
