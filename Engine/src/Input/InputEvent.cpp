@@ -26,6 +26,11 @@ namespace engine {
 		return key;
 	}
 
+	const std::string InputEvent::getAction() const
+	{
+		return action;
+	}
+
 	const InputEventType InputEvent::getEventType() const {
 		return eventType;
 	}
@@ -44,6 +49,11 @@ namespace engine {
 
 	void InputEvent::setKey(const Key key) {
 		this->key = key;
+	}
+
+	void InputEvent::setAction(const std::string action)
+	{
+		this->action = action;
 	}
 
 	void InputEvent::setEventType(const InputEventType eventType) {

@@ -137,6 +137,7 @@ namespace engine {
 	};
 	enum class InputEventType {
 		QuitProgram,
+		Action,
 		KeyDown,
 		KeyUp,
 		MouseButtonDown,
@@ -155,12 +156,14 @@ namespace engine {
 		float getY() const;
 		float getButton() const;
 		const Key getKey() const;
+		const std::string getAction() const;
 		const InputEventType getEventType() const;
 
 		void setX(float x);
 		void setY(float y);
 		void setButton(float button);
 		void setKey(const Key key);
+		void setAction(const std::string action);
 		void setEventType(const InputEventType eventType);
 
 	private:
@@ -168,6 +171,7 @@ namespace engine {
 		float y;
 		float button;
 		Key key;
+		std::string action;
 		InputEventType eventType;
 	};
 

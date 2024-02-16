@@ -3,18 +3,19 @@
 #include <SDL.h>
 #include "Events/EventManager.hpp"
 #include "InputListener.hpp"
+#include "ActionMap.hpp"
 #include <list>
 #include <string>
 /*
 	InputFramework class
-	- This class is a singleton that inherits from InputSystem
+	- This class is a singleton that also inherits some functionality from the ActionMap class
 	- The InputFramework class is responsible for reading input from the keyboard and mouse
-	- It then dispatches the input events to all listeners though the InputSystem class
+	- It then dispatches input events to all listeners with the appropriate data
 */
 
 namespace engine {
 
-	class InputFramework {
+	class InputFramework : public ActionMap {
 	public:
 		// Non cloneable
 		InputFramework(const InputFramework& other) = delete;
@@ -29,6 +30,8 @@ namespace engine {
 		void cleanup();
 
 		bool isKeyPressed(const char* key);
+
+		bool allKeysPressed(const std::string action, std::list<Key> keysPressed);
 
 		void handleContinousInput();
 

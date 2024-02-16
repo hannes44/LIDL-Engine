@@ -89,6 +89,8 @@ add_library(engine
 	src/Input/InputListener.cpp
 	src/Input/InputFramework.hpp
 	src/Input/InputFramework.cpp
+	src/Input/ActionMap.cpp
+	src/Input/ActionMap.hpp
 	src/Audio/AudioManager.cpp
 	src/Audio/AudioManager.hpp
 	src/ScriptEngine/ScriptEngine.hpp
@@ -221,6 +223,8 @@ source_group("Input" FILES
 	src/Input/InputListener.cpp
 	src/Input/InputFramework.hpp
 	src/Input/InputFramework.cpp
+	src/Input/ActionMap.cpp
+	src/Input/ActionMap.hpp
 )
 
 source_group("Audio" FILES
