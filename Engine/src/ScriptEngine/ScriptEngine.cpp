@@ -228,9 +228,11 @@ namespace engine
 		std::string resultString = result.GetString();
 		std::string errorPattern = "error";
 		if (resultString.find(errorPattern) != std::string::npos) {
-			LOG_FATAL("C# COMPILE ERROR");
+			LOG_ERROR("C# COMPILE ERROR");
 			LOG_ERROR("{}", resultString);
-			abort();
+			isSuccessfullyCompiled = false;
+			lastCompilationError = resultString;
+			return;
 		}
 		LOG_INFO("{}", resultString);
 		LOG_INFO("C# scripts compiled to lua");
@@ -244,6 +246,8 @@ namespace engine
 		std::filesystem::copy("../../Games/TestGame/Scripts/Compiled/API/", "../Debug/", std::filesystem::copy_options::overwrite_existing);
 		LOG_INFO("Compiled scripts copied to build directory");
 
+		isSuccessfullyCompiled = true;
+		lastCompilationError = "";
 	}
 
 	// This will remove the existing lua state and create a new. All scripts will be recompiled and loaded into the new lua state

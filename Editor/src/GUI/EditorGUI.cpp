@@ -130,6 +130,11 @@ bool isAddComponentVisible = false;
 			drawTopMenu();
 			drawPlayButtonToolbar();
 			drawBottomPanel();
+
+			if (!ScriptEngine::getInstance()->isSuccessfullyCompiled)
+			{
+				drawCompilationErrorWindow();
+			}
 		}
 	}
 
@@ -1038,6 +1043,23 @@ bool isAddComponentVisible = false;
 			ImGui::Text(name.c_str());
 		}
 		ImGui::EndGroup();
+	}
+
+	void EditorGUI::drawCompilationErrorWindow()
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		ImGui::SetNextWindowSize(ImVec2(800, 500));
+		ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+		ImGui::Begin("Compilation Error", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar);
+		ImGui::Text("Compilation Error");
+
+		// Set color to red
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+		ImGui::TextWrapped(ScriptEngine::getInstance()->lastCompilationError.c_str());
+		ImGui::PopStyleColor();
+		ImGui::Text("");
+		ImGui::Text("Fix the compilation error to use the Editor!");
+		ImGui::End();
 	}
 
 	bool EditorGUI::defaultCheckBox(const std::string& label, bool* value)

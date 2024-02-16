@@ -25,6 +25,10 @@ namespace engine
 
 		void recompileScripts();
 
+		bool isSuccessfullyCompiled = false;
+
+		std::string lastCompilationError = "";
+
 		static ScriptEngine* getInstance();
 
 		static inline ScriptEngine* instance;
