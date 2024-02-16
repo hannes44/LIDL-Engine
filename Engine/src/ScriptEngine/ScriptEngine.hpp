@@ -15,11 +15,13 @@ namespace engine
 		ScriptEngine(const ScriptEngine&) = delete;
 
 		// Sets up the lua states and binds the engine API to the lua state
-		void start(Game* game);
+		void loadScriptStatesIntoNewLuaState(Game* game);
 
 		void updateScriptableComponent(ScriptableComponent* component);
 
 		void initializeScriptableComponent(ScriptableComponent* component);
+
+		void checkForUpdatedScripts();
 
 		void recompileScripts();
 
@@ -46,6 +48,9 @@ namespace engine
 		void decodeCompiledAPILuaFiles();
 
 		void compileCSharpFilesToLua();
+
+		// Storing the sizes of the files to determine if they have been updated
+		std::unordered_map<std::string, int> scriptFileByteSizes{};
 
 		ScriptEngine() = default;
 	};

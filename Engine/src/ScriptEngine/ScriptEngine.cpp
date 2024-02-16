@@ -55,6 +55,33 @@ namespace engine
 		LOG_INFO("Initializing scriptable component");
 	}
 
+	// Checks all scripts for updates and recompiles them if they have been updated
+	// Checking the byte size of the files to determine if they have been updated
+	// This is not a perfect solution, but it is good enough for now
+	// This does not have to be called every frame
+	void ScriptEngine::checkForUpdatedScripts()
+	{
+		for (auto& scriptName : ResourceManager::getInstance()->getAllCSharpScriptsInActiveGame())
+		{
+			// If the file doesn't exist in the map, we have to recompile the lua state
+			if (scriptFileByteSizes.count(scriptName) == 0)
+			{
+				loadScriptStatesIntoNewLuaState(game);
+				return;
+			}	
+			int savedByteSize = scriptFileByteSizes[scriptName];
+
+			std::string pathToScript = ResourceManager::getInstance()->getPathToGameResource(scriptName);
+			int updatedByteSize = std::filesystem::file_size(pathToScript);
+
+			if (savedByteSize != updatedByteSize)
+			{
+				loadScriptStatesIntoNewLuaState(game);
+				return;
+			}
+		}
+	}
+
 	void ScriptEngine::recompileScripts()
 	{
 		sol::state_view lua(L);
@@ -127,6 +154,7 @@ namespace engine
 		}
 	}
 
+	// Updates the launcher script with the names of all the scripts in the game
 	void ScriptEngine::updateLauncherScript()
 	{
 		std::vector<std::string> fileNames = ResourceManager::getInstance()->getAllCSharpScriptsInActiveGame();
@@ -218,26 +246,24 @@ namespace engine
 
 	}
 
-	void ScriptEngine::start(Game* game)
+	// This will remove the existing lua state and create a new. All scripts will be recompiled and loaded into the new lua state
+	// If changes are done in the scripts, this function needs to be called to update the lua state
+	void ScriptEngine::loadScriptStatesIntoNewLuaState(Game* game)
 	{
+		LOG_INFO("ScriptEngine: Loading C# script state into lua state");
 		L = luaL_newstate();
 		sol::state_view lua(L);
+		lua.open_libraries(sol::lib::base);
 
 		this->game = game;
-		LOG_INFO("Starting script engine");
 
-		lua.open_libraries(sol::lib::base);
+
 		bindEngineAPIToLuaState();
-
 
 		compileCSharpFilesToLua();
 		
 		// Require doesn't work if only sol is used, using base lua for loading state and sol for the rest
 		luaL_openlibs(L);
-
-		// We need to insert the file names into the launcher script
-		// In the script the pattern "--FileNames--" will be replaced with the file names'
-		
 
 		updateLauncherScript();
 
@@ -247,5 +273,16 @@ namespace engine
 		lua.script_file(pathToLauncherScript);
 
 		EventManager::getInstance().notify(EventType::ScriptsRecompiled, "");
+
+		// Storing the sizes of the files to determine if they have been updated
+		scriptFileByteSizes.clear();
+		for (auto& scriptName : ResourceManager::getInstance()->getAllCSharpScriptsInActiveGame())
+		{
+			std::string pathToScript = ResourceManager::getInstance()->getPathToGameResource(scriptName);
+			int byteSize = std::filesystem::file_size(pathToScript);
+			scriptFileByteSizes[scriptName] = byteSize;
+		}
+
+		LOG_INFO("ScriptEngine: C# script state loaded into lua state");
 	}
 }

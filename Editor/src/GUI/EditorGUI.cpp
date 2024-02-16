@@ -70,7 +70,7 @@ bool isAddComponentVisible = false;
 		if (editorSettings.enableScripting)
 		{
 			ScriptEngine* scriptEngine = ScriptEngine::getInstance();
-			scriptEngine->start(project->game.get());
+			scriptEngine->loadScriptStatesIntoNewLuaState(project->game.get());
 		}				
 		
 		while (!quitProgram)
@@ -81,6 +81,8 @@ bool isAddComponentVisible = false;
 
 			renderer->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 			renderer->renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
+
+			ScriptEngine::getInstance()->checkForUpdatedScripts();
 
 			if (sceneState == EditorSceneState::Play)
 			{
@@ -563,7 +565,7 @@ bool isAddComponentVisible = false;
 		ImGui::SameLine();
 		if (ImGui::Button("Recompile scripts"))
 		{
-			ScriptEngine::getInstance()->start(game.get());
+			ScriptEngine::getInstance()->loadScriptStatesIntoNewLuaState(game.get());
 		}
 
 		ImGui::End();

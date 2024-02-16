@@ -8,6 +8,7 @@
 #include <commdlg.h>
 #include <filesystem>
 #include <ShObjIdl_core.h>
+#include "ScriptEngine/ScriptEngine.hpp"
 
 #include <fstream>
 #include <sstream>
@@ -26,7 +27,7 @@ namespace engine
 	}
 	std::string ResourceManager::getPathToGameResource(const std::string& fileNameWithExtention)
 	{
-		LOG_INFO("Looking for file: {}", fileNameWithExtention);
+		LOG_TRACE("Looking for file: {}", fileNameWithExtention);
 		if (game == nullptr)
 		{
 			LOG_ERROR("No game has been set for the ResourceManager");
@@ -45,7 +46,7 @@ namespace engine
 			{
 				if (subFolderEntry.path().filename().string() == fileNameWithExtention)
 				{
-					LOG_INFO("Found file: {}", subFolderEntry.path().string());
+					LOG_TRACE("Found file: {}", subFolderEntry.path().string());
 					return subFolderEntry.path().string();
 				}
 			}
@@ -58,7 +59,7 @@ namespace engine
 		{
 			if (entry.path().filename().string() == fileNameWithExtention)
 			{
-				LOG_INFO("Found file: {}", entry.path().string());
+				LOG_TRACE("Found file: {}", entry.path().string());
 				return entry.path().string();
 			}
 		}

@@ -16,7 +16,7 @@ namespace engine
 		static std::shared_ptr<spdlog::logger> coreLogger;
 	};
 
-#define ENABLE_TRACE_LOGGING
+//#define ENABLE_TRACE_LOGGING
 
 	// Core log macros
 #if defined(_DEBUG) && defined(ENABLE_TRACE_LOGGING)
