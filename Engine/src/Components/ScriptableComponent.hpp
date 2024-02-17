@@ -33,10 +33,14 @@ namespace engine
 
 		std::vector<SerializableVariable> getSerializableVariables() 
 		{ 
-			return serializableVariables;
+			std::vector<SerializableVariable> scriptVariables = serializableVariables;
+			scriptVariables.push_back({ SerializableType::STRING, "scriptFileName", "The file name of the C# or Lua files", &scriptFileName });
+			return scriptVariables;
 		};
 
-		std::vector<SerializableVariable> serializableVariables {};
+		std::vector<SerializableVariable> serializableVariables { 
+			 
+		};
 
 		// The scripts serialized variables will sync their values to a void pointer corresponding to a scriptable variable
 		std::vector<std::shared_ptr<void>> scriptVariablesData{};
