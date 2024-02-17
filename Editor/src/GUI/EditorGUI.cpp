@@ -566,15 +566,6 @@ bool isAddComponentVisible = false;
 			ImGui::PopStyleColor();
 		}
 
-		ImGui::SameLine();
-
-		ImGui::Dummy(ImVec2(10.0f, 20.0f));
-		ImGui::SameLine();
-		if (ImGui::Button("Recompile scripts"))
-		{
-			ScriptEngine::getInstance()->loadScriptStatesIntoNewLuaState(game.get());
-		}
-
 		ImGui::End();
 	}
 
