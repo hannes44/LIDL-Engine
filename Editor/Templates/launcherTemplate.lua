@@ -1,7 +1,7 @@
 package.path = package.path .. ";../../engine/src/ScriptingAPI/C#ToLuaCompiler/Coresystem.lua/?.lua"
 
 
--- The games script file names will be inserted into the NewComponent.cs,TestComponent.cs, sections
+-- The games script file names will be inserted into the "--FileNames--" patterns
 require("All")() -- coresystem.lua/All.lua
 --require("out.manifest")("out")
 System.init({

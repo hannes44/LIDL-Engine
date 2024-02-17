@@ -61,7 +61,7 @@ namespace engine
 	}
 
 	// Parses the script file and fetches all the serializable variables
-	// The variables that are going to be serialized needs bed marked with the attribute "[SerializableData]"
+	// The variables that are going to be serialized needs be marked with the attribute "[SerializableData]"
 	// either before the varaible declaration or on line above the variable declaration
 	// For example: 
 	// [SerializableData]

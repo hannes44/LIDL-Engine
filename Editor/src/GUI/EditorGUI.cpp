@@ -16,7 +16,7 @@
 namespace engine
 {
 #define IMGUI_TOP_MENU_HEIGHT 18
-#define IMGUI_SHOW_DEMO_WINDOWS true
+#define IMGUI_SHOW_DEMO_WINDOWS false
 
 // We have to undefine DELETE because it is causing a conflict with the InputEvent DELETE
 #undef DELETE
@@ -84,6 +84,8 @@ bool isAddComponentVisible = false;
 			renderer->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 			renderer->renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 
+			// Checking if any scripts have been updated
+			// TODO: This doesn't have to be done every frame
 			ScriptEngine::getInstance()->checkForUpdatedScripts();
 
 			if (sceneState == EditorSceneState::Play)
