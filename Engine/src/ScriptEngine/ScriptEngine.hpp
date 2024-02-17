@@ -46,6 +46,10 @@ namespace engine
 
 		void syncTransformStateScriptToEngine(ScriptableComponent* component);
 
+		void syncScriptableVariablesToScript(ScriptableComponent* component);
+
+		void syncScriptableVariablesToEngine(ScriptableComponent* component);
+
 		void updateLauncherScript();
 
 		std::string getVariableNameFromLine(const std::string& line);

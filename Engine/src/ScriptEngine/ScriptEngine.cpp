@@ -36,8 +36,10 @@ namespace engine
 		sol::state_view lua(L);
 
 		syncTransformStateEngineToScript(component);
+		syncScriptableVariablesToScript(component);
 		lua.script(component->getScriptClassName() + ".Update(" + component->uuid.id + ")");
 		syncTransformStateScriptToEngine(component);
+		syncScriptableVariablesToEngine(component);
 	}
 
 	void ScriptEngine::initializeScriptableComponent(ScriptableComponent* component)
@@ -50,10 +52,10 @@ namespace engine
 		sol::state_view lua(L);
 
 		syncTransformStateEngineToScript(component);
-
+		syncScriptableVariablesToScript(component);
 		lua.script(component->getScriptClassName() + ".Initialize(" + component->uuid.id + ")");
-
 		syncTransformStateScriptToEngine(component);
+		syncScriptableVariablesToEngine(component);
 
 		LOG_INFO("Initializing scriptable component");
 	}
@@ -68,6 +70,8 @@ namespace engine
 	// [SerializableData] int exampleVariable = 0;
 	void ScriptEngine::fetchSerializableVariables(ScriptableComponent* component)
 	{
+		component->serializableVariables.clear();
+
 		std::string pathToScript = ResourceManager::getInstance()->getPathToGameResource(component->getScriptFileName());
 		std::ifstream file(pathToScript);
 		std::string line;
@@ -274,6 +278,8 @@ namespace engine
 
 		fetchSerializableVariables(component);
 
+		syncScriptableVariablesToEngine(component);
+
 		component->stateIsInitialized = true;
 	}
 
@@ -309,6 +315,84 @@ namespace engine
 				// This is conversion to CSharp Matrix4x4 index format
 				std::string indexString = "M" + std::to_string(i + 1) + std::to_string(j + 1);
 				component->gameObject->transform.transformMatrix[i][j] = lua[component->uuid.id]["gameObject"]["transform"]["transformMatrix"][indexString];
+			}
+		}
+	}
+
+	// If the scriptable variables have been updated in the editor, we need to sync the new values to the lua state
+	void ScriptEngine::syncScriptableVariablesToScript(ScriptableComponent* component)
+	{
+		sol::state_view lua(L);
+
+		for (auto& variable : component->serializableVariables)
+		{
+			if (variable.type == SerializableType::INT)
+			{
+				int* data = static_cast<int*>(variable.data);
+				lua[component->uuid.id][variable.name] = *data;
+			}
+			else if (variable.type == SerializableType::FLOAT)
+			{
+				float* data = static_cast<float*>(variable.data);
+				lua[component->uuid.id][variable.name] = *data;
+			}
+			else if (variable.type == SerializableType::DOUBLE)
+			{
+				double* data = static_cast<double*>(variable.data);
+				lua[component->uuid.id][variable.name] = *data;
+			}
+			else if (variable.type == SerializableType::BOOLEAN)
+			{
+				bool* data = static_cast<bool*>(variable.data);
+				lua[component->uuid.id][variable.name] = *data;
+			}
+			else if (variable.type == SerializableType::STRING)
+			{
+				std::string* data = static_cast<std::string*>(variable.data);
+				lua[component->uuid.id][variable.name] = *data;
+			}
+		}
+
+
+	}
+
+	// If the scriptable variables have been updated in the script, we need to sync the new values to the engine
+	void ScriptEngine::syncScriptableVariablesToEngine(ScriptableComponent* component)
+	{
+	
+		sol::state_view lua(L);
+
+		for (auto& variable : component->serializableVariables)
+		{
+			if (variable.type == SerializableType::INT)
+			{
+				int value = lua[component->uuid.id][variable.name];
+				int* data = static_cast<int*>(variable.data);
+				*data = value;
+			}
+			else if (variable.type == SerializableType::FLOAT)
+			{
+				float value = lua[component->uuid.id][variable.name];
+				float* data = static_cast<float*>(variable.data);
+				*data = value;
+			}
+			else if (variable.type == SerializableType::DOUBLE)
+			{
+				double value = lua[component->uuid.id][variable.name];
+				double* data = static_cast<double*>(variable.data);
+				*data = value;
+			}
+			else if (variable.type == SerializableType::BOOLEAN)
+			{
+				bool value = lua[component->uuid.id][variable.name];
+				bool* data = static_cast<bool*>(variable.data);
+				*data = value;
+			}
+			else if (variable.type == SerializableType::STRING)
+			{
+				std::string value = lua[component->uuid.id][variable.name];
+				std::string* data = static_cast<std::string*>(variable.data);
+				*data = value;
 			}
 		}
 	}
@@ -444,6 +528,18 @@ namespace engine
 			std::string pathToScript = ResourceManager::getInstance()->getPathToGameResource(scriptName);
 			int byteSize = std::filesystem::file_size(pathToScript);
 			scriptFileByteSizes[scriptName] = byteSize;
+		}
+
+		// Update all scriptable components states
+		for (auto& [Id, GameObject] : game->getGameObjects())
+		{
+			for (auto& component : GameObject->getComponents())
+			{
+				if (auto scriptableComponent = std::dynamic_pointer_cast<ScriptableComponent>(component))
+				{
+					initializeLuaStateForScriptableComponent(static_cast<ScriptableComponent*>(component.get()));
+				}
+			}
 		}
 
 		LOG_INFO("ScriptEngine: C# script state loaded into lua state");

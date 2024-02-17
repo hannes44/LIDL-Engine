@@ -38,6 +38,7 @@ namespace engine
 		Game* game = nullptr;
 
 		void addComponent(std::shared_ptr<Component> component);
+
 		std::vector<std::shared_ptr<Component>>& getComponents() {
 			return components;
 		}
