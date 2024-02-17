@@ -639,7 +639,15 @@ bool isAddComponentVisible = false;
 			
 				for (auto component : lockedGameObject->getComponents())
 				{
-					if (ImGui::CollapsingHeader(component->getName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+					std::string componentName = component->getName();
+
+					// Special case for scriptable components
+					if (auto lockedScriptable = dynamic_pointer_cast<ScriptableComponent>(component))
+					{
+						componentName = lockedScriptable->getScriptClassName();
+					}
+
+					if (ImGui::CollapsingHeader(componentName.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 					{
 						drawSerializableVariables(component.get());
 					}
