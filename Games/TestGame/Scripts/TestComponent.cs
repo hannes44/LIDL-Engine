@@ -8,11 +8,15 @@ public class TestComponent
 
     public GameObject gameObject = new GameObject();
 
+    [SerializableData] public float test = 10.0f;
+
+    [SerializableData] public bool countNegative = false;
+
     public void Update()
     {
 
         gameObject.transform.Translate(new Vector3(0.1f, 0, 0));
-
+        test += countNegative ? -1.0f : 1.0f;
     }
 
     public void Initialize()
