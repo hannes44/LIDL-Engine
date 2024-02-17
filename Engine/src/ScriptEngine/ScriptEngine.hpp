@@ -28,6 +28,8 @@ namespace engine
 
 		void recompileScripts();
 
+		void initializeLuaStateForScriptableComponent(ScriptableComponent* component);
+
 		bool isSuccessfullyCompiled = false;
 
 		std::string lastCompilationError = "";
@@ -37,8 +39,6 @@ namespace engine
 		static inline ScriptEngine* instance;
 	private:
 		Game* game;
-
-		void initializeLuaStateForScriptableComponent(ScriptableComponent* component);
 
 		void bindEngineAPIToLuaState();
 

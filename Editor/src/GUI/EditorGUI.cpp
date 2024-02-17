@@ -30,6 +30,12 @@ bool isAddComponentVisible = false;
 
 	void EditorGUI::start()
 	{
+		if (editorSettings.enableScripting)
+		{
+			ScriptEngine* scriptEngine = ScriptEngine::getInstance();
+			scriptEngine->loadScriptStatesIntoNewLuaState(project->game.get());
+		}
+
 		// We have to save the initial serialization state to avoid serializing the initiated game if the user changes settings
 		bool initialUseSerialization = editorSettings.useSerialization;
 		if (initialUseSerialization)
@@ -67,11 +73,7 @@ bool isAddComponentVisible = false;
 
 		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png", false));
 
-		if (editorSettings.enableScripting)
-		{
-			ScriptEngine* scriptEngine = ScriptEngine::getInstance();
-			scriptEngine->loadScriptStatesIntoNewLuaState(project->game.get());
-		}				
+
 		
 		while (!quitProgram)
 		{

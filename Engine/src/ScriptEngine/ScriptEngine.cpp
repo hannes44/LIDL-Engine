@@ -45,7 +45,6 @@ namespace engine
 		if (!component->stateIsInitialized)
 		{
 			initializeLuaStateForScriptableComponent(component);
-			component->stateIsInitialized = true;
 		}
 
 		sol::state_view lua(L);
@@ -69,7 +68,7 @@ namespace engine
 	// [SerializableData] int exampleVariable = 0;
 	void ScriptEngine::fetchSerializableVariables(ScriptableComponent* component)
 	{
-		std::string pathToScript = ResourceManager::getInstance()->getPathToGameResource(component->scriptFileName);
+		std::string pathToScript = ResourceManager::getInstance()->getPathToGameResource(component->getScriptFileName());
 		std::ifstream file(pathToScript);
 		std::string line;
 		std::string serializableDataPattern = "[SerializableData]";
@@ -274,6 +273,8 @@ namespace engine
 		lua[Id]["Id"] = component->uuid.id;
 
 		fetchSerializableVariables(component);
+
+		component->stateIsInitialized = true;
 	}
 
 	void ScriptEngine::bindEngineAPIToLuaState()

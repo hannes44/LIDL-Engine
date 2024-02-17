@@ -9,6 +9,7 @@
 #include "Components/PointLightComponent.hpp"
 #include "Components/ComponentFactory.hpp"
 #include "Serializable.hpp"
+#include "Components/ScriptableComponent.hpp"
 
 namespace engine
 {
@@ -535,6 +536,12 @@ namespace engine
 						meshComponent->setMaterial(game->getMaterial(materialId));
 					}
 				}
+			}
+
+			if (auto scriptableComponent = dynamic_cast<ScriptableComponent*>(component.get()))
+			{
+				// We need to initialize the lua state for the scriptable component
+				ScriptEngine::getInstance()->initializeLuaStateForScriptableComponent(scriptableComponent);
 			}
 
 			gameObject->addComponent(component);

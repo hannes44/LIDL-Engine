@@ -19,7 +19,10 @@ namespace engine
 
 		void initialize() override;
 
-		std::string scriptFileName = "";
+		void setScriptFileName(std::string scriptFileName);
+
+		std::string getScriptFileName() { return scriptFileName; }
+
 
 		sol::state state;
 
@@ -46,5 +49,8 @@ namespace engine
 		std::vector<std::shared_ptr<void>> scriptVariablesData{};
 
 		void onEvent(EventType type, std::string message) override;
+
+	private:
+		std::string scriptFileName = "";
 	};
 }

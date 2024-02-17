@@ -17,6 +17,12 @@ namespace engine
 		ScriptEngine::getInstance()->initializeScriptableComponent(this);
 	}
 
+	void ScriptableComponent::setScriptFileName(std::string scriptFileName)
+	{
+		this->scriptFileName = scriptFileName;
+		ScriptEngine::getInstance()->initializeLuaStateForScriptableComponent(this);
+	}
+
 	std::string ScriptableComponent::getScriptClassName()
 	{
 		std::string fileNameNoExtension = scriptFileName.substr(0, scriptFileName.find_last_of("."));
