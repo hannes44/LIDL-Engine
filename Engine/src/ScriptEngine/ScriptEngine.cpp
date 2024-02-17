@@ -15,6 +15,10 @@
 #include <fstream>
 #include <sstream>
 #include <regex>
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+
 
 namespace engine
 {
@@ -54,6 +58,158 @@ namespace engine
 
 		LOG_INFO("Initializing scriptable component");
 	}
+
+	// Parses the script file and fetches all the serializable variables
+	// The variables that are going to be serialized needs bed marked with the attribute "[SerializableData]"
+	// either before the varaible declaration or on line above the variable declaration
+	// For example: 
+	// [SerializableData]
+	// int exampleVariable = 0;
+	// or
+	// [SerializableData] int exampleVariable = 0;
+	void ScriptEngine::fetchSerializableVariables(ScriptableComponent* component)
+	{
+		std::string pathToScript = ResourceManager::getInstance()->getPathToGameResource(component->scriptFileName);
+		std::ifstream file(pathToScript);
+		std::string line;
+		std::string serializableDataPattern = "[SerializableData]";
+
+		component->scriptVariablesData.clear();
+
+		// when "[SerializableData]" is found alone at a line, the next line will be the variable declaration
+		bool previousLineWasPatternAlone = false;
+
+		while (std::getline(file, line)) 
+		{
+			if (previousLineWasPatternAlone)
+			{
+				previousLineWasPatternAlone = false;
+				std::cout << line << '\n';
+				addSerializableVariableFromLine(line, component);
+			}
+
+			if (line.find(serializableDataPattern) != std::string::npos) {
+				// Asumming that if the line does not contain a semicolon, the pattern is alone and the next line is the variable declaration
+				if (!(line.find(';') != std::string::npos)) {
+					previousLineWasPatternAlone = true;
+					continue;
+				}
+
+				std::cout << line << '\n';
+				addSerializableVariableFromLine(line, component);
+			}
+		}
+	}
+
+	std::string ScriptEngine::getVariableNameFromLine(const std::string& line)
+	{
+		// There is two possible cases for the variable name
+		// 1. The variable is declared. For example: "int exampleVariable;"
+		// 2. The variable is initialized. For example: "int exampleVariable = 0;"
+
+		// We look for the first occurance of the equal sign or semicolon and take the word before it
+		// There could possibly be cases where the equal sign is used in a string or comment, but we will ignore those cases for now
+
+		// Remove the pattern "[SerializableData]" from the line
+		std::string serializableDataPattern = "\\[SerializableData\\]";
+		std::string const lineWithoutPattern = std::regex_replace(line, std::regex(serializableDataPattern), "");
+
+		std::string previousWord = "";
+		std::string currentWord = "";
+
+		for (char const& c : lineWithoutPattern)
+		{
+			if (c == ' ')
+			{
+				if (currentWord != "")
+				{
+					previousWord = currentWord;
+					currentWord = "";
+				}
+
+				continue;
+			}
+
+			if (c == '=' || c == ';')
+			{
+				if (currentWord != "")
+				{
+					previousWord = currentWord;
+				}
+
+				break;
+			}
+
+			currentWord += c;
+		}
+
+
+		return previousWord;
+	}
+
+	std::tuple<std::shared_ptr<void>, SerializableType> ScriptEngine::getVariableDataFromLine(const std::string& variableName, ScriptableComponent* component)
+	{
+		sol::state_view lua(L);
+		
+		// We need to create a shared pointer for the specific type first and then cast it to a shared void pointer
+		// if we do not create the void pointer from the type pointer, the destructor of the type pointer will
+		// not be added to the void pointer and the type pointer will not be deleted when the void pointer is deleted
+		sol::optional<int> valueAsInt = lua[component->uuid.id][variableName];
+		if (valueAsInt)
+		{
+			std::shared_ptr<int> value = std::make_shared<int>(valueAsInt.value());
+			std::shared_ptr<void> valueVoidPtr = std::static_pointer_cast<void>(value);
+			return { valueVoidPtr, SerializableType::INT };
+		}
+
+		sol::optional<float> valueAsFloat = lua[component->uuid.id][variableName];
+		if (valueAsFloat)
+		{
+			std::shared_ptr<float> value = std::make_shared<float>(valueAsFloat.value());
+			std::shared_ptr<void> valueVoidPtr = std::static_pointer_cast<void>(value);
+			return { valueVoidPtr, SerializableType::FLOAT };
+		}
+
+		sol::optional<double> valueAsDouble = lua[component->uuid.id][variableName];
+		if (valueAsDouble)
+		{
+			std::shared_ptr<double> value = std::make_shared<double>(valueAsDouble.value());
+			std::shared_ptr<void> valueVoidPtr = std::static_pointer_cast<void>(value);
+			return { valueVoidPtr, SerializableType::DOUBLE };
+		}
+
+		sol::optional<bool> valueAsBool = lua[component->uuid.id][variableName];
+		if (valueAsBool)
+		{
+			std::shared_ptr<bool> value = std::make_shared<bool>(valueAsBool.value());
+			std::shared_ptr<void> valueVoidPtr = std::static_pointer_cast<void>(value);
+			return { valueVoidPtr, SerializableType::BOOLEAN };
+		}
+
+		sol::optional<std::string> valueAsString = lua[component->uuid.id][variableName];
+		if (valueAsString)
+		{
+			std::shared_ptr<std::string> value = std::make_shared<std::string>(valueAsString.value());
+			std::shared_ptr<void> valueVoidPtr = std::static_pointer_cast<void>(value);
+			return { valueVoidPtr, SerializableType::STRING };
+		}
+
+		return {};
+	}
+
+	void ScriptEngine::addSerializableVariableFromLine(const std::string& line, ScriptableComponent* component)
+	{
+		std::string variableName = getVariableNameFromLine(line);
+
+		std::cout << "Variable name: " << variableName << std::endl;
+
+		auto [data, type] = getVariableDataFromLine(variableName, component);
+
+		SerializableVariable variable = { type , variableName, "", data.get()};
+		component->serializableVariables.push_back(variable);
+		component->scriptVariablesData.push_back(data);
+	}
+
 
 	// Checks all scripts for updates and recompiles them if they have been updated
 	// Checking the byte size of the files to determine if they have been updated
@@ -116,6 +272,8 @@ namespace engine
 		// Initializing the component in the lua state
 		lua.script(Id + " = " + component->getScriptClassName() + "()");
 		lua[Id]["Id"] = component->uuid.id;
+
+		fetchSerializableVariables(component);
 	}
 
 	void ScriptEngine::bindEngineAPIToLuaState()

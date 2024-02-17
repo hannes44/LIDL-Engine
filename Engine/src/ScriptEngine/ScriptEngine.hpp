@@ -21,6 +21,9 @@ namespace engine
 
 		void initializeScriptableComponent(ScriptableComponent* component);
 
+		// Parses the script file and fetches all the serializable variables
+		void fetchSerializableVariables(ScriptableComponent* component);
+
 		void checkForUpdatedScripts();
 
 		void recompileScripts();
@@ -44,6 +47,13 @@ namespace engine
 		void syncTransformStateScriptToEngine(ScriptableComponent* component);
 
 		void updateLauncherScript();
+
+		std::string getVariableNameFromLine(const std::string& line);
+
+		// Returns the data and the type of the variable
+		std::tuple<std::shared_ptr<void>, SerializableType>getVariableDataFromLine(const std::string& variableName, ScriptableComponent* component);
+
+		void addSerializableVariableFromLine(const std::string& line, ScriptableComponent* component);
 
 		lua_State* L = luaL_newstate();
 

@@ -884,6 +884,13 @@ bool isAddComponentVisible = false;
 			if (!seralizableVariable.showInEditor)
 				continue;
 
+			if (seralizableVariable.data == nullptr)
+			{
+				ImGui::Text((seralizableVariable.name + ":").c_str());
+
+				continue;
+			}
+
 			if (seralizableVariable.type == SerializableType::STRING)
 			{
 				std::string data = *static_cast<std::string*>(seralizableVariable.data);
