@@ -78,6 +78,8 @@ namespace engine
 
 		void playGame();
 
+		void stopGame();
+
 		void changeGame(std::shared_ptr<Game> game);
 
 		Window& window;
