@@ -559,9 +559,14 @@ bool isAddComponentVisible = false;
 		}
 		if (ImGui::Button("Stop"))
 		{
-			sceneState = EditorSceneState::Scene;
-
 			wasStopButtonPressed = true;
+
+			if (sceneState != EditorSceneState::Scene)
+			{
+				stopGame();
+			}
+
+			
 		}
 		if (sceneState == EditorSceneState::Scene && pushedStyleColor)
 		{
@@ -1079,11 +1084,24 @@ bool isAddComponentVisible = false;
 
 	void EditorGUI::playGame()
 	{
+		// Save the current state of the game
+		GameSerializer::serializeGame(game.get());
+
 		for (auto& [gameObjectId, gameObject] : game->getGameObjects())
 		{
 			gameObject->initialize();
 		}
 		sceneState = EditorSceneState::Play;
+	}
+
+	void EditorGUI::stopGame()
+	{
+		// Overwrite the current state of the game with the saved state
+		GameSerializer::deserializeGame(game.get());
+
+		// We should probably reset the sript states aswell since only serializable script variables will be reset
+
+		sceneState = EditorSceneState::Scene;
 	}
 
 	CameraComponent* EditorGUI::getActiveCamera()
