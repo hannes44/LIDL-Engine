@@ -44,6 +44,8 @@ namespace engine
 
 		std::vector<std::string> getAllCSharpScriptsInActiveGame();
 
+		void createNewScriptForActiveGame(const std::string& scriptFileName);
+
 		static std::vector<std::string> getAllGameNamesInGamesFolder();
 
 		static bool isProjectPathValid(const std::string& path);

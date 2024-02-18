@@ -72,6 +72,8 @@ namespace engine
 
 		void drawAssetItem(std::shared_ptr<AssetNode> assetNode);
 
+		void drawCompilationErrorWindow();
+
 		bool defaultCheckBox(const std::string& label, bool* value);
 
 		void playGame();

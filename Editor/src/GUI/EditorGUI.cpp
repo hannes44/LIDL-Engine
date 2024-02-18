@@ -30,6 +30,12 @@ bool isAddComponentVisible = false;
 
 	void EditorGUI::start()
 	{
+		if (editorSettings.enableScripting)
+		{
+			ScriptEngine* scriptEngine = ScriptEngine::getInstance();
+			scriptEngine->loadScriptStatesIntoNewLuaState(project->game.get());
+		}
+
 		// We have to save the initial serialization state to avoid serializing the initiated game if the user changes settings
 		bool initialUseSerialization = editorSettings.useSerialization;
 		if (initialUseSerialization)
@@ -67,11 +73,7 @@ bool isAddComponentVisible = false;
 
 		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png", false));
 
-		if (editorSettings.enableScripting)
-		{
-			ScriptEngine* scriptEngine = ScriptEngine::getInstance();
-			scriptEngine->start(project->game.get());
-		}				
+
 		
 		while (!quitProgram)
 		{
@@ -81,6 +83,10 @@ bool isAddComponentVisible = false;
 
 			renderer->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 			renderer->renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
+
+			// Checking if any scripts have been updated
+			// TODO: This doesn't have to be done every frame
+			ScriptEngine::getInstance()->checkForUpdatedScripts();
 
 			if (sceneState == EditorSceneState::Play)
 			{
@@ -128,6 +134,11 @@ bool isAddComponentVisible = false;
 			drawTopMenu();
 			drawPlayButtonToolbar();
 			drawBottomPanel();
+
+			if (!ScriptEngine::getInstance()->isSuccessfullyCompiled)
+			{
+				drawCompilationErrorWindow();
+			}
 		}
 	}
 
@@ -623,7 +634,15 @@ bool isAddComponentVisible = false;
 			
 				for (auto component : lockedGameObject->getComponents())
 				{
-					if (ImGui::CollapsingHeader(component->getName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+					std::string componentName = component->getName();
+
+					// Special case for scriptable components
+					if (auto lockedScriptable = dynamic_pointer_cast<ScriptableComponent>(component))
+					{
+						componentName = lockedScriptable->getScriptClassName();
+					}
+
+					if (ImGui::CollapsingHeader(componentName.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 					{
 						drawSerializableVariables(component.get());
 					}
@@ -781,6 +800,23 @@ bool isAddComponentVisible = false;
 					}
 
 				}
+
+
+				static char newScriptName[64];
+
+				ImGui::SameLine();
+
+				if (ImGui::SmallButton("New Script"))
+				{
+					std::string scriptName = newScriptName + std::string(".cs");
+					ResourceManager::getInstance()->createNewScriptForActiveGame(scriptName);
+					assetManager->addNewScriptNode(scriptName);
+				}
+
+				ImGui::SameLine();
+
+				ImGui::InputText("##newScriptName", newScriptName, 64);
+
 				drawAssetsSection();
 				ImGui::EndTabItem();
 			}
@@ -850,6 +886,13 @@ bool isAddComponentVisible = false;
 		{
 			if (!seralizableVariable.showInEditor)
 				continue;
+
+			if (seralizableVariable.data == nullptr)
+			{
+				ImGui::Text((seralizableVariable.name + ":").c_str());
+
+				continue;
+			}
 
 			if (seralizableVariable.type == SerializableType::STRING)
 			{
@@ -1010,6 +1053,23 @@ bool isAddComponentVisible = false;
 			ImGui::Text(name.c_str());
 		}
 		ImGui::EndGroup();
+	}
+
+	void EditorGUI::drawCompilationErrorWindow()
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		ImGui::SetNextWindowSize(ImVec2(800, 500));
+		ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+		ImGui::Begin("Compilation Error", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar);
+		ImGui::Text("Compilation Error");
+
+		// Set color to red
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+		ImGui::TextWrapped(ScriptEngine::getInstance()->lastCompilationError.c_str());
+		ImGui::PopStyleColor();
+		ImGui::Text("");
+		ImGui::Text("Fix the compilation error to use the Editor!");
+		ImGui::End();
 	}
 
 	bool EditorGUI::defaultCheckBox(const std::string& label, bool* value)

@@ -60,7 +60,7 @@ namespace engine
 		}
 
 		std::shared_ptr<ScriptableComponent> scriptComponent = std::make_shared<ScriptableComponent>();
-		scriptComponent->scriptFileName = componentName;
+		scriptComponent->setScriptFileName(componentName);
 		return scriptComponent;
 	}
 }

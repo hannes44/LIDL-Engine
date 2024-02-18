@@ -31,6 +31,8 @@ namespace engine
 		void addChild(std::shared_ptr<AssetNode> parent, std::shared_ptr<AssetNode> child);
 
 		bool isNameInUse(std::shared_ptr<AssetNode> parent, std::string name);
+
+		void addNewScriptNode(const std::string& scriptFileName);
 	private:
 		void loadIconTextures();
 
