@@ -8,6 +8,7 @@ namespace engine
 		QuitProgram,
 		SelectableDeleted,
 		SelectableAdded,
+		ScriptsRecompiled,
 		Last
 	};
 	class EventListener

@@ -1,5 +1,6 @@
 using Engine;
 using System;
+using System.Numerics;
 
 public class TemplateComponent
 {

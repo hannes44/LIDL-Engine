@@ -8,6 +8,8 @@
 *.vs
 *.lua
 
+!/Editor/Templates/*
+
 # Precompiled Headers
 *.gch
 *.pch

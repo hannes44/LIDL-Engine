@@ -19,6 +19,8 @@ namespace engine
 		std::shared_ptr<AssetNode> materialsFolderNode;
 
 		std::shared_ptr<AssetNode> texturesFolderNode;
+
+		std::shared_ptr<AssetNode> scriptsFolderNode;
 		
 		void changeGame(Game* game);
 
@@ -27,6 +29,10 @@ namespace engine
 		void onEvent(EventType type, std::string message);
 
 		void addChild(std::shared_ptr<AssetNode> parent, std::shared_ptr<AssetNode> child);
+
+		bool isNameInUse(std::shared_ptr<AssetNode> parent, std::string name);
+
+		void addNewScriptNode(const std::string& scriptFileName);
 	private:
 		void loadIconTextures();
 
@@ -36,5 +42,7 @@ namespace engine
 		Game* game;
 
 		static inline std::shared_ptr<Texture> folderIconTexture;
+
+		static inline std::shared_ptr<Texture> csharpIconTexture;
 	};
 }
