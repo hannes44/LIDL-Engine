@@ -640,10 +640,11 @@ bool isAddComponentVisible = false;
 			if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
 			{ 
 				ImGui::Text("Name: ");
-				//	ImGui::SameLine();
-				//	strcpy(selectedItemNameBuffer, selectedItem.lock()->getName().c_str());
-				//	ImGui::InputText("##selectedItemNameInput", selectedItemNameBuffer, 255);
-				//	selectedItemNameBuffer, selectedItem.lock()->getName() = selectedItemNameBuffer;
+				ImGui::SameLine();
+				static char gameObjectNameBuffer[255];
+				strcpy(gameObjectNameBuffer, lockedGameObject->name.c_str());
+				ImGui::InputText("##GameObjectNameInput", gameObjectNameBuffer, 255);
+				lockedGameObject->name = gameObjectNameBuffer;
 
 				// Since all gameobjects have a transform, we can always draw the transform
 				if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
