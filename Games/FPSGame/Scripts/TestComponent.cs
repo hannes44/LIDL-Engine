@@ -31,13 +31,12 @@ public class TestComponent
         Console.WriteLine(gameObject.transform.transformMatrix);
         EngineAPI.Log("hejsan potatismos");
 
-        EngineAPI.AddGameObject("GIAGACHAD CSHARP GAMEOBJECT");
+        // EngineAPI.AddGameObject("GIAGACHAD CSHARP GAMEOBJECT");
 
     }
 
-    public void OnInput()
+    public void OnInput(string action, int mouseXDiff, int mouseYDiff)
     {
-        Console.WriteLine("OnInput TestComponent");
-        EngineAPI.Log("ONINPUT");
+
     }
 }

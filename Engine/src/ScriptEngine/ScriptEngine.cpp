@@ -37,7 +37,8 @@ namespace engine
 
 		syncTransformStateEngineToScript(component);
 		syncScriptableVariablesToScript(component);
-		lua.script(component->getScriptClassName() + ".Update(" + component->uuid.id + ")");
+		sol::table componentTable = lua[component->uuid.id];
+		componentTable["Update"](componentTable);
 		syncTransformStateScriptToEngine(component);
 		syncScriptableVariablesToEngine(component);
 	}
@@ -50,13 +51,15 @@ namespace engine
 		}
 
 		sol::state_view lua(L);
-
+		
 		syncTransformStateEngineToScript(component);
 		syncScriptableVariablesToScript(component);
-		lua.script(component->getScriptClassName() + ".Initialize(" + component->uuid.id + ")");
+		sol::table componentTable = lua[component->uuid.id];
+		componentTable["Initialize"](componentTable);
 		syncTransformStateScriptToEngine(component);
 		syncScriptableVariablesToEngine(component);
 
+		
 		LOG_INFO("Initializing scriptable component");
 	}
 
@@ -290,7 +293,8 @@ namespace engine
 
 		syncTransformStateEngineToScript(component);
 		syncScriptableVariablesToScript(component);
-		lua.script(component->getScriptClassName() + ".OnInput(" + component->uuid.id + ")");
+		sol::table componentTable = lua[component->uuid.id];
+		componentTable["OnInput"](componentTable, event.getAction(), event.getX(), event.getY());
 		syncTransformStateScriptToEngine(component);
 		syncScriptableVariablesToEngine(component);
 	}
