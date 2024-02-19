@@ -1051,11 +1051,28 @@ bool isAddComponentVisible = false;
 
 			if (ImGui::BeginPopupContextItem())
 			{
+				static char name[32] = "";
+				memcpy(name, assetNode->name.c_str(), 32);
+            	char buf[64];
+            	sprintf(buf, "%s###Button", name);
+				ImGui::Button(buf);
+				if (ImGui::BeginPopupContextItem())
+				{
+					ImGui::Text("Edit name:");
+					ImGui::InputText("##edit", name, IM_ARRAYSIZE(name));
+					if (ImGui::Button("Close"))
+						ImGui::CloseCurrentPopup();
+					assetNode->name = name;
+					ImGui::EndPopup();
+				}
+				ImGui::Separator();
 				if (ImGui::Button("Delete"))
 				{
 					assetManager->deleteAssetNode(assetNode);
 					ImGui::CloseCurrentPopup();
 				}
+				if (ImGui::Button("Close"))
+                    ImGui::CloseCurrentPopup();
 				ImGui::EndPopup();
 			}
 
