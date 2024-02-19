@@ -1044,6 +1044,16 @@ bool isAddComponentVisible = false;
 					selectedObject = assetNode->asset;
 			}
 
+			if (ImGui::BeginPopupContextItem())
+			{
+				if (ImGui::Button("Delete"))
+				{
+					assetManager->deleteAssetNode(assetNode);
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::EndPopup();
+			}
+
 
 			float currentX = ImGui::GetCursorPosX();
 			std::string name = assetNode->name;
