@@ -11,6 +11,7 @@ void runMultiplayer() {
 }
 
 int main(int argc, char* argv[]) {
+	engine::Logger::init();
 
 	//runMultiplayer();
 	runEditor();

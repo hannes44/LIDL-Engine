@@ -2,18 +2,15 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Linq;
+using System.Collections.Generic;
 // Needed for Console
 using System;
 
 public static class Helpers {
 
     const int BUF_SIZE = 1024;
-    const string END_MSG_FLAG = "<EOF>";
+    const string END_MSG_FLAG = "<%>EOM<%>";
     const string IP_ADDRESS = "127.0.0.1";
-    public enum FlagMessage {
-        ACK = 'A',
-        END = 'E'
-    }
 
     public static bool CloseSocket(Socket socket) {
         try {
@@ -34,6 +31,11 @@ public static class Helpers {
 
     public static Socket OpenServerSocket(int port) {
         (IPEndPoint localEndPoint, Socket socket) = CreateSocket(port);
+        
+        if (socket == null) {
+            Console.WriteLine("Socket is null");
+            return null;
+        }
 
         try {
             // Using the `Bind()` method associates a network address with the Server socket
@@ -42,7 +44,7 @@ public static class Helpers {
             // Using the `Listen()` method creates a Client list that can connect to the Server
             socket.Listen(10);
 
-            return socket.Accept();
+            return socket;
         }
         catch (Exception e) {
             Console.WriteLine(e.ToString());
@@ -88,6 +90,8 @@ public static class Helpers {
             Console.WriteLine("Creating IPv4 socket on {0}:{1}", ipAddr.ToString(), port);
 
             Socket socket = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+
             return (localEndPoint, socket);
         }
         catch (Exception e) {
@@ -101,35 +105,62 @@ public static class Helpers {
         return message.Replace(END_MSG_FLAG, "");
     }
 
-    public static void SendMessage(Socket socket, string message) {
-        byte[] messageSent = Encoding.ASCII.GetBytes(message + END_MSG_FLAG);
-        // TODO: split msg in max BUF_SIZE payloads
-        socket.Send(messageSent);
-        Console.WriteLine("-> {0}", message);
+    // Splits a string into chunks up to a given max size
+    private static IEnumerable<string> Chunk(string str, int maxChunkSize) {
+        for (int i = 0; i < str.Length; i += maxChunkSize)
+            yield return str.Substring(i, Math.Min(maxChunkSize, str.Length-i));
     }
 
-    public static void SendMessage(Socket socket, FlagMessage flagMessage) {
-        SendMessage(socket, flagMessage.ToString());
+    public static void SendMessage(Socket socket, string message) {
+        if (message.Contains(END_MSG_FLAG)) {
+            Console.WriteLine("Cannot send message. Message contains the EOM flag: {0}", END_MSG_FLAG);
+            return;
+        }
+        
+        const int chunkSize = BUF_SIZE;
+        
+        List<string> chunks = Chunk(message, chunkSize).ToList();
+        
+        for (int i = 0; i < chunks.Count(); i++) {
+            string msg = chunks[i];
+            
+            byte[] messageSent = Encoding.ASCII.GetBytes(msg);
+            socket.Send(messageSent);
+            Console.WriteLine("[{0}] -> {1}", i, msg);
+        }
+
+        socket.Send(Encoding.ASCII.GetBytes(END_MSG_FLAG));
     }
 
     public static string ReceiveMessage(Socket socket) {
-        // Data buffer
-        byte[] bytes = new Byte[BUF_SIZE];
-        string data = null;
-        
-        while (true) {
-            int numByte = socket.Receive(bytes);
+        try {
+            // Data buffer
+            byte[] bytes = new Byte[BUF_SIZE];
+            string data = null;
+            
+            while (true) {
+                int numByte = socket.Receive(bytes);
 
-            data += Encoding.ASCII.GetString(bytes, 0, numByte);
+                data += Encoding.ASCII.GetString(bytes, 0, numByte);
 
-            if (data.IndexOf(END_MSG_FLAG) > -1)
-                break;
+                if (data.IndexOf(END_MSG_FLAG) > -1)
+                    break;
+            }
+
+            data = CleanMsg(data);
+            Console.WriteLine("<- {0}", data);
+
+            return data;
         }
-
-        data = CleanMsg(data);
-        Console.WriteLine("<- {0}", data);
-
-        return data;
+        catch (SocketException se) {
+            Console.WriteLine("SocketException : {0}", se.ToString());
+            return null;
+        }
+        catch (Exception e) {
+            throw;
+        }
+        
+        return null;
     }
 
     public static string SendAndReceive(Socket socket, string message) {

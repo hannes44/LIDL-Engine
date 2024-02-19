@@ -84,6 +84,8 @@
         "any": "cpp",
         "stack": "cpp",
         "unordered_set": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "bitset": "cpp",
+        "numeric": "cpp"
     }
 }
