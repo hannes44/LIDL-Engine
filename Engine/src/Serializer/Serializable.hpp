@@ -16,6 +16,7 @@ namespace engine
 		VECTOR3,
 		VECTOR4,
 		GAMEOBJECT,
+		COLOR,
 	};
 
 	// Variable that will be serialized and be displayed in the editor
