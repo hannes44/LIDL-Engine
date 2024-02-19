@@ -12,6 +12,8 @@
 #include <imgui_internal.h>
 #include <Windows.h>
 #include <regex>
+#include <ShlDisp.h>
+
 
 namespace engine
 {
@@ -30,6 +32,8 @@ bool isAddComponentVisible = false;
 
 	void EditorGUI::start()
 	{
+		ActionMap::getInstance().addAction("Copy", {Key::LCTRL, Key::C});
+
 		if (editorSettings.enableScripting)
 		{
 			ScriptEngine* scriptEngine = ScriptEngine::getInstance();
@@ -178,6 +182,30 @@ bool isAddComponentVisible = false;
 					}
 				}
 			}
+
+			if ((Key)event.getKey() == Key::V)
+			{
+				if (auto lockedCopiedGameObject = copiedGameObject.lock())
+				{
+					LOG_INFO("Pasting game object");
+					GameObject newGameObject = lockedCopiedGameObject->clone();
+					std::shared_ptr<GameObject> newGameObjectPtr = std::make_shared<GameObject>(newGameObject);
+					game->addGameObject(newGameObjectPtr);
+					selectedObject = newGameObjectPtr;
+				}
+			}
+		}
+
+		if (event.getAction() == "Copy")
+		{
+			if (auto lockedSelectedObject = selectedObject.lock())
+			{
+				if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
+				{
+					LOG_INFO("Copying game object");
+					copiedGameObject = lockedGameObject;
+				}
+			}
 		}
 	}
 
@@ -305,9 +333,30 @@ bool isAddComponentVisible = false;
 					{
 						selectedObject = gameObject;
 					}
+
+					if (ImGui::BeginPopupContextItem())
+					{
+						static char name[32];
+						memcpy(name, gameObject->name.c_str(), 32);
+						char buf[64];
+						sprintf(buf, "%s###Button", name);
+						ImGui::Button(buf);
+						if (ImGui::BeginPopupContextItem("Test"))
+						{
+							ImGui::Text("Edit name:");
+							ImGui::InputText("##edit", name, IM_ARRAYSIZE(name));
+							if (ImGui::Button("Close"))
+								ImGui::CloseCurrentPopup();
+							gameObject->name = name;
+							ImGui::EndPopup();
+						}
+						ImGui::Separator();
+						if (ImGui::Button("Close"))
+							ImGui::CloseCurrentPopup();
+						ImGui::EndPopup();
+					}
+					
 					ImGui::PopID();
-
-
 				}
 
 				ImGui::EndListBox();
@@ -468,6 +517,7 @@ bool isAddComponentVisible = false;
 		{
 			if (ImGui::MenuItem("About"))
 			{
+				ShellExecute(NULL, "open", "https://github.com/hannes44/GameEngineTDA572", 0, 0, SW_SHOWDEFAULT);
 			}
 			ImGui::EndMenu();
 		}
@@ -618,10 +668,11 @@ bool isAddComponentVisible = false;
 			if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
 			{ 
 				ImGui::Text("Name: ");
-				//	ImGui::SameLine();
-				//	strcpy(selectedItemNameBuffer, selectedItem.lock()->getName().c_str());
-				//	ImGui::InputText("##selectedItemNameInput", selectedItemNameBuffer, 255);
-				//	selectedItemNameBuffer, selectedItem.lock()->getName() = selectedItemNameBuffer;
+				ImGui::SameLine();
+				static char gameObjectNameBuffer[255];
+				strcpy(gameObjectNameBuffer, lockedGameObject->name.c_str());
+				ImGui::InputText("##GameObjectNameInput", gameObjectNameBuffer, 255);
+				lockedGameObject->name = gameObjectNameBuffer;
 
 				// Since all gameobjects have a transform, we can always draw the transform
 				if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
@@ -904,7 +955,14 @@ bool isAddComponentVisible = false;
 				std::string data = *static_cast<std::string*>(seralizableVariable.data);
 				ImGui::Text((seralizableVariable.name + ":").c_str());
 				ImGui::SameLine();
-				ImGui::Text(data.c_str());
+				char name[32];
+				memcpy(name, data.c_str(), 32);
+				char buf[64];
+				sprintf(buf, "%s###Button", name);
+				ImGui::InputText(("##"+seralizableVariable.name).c_str(), name, IM_ARRAYSIZE(name));
+				*static_cast<std::string*>(seralizableVariable.data) = name;
+
+				//ImGui::Text(data.c_str());
 			}
 			else if (seralizableVariable.type == SerializableType::INT)
 			{
@@ -929,6 +987,10 @@ bool isAddComponentVisible = false;
 			else if (seralizableVariable.type == SerializableType::VECTOR3)
 			{
 				ImGui::InputFloat3(seralizableVariable.name.c_str(), (float*)seralizableVariable.data);
+			}
+			else if (seralizableVariable.type == SerializableType::COLOR)
+			{
+				ImGui::ColorEdit3(seralizableVariable.name.c_str(), (float*)seralizableVariable.data);
 			}
 			else if (seralizableVariable.type == SerializableType::VECTOR4)
 			{
@@ -1042,6 +1104,33 @@ bool isAddComponentVisible = false;
 					selectedAssetNodeFolder = assetNode;
 				else
 					selectedObject = assetNode->asset;
+			}
+
+			if (ImGui::BeginPopupContextItem())
+			{
+				static char name[32];
+				memcpy(name, assetNode->name.c_str(), 32);
+            	char buf[64];
+            	sprintf(buf, "%s###Button", name);
+				ImGui::Button(buf);
+				if (ImGui::BeginPopupContextItem())
+				{
+					ImGui::Text("Edit name:");
+					ImGui::InputText("##edit", name, IM_ARRAYSIZE(name));
+					if (ImGui::Button("Close"))
+						ImGui::CloseCurrentPopup();
+					assetNode->name = name;
+					ImGui::EndPopup();
+				}
+				ImGui::Separator();
+				if (ImGui::Button("Delete"))
+				{
+					assetManager->deleteAssetNode(assetNode);
+					ImGui::CloseCurrentPopup();
+				}
+				if (ImGui::Button("Close"))
+                    ImGui::CloseCurrentPopup();
+				ImGui::EndPopup();
 			}
 
 

@@ -52,6 +52,7 @@ target_link_libraries(Editor PRIVATE
 	TestGame
 	TestGame2
 	Snake3D
+	FPSGame
 	engine
 	vendor
 	imgui

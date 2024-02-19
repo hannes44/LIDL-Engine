@@ -12,6 +12,8 @@
 namespace engine {
 
 	InputFramework::InputFramework() {
+		// Initialize the SDL event
+		ev = SDL_Event();
 	}
 
 	InputFramework& InputFramework::getInstance() {
@@ -31,16 +33,39 @@ namespace engine {
 	void InputFramework::handleContinousInput() {
 		// Initialize with default values
 		InputEvent ie(0, 0, 0, Key::LAST, InputEventType::NULL_EVENT);
+		std::list<Key> keysPressed{};
 
 		const Uint8* keystates = SDL_GetKeyboardState(NULL);
 		for (int keyInt = (int)Key::A; (int)keyInt != (int)Key::LAST; keyInt++) {
 			Key key = static_cast<Key>(keyInt);
 			if (keystates[keyInt]) {
-				ie.setKey(key);
 				ie.setEventType(InputEventType::KeyHold);
+				ie.setKey(key);
 				dispatchEvent(ie);
+
+				// Add key to the list of keys being held
+				keysPressed.push_back(key);
 			}
 		}
+		// Check if any set of keys responsible for an action are being held
+		if (keysPressed.size() > 1) {
+			for (auto action : actionMap.getActions()) {
+				if (allKeysPressed(action, keysPressed)) {
+					ie.setEventType(InputEventType::Action);
+					ie.setAction(action);
+					dispatchEvent(ie);
+				}
+			}
+		}
+	}
+
+	bool InputFramework::allKeysPressed(std::string action, std::list<Key> keysPressed) {
+		for (auto key : actionMap.getKeys(action)) {
+			if (std::find(keysPressed.begin(), keysPressed.end(), key) == keysPressed.end()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	// Read input from the SDL window

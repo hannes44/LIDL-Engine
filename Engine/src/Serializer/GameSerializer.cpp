@@ -234,7 +234,7 @@ namespace engine
 			{
 				out << YAML::Value << *static_cast<float*>(serializableVariable.data);
 			}
-			else if (serializableVariable.type == SerializableType::VECTOR3)
+			else if (serializableVariable.type == SerializableType::VECTOR3 || serializableVariable.type == SerializableType::COLOR)
 			{
 				float* vec3 = static_cast<float*>(serializableVariable.data);
 				std::vector<float> vec3Vector(vec3, vec3 + 3);
@@ -281,7 +281,7 @@ namespace engine
 					{
 						*static_cast<float*>(serializableVariable.data) = it->second.as<float>();
 					}
-					else if (serializableVariable.type == SerializableType::VECTOR3)
+					else if (serializableVariable.type == SerializableType::VECTOR3 || serializableVariable.type == SerializableType::COLOR)
 					{
 						std::vector<float> vec3 = it->second.as<std::vector<float>>();
 						std::copy(vec3.begin(), vec3.end(), static_cast<float*>(serializableVariable.data));
