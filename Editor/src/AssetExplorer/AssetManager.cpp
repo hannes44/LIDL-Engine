@@ -61,6 +61,29 @@ namespace engine
 		return false;
 	}
 
+	void AssetManager::deleteAssetNode(std::shared_ptr<AssetNode> node)
+	{
+		if (auto lockedParent = node->parent.lock())
+		{
+			for (auto it = lockedParent->children.begin(); it != lockedParent->children.end(); it++)
+			{
+				if ((*it)->uuid.id == node->uuid.id)
+				{
+					lockedParent->children.erase(it);
+					break;
+				}
+			}
+		}
+
+		if (node->isFolder)
+		{
+			for (auto& child : node->children)
+			{
+				deleteAssetNode(child);
+			}
+		}
+	}
+
 	void AssetManager::addNewScriptNode(const std::string& scriptFileName)
 	{
 		std::shared_ptr<AssetNode> scriptNode = std::make_shared<AssetNode>(false, csharpIconTexture);
