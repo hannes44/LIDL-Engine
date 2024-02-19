@@ -107,6 +107,8 @@ namespace engine
 
 		EditorSettings editorSettings{};
 
+		std::weak_ptr<GameObject> copiedGameObject;
+
 		std::weak_ptr<AssetNode> selectedAssetNodeFolder;
 
 		std::unique_ptr<AssetManager> assetManager;
