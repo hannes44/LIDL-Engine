@@ -12,9 +12,6 @@
 #include <imgui_internal.h>
 #include <Windows.h>
 #include <regex>
-#include <shlobj.h>
-#include <shlwapi.h>
-#include <objbase.h>
 #include <ShlDisp.h>
 
 
