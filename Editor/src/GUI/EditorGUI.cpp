@@ -930,6 +930,10 @@ bool isAddComponentVisible = false;
 			{
 				ImGui::InputFloat3(seralizableVariable.name.c_str(), (float*)seralizableVariable.data);
 			}
+			else if (seralizableVariable.type == SerializableType::COLOR)
+			{
+				ImGui::ColorEdit3(seralizableVariable.name.c_str(), (float*)seralizableVariable.data);
+			}
 			else if (seralizableVariable.type == SerializableType::VECTOR4)
 			{
 				ImGui::InputFloat4(seralizableVariable.name.c_str(), (float*)seralizableVariable.data);

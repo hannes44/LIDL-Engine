@@ -19,7 +19,7 @@ namespace engine
 		{
 			return
 			{
-				{SerializableType::VECTOR3, "Color", "The color or the pointlight", &color},
+				{SerializableType::COLOR, "Color", "The color or the pointlight", &color},
 				{SerializableType::FLOAT, "Intensity", "The intensity of the pointlight", &intensity}
 			};
 		};
