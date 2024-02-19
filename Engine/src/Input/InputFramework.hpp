@@ -15,7 +15,7 @@
 
 namespace engine {
 
-	class InputFramework : public ActionMap {
+	class InputFramework {
 	public:
 		// Non cloneable
 		InputFramework(const InputFramework& other) = delete;
@@ -47,6 +47,7 @@ namespace engine {
 		InputFramework();
 		SDL_Event ev;
 		std::list<InputListener*> listeners{};
+		ActionMap& actionMap = ActionMap::getInstance();
 	};
 
 }

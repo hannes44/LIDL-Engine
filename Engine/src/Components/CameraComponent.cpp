@@ -128,12 +128,5 @@ namespace engine
 				}
 			}
 		}
-
-		if (EventType == InputEventType::Action) {
-			LOG_INFO("action event read");
-			if (event.getAction() == "TEST") {
-				LOG_INFO("TEST ACTION");
-			}
-		}
 	}
 }

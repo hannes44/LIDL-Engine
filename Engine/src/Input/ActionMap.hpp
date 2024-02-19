@@ -21,7 +21,6 @@ namespace engine {
 	{
 	public:
 		ActionMap(const ActionMap&) = delete;
-		ActionMap& operator=(const ActionMap&) = delete;
 		~ActionMap() = default;
 
 		static ActionMap& getInstance();

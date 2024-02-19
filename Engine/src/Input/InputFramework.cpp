@@ -49,7 +49,7 @@ namespace engine {
 		}
 		// Check if any set of keys responsible for an action are being held
 		if (keysPressed.size() > 1) {
-			for (auto action : ActionMap::getActions()) {
+			for (auto action : actionMap.getActions()) {
 				if (allKeysPressed(action, keysPressed)) {
 					ie.setEventType(InputEventType::Action);
 					ie.setAction(action);
@@ -60,7 +60,7 @@ namespace engine {
 	}
 
 	bool InputFramework::allKeysPressed(std::string action, std::list<Key> keysPressed) {
-		for (auto key : ActionMap::getKeys(action)) {
+		for (auto key : actionMap.getKeys(action)) {
 			if (std::find(keysPressed.begin(), keysPressed.end(), key) == keysPressed.end()) {
 				return false;
 			}
