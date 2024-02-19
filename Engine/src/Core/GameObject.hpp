@@ -59,6 +59,8 @@ namespace engine
 
 		std::string getName() override { return name; };
 
+		GameObject clone();
+
 	private:
 		// TODO: Should limit each component to one of each type
 		std::vector<std::shared_ptr<Component>> components{};

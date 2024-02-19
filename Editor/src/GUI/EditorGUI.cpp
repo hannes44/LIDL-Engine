@@ -32,6 +32,8 @@ bool isAddComponentVisible = false;
 
 	void EditorGUI::start()
 	{
+		ActionMap::getInstance().addAction("Copy", {Key::LCTRL, Key::C});
+
 		if (editorSettings.enableScripting)
 		{
 			ScriptEngine* scriptEngine = ScriptEngine::getInstance();
@@ -178,6 +180,30 @@ bool isAddComponentVisible = false;
 						game->deleteTexture(lockedTexture->getUUID().id);
 						EventManager::getInstance().notify(EventType::SelectableDeleted, textureId);
 					}
+				}
+			}
+
+			if ((Key)event.getKey() == Key::V)
+			{
+				if (auto lockedCopiedGameObject = copiedGameObject.lock())
+				{
+					LOG_INFO("Pasting game object");
+					GameObject newGameObject = lockedCopiedGameObject->clone();
+					std::shared_ptr<GameObject> newGameObjectPtr = std::make_shared<GameObject>(newGameObject);
+					game->addGameObject(newGameObjectPtr);
+					selectedObject = newGameObjectPtr;
+				}
+			}
+		}
+
+		if (event.getAction() == "Copy")
+		{
+			if (auto lockedSelectedObject = selectedObject.lock())
+			{
+				if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
+				{
+					LOG_INFO("Copying game object");
+					copiedGameObject = lockedGameObject;
 				}
 			}
 		}
