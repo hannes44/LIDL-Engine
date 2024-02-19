@@ -6,6 +6,7 @@ namespace engine
 	ScriptableComponent::ScriptableComponent()
 	{
 		EventManager::getInstance().subscribe(EventType::ScriptsRecompiled, this);
+		InputFramework::getInstance().addListener(this);
 	}
 	void ScriptableComponent::update()
 	{
@@ -36,6 +37,11 @@ namespace engine
 		{
 			stateIsInitialized = false;
 		}
+	}
+
+	void ScriptableComponent::handleInput(const InputEvent& event)
+	{
+		ScriptEngine::getInstance()->handleInputForScriptableComponent(this, event);
 	}
 
 }

@@ -3,6 +3,9 @@
 namespace Engine
 {
 
+    // Fields marked with this attribute will be serialized and editable in the editor
+    public class SerializableData : Attribute { }
+
     // The EngineAPI, responsible for abstracting away the c++ binding away from the user
     // Since the c++ bindings only work with lua, we compile the C# files to lua
     // We encode the bindings in this file under the pattern "//(c++_API) bindingFunctionName();"
