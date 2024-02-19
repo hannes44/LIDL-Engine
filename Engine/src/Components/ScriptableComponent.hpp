@@ -3,12 +3,13 @@
 #include "ScriptEngine/ScriptEngine.hpp"
 #include <sol/sol.hpp>
 #include "Events/EventManager.hpp"
+#include "Input/InputFramework.hpp"
 
 namespace engine
 {
 	class ScriptEngine;
 
-	class ScriptableComponent : public Component, public EventListener
+	class ScriptableComponent : public Component, public EventListener, public InputListener
 	{
 	public:
 		ScriptableComponent();
@@ -49,6 +50,8 @@ namespace engine
 		std::vector<std::shared_ptr<void>> scriptVariablesData{};
 
 		void onEvent(EventType type, std::string message) override;
+
+		void handleInput(const InputEvent& event) override;
 
 	private:
 		std::string scriptFileName = "";

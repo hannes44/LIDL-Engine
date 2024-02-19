@@ -30,6 +30,8 @@ namespace engine
 
 		void initializeLuaStateForScriptableComponent(ScriptableComponent* component);
 
+		void handleInputForScriptableComponent(ScriptableComponent* component, const InputEvent& event);
+
 		bool isSuccessfullyCompiled = false;
 
 		std::string lastCompilationError = "";

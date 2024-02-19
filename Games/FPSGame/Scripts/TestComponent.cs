@@ -34,4 +34,10 @@ public class TestComponent
         EngineAPI.AddGameObject("GIAGACHAD CSHARP GAMEOBJECT");
 
     }
+
+    public void OnInput()
+    {
+        Console.WriteLine("OnInput TestComponent");
+        EngineAPI.Log("ONINPUT");
+    }
 }
