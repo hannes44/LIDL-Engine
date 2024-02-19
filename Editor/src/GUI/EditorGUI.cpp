@@ -306,9 +306,30 @@ bool isAddComponentVisible = false;
 					{
 						selectedObject = gameObject;
 					}
+
+					if (ImGui::BeginPopupContextItem())
+					{
+						static char name[32];
+						memcpy(name, gameObject->name.c_str(), 32);
+						char buf[64];
+						sprintf(buf, "%s###Button", name);
+						ImGui::Button(buf);
+						if (ImGui::BeginPopupContextItem("Test"))
+						{
+							ImGui::Text("Edit name:");
+							ImGui::InputText("##edit", name, IM_ARRAYSIZE(name));
+							if (ImGui::Button("Close"))
+								ImGui::CloseCurrentPopup();
+							gameObject->name = name;
+							ImGui::EndPopup();
+						}
+						ImGui::Separator();
+						if (ImGui::Button("Close"))
+							ImGui::CloseCurrentPopup();
+						ImGui::EndPopup();
+					}
+					
 					ImGui::PopID();
-
-
 				}
 
 				ImGui::EndListBox();
@@ -619,10 +640,11 @@ bool isAddComponentVisible = false;
 			if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
 			{ 
 				ImGui::Text("Name: ");
-				//	ImGui::SameLine();
-				//	strcpy(selectedItemNameBuffer, selectedItem.lock()->getName().c_str());
-				//	ImGui::InputText("##selectedItemNameInput", selectedItemNameBuffer, 255);
-				//	selectedItemNameBuffer, selectedItem.lock()->getName() = selectedItemNameBuffer;
+				ImGui::SameLine();
+				static char gameObjectNameBuffer[255];
+				strcpy(gameObjectNameBuffer, lockedGameObject->name.c_str());
+				ImGui::InputText("##GameObjectNameInput", gameObjectNameBuffer, 255);
+				lockedGameObject->name = gameObjectNameBuffer;
 
 				// Since all gameobjects have a transform, we can always draw the transform
 				if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
@@ -905,7 +927,14 @@ bool isAddComponentVisible = false;
 				std::string data = *static_cast<std::string*>(seralizableVariable.data);
 				ImGui::Text((seralizableVariable.name + ":").c_str());
 				ImGui::SameLine();
-				ImGui::Text(data.c_str());
+				char name[32];
+				memcpy(name, data.c_str(), 32);
+				char buf[64];
+				sprintf(buf, "%s###Button", name);
+				ImGui::InputText(("##"+seralizableVariable.name).c_str(), name, IM_ARRAYSIZE(name));
+				*static_cast<std::string*>(seralizableVariable.data) = name;
+
+				//ImGui::Text(data.c_str());
 			}
 			else if (seralizableVariable.type == SerializableType::INT)
 			{
@@ -1051,7 +1080,7 @@ bool isAddComponentVisible = false;
 
 			if (ImGui::BeginPopupContextItem())
 			{
-				static char name[32] = "";
+				static char name[32];
 				memcpy(name, assetNode->name.c_str(), 32);
             	char buf[64];
             	sprintf(buf, "%s###Button", name);
