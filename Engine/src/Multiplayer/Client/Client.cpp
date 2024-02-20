@@ -7,6 +7,9 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <stdio.h>
+#include <fstream>
+
+#include "Core/Logger.hpp"
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -14,8 +17,11 @@
 #define IP_ADDR "127.0.0.1"
 #define BUF_SIZE 1024
 
+#define GAME_FOLDER_PATH "../../Games/"
+#define GAME_CONFIG_FILE_EXTENSION ".yaml"
+
 namespace engine {
-	const std::string END_MSG_FLAG = "<EOF>";
+	const std::string END_MSG_FLAG = "<%>EOM<%>";
 
 	int Client::run() {
 		WSADATA wsaData;
@@ -57,27 +63,53 @@ namespace engine {
 			std::string msg;
 			printf("Enter the message to send to the server: ");
 			std::getline(std::cin, msg);
-			// TODO: split msg in max BUF_SIZE payloads
-			SendMsg(clientSocket, msg);
+			if (msg == "state") {
+				std::string state = GetGameState("TestGame");
+				SendMsg(clientSocket, state);
+			}
+			else {
+				SendMsg(clientSocket, msg);
+			}
+			
 			std::string response = ReceiveMsg(clientSocket);
 		}
 
 	}
 
-	bool Client::SendMsg(SOCKET socket, std::string message) {
-		std::string payload = message + END_MSG_FLAG;
-
-		std::cout << "-> " << message << std::endl;
-
-		int sbyteCount = send(socket, payload.c_str(), payload.size(), 0);
+	bool Client::SocketSend(SOCKET socket, std::string message) {
+		int sbyteCount = send(socket, message.c_str(), message.size(), 0);
 
 		if (sbyteCount == SOCKET_ERROR) {
-			std::cout << "Server send error: " << WSAGetLastError() << std::endl;
+			LOG_FATAL("Server send error: {}", WSAGetLastError());
 			return false;
 		}
-		else {
-			return true;
+
+		return true;
+	}
+
+	bool Client::SendMsg(SOCKET socket, std::string message) {
+		if (message.find(END_MSG_FLAG) != std::string::npos) {
+			std::cout << "Cannot send message. Message contains the EOM flag: " << END_MSG_FLAG << std::endl;
+			return false;
 		}
+
+		const int chunkSize = BUF_SIZE;
+		
+		std::string payload = message + END_MSG_FLAG;
+
+		std::vector<std::string> chunks{};
+
+		for (int i = 0; i < message.length(); i += chunkSize)
+			chunks.push_back(message.substr(i, chunkSize));
+
+		for (int i = 0; i < chunks.size(); i++) {
+			std::string chunk = chunks[i];
+			SocketSend(socket, chunk);
+
+			LOG_INFO("[{0}] -> {1}", std::to_string(i), chunk);
+		}
+
+		SocketSend(socket, END_MSG_FLAG);
 	}
 
 	std::string Client::ReceiveMsg(SOCKET socket) {
@@ -106,10 +138,25 @@ namespace engine {
 		if (SendMsg(socket, message))
 			return ReceiveMsg(socket);
 
-		return NULL;
+		return "";
 	}
 
 	std::string Client::CleanMsg(std::string message) {
 		return std::regex_replace(message, std::regex(END_MSG_FLAG), "");
+	}
+
+	std::string Client::GetGameState(const std::string& gameName) {
+		std::string filePath = GAME_FOLDER_PATH + gameName + "/" + gameName + "State" + GAME_CONFIG_FILE_EXTENSION;
+        
+		if (!std::ifstream(filePath).good()) {
+			LOG_ERROR("File not found: " + filePath);
+			return "";
+		}
+		
+		std::ostringstream text;
+		std::ifstream in_file(filePath);
+
+        text << in_file.rdbuf();
+        return text.str();
 	}
 }
