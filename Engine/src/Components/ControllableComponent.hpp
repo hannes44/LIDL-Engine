@@ -22,6 +22,7 @@ namespace engine {
 	class ControllableComponent : public Component, public InputListener {
 	public:
 		ControllableComponent();
+		~ControllableComponent();
 
 		float movementSpeed = 3;
 		MovementType movementType = MovementType::Always;

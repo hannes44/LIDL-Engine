@@ -14,6 +14,11 @@ namespace engine {
 		InputFramework::getInstance().addListener(this);
 	}
 
+	ControllableComponent::~ControllableComponent()
+	{
+		InputFramework::getInstance().removeListener(this);
+	}
+
 	std::set<std::string> ControllableComponent::getRequiredComponents() {
 		return { "Physics" };
 	}

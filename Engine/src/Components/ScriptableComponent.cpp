@@ -8,6 +8,11 @@ namespace engine
 		EventManager::getInstance().subscribe(EventType::ScriptsRecompiled, this);
 		InputFramework::getInstance().addListener(this);
 	}
+	ScriptableComponent::~ScriptableComponent()
+	{
+		EventManager::getInstance().unsubscribe(EventType::ScriptsRecompiled, this);
+		InputFramework::getInstance().removeListener(this);
+	}
 	void ScriptableComponent::update()
 	{
 		ScriptEngine::getInstance()->updateScriptableComponent(this);
