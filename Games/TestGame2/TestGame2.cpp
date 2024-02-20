@@ -1,8 +1,15 @@
 #include "TestGame2.hpp"
 
 extern "C" {
-	__declspec(dllexport) engine::Game* createGame() {
-		return new engine::TestGame2();
+	__declspec(dllexport) engine::Game* createGame(engine::Renderer* renderer, engine::Window* window, engine::InputFramework* inputFramework, engine::ResourceManager* resourceManager) {
+		engine::Game* game = new engine::TestGame2();
+		engine::Renderer::instance = renderer;
+		engine::Window::instance = window;
+		engine::InputFramework::instance = inputFramework;
+		engine::Logger::init();
+		engine::ResourceManager::instance = resourceManager;
+		resourceManager->changeGame(game);
+		return game;
 	}
 }
 namespace engine {
