@@ -13,6 +13,8 @@ namespace engine
 	{
 	public:
 		ScriptableComponent();
+		~ScriptableComponent();
+		
 
 		std::string getName() override { return name; };
 
