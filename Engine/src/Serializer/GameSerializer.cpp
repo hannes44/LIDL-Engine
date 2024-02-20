@@ -62,7 +62,7 @@ namespace engine
 		std::ofstream fout(filePath + configFileName + GAME_CONFIG_FILE_EXTENSION);
 		fout << out.c_str();
 
-		std::cout << "Here's the output YAML:\n" << out.c_str(); // prints "Hello, World!"
+		std::cout << "Here's the output YAML:\n" << out.c_str() << std::endl; // prints "Hello, World!"
 
 		LOG_INFO("Serialized game config: " + game->name);
 	}
@@ -85,7 +85,7 @@ namespace engine
 		std::ofstream fout(filePath + configFileName + GAME_CONFIG_FILE_EXTENSION);
 		fout << out.c_str();
 
-		std::cout << "Here's the output YAML:\n" << out.c_str(); // prints "Hello, World!"
+		std::cout << "Here's the output YAML:\n" << out.c_str() << std::endl; // prints "Hello, World!"
 
 		LOG_INFO("Serialized game state: " + game->name);
 	}
