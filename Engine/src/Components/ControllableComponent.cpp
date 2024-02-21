@@ -15,6 +15,11 @@ namespace engine {
 		InputFramework::getInstance().addListener(this);
 	}
 
+	void ControllableComponent::initialize() {
+		if (gameObject->game)
+			enableForces = gameObject->game->config.physicsSettings.enableForces;
+	}
+
 	ControllableComponent::~ControllableComponent()
 	{
 		InputFramework::getInstance().removeListener(this);
