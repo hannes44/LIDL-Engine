@@ -28,7 +28,7 @@ namespace engine
 	class EditorGUI : public InputListener, public EventListener
 	{
 	public:
-		EditorGUI(std::shared_ptr<Project> project);
+		EditorGUI(std::shared_ptr<Project> project, EditorSettings& editorSettings);
 
 		void start();
 
@@ -72,7 +72,13 @@ namespace engine
 
 		void drawAssetItem(std::shared_ptr<AssetNode> assetNode);
 
+		void drawCompilationErrorWindow();
+
 		bool defaultCheckBox(const std::string& label, bool* value);
+
+		void playGame();
+
+		void stopGame();
 
 		void changeGame(std::shared_ptr<Game> game);
 
@@ -100,6 +106,8 @@ namespace engine
 		CameraComponent* getActiveCamera();
 
 		EditorSettings editorSettings{};
+
+		std::weak_ptr<GameObject> copiedGameObject;
 
 		std::weak_ptr<AssetNode> selectedAssetNodeFolder;
 

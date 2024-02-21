@@ -12,7 +12,6 @@ namespace engine
 	{
 		int len = 32;
 		const char alphanum[] =
-			"0123456789"
 			"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 			"abcdefghijklmnopqrstuvwxyz";
 		std::string tmp_s;

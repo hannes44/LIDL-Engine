@@ -39,4 +39,11 @@ namespace engine {
 		component->setGameObject(this);
 		components.push_back(component);
 	}
+
+	GameObject GameObject::clone()
+	{
+		GameObject newGameObject = *this;
+		newGameObject.uuid = UUID();
+		return newGameObject;
+	}
 }

@@ -10,39 +10,39 @@
 
 namespace engine
 {
-	// Comment out to not skip the main menu
-	#define SKIP_MAIN_MENU
+// Comment out to not skip the main menu
+#define SKIP_MAIN_MENU
 
 	void engine::Editor::start()
 	{
-		engine::Logger::init();
 		LOG_INFO("Starting Editor");
 
-		Window& window = Window::getInstance();
+		Window &window = Window::getInstance();
 		window.createWindow(1280, 720, "Editor");
 
 		glewInit();
-		Renderer* renderer = Renderer::getInstance();
+		Renderer *renderer = Renderer::getInstance();
 		Renderer::getInstance()->initGraphicsAPI(engine::GraphicsAPIType::OpenGL);
 		renderer->baseShader = engine::Shader::create("simple.vert", "simple.frag");
 
-		#ifdef SKIP_MAIN_MENU
+		EditorSettings editorSettings = EditorSerializer::deSerializeEditorSettings();
+
+#ifdef SKIP_MAIN_MENU
 		project = std::make_shared<Project>();
-		project->game = loadGameFromDLL("Snake3D");
-		#endif
+		project->game = loadGameFromDLL(editorSettings.defaultGame);
+#endif
 
 		if (!project)
 		{
 			MainMenuGUI mainMenuGui{};
 			mainMenuGui.MainMenu();
-
 		}
 
-		EditorGUI editorGui{project};
+		EditorGUI editorGui{project, editorSettings};
 		editorGui.start();
 	}
 
-	void Editor::createNewProject(const std::string& name, const std::string& path)
+	void Editor::createNewProject(const std::string &name, const std::string &path)
 	{
 		LOG_INFO("Creating new project: {0} at {1}", name, path);
 
@@ -53,7 +53,7 @@ namespace engine
 		ResourceManager::createFolder(path + "/" + name + "/scripts");
 	}
 
-	void Editor::openProject(const std::string& gameName)
+	void Editor::openProject(const std::string &gameName)
 	{
 		LOG_INFO("Opening project: {0}", gameName);
 		project = std::make_shared<Project>();
@@ -74,7 +74,7 @@ namespace engine
 		if (gameDLL)
 		{
 			LOG_INFO("Loaded: {0}", fileName);
-			typedef engine::Game* (*createGame)(Renderer*, Window*, InputFramework*, ResourceManager*);
+			typedef engine::Game *(*createGame)(Renderer *, Window *, InputFramework *, ResourceManager *);
 			createGame createGameFunction = (createGame)GetProcAddress(gameDLL, "createGame");
 			if (createGameFunction)
 			{
@@ -92,7 +92,5 @@ namespace engine
 		}
 		return game;
 	}
-	
 
 }
-

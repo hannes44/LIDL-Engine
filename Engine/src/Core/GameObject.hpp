@@ -38,6 +38,7 @@ namespace engine
 		Game* game = nullptr;
 
 		void addComponent(std::shared_ptr<Component> component);
+
 		std::vector<std::shared_ptr<Component>>& getComponents() {
 			return components;
 		}
@@ -57,6 +58,8 @@ namespace engine
 		}
 
 		std::string getName() override { return name; };
+
+		GameObject clone();
 
 	private:
 		// TODO: Should limit each component to one of each type

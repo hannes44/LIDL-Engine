@@ -29,7 +29,7 @@ namespace engine
 
 		graphicsAPI->setViewport(0, 0, width, height);
 
-		graphicsAPI->setClearColor(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+		graphicsAPI->setClearColor(glm::vec4(renderingSettings->backgroundColor.x, renderingSettings->backgroundColor.y, renderingSettings->backgroundColor.z, 1.0f));
 
 		graphicsAPI->setCullFace(renderingSettings->enableFaceCulling);
 

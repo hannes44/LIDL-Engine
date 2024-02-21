@@ -42,6 +42,8 @@ add_library(engine
 	src/Components/ComponentFactory.cpp
 	src/Components/ControllableComponent.hpp
 	src/Components/ControllableComponent.cpp
+	src/Components/ScriptableComponent.hpp
+	src/Components/ScriptableComponent.cpp
 	src/Renderer/Console/Display.hpp
 	src/Renderer/Console/DisplayTerminal.hpp
 	src/Renderer/Console/DisplayTerminal.cpp
@@ -87,8 +89,14 @@ add_library(engine
 	src/Input/InputListener.cpp
 	src/Input/InputFramework.hpp
 	src/Input/InputFramework.cpp
+	src/Input/ActionMap.cpp
+	src/Input/ActionMap.hpp
 	src/Audio/AudioManager.cpp
 	src/Audio/AudioManager.hpp
+	src/Multiplayer/Client/Client.hpp
+	src/Multiplayer/Client/Client.cpp
+	src/ScriptEngine/ScriptEngine.hpp
+	src/ScriptEngine/ScriptEngine.cpp
 	${SHADERS}
 )
 target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -111,6 +119,8 @@ source_group("Components" FILES
 	src/Components/ComponentFactory.cpp
 	src/Components/ControllableComponent.hpp
 	src/Components/ControllableComponent.cpp
+	src/Components/ScriptableComponent.hpp
+	src/Components/ScriptableComponent.cpp
 )
 
 source_group("Renderer" FILES
@@ -141,6 +151,12 @@ source_group("Events" FILES
 	src/Events/EventManager.cpp
 	src/Events/EventListener.hpp
 )
+
+source_group("ScriptEngine" FILES
+	src/ScriptEngine/ScriptEngine.hpp
+	src/ScriptEngine/ScriptEngine.cpp
+)
+
 
 source_group("Serializer" FILES
 	src/Serializer/GameSerializer.hpp
@@ -209,11 +225,18 @@ source_group("Input" FILES
 	src/Input/InputListener.cpp
 	src/Input/InputFramework.hpp
 	src/Input/InputFramework.cpp
+	src/Input/ActionMap.cpp
+	src/Input/ActionMap.hpp
 )
 
 source_group("Audio" FILES
 	src/Audio/AudioManager.cpp
 	src/Audio/AudioManager.hpp
+)
+
+source_group("Multiplayer" FILES
+	src/Multiplayer/Client/Client.hpp
+	src/Multiplayer/Client/Client.cpp
 )
 
 
@@ -231,6 +254,7 @@ target_link_libraries(engine PRIVATE
 	imgui
 	imguilib
 	SDL3::SDL3
+	sol2::sol2
 	winmm.lib
 )
 

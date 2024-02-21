@@ -6,8 +6,9 @@
 #include "Components/SphereColliderComponent.hpp"
 #include "Components/PointLightComponent.hpp"
 #include "Components/CameraComponent.hpp"
+#include "Components/ScriptableComponent.hpp"
 #include "Core/Logger.hpp"
-
+#include "Core/ResourceManager.hpp"
 
 namespace engine
 {
@@ -38,11 +39,28 @@ namespace engine
 		{
 			return std::make_shared<CameraComponent>();
 		}
+		else if (componentName == "Scriptable")
+		{
+			return std::make_shared<ScriptableComponent>();
+		}
 
-		LOG_INFO("Did not find component: {0} in list of default components, looking for component dll");
-		// TODO: Load component from dll
+		LOG_INFO("Did not find component: {0} in list of default components, looking for script component");
+		
+		// Add .cs extension to the component if it is not already there
+		if (componentName.find(".cs") == std::string::npos)
+		{
+			componentName += ".cs";
+		}
 
-		LOG_WARN("Component: {0} not found", componentName);
-		return nullptr;
+		std::vector<std::string> allScriptComponents = ResourceManager::getInstance()->getAllCSharpScriptsInActiveGame();
+		if (std::find(allScriptComponents.begin(), allScriptComponents.end(), componentName) == allScriptComponents.end())
+		{
+			LOG_ERROR("Could not find script: {0}", componentName);
+			return nullptr;
+		}
+
+		std::shared_ptr<ScriptableComponent> scriptComponent = std::make_shared<ScriptableComponent>();
+		scriptComponent->setScriptFileName(componentName);
+		return scriptComponent;
 	}
 }

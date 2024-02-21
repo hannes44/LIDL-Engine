@@ -10,6 +10,9 @@
 #include "Components/ComponentFactory.hpp"
 #include <memory>
 #include <imgui_internal.h>
+#include <Windows.h>
+#include <regex>
+#include <ShlDisp.h>
 
 
 namespace engine
@@ -17,16 +20,25 @@ namespace engine
 #define IMGUI_TOP_MENU_HEIGHT 18
 #define IMGUI_SHOW_DEMO_WINDOWS false
 
+// We have to undefine DELETE because it is causing a conflict with the InputEvent DELETE
+#undef DELETE
+
 bool isAddComponentVisible = false;
 
-	EditorGUI::EditorGUI(std::shared_ptr<Project> project) :  window(Window::getInstance()), project(project)
+	EditorGUI::EditorGUI(std::shared_ptr<Project> project, EditorSettings& editorSettings) :  window(Window::getInstance()), project(project), editorSettings(editorSettings)
 	{
 		game = project->game;
 	}
 
 	void EditorGUI::start()
 	{
-		editorSettings = EditorSerializer::deSerializeEditorSettings();
+		ActionMap::getInstance().addAction("Copy", {Key::LCTRL, Key::C});
+
+		if (editorSettings.enableScripting)
+		{
+			ScriptEngine* scriptEngine = ScriptEngine::getInstance();
+			scriptEngine->loadScriptStatesIntoNewLuaState(project->game.get());
+		}
 
 		auto editorCameraGameObject = std::make_shared<GameObject>();
 		auto editorCameraControllableComponent = std::make_shared<ControllableComponent>();
@@ -65,7 +77,7 @@ bool isAddComponentVisible = false;
 		{
 			game->initialize();
 		}
-
+		
 		AudioManager::getInstance().initialize();
 
 		Renderer* renderer = Renderer::getInstance();
@@ -91,6 +103,8 @@ bool isAddComponentVisible = false;
 
 		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png", false));
 
+
+		
 		while (!quitProgram)
 		{
 			renderNewFrame();
@@ -102,10 +116,19 @@ bool isAddComponentVisible = false;
 			renderer->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 			renderer->renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 
+			// Checking if any scripts have been updated
+			// TODO: This doesn't have to be done every frame
+			ScriptEngine::getInstance()->checkForUpdatedScripts();
+
 			if (sceneState == EditorSceneState::Play)
 			{
 				GamePhysics::getInstance().run(game.get());
 				game->update();
+
+				for (auto& [gameObjectId, gameObject] : game->getGameObjects())
+				{
+					gameObject->update();
+				}
 			}
 
 			endFrame();
@@ -143,6 +166,11 @@ bool isAddComponentVisible = false;
 			drawTopMenu();
 			drawPlayButtonToolbar();
 			drawBottomPanel();
+
+			if (!ScriptEngine::getInstance()->isSuccessfullyCompiled)
+			{
+				drawCompilationErrorWindow();
+			}
 		}
 	}
 
@@ -180,6 +208,30 @@ bool isAddComponentVisible = false;
 						game->deleteTexture(lockedTexture->getUUID().id);
 						EventManager::getInstance().notify(EventType::SelectableDeleted, textureId);
 					}
+				}
+			}
+
+			if ((Key)event.getKey() == Key::V)
+			{
+				if (auto lockedCopiedGameObject = copiedGameObject.lock())
+				{
+					LOG_INFO("Pasting game object");
+					GameObject newGameObject = lockedCopiedGameObject->clone();
+					std::shared_ptr<GameObject> newGameObjectPtr = std::make_shared<GameObject>(newGameObject);
+					game->addGameObject(newGameObjectPtr);
+					selectedObject = newGameObjectPtr;
+				}
+			}
+		}
+
+		if (event.getAction() == "Copy")
+		{
+			if (auto lockedSelectedObject = selectedObject.lock())
+			{
+				if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
+				{
+					LOG_INFO("Copying game object");
+					copiedGameObject = lockedGameObject;
 				}
 			}
 		}
@@ -309,9 +361,30 @@ bool isAddComponentVisible = false;
 					{
 						selectedObject = gameObject;
 					}
+
+					if (ImGui::BeginPopupContextItem())
+					{
+						static char name[32];
+						memcpy(name, gameObject->name.c_str(), 32);
+						char buf[64];
+						sprintf(buf, "%s###Button", name);
+						ImGui::Button(buf);
+						if (ImGui::BeginPopupContextItem("Test"))
+						{
+							ImGui::Text("Edit name:");
+							ImGui::InputText("##edit", name, IM_ARRAYSIZE(name));
+							if (ImGui::Button("Close"))
+								ImGui::CloseCurrentPopup();
+							gameObject->name = name;
+							ImGui::EndPopup();
+						}
+						ImGui::Separator();
+						if (ImGui::Button("Close"))
+							ImGui::CloseCurrentPopup();
+						ImGui::EndPopup();
+					}
+					
 					ImGui::PopID();
-
-
 				}
 
 				ImGui::EndListBox();
@@ -472,6 +545,7 @@ bool isAddComponentVisible = false;
 		{
 			if (ImGui::MenuItem("About"))
 			{
+				ShellExecute(NULL, "open", "https://github.com/hannes44/GameEngineTDA572", 0, 0, SW_SHOWDEFAULT);
 			}
 			ImGui::EndMenu();
 		}
@@ -540,8 +614,11 @@ bool isAddComponentVisible = false;
 		{
 			wasPlayButtonPressed = true;
 
-			sceneState = EditorSceneState::Play;
-
+			// Only start the game if it isn't already playing
+			if (sceneState != EditorSceneState::Play)
+			{
+				playGame();
+			}
 		}
 		if (sceneState == EditorSceneState::Play && pushedStyleColor)
 		{
@@ -560,9 +637,14 @@ bool isAddComponentVisible = false;
 		}
 		if (ImGui::Button("Stop"))
 		{
-			sceneState = EditorSceneState::Scene;
-
 			wasStopButtonPressed = true;
+
+			if (sceneState != EditorSceneState::Scene)
+			{
+				stopGame();
+			}
+
+			
 		}
 		if (sceneState == EditorSceneState::Scene && pushedStyleColor)
 		{
@@ -614,10 +696,11 @@ bool isAddComponentVisible = false;
 			if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
 			{ 
 				ImGui::Text("Name: ");
-				//	ImGui::SameLine();
-				//	strcpy(selectedItemNameBuffer, selectedItem.lock()->getName().c_str());
-				//	ImGui::InputText("##selectedItemNameInput", selectedItemNameBuffer, 255);
-				//	selectedItemNameBuffer, selectedItem.lock()->getName() = selectedItemNameBuffer;
+				ImGui::SameLine();
+				static char gameObjectNameBuffer[255];
+				strcpy(gameObjectNameBuffer, lockedGameObject->name.c_str());
+				ImGui::InputText("##GameObjectNameInput", gameObjectNameBuffer, 255);
+				lockedGameObject->name = gameObjectNameBuffer;
 
 				// Since all gameobjects have a transform, we can always draw the transform
 				if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
@@ -635,7 +718,15 @@ bool isAddComponentVisible = false;
 			
 				for (auto component : lockedGameObject->getComponents())
 				{
-					if (ImGui::CollapsingHeader(component->getName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+					std::string componentName = component->getName();
+
+					// Special case for scriptable components
+					if (auto lockedScriptable = dynamic_pointer_cast<ScriptableComponent>(component))
+					{
+						componentName = lockedScriptable->getScriptClassName();
+					}
+
+					if (ImGui::CollapsingHeader(componentName.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 					{
 						drawSerializableVariables(component.get());
 					}
@@ -669,36 +760,37 @@ bool isAddComponentVisible = false;
 			ImGui::Text("Add Component");
 			ImGui::Separator();
 
-			const char* lines[] = { "Box Collider", "Camera", "Mesh", "Physics", "PointLight", "Sphere Collider" };
-			
-			static int item_current_idx = 0;
+			std::vector<std::string> allComponentNames = { "Box Collider", "Camera", "Mesh", "Physics", "PointLight", "Sphere Collider" };
+			std::vector<std::string> scriptComponentNames = ResourceManager::getInstance()->getAllCSharpScriptsInActiveGame();
+		
+			// Remove the extension from the script names
+			for (auto& scriptName : scriptComponentNames)
+			{
+				scriptName = scriptName.substr(0, scriptName.find_last_of('.'));
+			}
+
+			allComponentNames.insert(allComponentNames.end(), scriptComponentNames.begin(), scriptComponentNames.end());
 
 			if (ImGui::BeginListBox("##"))
 			{
-				for (int n = 0; n < IM_ARRAYSIZE(lines); n++)
+				for (auto componentName : allComponentNames)
 				{
-					bool is_selected = (item_current_idx == n);
-					if (ImGui::Selectable(lines[n], is_selected, ImGuiSelectableFlags_AllowDoubleClick))
+					if (ImGui::Selectable(componentName.c_str(), false, ImGuiSelectableFlags_AllowDoubleClick))
 					{
 						if (ImGui::IsMouseDoubleClicked(0))
 						{
-							item_current_idx = n;
-							Debug::Log(lines[item_current_idx]);
 							isAddComponentVisible = !isAddComponentVisible;
 
 							if (auto lockedSelectedObject = selectedObject.lock())
 							{
 								if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
 								{
-									std::string componentName = lines[item_current_idx];
 									lockedGameObject->addComponent(ComponentFactory::createComponent(componentName));
 								}
 							}
 
 						}
 					}
-					if (is_selected)
-						ImGui::SetItemDefaultFocus();
 				}
 				ImGui::EndListBox();
 			}
@@ -772,6 +864,43 @@ bool isAddComponentVisible = false;
 		{
 			if (ImGui::BeginTabItem("Assets"))
 			{
+				if(ImGui::SmallButton("New Folder"))
+				{
+					if (auto lockedSelectedAssetNodeFolder = selectedAssetNodeFolder.lock())
+					{
+						std::shared_ptr<AssetNode> newFolder = std::make_shared<AssetNode>(true, std::weak_ptr<Selectable>());
+						newFolder->name = "New Folder";
+						
+						int i = 1;
+						std::string newFolderName = newFolder->name;
+						while (assetManager->isNameInUse(lockedSelectedAssetNodeFolder, newFolderName))
+						{
+							newFolderName = newFolder->name + " (" + std::to_string(i) + ")";
+							i++;
+						}
+						newFolder->name = newFolderName;
+
+						assetManager->addChild(lockedSelectedAssetNodeFolder, newFolder);
+					}
+
+				}
+
+
+				static char newScriptName[64];
+
+				ImGui::SameLine();
+
+				if (ImGui::SmallButton("New Script"))
+				{
+					std::string scriptName = newScriptName + std::string(".cs");
+					ResourceManager::getInstance()->createNewScriptForActiveGame(scriptName);
+					assetManager->addNewScriptNode(scriptName);
+				}
+
+				ImGui::SameLine();
+
+				ImGui::InputText("##newScriptName", newScriptName, 64);
+
 				drawAssetsSection();
 				ImGui::EndTabItem();
 			}
@@ -842,12 +971,26 @@ bool isAddComponentVisible = false;
 			if (!seralizableVariable.showInEditor)
 				continue;
 
+			if (seralizableVariable.data == nullptr)
+			{
+				ImGui::Text((seralizableVariable.name + ":").c_str());
+
+				continue;
+			}
+
 			if (seralizableVariable.type == SerializableType::STRING)
 			{
 				std::string data = *static_cast<std::string*>(seralizableVariable.data);
 				ImGui::Text((seralizableVariable.name + ":").c_str());
 				ImGui::SameLine();
-				ImGui::Text(data.c_str());
+				char name[32];
+				memcpy(name, data.c_str(), 32);
+				char buf[64];
+				sprintf(buf, "%s###Button", name);
+				ImGui::InputText(("##"+seralizableVariable.name).c_str(), name, IM_ARRAYSIZE(name));
+				*static_cast<std::string*>(seralizableVariable.data) = name;
+
+				//ImGui::Text(data.c_str());
 			}
 			else if (seralizableVariable.type == SerializableType::INT)
 			{
@@ -872,6 +1015,10 @@ bool isAddComponentVisible = false;
 			else if (seralizableVariable.type == SerializableType::VECTOR3)
 			{
 				ImGui::InputFloat3(seralizableVariable.name.c_str(), (float*)seralizableVariable.data);
+			}
+			else if (seralizableVariable.type == SerializableType::COLOR)
+			{
+				ImGui::ColorEdit3(seralizableVariable.name.c_str(), (float*)seralizableVariable.data);
 			}
 			else if (seralizableVariable.type == SerializableType::VECTOR4)
 			{
@@ -972,10 +1119,46 @@ bool isAddComponentVisible = false;
 
 			if (ImGui::ImageButton(("##" + assetNode->uuid.id).c_str(), (void*)(intptr_t)openGLTextureId, ImVec2(70, 70), { 0, 1 }, { 1, 0 }))
 			{
-				if (assetNode->isFolder)
+				// Special case for script
+				if (assetNode->isScript)
+				{
+					// Opening the script in the default editor for the user
+					std::string path = ResourceManager::getInstance()->getPathToGameResource(assetNode->name);
+					std::string const pathCorrectFormat = std::regex_replace(path, std::regex("/"), "\\");
+					LPCSTR filePath = pathCorrectFormat.c_str();
+					ShellExecute(0, 0, filePath, NULL, NULL, SW_SHOW);
+				}
+				else if (assetNode->isFolder)
 					selectedAssetNodeFolder = assetNode;
 				else
 					selectedObject = assetNode->asset;
+			}
+
+			if (ImGui::BeginPopupContextItem())
+			{
+				static char name[32];
+				memcpy(name, assetNode->name.c_str(), 32);
+            	char buf[64];
+            	sprintf(buf, "%s###Button", name);
+				ImGui::Button(buf);
+				if (ImGui::BeginPopupContextItem())
+				{
+					ImGui::Text("Edit name:");
+					ImGui::InputText("##edit", name, IM_ARRAYSIZE(name));
+					if (ImGui::Button("Close"))
+						ImGui::CloseCurrentPopup();
+					assetNode->name = name;
+					ImGui::EndPopup();
+				}
+				ImGui::Separator();
+				if (ImGui::Button("Delete"))
+				{
+					assetManager->deleteAssetNode(assetNode);
+					ImGui::CloseCurrentPopup();
+				}
+				if (ImGui::Button("Close"))
+                    ImGui::CloseCurrentPopup();
+				ImGui::EndPopup();
 			}
 
 
@@ -994,9 +1177,48 @@ bool isAddComponentVisible = false;
 		ImGui::EndGroup();
 	}
 
+	void EditorGUI::drawCompilationErrorWindow()
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		ImGui::SetNextWindowSize(ImVec2(800, 500));
+		ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+		ImGui::Begin("Compilation Error", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar);
+		ImGui::Text("Compilation Error");
+
+		// Set color to red
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+		ImGui::TextWrapped(ScriptEngine::getInstance()->lastCompilationError.c_str());
+		ImGui::PopStyleColor();
+		ImGui::Text("");
+		ImGui::Text("Fix the compilation error to use the Editor!");
+		ImGui::End();
+	}
+
 	bool EditorGUI::defaultCheckBox(const std::string& label, bool* value)
 	{
 		return ImGui::Checkbox(label.c_str(), value);
+	}
+
+	void EditorGUI::playGame()
+	{
+		// Save the current state of the game
+		GameSerializer::serializeGame(game.get());
+
+		for (auto& [gameObjectId, gameObject] : game->getGameObjects())
+		{
+			gameObject->initialize();
+		}
+		sceneState = EditorSceneState::Play;
+	}
+
+	void EditorGUI::stopGame()
+	{
+		// Overwrite the current state of the game with the saved state
+		GameSerializer::deserializeGame(game.get());
+
+		// We should probably reset the sript states aswell since only serializable script variables will be reset
+
+		sceneState = EditorSceneState::Scene;
 	}
 
 	CameraComponent* EditorGUI::getActiveCamera()

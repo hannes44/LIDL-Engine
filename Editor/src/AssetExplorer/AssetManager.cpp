@@ -51,6 +51,47 @@ namespace engine
 		}
 	}
 
+	bool AssetManager::isNameInUse(std::shared_ptr<AssetNode> parent, std::string name)
+	{
+		for (auto& child : parent->children)
+		{
+			if (child->name == name)
+				return true;
+		}
+		return false;
+	}
+
+	void AssetManager::deleteAssetNode(std::shared_ptr<AssetNode> node)
+	{
+		if (auto lockedParent = node->parent.lock())
+		{
+			for (auto it = lockedParent->children.begin(); it != lockedParent->children.end(); it++)
+			{
+				if ((*it)->uuid.id == node->uuid.id)
+				{
+					lockedParent->children.erase(it);
+					break;
+				}
+			}
+		}
+
+		if (node->isFolder)
+		{
+			for (auto& child : node->children)
+			{
+				deleteAssetNode(child);
+			}
+		}
+	}
+
+	void AssetManager::addNewScriptNode(const std::string& scriptFileName)
+	{
+		std::shared_ptr<AssetNode> scriptNode = std::make_shared<AssetNode>(false, csharpIconTexture);
+		scriptNode->name = scriptFileName;
+		scriptNode->isScript = true;
+		addChild(scriptsFolderNode, scriptNode);
+	}
+
 	void AssetManager::buildAssetTree()
 	{
 		rootNode = std::make_shared<AssetNode>(true, std::weak_ptr<Selectable>());
@@ -78,7 +119,14 @@ namespace engine
 			addChild(materialsFolderNode, materialNode);
 		}
 
-		
+		scriptsFolderNode = std::make_shared<AssetNode>(true, std::weak_ptr<Selectable>());
+		scriptsFolderNode->name = "Scripts";
+		addChild(rootNode, scriptsFolderNode);
+
+		for (const auto& scriptFileName : ResourceManager::getInstance()->getAllCSharpScriptsInActiveGame())
+		{
+			addNewScriptNode(scriptFileName);
+		}
 
 	}
 	void AssetManager::changeGame(Game* game)
@@ -89,6 +137,7 @@ namespace engine
 	void AssetManager::loadIconTextures()
 	{
 		folderIconTexture = std::shared_ptr<Texture>(Texture::create("folder_icon.png", false));
+		csharpIconTexture = std::shared_ptr<Texture>(Texture::create("csharp_file_icon.png", false));
 	}
 
 	std::shared_ptr<Texture> AssetManager::getIconTextureForNode(AssetNode* node)

@@ -9,6 +9,7 @@
 #include "Components/PointLightComponent.hpp"
 #include "Components/ComponentFactory.hpp"
 #include "Serializable.hpp"
+#include "Components/ScriptableComponent.hpp"
 
 namespace engine
 {
@@ -61,7 +62,7 @@ namespace engine
 		std::ofstream fout(filePath + configFileName + GAME_CONFIG_FILE_EXTENSION);
 		fout << out.c_str();
 
-		std::cout << "Here's the output YAML:\n" << out.c_str(); // prints "Hello, World!"
+		std::cout << "Here's the output YAML:\n" << out.c_str() << std::endl; // prints "Hello, World!"
 
 		LOG_INFO("Serialized game config: " + game->name);
 	}
@@ -84,7 +85,7 @@ namespace engine
 		std::ofstream fout(filePath + configFileName + GAME_CONFIG_FILE_EXTENSION);
 		fout << out.c_str();
 
-		std::cout << "Here's the output YAML:\n" << out.c_str(); // prints "Hello, World!"
+		std::cout << "Here's the output YAML:\n" << out.c_str() << std::endl; // prints "Hello, World!"
 
 		LOG_INFO("Serialized game state: " + game->name);
 	}
@@ -233,7 +234,7 @@ namespace engine
 			{
 				out << YAML::Value << *static_cast<float*>(serializableVariable.data);
 			}
-			else if (serializableVariable.type == SerializableType::VECTOR3)
+			else if (serializableVariable.type == SerializableType::VECTOR3 || serializableVariable.type == SerializableType::COLOR)
 			{
 				float* vec3 = static_cast<float*>(serializableVariable.data);
 				std::vector<float> vec3Vector(vec3, vec3 + 3);
@@ -280,7 +281,7 @@ namespace engine
 					{
 						*static_cast<float*>(serializableVariable.data) = it->second.as<float>();
 					}
-					else if (serializableVariable.type == SerializableType::VECTOR3)
+					else if (serializableVariable.type == SerializableType::VECTOR3 || serializableVariable.type == SerializableType::COLOR)
 					{
 						std::vector<float> vec3 = it->second.as<std::vector<float>>();
 						std::copy(vec3.begin(), vec3.end(), static_cast<float*>(serializableVariable.data));
@@ -535,6 +536,12 @@ namespace engine
 						meshComponent->setMaterial(game->getMaterial(materialId));
 					}
 				}
+			}
+
+			if (auto scriptableComponent = dynamic_cast<ScriptableComponent*>(component.get()))
+			{
+				// We need to initialize the lua state for the scriptable component
+				ScriptEngine::getInstance()->initializeLuaStateForScriptableComponent(scriptableComponent);
 			}
 
 			gameObject->addComponent(component);
