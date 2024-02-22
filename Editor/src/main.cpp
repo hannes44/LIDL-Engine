@@ -1,5 +1,5 @@
 #include "Editor.hpp"
-#include "Multiplayer/Client/Client.hpp"
+#include "MultiplayerClient/Client.hpp"
 #include <stdio.h>
 
 void runEditor() {
