@@ -93,8 +93,8 @@ add_library(engine
 	src/Input/ActionMap.hpp
 	src/Audio/AudioManager.cpp
 	src/Audio/AudioManager.hpp
-	src/Multiplayer/Client/Client.hpp
-	src/Multiplayer/Client/Client.cpp
+	src/MultiplayerClient/Client.hpp
+	src/MultiplayerClient/Client.cpp
 	src/ScriptEngine/ScriptEngine.hpp
 	src/ScriptEngine/ScriptEngine.cpp
 	${SHADERS}
@@ -235,8 +235,8 @@ source_group("Audio" FILES
 )
 
 source_group("Multiplayer" FILES
-	src/Multiplayer/Client/Client.hpp
-	src/Multiplayer/Client/Client.cpp
+	src/MultiplayerClient/Client.hpp
+	src/MultiplayerClient/Client.cpp
 )
 
 
