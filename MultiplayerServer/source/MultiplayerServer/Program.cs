@@ -37,7 +37,7 @@ namespace Server
                 return (ClientMessageType.Undefined, "");
             }
 
-            string body = message.Substring(message.LastIndexOf(HEADER_MSG_FLAG) + HEADER_MSG_FLAG.Count());
+            string body = message.Substring(message.LastIndexOf(HEADER_MSG_FLAG) + HEADER_MSG_FLAG.Length);
 
             string header = message.Substring(message.IndexOf(HEADER_MSG_FLAG), message.LastIndexOf(HEADER_MSG_FLAG)).Trim().Replace(HEADER_MSG_FLAG, "");
             switch (header)
@@ -107,8 +107,8 @@ namespace Server
             }
 
             // Multicast message to all connected sessions except the sender
-            //Server.Multicast(response, Id);
-            Server.Multicast(response);
+            Server.Multicast(response, Id);
+            //Server.Multicast(response);
 
             // If the buffer starts with '!' the disconnect the current session
             if (message == "!")

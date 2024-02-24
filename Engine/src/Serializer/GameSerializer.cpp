@@ -30,10 +30,16 @@ namespace engine
 		serializeGameState(insideDirectoryFilePath, game);
 	}
 
-	void GameSerializer::createYAMLFile(const std::string& filePath, const std::string& fileName)
+	void GameSerializer::createYAMLFile(const std::string& fileFolder, const std::string& fileName)
 	{
-		LOG_INFO("Creating YAML file: " + filePath + fileName + GAME_CONFIG_FILE_EXTENSION);
-		std::ofstream outfile(filePath + fileName + GAME_CONFIG_FILE_EXTENSION);
+		std::string filePath = fileFolder + fileName + GAME_CONFIG_FILE_EXTENSION;
+		createYAMLFile(filePath);
+	}
+
+	void GameSerializer::createYAMLFile(const std::string& filePath)
+	{
+		LOG_INFO("Creating YAML file: " + filePath);
+		std::ofstream outfile(filePath);
 		outfile.close();
 	}
 
@@ -68,11 +74,12 @@ namespace engine
 	}
 
 	// Serializes the game state to a YAML file at the given file path
-	void GameSerializer::serializeGameState(const std::string& filePath, const Game* game)
+	std::string GameSerializer::serializeGameState(const std::string& folderPath, const Game* game)
 	{
 		LOG_INFO("Serializing game state: " + game->name);
-		std::string configFileName = game->name + "State";
-		createYAMLFile(filePath, configFileName);
+		std::string stateFileName = game->name + "State";
+		std::string stateFilePath = folderPath + stateFileName + GAME_CONFIG_FILE_EXTENSION;
+		createYAMLFile(stateFilePath);
 
 		YAML::Emitter out;
 		out << YAML::BeginMap;
@@ -82,12 +89,14 @@ namespace engine
 		serializeMaterials(game, out);
 
 		out << YAML::EndMap;
-		std::ofstream fout(filePath + configFileName + GAME_CONFIG_FILE_EXTENSION);
+		std::ofstream fout(folderPath + stateFileName + GAME_CONFIG_FILE_EXTENSION);
 		fout << out.c_str();
 
 		std::cout << "Here's the output YAML:\n" << out.c_str() << std::endl; // prints "Hello, World!"
 
 		LOG_INFO("Serialized game state: " + game->name);
+
+		return stateFilePath;
 	}
 
 	// Serializes all game objects to the given YAML emitter, will create a sequence of game objects
@@ -344,11 +353,10 @@ namespace engine
 	{
 	}
 
-	// Deserializes the game state from the game name's folder
-	void GameSerializer::deserializeGameState(Game* game)
+	// Deserializes the game state from a file path
+	void GameSerializer::deserializeGameState(Game* game, std::string gameStateFilePath)
 	{
 		LOG_INFO("Deserializing game state: {}", game->name);
-		std::string gameStateFilePath = GAME_FOLDER_PATH + game->name + "/" + game->name + "State" + GAME_CONFIG_FILE_EXTENSION;
 		LOG_TRACE("Loading file: " + gameStateFilePath);
 		YAML::Node state = YAML::LoadFile(gameStateFilePath);
 
@@ -358,6 +366,13 @@ namespace engine
 		deserializeGameObjects(state, game);
 
 		LOG_INFO("Deserialized game state: " + game->name);
+	}
+
+	// Deserializes the game state from the game name's folder
+	void GameSerializer::deserializeGameState(Game* game)
+	{
+		std::string gameStateFilePath = GAME_FOLDER_PATH + game->name + "/" + game->name + "State" + GAME_CONFIG_FILE_EXTENSION;
+		deserializeGameState(game, gameStateFilePath);
 	}
 
 	// Deserializes all textures from the given YAML node into the game
@@ -538,11 +553,14 @@ namespace engine
 				}
 			}
 
+			// TODO: Reenable this once the LUA error is fixed
+			/*
 			if (auto scriptableComponent = dynamic_cast<ScriptableComponent*>(component.get()))
 			{
 				// We need to initialize the lua state for the scriptable component
 				ScriptEngine::getInstance()->initializeLuaStateForScriptableComponent(scriptableComponent);
 			}
+			*/
 
 			gameObject->addComponent(component);
 

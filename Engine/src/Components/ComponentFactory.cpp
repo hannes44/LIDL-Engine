@@ -6,6 +6,7 @@
 #include "Components/SphereColliderComponent.hpp"
 #include "Components/PointLightComponent.hpp"
 #include "Components/CameraComponent.hpp"
+#include "Components/MultiplayerComponent.hpp"
 #include "Components/ScriptableComponent.hpp"
 #include "Core/Logger.hpp"
 #include "Core/ResourceManager.hpp"
@@ -39,12 +40,18 @@ namespace engine
 		{
 			return std::make_shared<CameraComponent>();
 		}
-		else if (componentName == "Scriptable")
+		else if (componentName == "Multiplayer")
+		{
+			return std::make_shared<MultiplayerComponent>();
+		}
+		// TODO: Reenable this once the LUA error is fixed
+		/*else if (componentName == "Scriptable")
 		{
 			return std::make_shared<ScriptableComponent>();
 		}
-
+		
 		LOG_INFO("Did not find component: {0} in list of default components, looking for script component");
+		
 		
 		// Add .cs extension to the component if it is not already there
 		if (componentName.find(".cs") == std::string::npos)
@@ -62,5 +69,7 @@ namespace engine
 		std::shared_ptr<ScriptableComponent> scriptComponent = std::make_shared<ScriptableComponent>();
 		scriptComponent->setScriptFileName(componentName);
 		return scriptComponent;
+		*/
+		return nullptr;
 	}
 }

@@ -1,6 +1,8 @@
 #include "Editor.hpp"
 #include "MultiplayerClient/Client.hpp"
 #include <stdio.h>
+#include <string>
+#include <thread>
 
 void runEditor() {
 	engine::Editor editor{};
@@ -13,7 +15,11 @@ void onMessage(std::string msg) {
 }
 
 void runMultiplayer() {
-	engine::Client::run(onMessage);
+	std::thread client(engine::Client::Run, onMessage);
+	engine::Client::QueueMessage({ engine::ClientMessageType::CustomMessage, "hello" });
+	engine::Client::QueueMessage({ engine::ClientMessageType::CustomMessage, "ping" });
+
+	client.join();
 }
 
 int main(int argc, char* argv[]) {

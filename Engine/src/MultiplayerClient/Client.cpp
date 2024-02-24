@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <regex>
+#include <queue>
 
 #include <stdio.h>
 #include <winsock2.h>
@@ -25,7 +26,9 @@ namespace engine {
 	const std::string END_CHUNK_FLAG = "<%>EOC<%>";
 	const std::string HEADER_MSG_FLAG = "<!>";
 
-	int Client::run(std::function<void(std::string)> onMessage) {
+	SafeQueue<ClientMessage> Client::messageQueue = SafeQueue<ClientMessage>();
+
+	int Client::Run(std::function<void(std::string)> onMessage) {
 		WSADATA wsaData;
 		int wserr;
 		WORD wVersionRequested = MAKEWORD(2, 2);
@@ -62,21 +65,33 @@ namespace engine {
 		}
 
 		while (true) {
-			std::string msg;
-			printf("Enter the message to send to the server: ");
+			ClientMessage msg;
+
+			msg = messageQueue.dequeue();
+
+			SendMsg(clientSocket, msg.message, msg.type);
+
+			/*printf("Enter the message to send to the server: ");
 			std::getline(std::cin, msg);
+
 			if (msg == "state") {
 				std::string state = GetGameState("TestGame");
 				SendMsg(clientSocket, state, StateUpdate);
 			}
 			else {
 				SendMsg(clientSocket, msg, CustomMessage);
-			}
+			}*/
 
+			std::cout << "Waiting to receive..." << std::endl;
 			std::string response = ReceiveMsg(clientSocket);
 			onMessage(response);
 		}
 
+	}
+
+	void Client::QueueMessage(ClientMessage message) {
+		messageQueue.enqueue(message);
+		std::cout << "Enqueued." << std::endl;
 	}
 
 	std::string Client::GetHeader(ClientMessageType type) {

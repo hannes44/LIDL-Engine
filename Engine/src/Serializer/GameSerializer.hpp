@@ -20,15 +20,18 @@ namespace engine
 		static void deserializeGame(Game* game);
 
 		static void createYAMLFile(const std::string& filePath, const std::string& fileName);
+		static void createYAMLFile(const std::string& filePath);
 
 		static void serializeSerializable(Serializable* serializable, YAML::Emitter& out);
 
+		static std::string serializeGameState(const std::string& folderPath, const Game* game);
+
 		static void deserializeSerializable(YAML::Node node, Serializable* serializable);
+
+		static void deserializeGameState(Game* game, std::string filePath);
 
 	private:
 		static void serializeGameConfig(const std::string& filePath, const Game* game);
-
-		static void serializeGameState(const std::string& filePath, const Game* game);
 
 		static void serializeGameObjects(const Game* game, YAML::Emitter& emitter);
 		static void serializeGameObject(GameObject* gameObject, YAML::Emitter& emitter);
