@@ -15,15 +15,17 @@
 
 #define PORT 11111
 #define IP_ADDR "127.0.0.1"
-#define BUF_SIZE 1024
+#define BUF_SIZE 1000
 
 #define GAME_FOLDER_PATH "../../Games/"
 #define GAME_CONFIG_FILE_EXTENSION ".yaml"
 
 namespace engine {
 	const std::string END_MSG_FLAG = "<%>EOM<%>";
+	const std::string END_CHUNK_FLAG = "<%>EOC<%>";
+	const std::string HEADER_MSG_FLAG = "<!>";
 
-	int Client::run() {
+	int Client::run(std::function<void(std::string)> onMessage) {
 		WSADATA wsaData;
 		int wserr;
 		WORD wVersionRequested = MAKEWORD(2, 2);
@@ -65,15 +67,33 @@ namespace engine {
 			std::getline(std::cin, msg);
 			if (msg == "state") {
 				std::string state = GetGameState("TestGame");
-				SendMsg(clientSocket, state);
+				SendMsg(clientSocket, state, StateUpdate);
 			}
 			else {
-				SendMsg(clientSocket, msg);
+				SendMsg(clientSocket, msg, CustomMessage);
 			}
-			
+
 			std::string response = ReceiveMsg(clientSocket);
+			onMessage(response);
 		}
 
+	}
+
+	std::string Client::GetHeader(ClientMessageType type) {
+		std::string header = HEADER_MSG_FLAG;
+		switch (type) {
+		case StateUpdate:
+			header += "StateUpdate";
+			break;
+		case CustomMessage:
+			header += "CustomMessage";
+			break;
+		default:
+			LOG_FATAL("Unhandeled ClientMessageType: {}", type);
+			return "";
+		}
+
+		return header + HEADER_MSG_FLAG;
 	}
 
 	bool Client::SocketSend(SOCKET socket, std::string message) {
@@ -87,14 +107,14 @@ namespace engine {
 		return true;
 	}
 
-	bool Client::SendMsg(SOCKET socket, std::string message) {
+	bool Client::SendMsg(SOCKET socket, std::string message, ClientMessageType type) {
 		if (message.find(END_MSG_FLAG) != std::string::npos) {
 			std::cout << "Cannot send message. Message contains the EOM flag: " << END_MSG_FLAG << std::endl;
 			return false;
 		}
 
-		const int chunkSize = BUF_SIZE;
-		
+		const int chunkSize = BUF_SIZE - END_CHUNK_FLAG.length();
+
 		std::string payload = message + END_MSG_FLAG;
 
 		std::vector<std::string> chunks{};
@@ -102,8 +122,10 @@ namespace engine {
 		for (int i = 0; i < message.length(); i += chunkSize)
 			chunks.push_back(message.substr(i, chunkSize));
 
+		SocketSend(socket, GetHeader(type));
+
 		for (int i = 0; i < chunks.size(); i++) {
-			std::string chunk = chunks[i];
+			std::string chunk = chunks[i] + END_CHUNK_FLAG;
 			SocketSend(socket, chunk);
 
 			LOG_INFO("[{0}] -> {1}", std::to_string(i), chunk);
@@ -113,15 +135,15 @@ namespace engine {
 	}
 
 	std::string Client::ReceiveMsg(SOCKET socket) {
-		char buf[BUF_SIZE];
+		char buf[BUF_SIZE + 1];
 		std::string data = "";
 
 		while (true) {
-			std::fill(buf, buf + BUF_SIZE, 0);
-			recv(socket, buf, BUF_SIZE, 0);
+			std::fill(buf, buf + BUF_SIZE + 1, 0);
+			recv(socket, buf, BUF_SIZE + 1, 0);
 			std::string received(buf);
 
-			data += received;
+			data += CleanChunk(received);
 
 			if (data.find(END_MSG_FLAG) != std::string::npos)
 				break;
@@ -134,29 +156,33 @@ namespace engine {
 		return data;
 	}
 
-	std::string Client::SendAndReceiveMsg(SOCKET socket, std::string message) {
-		if (SendMsg(socket, message))
+	std::string Client::SendAndReceiveMsg(SOCKET socket, std::string message, ClientMessageType type) {
+		if (SendMsg(socket, message, type))
 			return ReceiveMsg(socket);
 
 		return "";
 	}
 
 	std::string Client::CleanMsg(std::string message) {
-		return std::regex_replace(message, std::regex(END_MSG_FLAG), "");
+		return std::regex_replace(message, std::regex(END_MSG_FLAG + "\s*"), "");
+	}
+
+	std::string Client::CleanChunk(std::string chunk) {
+		return std::regex_replace(chunk, std::regex(END_CHUNK_FLAG + "\s*"), "");
 	}
 
 	std::string Client::GetGameState(const std::string& gameName) {
 		std::string filePath = GAME_FOLDER_PATH + gameName + "/" + gameName + "State" + GAME_CONFIG_FILE_EXTENSION;
-        
+
 		if (!std::ifstream(filePath).good()) {
 			LOG_ERROR("File not found: " + filePath);
 			return "";
 		}
-		
+
 		std::ostringstream text;
 		std::ifstream in_file(filePath);
 
-        text << in_file.rdbuf();
-        return text.str();
+		text << in_file.rdbuf();
+		return text.str();
 	}
 }
