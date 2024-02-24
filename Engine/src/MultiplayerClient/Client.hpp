@@ -69,7 +69,9 @@ namespace engine {
 
 	class Client {
 	public:
-		static int Run(std::function<void(std::string)> onStateUpdate);
+		static SOCKET OpenSocket();
+		static void RunReceiver(SOCKET clientSocket, std::function<void(std::string)> onStateUpdate);
+		static void RunTransmitter(SOCKET clientSocket);
 		static void QueueMessage(ClientMessage message);
 
 	private:

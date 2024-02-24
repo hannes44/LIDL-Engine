@@ -28,7 +28,7 @@ namespace engine {
 
 	SafeQueue<ClientMessage> Client::messageQueue = SafeQueue<ClientMessage>();
 
-	int Client::Run(std::function<void(std::string)> onMessage) {
+	SOCKET Client::OpenSocket() {
 		WSADATA wsaData;
 		int wserr;
 		WORD wVersionRequested = MAKEWORD(2, 2);
@@ -36,7 +36,7 @@ namespace engine {
 
 		if (wserr != 0) {
 			std::cout << "Error: The winsock dll was not found!" << std::endl;
-			return 0;
+			return INVALID_SOCKET;
 		}
 
 		// Create socket
@@ -45,7 +45,7 @@ namespace engine {
 		if (clientSocket == INVALID_SOCKET) {
 			std::cout << "Error during socket creation: " << WSAGetLastError() << std::endl;
 			WSACleanup();
-			return 0;
+			return INVALID_SOCKET;
 		}
 
 		// Connect to server
@@ -58,35 +58,32 @@ namespace engine {
 			std::cout << "Socket error: could not connect to server: " << WSAGetLastError() << std::endl;
 			std::cout << "Make sure the server is running on the specified IP and port" << std::endl;
 			WSACleanup();
-			return 0;
+			return INVALID_SOCKET;
 		}
 		else {
 			std::cout << "Socket connected to server!" << std::endl;
 		}
 
+		return clientSocket;
+	}
+
+	void Client::RunReceiver(SOCKET clientSocket, std::function<void(std::string)> onMessage) {
 		while (true) {
-			ClientMessage msg;
-
-			msg = messageQueue.dequeue();
-
-			SendMsg(clientSocket, msg.message, msg.type);
-
-			/*printf("Enter the message to send to the server: ");
-			std::getline(std::cin, msg);
-
-			if (msg == "state") {
-				std::string state = GetGameState("TestGame");
-				SendMsg(clientSocket, state, StateUpdate);
-			}
-			else {
-				SendMsg(clientSocket, msg, CustomMessage);
-			}*/
-
 			std::cout << "Waiting to receive..." << std::endl;
 			std::string response = ReceiveMsg(clientSocket);
 			onMessage(response);
 		}
+	}
 
+	void Client::RunTransmitter(SOCKET clientSocket) {
+		while (true) {
+			ClientMessage msg;
+
+			std::cout << "Waiting to transmit..." << std::endl;
+			msg = messageQueue.dequeue();
+
+			SendMsg(clientSocket, msg.message, msg.type);
+		}
 	}
 
 	void Client::QueueMessage(ClientMessage message) {

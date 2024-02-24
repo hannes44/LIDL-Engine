@@ -41,19 +41,24 @@ namespace engine
 		outfile << msg.c_str();
 		outfile.close();
 
-		GameSerializer::deserializeGameState(this, filePath);
+		GameSerializer::deserializeMultiplayerState(this, filePath);
 	}
 
-	void MultiplayerGame::moveRemoteBox() {
+	GameObject* MultiplayerGame::getRemoteBox() {
 		for (auto it = gameObjects.begin(); it != gameObjects.end(); it++)
 		{
 			auto gameObject = it->second.get();
 			if (gameObject->name == "Remote box") {
-				gameObject->transform.shiftPosition(glm::vec3(-2, 0, 0));
+				return gameObject;
 			}
 		}
+	}
 
-		std::string filePath = GameSerializer::serializeGameState(MULTIPLAYER_STATE_FOLDER, this);
+	void MultiplayerGame::moveRemoteBox() {
+		auto remoteBox = getRemoteBox();
+		remoteBox->transform.shiftPosition(glm::vec3(-2, 0, 0));
+
+		std::string filePath = GameSerializer::serializeMultiplayerState(MULTIPLAYER_STATE_FOLDER, this);
 
 		if (!std::ifstream(filePath).good()) {
 			LOG_ERROR("File not found: " + filePath);
@@ -70,6 +75,16 @@ namespace engine
 		Client::QueueMessage({ ClientMessageType::StateUpdate, message });
 	}
 
+	void MultiplayerGame::cycleRemoteBoxColour() {
+		auto remoteBox = getRemoteBox();
+		auto material = remoteBox->getComponent<MeshComponent>()->getMaterial();
+		float greenValue = material->baseColor.g + 1.f;
+		if(greenValue > 5.f)
+			greenValue = 1.f;
+
+		material->setBaseColor(glm::vec3(0, greenValue, 0));
+	}
+
 	void MultiplayerGame::handleInput(const InputEvent& event) {
 		const InputEventType eventType = event.getEventType();
 		if (eventType != InputEventType::KeyDown)
@@ -78,6 +93,9 @@ namespace engine
 		// Manual triggers of actions
 		if (event.getKey() == Key::M) {
 			moveRemoteBox();
+		}
+		else if (event.getKey() == Key::C) {
+			cycleRemoteBoxColour();
 		}
 	}
 
@@ -95,9 +113,16 @@ namespace engine
 
 	void MultiplayerGame::initialize()
 	{
-		// Start the multiplayer client in a detached thread
-		std::thread client(engine::Client::Run, std::bind(&MultiplayerGame::onMessage, this, std::placeholders::_1));
-		client.detach();
+		// Connect to the server
+		SOCKET clientSocket = engine::Client::OpenSocket();
+		
+		// Start the multiplayer receiver in a detached thread
+		std::thread receiver(engine::Client::RunReceiver, clientSocket, std::bind(&MultiplayerGame::onMessage, this, std::placeholders::_1));
+		// Start the multiplayer transmitter in a detached thread
+		std::thread transmitter(engine::Client::RunTransmitter, clientSocket);
+		
+		receiver.detach();
+		transmitter.detach();
 
 		engine::PointLightComponent pointLightComponent = engine::PointLightComponent();
 

@@ -25,16 +25,19 @@ namespace engine
 		static void serializeSerializable(Serializable* serializable, YAML::Emitter& out);
 
 		static std::string serializeGameState(const std::string& folderPath, const Game* game);
+		static std::string serializeMultiplayerState(const std::string& folderPath, const Game* game);
 
 		static void deserializeSerializable(YAML::Node node, Serializable* serializable);
 
 		static void deserializeGameState(Game* game, std::string filePath);
+		static void deserializeMultiplayerState(Game* game, std::string filePath);
 
 	private:
 		static void serializeGameConfig(const std::string& filePath, const Game* game);
 
 		static void serializeGameObjects(const Game* game, YAML::Emitter& emitter);
 		static void serializeGameObject(GameObject* gameObject, YAML::Emitter& emitter);
+		static void serializeMultiplayerGameObjects(const Game* game, YAML::Emitter& emitter);
 
 		static void serializeComponents(std::vector<std::shared_ptr<Component>> components, YAML::Emitter& emitter);
 		static void serializeComponent(std::shared_ptr<Component>, YAML::Emitter& emitter);
@@ -54,6 +57,7 @@ namespace engine
 		static void deserializeMaterials(YAML::Node node, Game* game);
 
 		static void deserializeGameObjects(YAML::Node node, Game* game);
+		static void deserializeMultiplayerGameObjects(YAML::Node node, Game* game);
 		static void deserializeComponents(YAML::Node node, GameObject* gameObject, Game* game);
 
 		static void deserializeComponent(YAML::Node node, GameObject* gameObject, Game* game);

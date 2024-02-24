@@ -35,6 +35,11 @@ namespace engine
 			return uuid;
 		}
 
+		void setBaseColor(glm::vec3 color)
+		{
+			baseColor = color;
+		}
+
 		std::vector<SerializableVariable> getSerializableVariables() override
 		{
 			std::string* diffuseId = diffuseTexture.expired() ? &dummyId : &diffuseTexture.lock()->uuid.id;

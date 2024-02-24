@@ -15,11 +15,18 @@ void onMessage(std::string msg) {
 }
 
 void runMultiplayer() {
-	std::thread client(engine::Client::Run, onMessage);
+	SOCKET clientSocket = engine::Client::OpenSocket();
+	if (clientSocket == INVALID_SOCKET) {
+		std::cout << "Got invalid socket" << std::endl;
+		return;
+	}
+	std::thread receiver(engine::Client::RunReceiver, clientSocket, onMessage);
+	std::thread transmitter(engine::Client::RunTransmitter, clientSocket);
 	engine::Client::QueueMessage({ engine::ClientMessageType::CustomMessage, "hello" });
 	engine::Client::QueueMessage({ engine::ClientMessageType::CustomMessage, "ping" });
 
-	client.join();
+	transmitter.join();
+	receiver.join();
 }
 
 int main(int argc, char* argv[]) {

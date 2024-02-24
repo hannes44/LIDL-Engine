@@ -7,6 +7,7 @@
 #include <memory>
 #include "Components/MeshComponent.hpp"
 #include "Components/PointLightComponent.hpp"
+#include "Components/MultiplayerComponent.hpp"
 #include "Components/ComponentFactory.hpp"
 #include "Serializable.hpp"
 #include "Components/ScriptableComponent.hpp"
@@ -99,6 +100,29 @@ namespace engine
 		return stateFilePath;
 	}
 
+	// Serializes the multiplayer state to a YAML file at the given file path
+	std::string GameSerializer::serializeMultiplayerState(const std::string& folderPath, const Game* game) {
+		LOG_INFO("Serializing multiplayer state: " + game->name);
+		std::string stateFileName = game->name + "State";
+		std::string stateFilePath = folderPath + stateFileName + GAME_CONFIG_FILE_EXTENSION;
+		createYAMLFile(stateFilePath);
+
+		YAML::Emitter out;
+		out << YAML::BeginMap;
+
+		serializeMultiplayerGameObjects(game, out);
+		serializeTextures(game, out);
+		serializeMaterials(game, out);
+
+		out << YAML::EndMap;
+		std::ofstream fout(folderPath + stateFileName + GAME_CONFIG_FILE_EXTENSION);
+		fout << out.c_str();
+
+		LOG_INFO("Serialized game state: " + game->name);
+
+		return stateFilePath;
+	}
+
 	// Serializes all game objects to the given YAML emitter, will create a sequence of game objects
 	void GameSerializer::serializeGameObjects(const Game* game, YAML::Emitter& out)
 	{
@@ -108,6 +132,27 @@ namespace engine
 		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
 		{
 			serializeGameObject(gameObject.get(), out);
+		}
+
+		out << YAML::EndSeq;
+
+		if (out.good())
+			LOG_INFO("Serialized game objects");
+		else
+			LOG_ERROR("Failed to serialize game objects");
+
+	}
+
+	// Serializes all game objects to the given YAML emitter, will create a sequence of game objects
+	void GameSerializer::serializeMultiplayerGameObjects(const Game* game, YAML::Emitter& out)
+	{
+		out << YAML::Key << "GameObjects";
+		out << YAML::Value << YAML::BeginSeq;
+
+		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
+		{
+			if (gameObject->hasComponent<MultiplayerComponent>())
+				serializeGameObject(gameObject.get(), out);
 		}
 
 		out << YAML::EndSeq;
@@ -368,6 +413,11 @@ namespace engine
 		LOG_INFO("Deserialized game state: " + game->name);
 	}
 
+	// Deserializes the multiplayer state from a file path
+	void GameSerializer::deserializeMultiplayerState(Game* game, std::string gameStateFilePath) {
+		deserializeGameState(game, gameStateFilePath);
+	}
+
 	// Deserializes the game state from the game name's folder
 	void GameSerializer::deserializeGameState(Game* game)
 	{
@@ -480,7 +530,52 @@ namespace engine
 			}
 
 		}
+	}
 
+	// Deserializes all multiplayer game objects from the given YAML node into the game
+	void GameSerializer::deserializeMultiplayerGameObjects(YAML::Node node, Game* game)
+	{
+		YAML::Node gameObjectsNode;
+		try
+		{
+			gameObjectsNode = node["GameObjects"];
+		}
+		catch (const std::exception& e)
+		{
+			LOG_ERROR("Failed to deserialize game objects: " + std::string(e.what()));
+			return;
+		}
+
+		for (YAML::const_iterator it = gameObjectsNode.begin(); it != gameObjectsNode.end(); ++it)
+		{
+			try
+			{
+				YAML::Node gameObjectNode = *it;
+				std::string gameObjectName = gameObjectNode["name"].as<std::string>();
+
+				auto existingGameObjects = game->getGameObjects();
+				
+				auto match = std::find_if(existingGameObjects.begin(), existingGameObjects.end(), [&](const std::pair<std::string, std::shared_ptr<GameObject>>& gameObject) {
+					return gameObject.second->name == gameObjectName;
+				});
+				if (match != existingGameObjects.end())
+					game->deleteGameObject(game->getGameObject(gameObjectName).lock().get());
+
+				std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>();
+				gameObject->name = "MGO_" + gameObjectName;
+				std::vector<float> transformMatrix = gameObjectNode["transform"].as<std::vector<float>>();
+				std::copy(transformMatrix.begin(), transformMatrix.end(), &gameObject->transform.transformMatrix[0][0]);
+				gameObject->isVisible = gameObjectNode["isVisible"].as<bool>();
+				gameObject->uuid.id = gameObjectNode["Id"].as<std::string>();
+				deserializeComponents(gameObjectNode, gameObject.get(), game);
+				game->addGameObject(gameObject);
+			}
+			catch (const std::exception& e)
+			{
+				LOG_WARN("Failed to deserialize game object: " + std::string(e.what()));
+			}
+
+		}
 	}
 
 	// Deserializes all components from the given YAML node into the given game object

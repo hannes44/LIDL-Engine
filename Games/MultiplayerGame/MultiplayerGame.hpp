@@ -15,7 +15,9 @@ namespace engine {
 		
 	protected:
 		double getTargetFrameRate() override;
+		GameObject* getRemoteBox();
 		void moveRemoteBox();
+		void cycleRemoteBoxColour();
 
 		void onMessage(std::string msg);
 
