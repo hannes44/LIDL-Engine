@@ -100,11 +100,11 @@ namespace engine
 
 		// TODO: Figure out if the axis is flipped or the model is flipped
 		// Hotfix for mirrored rotation during movement on Z-axis
-		if (vel.z != 0)
-			vel.z *= -1;
+		if (vel.x != 0)
+			vel.x *= -1;
 
 		// We do not currently support rotations when moving along the Y-axis, so only rotate when moving along the X or Z axis
-		if (glm::length(vel) > 0.1f && (vel.x != 0 || vel.z != 0) && !veceql(vel, direction)) {
+		if (glm::length(vel) > 0.1f && (vel.x != 0 || vel.z != 0 || vel.y != 0) && !veceql(vel, direction)) {
 			direction = glm::normalize(vel);
 			glm::vec3 dir = direction;
 			
@@ -113,7 +113,15 @@ namespace engine
 			if (dir.x < 0)
 				dir = glm::vec3(1, 0, 0.01f);
 
-			snake.front().lock()->transform.setRotationFromDirection(dir);
+			// Figure out if the axis is flipped or the model is flipped
+			glm::vec3 normal = glm::vec3(0, 1, 0);
+			if (direction == glm::vec3(0, 1, 0))
+				normal = glm::vec3(0, 0, 1);
+			else if (direction == glm::vec3(0, -1, 0))
+				normal = glm::vec3(0, 0, -1);
+
+			snake.front().lock()->transform.setRotationFromDirection(direction, normal);
+			//snake.front().lock()->transform.setRotationFromDirection(dir);
 		}
 	}
 
@@ -128,6 +136,7 @@ namespace engine
 	}
 
 	void onHeadCollision(Game* game, GameObject* other, ColliderComponent* otherCollider) {
+		//return;
 		Snake3D* snakeGame = dynamic_cast<Snake3D*>(game);
 		if (snakeGame == nullptr)
 			return;
@@ -156,7 +165,7 @@ namespace engine
 		addGameObject(std::unique_ptr<GameObject>(light));
 
 		GameObject* camera = new GameObject();
-		camera->transform.setPosition(glm::vec3(0, 0, 10));
+		camera->transform.setPosition(glm::vec3(3, 5, 10));
 		camera->addComponent(std::make_unique<engine::CameraComponent>());
 		camera->name = "Camera";
 		addGameObject(std::unique_ptr<GameObject>(camera));
