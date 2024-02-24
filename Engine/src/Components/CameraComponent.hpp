@@ -9,7 +9,7 @@ namespace engine
 	class CameraComponent : public Component, public InputListener
 	{
 	public:
-		CameraComponent();
+		CameraComponent(glm::vec3 offset = glm::vec3(0, 0, 0)) : offset(offset) {};
 		void translate(float x, float y, float z);
 		void rotate(float angle, float x, float y, float z);
 
@@ -37,6 +37,7 @@ namespace engine
 		glm::vec3 rotation{ 90, 0, 0 };
 		glm::vec3 direction{ -1, -1, -1 };
 		glm::vec3 worldUp{ 0.0f, 1.0f, 0.0f };
+		glm::vec3 offset{ 0, 0, 0 };
 
 
 		float fov = 50;

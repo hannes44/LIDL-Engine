@@ -11,11 +11,9 @@
 
 namespace engine
 {
-	CameraComponent::CameraComponent()
+	void CameraComponent::update() 
 	{
-	}
 
-	void CameraComponent::update() {
 	}
 
 	void CameraComponent::translate(float x, float y, float z)
@@ -31,15 +29,6 @@ namespace engine
 	Transform CameraComponent::getTransform()
 	{
 		return gameObject->transform;
-		/*
-		glm::mat4 lookAtMatrix = glm::lookAt(glm::vec3(0, 0, 0), direction, glm::vec3(0, 1, 0));
-
-		return lookAtMatrix;
-		glm::mat4 rotationMat = glm::rotate(glm::mat4(1.0f), rotation.x, { 1, 0, 0 })
-			* glm::rotate(glm::mat4(1.0f), rotation.y, { 0, 1, 0 })
-			* glm::rotate(glm::mat4(1.0f), rotation.z, { 0, 0, 1 });
-
-		return glm::translate(glm::mat4(1.0f), translation) * rotationMat;*/
 	}
 
 	glm::mat4 CameraComponent::getViewMatrix()
