@@ -47,7 +47,7 @@ namespace engine
 		outfile << state.c_str();
 		outfile.close();
 
-		GameSerializer::deserializeMultiplayerState(this, filePath);
+		GameSerializer::deserializeGameState(this, filePath);
 	}
 
 	// TODO_MULTIPLAYER: Move this to Game.hpp once include issues are resolved
@@ -69,7 +69,7 @@ namespace engine
 
 	// TODO_MULTIPLAYER: Move this to the Physics Engine once include issues are resolved
 	void MultiplayerGame::sendMultiplayerState() {
-		std::string filePath = GameSerializer::serializeMultiplayerState(MULTIPLAYER_STATE_FOLDER, this);
+		std::string filePath = GameSerializer::serializeGameState(MULTIPLAYER_STATE_FOLDER, this, true);
 
 		if (!std::ifstream(filePath).good()) {
 			LOG_ERROR("File not found: " + filePath);
