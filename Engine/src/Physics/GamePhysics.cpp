@@ -165,6 +165,10 @@ namespace engine {
 		}
 	}
 
+	void GamePhysics::sendMultiplayerState(Game* game) {
+		// TODO_MULTIPLAYER: Implement this when include issues are resolved
+	}
+
 	void GamePhysics::run(Game* game) {
 		if (Utils::getTimestampNS() - lastPhysicsUpdateTimestamp < PHYSICS_TIME_CONVERSION_FACTOR * game->config.physicsSettings.fixedUpdateIntervalMS) {
 			return;
@@ -173,5 +177,7 @@ namespace engine {
 		lastPhysicsUpdateTimestamp = Utils::getTimestampNS();
 		fixedUpdate(game->getGameObjects(), game->config.physicsSettings);
 		checkCollisions(game, game->getGameObjects(), game->config.physicsSettings);
+		if (game->isMultiplayerGame())
+			sendMultiplayerState(game);
 	}
 }

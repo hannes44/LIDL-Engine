@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Components/CameraComponent.hpp"
 #include <memory>
 #include <vector>
@@ -72,6 +73,10 @@ namespace engine
 		CameraComponent* getMainCamera();
 
 		RendererSettings renderingSettings{};
+
+		virtual bool isMultiplayerGame() {
+			return false;
+		}
 
 	protected:
 		// 0 is uncapped

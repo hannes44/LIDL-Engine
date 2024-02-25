@@ -27,6 +27,8 @@ int main(int argc, char* argv[])
 
 	auto game = engine::createGame();
 	window.setWindowTitle(game->name);
+	// TODO_MULTIPLAYER: Reactivate once include issues are fixed
+	//game->setupMultiplayer();
 	game->initialize();
 	game->gameLoop();
 

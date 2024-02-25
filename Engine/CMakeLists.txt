@@ -238,7 +238,7 @@ source_group("Audio" FILES
 	src/Audio/AudioManager.hpp
 )
 
-source_group("Multiplayer" FILES
+source_group("MultiplayerClient" FILES
 	src/MultiplayerClient/Client.hpp
 	src/MultiplayerClient/Client.cpp
 )

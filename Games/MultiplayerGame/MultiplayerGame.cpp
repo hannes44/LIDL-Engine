@@ -30,34 +30,45 @@ namespace engine
 		return 10;
 	}
 
-	void MultiplayerGame::onMessage(std::string msg) {
-		std::cout << "MultiplayerClient received:" << std::endl;
-		std::cout << msg << std::endl;
+	bool MultiplayerGame::isMultiplayerGame()
+	{
+		return true;
+	}
 
-		std::string filePath = MULTIPLAYER_STATE_FOLDER + "ParsedState" + GAME_CONFIG_FILE_EXTENSION;
+	void MultiplayerGame::onMultiplayerStateReceived(std::string state)
+	{
+		std::cout << "MultiplayerClient received:" << std::endl;
+		std::cout << state << std::endl;
+
+		std::string filePath = MULTIPLAYER_STATE_FOLDER + "ParsedState" + MULTIPLAYER_STATE_FILE_EXTENSION;
 
 		LOG_INFO("Creating YAML file from received state: " + filePath);
 		std::ofstream outfile(filePath);
-		outfile << msg.c_str();
+		outfile << state.c_str();
 		outfile.close();
 
 		GameSerializer::deserializeMultiplayerState(this, filePath);
 	}
 
-	GameObject* MultiplayerGame::getRemoteBox() {
-		for (auto it = gameObjects.begin(); it != gameObjects.end(); it++)
-		{
-			auto gameObject = it->second.get();
-			if (gameObject->name == "Remote box") {
-				return gameObject;
-			}
-		}
+	// TODO_MULTIPLAYER: Move this to Game.hpp once include issues are resolved
+	void MultiplayerGame::setupMultiplayer() {
+		if (!isMultiplayerGame())
+			return;
+
+		// Connect to the server
+		multiplayerSocket = engine::Client::OpenSocket();
+
+		// Start the multiplayer receiver in a detached thread
+		std::thread receiver(engine::Client::RunReceiver, multiplayerSocket, std::bind(&MultiplayerGame::onMultiplayerStateReceived, this, std::placeholders::_1));
+		// Start the multiplayer transmitter in a detached thread
+		std::thread transmitter(engine::Client::RunTransmitter, multiplayerSocket);
+
+		receiver.detach();
+		transmitter.detach();
 	}
 
-	void MultiplayerGame::moveRemoteBox() {
-		auto remoteBox = getRemoteBox();
-		remoteBox->transform.shiftPosition(glm::vec3(-2, 0, 0));
-
+	// TODO_MULTIPLAYER: Move this to the Physics Engine once include issues are resolved
+	void MultiplayerGame::sendMultiplayerState() {
 		std::string filePath = GameSerializer::serializeMultiplayerState(MULTIPLAYER_STATE_FOLDER, this);
 
 		if (!std::ifstream(filePath).good()) {
@@ -75,6 +86,24 @@ namespace engine
 		Client::QueueMessage({ ClientMessageType::StateUpdate, message });
 	}
 
+	GameObject* MultiplayerGame::getRemoteBox() {
+		for (auto it = gameObjects.begin(); it != gameObjects.end(); it++)
+		{
+			auto gameObject = it->second.get();
+			if (gameObject->name == "Remote box") {
+				return gameObject;
+			}
+		}
+	}
+
+	void MultiplayerGame::moveRemoteBox() {
+		auto remoteBox = getRemoteBox();
+		remoteBox->transform.shiftPosition(glm::vec3(-2, 0, 0));
+
+		// TODO_MULTIPLAYER: Move this to the update on the Physics Engine once include issues are resolved
+		sendMultiplayerState();
+	}
+
 	void MultiplayerGame::cycleRemoteBoxColour() {
 		auto remoteBox = getRemoteBox();
 		auto material = remoteBox->getComponent<MeshComponent>()->getMaterial();
@@ -83,6 +112,9 @@ namespace engine
 			greenValue = 1.f;
 
 		material->setBaseColor(glm::vec3(0, greenValue, 0));
+
+		// TODO_MULTIPLAYER: Move this to the update on the Physics Engine once include issues are resolved
+		sendMultiplayerState();
 	}
 
 	void MultiplayerGame::handleInput(const InputEvent& event) {
@@ -113,16 +145,8 @@ namespace engine
 
 	void MultiplayerGame::initialize()
 	{
-		// Connect to the server
-		SOCKET clientSocket = engine::Client::OpenSocket();
-		
-		// Start the multiplayer receiver in a detached thread
-		std::thread receiver(engine::Client::RunReceiver, clientSocket, std::bind(&MultiplayerGame::onMessage, this, std::placeholders::_1));
-		// Start the multiplayer transmitter in a detached thread
-		std::thread transmitter(engine::Client::RunTransmitter, clientSocket);
-		
-		receiver.detach();
-		transmitter.detach();
+		// TODO_MULTIPLAYER: Move this to the Game initialization once include issues are resolved
+		setupMultiplayer();
 
 		engine::PointLightComponent pointLightComponent = engine::PointLightComponent();
 

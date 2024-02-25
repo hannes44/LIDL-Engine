@@ -2,6 +2,7 @@
 
 #include <Engine.hpp>	
 #include <vector>
+#include <WinSock2.h>
 
 namespace engine {
 	class MultiplayerGame : public Game, public InputListener {
@@ -11,7 +12,10 @@ namespace engine {
 		void initialize() override;
 
 		void handleInput(const InputEvent& event) override;
+		bool isMultiplayerGame() override;
 
+		// TODO_MULTIPLAYER: Move to Game.hpp once include issues are resolved
+		void setupMultiplayer();
 		
 	protected:
 		double getTargetFrameRate() override;
@@ -19,9 +23,13 @@ namespace engine {
 		void moveRemoteBox();
 		void cycleRemoteBoxColour();
 
-		void onMessage(std::string msg);
+		// TODO_MULTIPLAYER: Move this to the Physics Engine once include issues are resolved
+		void sendMultiplayerState();
 
-
+		// TODO_MULTIPLAYER: Move these to Game.hpp once include issues are resolved
 		std::string MULTIPLAYER_STATE_FOLDER = "../../MultiplayerStates/";
+		std::string MULTIPLAYER_STATE_FILE_EXTENSION = ".yaml";
+		SOCKET multiplayerSocket = INVALID_SOCKET;
+		void onMultiplayerStateReceived(std::string state);
 	};
 }

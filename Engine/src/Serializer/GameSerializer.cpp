@@ -151,7 +151,8 @@ namespace engine
 
 		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
 		{
-			if (gameObject->hasComponent<MultiplayerComponent>())
+			// Only serialize multiplayer GameObjects, and do not serialize imported GameObjects
+			if (gameObject->hasComponent<MultiplayerComponent>() && !gameObject->name._Starts_with("MGO_"))
 				serializeGameObject(gameObject.get(), out);
 		}
 
@@ -414,8 +415,18 @@ namespace engine
 	}
 
 	// Deserializes the multiplayer state from a file path
-	void GameSerializer::deserializeMultiplayerState(Game* game, std::string gameStateFilePath) {
-		deserializeGameState(game, gameStateFilePath);
+	void GameSerializer::deserializeMultiplayerState(Game* game, std::string gameStateFilePath)
+	{
+		LOG_INFO("Deserializing game state: {}", game->name);
+		LOG_TRACE("Loading file: " + gameStateFilePath);
+		YAML::Node state = YAML::LoadFile(gameStateFilePath);
+
+
+		deserializeTextures(state, game);
+		deserializeMaterials(state, game);
+		deserializeMultiplayerGameObjects(state, game);
+
+		LOG_INFO("Deserialized game state: " + game->name);
 	}
 
 	// Deserializes the game state from the game name's folder
@@ -481,7 +492,7 @@ namespace engine
 
 			std::string diffuseTextureId = materialNode["Diffuse Texture"].as<std::string>();
 			std::string specularTextureId = materialNode["Specular Texture"].as<std::string>();
-
+			
 			if (diffuseTextureId != "")
 			{
 				material->diffuseTexture = game->getTexture(diffuseTextureId);
@@ -551,18 +562,18 @@ namespace engine
 			try
 			{
 				YAML::Node gameObjectNode = *it;
-				std::string gameObjectName = gameObjectNode["name"].as<std::string>();
+				std::string gameObjectName = "MGO_" + gameObjectNode["name"].as<std::string>();
 
 				auto existingGameObjects = game->getGameObjects();
-				
+
 				auto match = std::find_if(existingGameObjects.begin(), existingGameObjects.end(), [&](const std::pair<std::string, std::shared_ptr<GameObject>>& gameObject) {
 					return gameObject.second->name == gameObjectName;
 				});
 				if (match != existingGameObjects.end())
-					game->deleteGameObject(game->getGameObject(gameObjectName).lock().get());
+					game->deleteGameObject(game->getGameObject(match->second->uuid.id).lock().get());
 
 				std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>();
-				gameObject->name = "MGO_" + gameObjectName;
+				gameObject->name = gameObjectName;
 				std::vector<float> transformMatrix = gameObjectNode["transform"].as<std::vector<float>>();
 				std::copy(transformMatrix.begin(), transformMatrix.end(), &gameObject->transform.transformMatrix[0][0]);
 				gameObject->isVisible = gameObjectNode["isVisible"].as<bool>();
