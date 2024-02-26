@@ -1,0 +1,47 @@
+GameObjects:
+  - name: Light
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 58.8534431, 0, 1]
+    isVisible: true
+    Id: cQTDJdjWAUkfhQiqktDDBWTtcOBPcqgc
+    Components:
+      - name: PointLight
+        Color: [1, 1, 1]
+        Intensity: 10
+  - name: EnemyManager
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+    isVisible: true
+    Id: mlvFwSsLPuYXLJqjKAmWeNVUdZBiVSoJ
+    Components:
+      - name: Scriptable
+        scriptFileName: EnemyManager.cs
+  - name: GameCamera
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+    isVisible: true
+    Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
+    Components:
+      - name: Camera
+        FOV: 50
+        Near Plane: 0.100000001
+        Far Plane: 1000
+        Is Main Camera: false
+  - name: Plane
+    transform: [175.617752, 0, 0, 0, 0, 1, 0, 0, 0, 0, 129.501724, 0, 0, 0, 0, 1]
+    isVisible: true
+    Id: sMlWhtjyDGUJBMUHljEtTwiOdvZjwYTZ
+    Components:
+      - name: Mesh
+        OBJ File: ""
+        Primative Type: PLANE
+        Material: bkbCvuwlPUqrIjktAUENfFgZDntkKrIZ
+Textures:
+  []
+Materials:
+  - Base Color: [0.123702407, 0.764705896, 0.387644976]
+    Transparency: 1
+    Emission: [0, 0, 0]
+    Roughness: 0
+    Shininess: 0.5
+    Name: Ground Material
+    Diffuse Texture: ""
+    Specular Texture: ""
+    Id: bkbCvuwlPUqrIjktAUENfFgZDntkKrIZ
