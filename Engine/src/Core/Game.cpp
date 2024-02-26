@@ -45,6 +45,13 @@ namespace engine {
 		return texture;
 	}
 
+	void Game::resetGameState()
+	{
+		gameObjects.clear();
+		materials.clear();
+		textures.clear();
+	}
+
 	std::weak_ptr<Selectable> Game::getSelectable(const std::string& id)
 	{
 		if (gameObjects.count(id))

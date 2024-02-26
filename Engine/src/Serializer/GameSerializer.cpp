@@ -321,6 +321,8 @@ namespace engine
 		LOG_TRACE("Loading file: " + gameConfigFilePath);
 		YAML::Node config = YAML::LoadFile(gameConfigFilePath);
 
+		game->resetGameState();
+
 		deserializeGameConfig(game);
 
 		deserializeGameState(game);

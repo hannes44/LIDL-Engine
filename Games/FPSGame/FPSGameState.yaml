@@ -24,6 +24,15 @@ GameObjects:
         Near Plane: 0.100000001
         Far Plane: 1000
         Is Main Camera: false
+  - name: Player
+    transform: [1, 0, 0, 0, 0, 7.36903429, 0, 0, 0, 0, 1, 0, 0, 2.14822531, 0, 1]
+    isVisible: true
+    Id: pRTLVhHmWbDxtVlOtBwabQKFiAdUmjSP
+    Components:
+      - name: Mesh
+        OBJ File: ""
+        Primative Type: CUBE
+        Material: UaBqVGDYHiwVQLuKdRiZaRZIEqaIjnWw
   - name: Plane
     transform: [175.617752, 0, 0, 0, 0, 1, 0, 0, 0, 0, 129.501724, 0, 0, 0, 0, 1]
     isVisible: true

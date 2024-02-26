@@ -57,6 +57,9 @@ namespace engine
 
 		const std::map<std::string, std::shared_ptr<Material>> getMaterials() const { return materials; };
 
+		// Deletes all game objects, textures, and materials
+		void resetGameState();
+
 		// Returns a selectable object with the given id
 		std::weak_ptr<Selectable> getSelectable(const std::string& id);
 
