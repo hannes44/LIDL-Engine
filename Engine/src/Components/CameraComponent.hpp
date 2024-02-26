@@ -9,14 +9,13 @@ namespace engine
 	class CameraComponent : public Component, public InputListener
 	{
 	public:
-		CameraComponent(glm::vec3 offset = glm::vec3(0, 0, 0)) : offset(offset) {};
+		CameraComponent() {};
 		void translate(float x, float y, float z);
 		void rotate(float angle, float x, float y, float z);
+		
+        void update();
 
-		void handleInput(const InputEvent& event) override;
-		void update();
-
-		bool isMainCamera = false;
+        bool isMainCamera = false;
 
 		std::vector<SerializableVariable> getSerializableVariables() override
 		{
@@ -33,12 +32,6 @@ namespace engine
 		glm::mat4 getViewMatrix();
 		glm::mat4 getProjectionMatrix();
 		glm::mat4 getProjectionMatrix(int width, int height);
-
-		glm::vec3 rotation{ 90, 0, 0 };
-		glm::vec3 direction{ -1, -1, -1 };
-		glm::vec3 worldUp{ 0.0f, 1.0f, 0.0f };
-		glm::vec3 offset{ 0, 0, 0 };
-
 
 		float fov = 50;
 		float nearPlane = 0.1;

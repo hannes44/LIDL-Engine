@@ -5,6 +5,7 @@
 #include "ControllableComponent.hpp"
 #include "PhysicsComponent.hpp"
 #include "Core/GameObject.hpp"
+#include <glm/glm.hpp>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/hash.hpp>
@@ -33,6 +34,13 @@ namespace engine {
 		std::string getName() override;
 		void initialize() override;
 
+		bool isMouseDragging;
+
+		glm::vec3 worldUp{ 0.0f, 1.0f, 0.0f };
+		glm::vec3 direction{ -1, -1, -1 };
+
+		float rotationSpeed = 0.005f;
+
 		std::set<std::string> getRequiredComponents() override;
 
 		void handleInput(const InputEvent& event) override;
@@ -42,5 +50,6 @@ namespace engine {
 
 		void moveOnHold(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent);
 		void alwaysMove(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent);
-	};
+        void changeDirection(const InputEvent &event);
+    };
 }
