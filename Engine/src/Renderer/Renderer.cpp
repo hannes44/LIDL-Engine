@@ -242,7 +242,6 @@ namespace engine
 		cameraGO->addComponent(camera);
 
 		camera->getTransform().setPosition(glm::vec3(2.5, 0, 2.5));
-		camera->direction = glm::vec3(-1, 0, -1);
 
 		graphicsAPI->setViewport(0, 0, width, height);
 
