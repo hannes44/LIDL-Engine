@@ -5,6 +5,7 @@
 #include "Window.hpp"
 #include "Physics/GamePhysics.hpp"
 #include "Core/Logger.hpp"
+#include "Components/ColliderComponent.hpp"
 
 constexpr auto TIME_CONVERSION_FACTOR = 1000000000;
 
@@ -177,5 +178,52 @@ namespace engine {
 		}
 
 		return nullptr;
+	}
+
+	std::vector<std::shared_ptr<GameObject>> Game::checkRayCollisions(glm::vec3 origin, glm::vec3 direction) {
+		std::vector<RayCollision> collisions{};
+		for (auto& [id, gameObject] : gameObjects) {
+			auto collision = checkRayCollision(gameObject, origin, direction);
+			if (collision.collision)
+				collisions.push_back(collision);
+		}
+
+		std::sort(collisions.begin(), collisions.end());
+
+		std::vector<std::shared_ptr<GameObject>> collidingObjects{};
+		for (auto& collision : collisions)
+			collidingObjects.push_back(collision.gameObject);
+
+		return collidingObjects;
+	}
+
+	glm::vec3 vec3min(glm::vec3 a, glm::vec3 b) {
+		return glm::vec3(min(a.x, b.x), min(a.y, b.y), min(a.z, b.z));
+	}
+
+	glm::vec3 vec3max(glm::vec3 a, glm::vec3 b) {
+		return glm::vec3(max(a.x, b.x), max(a.y, b.y), max(a.z, b.z));
+	}
+
+	RayCollision Game::checkRayCollision(std::shared_ptr<GameObject> gameObject, glm::vec3 origin, glm::vec3 direction) {
+		auto collider = gameObject->getComponent<ColliderComponent>();
+		if (collider == nullptr)
+			return { false, 0, 0, gameObject };
+
+		direction = glm::normalize(direction);
+
+		// TODO: Since we are checking multiple boxes with the same ray, this can be optimized
+		// See https://gist.github.com/DomNomNom/46bb1ce47f68d255fd5d
+		auto aabb = collider->getBoundingBox();
+		glm::vec3 tMin = (aabb.getMin() - origin) / direction;
+		glm::vec3 tMax = (aabb.getMax() - origin) / direction;
+
+		glm::vec3 t1 = vec3min(tMin, tMax);
+		glm::vec3 t2 = vec3max(tMin, tMax);
+
+		float tNear = max(max(t1.x, t1.y), t1.z);
+		float tFar = min(min(t2.x, t2.y), t2.z);
+
+		return { tNear >= 0 && tNear < tFar, tNear, tFar, gameObject };
 	}
 }
