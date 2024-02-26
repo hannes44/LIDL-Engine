@@ -13,6 +13,18 @@
 
 namespace engine
 {
+	struct RayCollision {
+		bool collision = false;
+		float nearCollision = 0;
+		float farCollision = 0;
+		std::shared_ptr<GameObject> gameObject;
+
+		bool operator < (const RayCollision& other) const
+		{
+			return nearCollision < other.nearCollision;
+		}
+	};
+
 	class Game
 	{
 	public:
@@ -73,7 +85,11 @@ namespace engine
 
 		RendererSettings renderingSettings{};
 
+		/// Returns a vector of the GameObjects that collided with the ray, sorted from closest to farthest
+		std::vector<std::shared_ptr<GameObject>> checkRayCollisions(glm::vec3 origin, glm::vec3 direction);
+
 	protected:
+		RayCollision checkRayCollision(std::shared_ptr<GameObject> gameObject, glm::vec3 origin, glm::vec3 direction);
 		// 0 is uncapped
 		virtual double getTargetFrameRate() = 0;
 
