@@ -674,6 +674,13 @@ bool isAddComponentVisible = false;
 				ImGui::InputText("##GameObjectNameInput", gameObjectNameBuffer, 255);
 				lockedGameObject->name = gameObjectNameBuffer;
 
+				ImGui::Text("Tag");
+				ImGui::SameLine();
+				static char gameObjectTagBuffer[255];
+				strcpy(gameObjectTagBuffer, lockedGameObject->tag.c_str());
+				ImGui::InputText("##GameObjectTagInput", gameObjectTagBuffer, 255);
+				lockedGameObject->tag = gameObjectTagBuffer;
+
 				// Since all gameobjects have a transform, we can always draw the transform
 				if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 				{

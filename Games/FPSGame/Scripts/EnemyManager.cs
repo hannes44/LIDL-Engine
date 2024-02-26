@@ -9,6 +9,13 @@ public class EnemyManager
     // The gameObject this component is attached to
     public GameObject gameObject = new GameObject();
 
+    [SerializableData] public int currentRound = 1;
+
+    public GameObject enemyPrefab = new GameObject();
+
+    public int enemiesToSpawn = 10;
+
+
 
     // Update is called once per frame
     public void Update()
@@ -24,6 +31,17 @@ public class EnemyManager
 
     private void SpawnEnemy()
     {
-        EngineAPI.AddGameObject("Enemy");
+        for (int i = 0; i < enemiesToSpawn; i++)
+        {
+            EngineAPI.AddGameObject("Enemy");
+        }
+    }
+
+    private void NextRound()
+    {
+        currentRound++;
+
+        // Increasing the number of enemies to spawn each round
+        enemiesToSpawn += 5;
     }
 }

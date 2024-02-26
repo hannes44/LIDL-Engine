@@ -1,8 +1,21 @@
 GameObjects:
+  - name: EnemyPrefab
+    transform: [1.90553308, 0, 0, 0, 0, 3.98312092, 0, 0, 0, 0, 1, 0, 0, 30.4076233, 0, 1]
+    isVisible: true
+    Id: DtuMLenGYcDLdGyqOFrcULacGKHcQDEH
+    tag: EnemyPrefab
+    Components:
+      - name: Mesh
+        OBJ File: ""
+        Primative Type: CUBE
+        Material: hZYYcYtKpiPCHvMlODrrndOPQMbqNcru
+      - name: Scriptable
+        scriptFileName: Enemy.cs
   - name: Light
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 58.8534431, 0, 1]
     isVisible: true
     Id: cQTDJdjWAUkfhQiqktDDBWTtcOBPcqgc
+    tag: ""
     Components:
       - name: PointLight
         Color: [1, 1, 1]
@@ -11,13 +24,16 @@ GameObjects:
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
     isVisible: true
     Id: mlvFwSsLPuYXLJqjKAmWeNVUdZBiVSoJ
+    tag: ""
     Components:
       - name: Scriptable
+        currentRound: 1
         scriptFileName: EnemyManager.cs
   - name: GameCamera
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
     isVisible: true
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
+    tag: ""
     Components:
       - name: Camera
         FOV: 50
@@ -28,6 +44,7 @@ GameObjects:
     transform: [1, 0, 0, 0, 0, 7.36903429, 0, 0, 0, 0, 1, 0, 0, 2.14822531, 0, 1]
     isVisible: true
     Id: pRTLVhHmWbDxtVlOtBwabQKFiAdUmjSP
+    tag: Player
     Components:
       - name: Mesh
         OBJ File: ""
@@ -37,13 +54,16 @@ GameObjects:
     transform: [175.617752, 0, 0, 0, 0, 1, 0, 0, 0, 0, 129.501724, 0, 0, 0, 0, 1]
     isVisible: true
     Id: sMlWhtjyDGUJBMUHljEtTwiOdvZjwYTZ
+    tag: ""
     Components:
       - name: Mesh
         OBJ File: ""
         Primative Type: PLANE
         Material: bkbCvuwlPUqrIjktAUENfFgZDntkKrIZ
 Textures:
-  []
+  - name: glocken
+    fileName: glocken.png
+    Id: hQuVVhkiCALSLeNAaVdGXGXezifThHKL
 Materials:
   - Base Color: [0.123702407, 0.764705896, 0.387644976]
     Transparency: 1
@@ -54,3 +74,12 @@ Materials:
     Diffuse Texture: ""
     Specular Texture: ""
     Id: bkbCvuwlPUqrIjktAUENfFgZDntkKrIZ
+  - Base Color: [1, 1, 1]
+    Transparency: 1
+    Emission: [0, 0, 0]
+    Roughness: 0
+    Shininess: 0.5
+    Name: Enemy Material
+    Diffuse Texture: hQuVVhkiCALSLeNAaVdGXGXezifThHKL
+    Specular Texture: ""
+    Id: hZYYcYtKpiPCHvMlODrrndOPQMbqNcru

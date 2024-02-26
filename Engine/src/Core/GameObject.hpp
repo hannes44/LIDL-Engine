@@ -31,6 +31,8 @@ namespace engine
 
 		std::string name = "GameObject";
 
+		std::string tag = "";
+
 		UUID uuid{};
 
 		UUID getUUID() override;
@@ -60,6 +62,7 @@ namespace engine
 		std::string getName() override { return name; };
 
 		GameObject clone();
+
 
 	private:
 		// TODO: Should limit each component to one of each type

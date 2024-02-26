@@ -35,11 +35,11 @@ namespace engine
 	{
 		sol::state_view lua(L);
 
-		syncTransformStateEngineToScript(component);
+		syncGameObjectStateEngineToScript(component);
 		syncScriptableVariablesToScript(component);
 		sol::table componentTable = lua[component->uuid.id];
 		componentTable["Update"](componentTable);
-		syncTransformStateScriptToEngine(component);
+		syncGameObjectStateScriptToEngine(component);
 		syncScriptableVariablesToEngine(component);
 	}
 
@@ -52,11 +52,11 @@ namespace engine
 
 		sol::state_view lua(L);
 		
-		syncTransformStateEngineToScript(component);
+		syncGameObjectStateEngineToScript(component);
 		syncScriptableVariablesToScript(component);
 		sol::table componentTable = lua[component->uuid.id];
 		componentTable["Initialize"](componentTable);
-		syncTransformStateScriptToEngine(component);
+		syncGameObjectStateScriptToEngine(component);
 		syncScriptableVariablesToEngine(component);
 
 		
@@ -291,11 +291,11 @@ namespace engine
 		sol::state_view lua(L);
 		std::string Id = component->uuid.id;
 
-		syncTransformStateEngineToScript(component);
+		syncGameObjectStateEngineToScript(component);
 		syncScriptableVariablesToScript(component);
 		sol::table componentTable = lua[component->uuid.id];
 		componentTable["OnInput"](componentTable, event.getAction(), event.getX(), event.getY());
-		syncTransformStateScriptToEngine(component);
+		syncGameObjectStateScriptToEngine(component);
 		syncScriptableVariablesToEngine(component);
 	}
 
@@ -304,6 +304,28 @@ namespace engine
 		sol::state_view lua(L);
 		lua["__log__"] = Debug::Log;
 		lua.set_function("__addGameObject__", &Game::createGameObject, game);
+	}
+
+	void ScriptEngine::syncGameObjectStateEngineToScript(ScriptableComponent* component)
+	{
+		syncTransformStateEngineToScript(component);
+
+		sol::state_view lua(L);
+		lua[component->uuid.id]["gameObject"]["name"] = component->gameObject->name;
+		lua[component->uuid.id]["gameObject"]["tag"] = component->gameObject->tag;
+		lua[component->uuid.id]["gameObject"]["isVisible"] = component->gameObject->isVisible;
+		lua[component->uuid.id]["gameObject"]["Id"] = component->gameObject->uuid.id;
+	}
+
+	void ScriptEngine::syncGameObjectStateScriptToEngine(ScriptableComponent* component)
+	{
+		syncTransformStateScriptToEngine(component);
+
+		sol::state_view lua(L);
+		component->gameObject->name = lua[component->uuid.id]["gameObject"]["name"];
+		component->gameObject->tag = lua[component->uuid.id]["gameObject"]["tag"];
+		component->gameObject->isVisible = lua[component->uuid.id]["gameObject"]["isVisible"];
+		component->gameObject->uuid.id = lua[component->uuid.id]["gameObject"]["Id"];
 	}
 
 	// Syncs the transform state of the components gameObject to the lua state

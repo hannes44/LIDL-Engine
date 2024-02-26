@@ -126,6 +126,8 @@ namespace engine
 		out << YAML::Key << "Id";
 		// TODO: Add proper Id when UUID is implemented
 		out << YAML::Value << gameObject->uuid.id;
+		out << YAML::Key << "tag";
+		out << YAML::Value << gameObject->tag;
 
 		serializeComponents(gameObject->getComponents(), out);
 
@@ -458,6 +460,7 @@ namespace engine
 				std::copy(transformMatrix.begin(), transformMatrix.end(), &gameObject->transform.transformMatrix[0][0]);
 				gameObject->isVisible = gameObjectNode["isVisible"].as<bool>();
 				gameObject->uuid.id = gameObjectNode["Id"].as<std::string>();
+				gameObject->tag = gameObjectNode["tag"].as<std::string>();
 				deserializeComponents(gameObjectNode, gameObject.get(), game);
 				game->addGameObject(gameObject);
 			}
