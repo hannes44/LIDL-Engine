@@ -955,10 +955,8 @@ bool isAddComponentVisible = false;
 				std::string data = *static_cast<std::string*>(seralizableVariable.data);
 				ImGui::Text((seralizableVariable.name + ":").c_str());
 				ImGui::SameLine();
-				char name[32];
-				memcpy(name, data.c_str(), 32);
-				char buf[64];
-				sprintf(buf, "%s###Button", name);
+				char name[64];
+				memcpy(name, data.c_str(), 64);
 				ImGui::InputText(("##"+seralizableVariable.name).c_str(), name, IM_ARRAYSIZE(name));
 				*static_cast<std::string*>(seralizableVariable.data) = name;
 
