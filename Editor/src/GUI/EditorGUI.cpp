@@ -41,6 +41,8 @@ bool isAddComponentVisible = false;
 		}
 
 		auto editorCameraGameObject = std::make_shared<GameObject>();
+
+		// Create a custom controllable component for the editor camera
 		auto editorCameraControllableComponent = std::make_shared<ControllableComponent>();
 		editorCameraControllableComponent->setGameObject(editorCameraGameObject.get());
 		editorCameraControllableComponent->movementSpeed = 5.f;
@@ -48,7 +50,8 @@ bool isAddComponentVisible = false;
 		editorCameraControllableComponent->enableForces = false;
 		editorCameraControllableComponent->initialize();
 
-		auto editorCameraComponent = std::make_shared<CameraComponent>();
+		// Create a camera component for the editor camera
+		auto editorCameraComponent = std::make_shared<CameraComponent>();		
 
 		editorCameraGameObject->addComponent(editorCameraComponent);
 		editorCameraGameObject->addComponent(std::make_unique<PhysicsComponent>());
@@ -57,7 +60,6 @@ bool isAddComponentVisible = false;
 		editorCameraGameObject->transform.setPosition(glm::vec3(0, 0, 5));
 
 		editorCamera = editorCameraGameObject;
-
 
 		auto editorGameObjects = std::map<std::string, std::shared_ptr<GameObject>>();
 		editorGameObjects[editorCameraGameObject->getUUID().id] = editorCameraGameObject;
