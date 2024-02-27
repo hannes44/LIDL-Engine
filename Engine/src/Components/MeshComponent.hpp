@@ -70,7 +70,9 @@ namespace engine
 
 		std::string objFileName = "";
 
-
+		std::shared_ptr<Component> clone() override {
+			return std::make_shared<MeshComponent>(*this);
+		}
 		//--------------------------------------
 
 	private:

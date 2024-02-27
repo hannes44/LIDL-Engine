@@ -34,7 +34,7 @@ namespace engine
 		// Called at initialization
 		virtual void initialize() = 0;
 
-		bool running = true;
+		bool running = false;
 
 		const void run();
 

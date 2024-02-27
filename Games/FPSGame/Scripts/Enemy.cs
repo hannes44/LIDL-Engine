@@ -19,6 +19,7 @@ public class Enemy
     // Initialize is called once the component is added to the game
     public void Initialize()
     {
+        EngineAPI.Log("Enemy initialized");
         // Randomize the position of the enemy
         Random random = new Random();
         int x = random.Next(0, 100);

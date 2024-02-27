@@ -187,10 +187,9 @@ bool isAddComponentVisible = false;
 				if (auto lockedCopiedGameObject = copiedGameObject.lock())
 				{
 					LOG_INFO("Pasting game object");
-					GameObject newGameObject = lockedCopiedGameObject->clone();
-					std::shared_ptr<GameObject> newGameObjectPtr = std::make_shared<GameObject>(newGameObject);
-					game->addGameObject(newGameObjectPtr);
-					selectedObject = newGameObjectPtr;
+					std::shared_ptr<GameObject> newGameObject = lockedCopiedGameObject->clone();
+					game->addGameObject(newGameObject);
+					selectedObject = newGameObject;
 				}
 			}
 		}
@@ -1179,20 +1178,24 @@ bool isAddComponentVisible = false;
 	{
 		// Save the current state of the game
 		GameSerializer::serializeGame(game.get());
-
+		game->running = true;
 		for (auto& [gameObjectId, gameObject] : game->getGameObjects())
 		{
 			gameObject->initialize();
 		}
+
+
 		sceneState = EditorSceneState::Play;
 	}
 
 	void EditorGUI::stopGame()
 	{
+		game->running = false;
 		// Overwrite the current state of the game with the saved state
 		GameSerializer::deserializeGame(game.get());
 
 		// We should probably reset the sript states aswell since only serializable script variables will be reset
+
 
 		sceneState = EditorSceneState::Scene;
 	}

@@ -49,5 +49,8 @@ namespace engine
 
 		std::string getName() override { return "Camera"; };
 
+		std::shared_ptr<Component> clone() override {
+			return std::make_shared<CameraComponent>(*this);
+		}
 	};
 }

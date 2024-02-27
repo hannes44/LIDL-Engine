@@ -211,10 +211,14 @@ namespace engine {
 		{
 			if (gameObject->tag == tag)
 			{
-				GameObject newGameObject = gameObject->clone();
-				newGameObject.uuid = UUID();
-				newGameObject.name = gameObject->name + " (Clone)";
-				gameObjects[newGameObject.uuid.id] = std::make_shared<GameObject>(newGameObject);
+				std::shared_ptr<GameObject> newGameObject = gameObject->clone();
+				gameObjects[newGameObject->uuid.id] = newGameObject;
+
+				// if the game object is spawned while the game is running, initialize it
+				if (running)
+				{
+					gameObjects[newGameObject->uuid.id]->initialize();
+				}
 				break;
 			}
 		}

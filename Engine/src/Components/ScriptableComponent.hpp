@@ -55,6 +55,14 @@ namespace engine
 
 		void handleInput(const InputEvent& event) override;
 
+		std::shared_ptr<Component> clone() override {
+			std::shared_ptr<ScriptableComponent> clone = std::make_shared<ScriptableComponent>();
+			clone->scriptFileName = scriptFileName;
+			
+
+
+			return clone;
+		}
 	private:
 		std::string scriptFileName = "";
 	};

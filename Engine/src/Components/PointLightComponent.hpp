@@ -15,6 +15,10 @@ namespace engine
 
 		inline static const std::string name = "PointLight";
 
+		std::shared_ptr<Component> clone() override {
+			return std::make_shared<PointLightComponent>(*this);
+		}
+
 		std::vector<SerializableVariable> getSerializableVariables() override
 		{
 			return

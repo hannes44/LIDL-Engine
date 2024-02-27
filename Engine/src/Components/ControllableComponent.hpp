@@ -33,6 +33,10 @@ namespace engine {
 		std::set<std::string> getRequiredComponents() override;
 
 		void handleInput(const InputEvent& event) override;
+
+		std::shared_ptr<Component> clone() override {
+			return std::make_shared<ControllableComponent>(*this);
+		}
 	protected:
 		std::unordered_set<glm::vec3> applied{};
 		void apply(std::shared_ptr<PhysicsComponent> physicsComponent, glm::vec3 vector);

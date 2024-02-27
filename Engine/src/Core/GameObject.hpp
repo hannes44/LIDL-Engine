@@ -61,7 +61,7 @@ namespace engine
 
 		std::string getName() override { return name; };
 
-		GameObject clone();
+		std::shared_ptr<GameObject> clone();
 
 
 	private:

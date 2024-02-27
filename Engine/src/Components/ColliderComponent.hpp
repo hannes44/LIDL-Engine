@@ -27,6 +27,7 @@ namespace engine {
 			};
 		};
 
+
 	protected:
 		bool deepCollisionCheck(ColliderComponent* other);
 

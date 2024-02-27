@@ -18,6 +18,13 @@ namespace engine
 	void GameSerializer::serializeGame(Game* game)
 	{
 		LOG_INFO("Serializing game: " + game->name);
+
+		if (game->running)
+		{
+			LOG_WARN("Cannot serialize game while it is running");
+			return;
+		}
+
 		std::string directoryFilePath = GAME_FOLDER_PATH + game->name;
 		std::string insideDirectoryFilePath = directoryFilePath + "/";
 
