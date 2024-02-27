@@ -77,7 +77,6 @@ bool isAddComponentVisible = false;
 
 		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png", false));
 
-
 		
 		while (!quitProgram)
 		{

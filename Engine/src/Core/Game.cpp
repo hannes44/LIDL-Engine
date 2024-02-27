@@ -204,6 +204,22 @@ namespace engine {
 		return collidingObjects;
 	}
 
+	void Game::spawnClonedGameObjectFromTag(std::string tag)
+	{
+		LOG_INFO("Spawning object with tag: " + tag);
+		for (auto& [id, gameObject] : gameObjects)
+		{
+			if (gameObject->tag == tag)
+			{
+				GameObject newGameObject = gameObject->clone();
+				newGameObject.uuid = UUID();
+				newGameObject.name = gameObject->name + " (Clone)";
+				gameObjects[newGameObject.uuid.id] = std::make_shared<GameObject>(newGameObject);
+				break;
+			}
+		}
+	}
+
 	glm::vec3 vec3min(glm::vec3 a, glm::vec3 b) {
 		return glm::vec3(min(a.x, b.x), min(a.y, b.y), min(a.z, b.z));
 	}

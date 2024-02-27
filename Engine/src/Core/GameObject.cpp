@@ -44,6 +44,9 @@ namespace engine {
 	{
 		GameObject newGameObject = *this;
 		newGameObject.uuid = UUID();
+
+
+
 		return newGameObject;
 	}
 }

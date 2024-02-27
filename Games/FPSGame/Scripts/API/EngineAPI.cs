@@ -23,6 +23,12 @@ namespace Engine
             //(c++_API) __log__(message);
         }
 
+        // Clones a game object from a game object with the given tag and spawns it
+        public static void SpawnClonedGameObjectFromTag(string tag)
+        {
+            //(c++_API) __spawnClonedGameObjectFromTag__(tag);
+        }
+
         public static GameObject GetComponentGameObject()
         {
             GameObject gameObject = new GameObject();

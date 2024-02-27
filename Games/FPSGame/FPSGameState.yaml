@@ -1,6 +1,6 @@
 GameObjects:
   - name: EnemyPrefab
-    transform: [1.90553308, 0, 0, 0, 0, 3.98312092, 0, 0, 0, 0, 1, 0, 0, 30.4076233, 0, 1]
+    transform: [1.90553308, 0, 0, 0, 0, 3.98312092, 0, 0, 0, 0, 1, 0, 33, 0, 35, 1]
     isVisible: true
     Id: DtuMLenGYcDLdGyqOFrcULacGKHcQDEH
     tag: EnemyPrefab

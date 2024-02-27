@@ -91,6 +91,9 @@ namespace engine
 		/// Returns a vector of the GameObjects that collided with the ray, sorted from closest to farthest
 		std::vector<std::shared_ptr<GameObject>> checkRayCollisions(glm::vec3 origin, glm::vec3 direction);
 
+		// Clones a game object from a gameobject with the given tag
+		void spawnClonedGameObjectFromTag(std::string tag);
+
 	protected:
 		RayCollision checkRayCollision(std::shared_ptr<GameObject> gameObject, glm::vec3 origin, glm::vec3 direction);
 		// 0 is uncapped
