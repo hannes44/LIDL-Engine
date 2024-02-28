@@ -65,6 +65,16 @@ namespace engine {
 				}
 			}
 		}
+
+		// Check if any action was released
+		for (auto action : prevActionsPressed) {
+			if (std::find(actionsPressed.begin(), actionsPressed.end(), action) == actionsPressed.end()) {
+				ie.setEventType(InputEventType::ActionUp);
+				ie.setAction(action);
+				dispatchEvent(ie);
+			}
+		}
+
 		// Update the list of keys being held
 		prevActionsPressed.clear();
 		prevActionsPressed = actionsPressed;

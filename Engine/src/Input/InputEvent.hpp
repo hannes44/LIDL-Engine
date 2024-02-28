@@ -139,6 +139,7 @@ namespace engine {
 		QuitProgram,
 		ActionDown,
 		ActionHold,
+		ActionUp,
 		KeyDown,
 		KeyUp,
 		MouseButtonDown,
