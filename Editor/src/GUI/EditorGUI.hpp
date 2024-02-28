@@ -37,7 +37,7 @@ namespace engine
 		void endFrame();
 
 		void handleInput(const InputEvent& event) override;
-		
+
 		void onEvent(EventType type, std::string message);
 
 		std::shared_ptr<Game> game = nullptr;
@@ -50,6 +50,8 @@ namespace engine
 
 		void drawLeftSidePanel();
 
+		void drawGameObject(std::shared_ptr<GameObject> gameObject, short tabLevel = 0);
+
 		void drawTopMenu();
 
 		void drawPlayButtonToolbar();
@@ -60,7 +62,7 @@ namespace engine
 
 		void ShowAddComponent();
 
-		void drawGameSettingsTab();	
+		void drawGameSettingsTab();
 
 		void drawBottomPanel();
 
