@@ -137,7 +137,8 @@ namespace engine {
 	};
 	enum class InputEventType {
 		QuitProgram,
-		Action,
+		ActionDown,
+		ActionHold,
 		KeyDown,
 		KeyUp,
 		MouseButtonDown,
