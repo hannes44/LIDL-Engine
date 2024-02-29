@@ -40,6 +40,16 @@ GameObjects:
       - name: PointLight
         Color: [1, 1, 1]
         Intensity: 10
+  - name: House.obj
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 112.499939, -0.428778648, 0, 1]
+    isVisible: true
+    Id: hcOOWXgwkGmFwmMSZYGKKEOvgkQbBsNT
+    tag: ""
+    Components:
+      - name: Mesh
+        OBJ File: House.obj
+        Primative Type: NONE
+        Material: jhlXRMcQvymIssELRfYEwWNFIGGUTuFa
   - name: EnemyManager
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
     isVisible: true
@@ -71,7 +81,7 @@ GameObjects:
         Primative Type: NONE
         Material: TikmfUwkrFNXXjEcaavGVjVaeuMhbFUU
       - name: Scriptable
-        ammoCount: 30
+        ammoCount: 10
         scriptFileName: Weapon.cs
   - name: Player
     transform: [1, 0, 0, 0, 0, 7.36903429, 0, 0, 0, 0, 1, 0, 0, 2.14822531, 0, 1]
@@ -103,6 +113,9 @@ Textures:
   - name: BowieKnife_BaseColor
     fileName: BowieKnife_BaseColor.png
     Id: KBnHTfCYDdtVKBGtpQrUaYiePdhvXhWL
+  - name: cottage_diffuse
+    fileName: cottage_diffuse.png
+    Id: KUraiXCrlPXGbdWQTchbZfzYsiZnjsXn
   - name: glocken
     fileName: glocken.png
     Id: hQuVVhkiCALSLeNAaVdGXGXezifThHKL
@@ -143,6 +156,15 @@ Materials:
     Diffuse Texture: hQuVVhkiCALSLeNAaVdGXGXezifThHKL
     Specular Texture: ""
     Id: hZYYcYtKpiPCHvMlODrrndOPQMbqNcru
+  - Base Color: [1, 1, 1]
+    Transparency: 1
+    Emission: [0, 0, 0]
+    Roughness: 0
+    Shininess: 0.5
+    Name: HouseMaterial
+    Diffuse Texture: KUraiXCrlPXGbdWQTchbZfzYsiZnjsXn
+    Specular Texture: ""
+    Id: jhlXRMcQvymIssELRfYEwWNFIGGUTuFa
 Actions:
   - Reload: [21]
   - Copy: [224, 6]
