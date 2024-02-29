@@ -29,13 +29,21 @@ public class Weapon
         EngineAPI.Log(action);
         if (action == "Fire")
         {
-            ammoCount--;
             if (ammoCount <= 0)
             {
                 EngineAPI.Log("Out of ammo");
             }
+            else
+            {
+                EngineAPI.PlaySound("AK47_Sound.wav");
+                ammoCount--;
+            }
+        }
 
-            EngineAPI.PlaySound("AK47_Sound.wav");
+        if (action == "Reload")
+        {
+            EngineAPI.PlaySound("AK47_Reload.wav");
+            ammoCount = 30;
         }
     }
 }
