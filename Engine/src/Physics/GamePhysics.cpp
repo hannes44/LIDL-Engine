@@ -78,6 +78,11 @@ namespace engine {
 					}
 				}
 
+				if (controllableComponent->enableForces)
+					physicsComponent->setForce(vec);
+				else
+					physicsComponent->setVelocity(vec);
+
 				if (currentDirections.size() > 0)
 					vec = glm::normalize(vec) * controllableComponent->movementSpeed;
 				
@@ -105,6 +110,8 @@ namespace engine {
 				force -= velocity * 0.5f;
 
 			physicsComponent->currentAcceleration = force / physicsComponent->mass;
+			
+			LOG_INFO("Velocity: {0}, {1}, {2}", velocity.x, velocity.y, velocity.z);
 
 			// Update the velocity, but snap to 0 if it is close to 0
 			if (zeroResultantForce && glm::length(velocity) < 0.1f)
