@@ -27,7 +27,6 @@ void engine::Transform::setRotation(glm::quat rotation)
 	//transformMatrix = glm::rotate(transformMatrix, glm::angle(rotation) - glm::angle(getRotation()), glm::vec3(0, 1, 0));
 }
 
-// TODO: Fix this, I do not trust it at all
 void engine::Transform::setRotationFromDirection(glm::vec3 direction, glm::vec3 normal) 
 {
 	glm::vec3 up = normal;
@@ -48,6 +47,23 @@ void engine::Transform::setRotationFromDirection(glm::vec3 direction, glm::vec3 
 	transformMatrix[2][1] = yaxis.z;
 	transformMatrix[2][2] = direction.z;
 
+}
+
+void engine::Transform::setRotationFromQuaternion(const glm::quat& orientation) 
+{
+    glm::mat4 rotationMatrix = glm::mat4_cast(orientation);
+
+    glm::vec3 position = glm::vec3(transformMatrix[3]);
+
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            transformMatrix[i][j] = rotationMatrix[i][j];
+        }
+    }
+
+    transformMatrix[3] = glm::vec4(position, 1.0f);
 }
 
 void engine::Transform::shiftPosition(glm::vec3 offset)
