@@ -53,13 +53,16 @@ namespace engine
 
 		// Create a camera component for the editor camera
 		auto editorCameraComponent = std::make_shared<CameraComponent>();
+		auto editorCameraPhysicsComponent = std::make_shared<PhysicsComponent>();
+		// Hotfix for camera W/S inversed
+		editorCameraPhysicsComponent->forward = glm::vec3(0, 0, -1);
 
 		editorCameraGameObject->addComponent(editorCameraComponent);
-		editorCameraGameObject->addComponent(std::make_unique<PhysicsComponent>());
+		editorCameraGameObject->addComponent(editorCameraPhysicsComponent);
 		editorCameraGameObject->addComponent(editorCameraControllableComponent);
 		editorCameraGameObject->name = "Editor Camera";
-		editorCameraGameObject->transform.setPosition(glm::vec3(0, 7.5f, 20));
-		editorCameraGameObject->transform.setRotationFromDirection(glm::vec3(0, -0.5f, 1), glm::vec3(0, 1, 0));
+		editorCameraGameObject->transform.setPosition(glm::vec3(0, 7.5f, -20));
+		editorCameraGameObject->transform.setRotationFromDirection(glm::vec3(0, 0.5f, -1), glm::vec3(0, 1, 0));
 
 		editorCamera = editorCameraGameObject;
 
