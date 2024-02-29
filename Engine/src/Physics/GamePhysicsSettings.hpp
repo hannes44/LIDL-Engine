@@ -14,6 +14,17 @@ namespace engine {
 		FULLY_INELASTIC
 	};
 
+	enum Direction
+	{
+		None,
+		Up,
+		Down,
+		Left,
+		Right,
+		Forward,
+		Backward
+	};
+
 	class GamePhysicsSettings : public Serializable {
 	public:
 		bool enableForces = true;
