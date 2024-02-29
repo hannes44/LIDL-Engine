@@ -67,7 +67,9 @@ namespace engine {
 		Direction dir = keyToDirection(event.getKey());
 
 		currentDirections.clear();
-		currentDirections.insert(dir);
+
+		if (dir != Direction::None)
+			currentDirections.insert(dir);
 	}
 
 	void ControllableComponent::moveOnHold(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent) 
