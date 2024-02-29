@@ -10,6 +10,7 @@
 #include "Components/ComponentFactory.hpp"
 #include <memory>
 #include <set>
+#include <ranges>
 #include <imgui_internal.h>
 #include <Windows.h>
 #include <regex>
@@ -52,13 +53,16 @@ namespace engine
 
 		// Create a camera component for the editor camera
 		auto editorCameraComponent = std::make_shared<CameraComponent>();
+		auto editorCameraPhysicsComponent = std::make_shared<PhysicsComponent>();
+		// Hotfix for camera W/S inversed
+		editorCameraPhysicsComponent->forward = glm::vec3(0, 0, -1);
 
 		editorCameraGameObject->addComponent(editorCameraComponent);
-		editorCameraGameObject->addComponent(std::make_unique<PhysicsComponent>());
+		editorCameraGameObject->addComponent(editorCameraPhysicsComponent);
 		editorCameraGameObject->addComponent(editorCameraControllableComponent);
 		editorCameraGameObject->name = "Editor Camera";
-		editorCameraGameObject->transform.setPosition(glm::vec3(0, 7.5f, 20));
-		editorCameraGameObject->transform.setRotationFromDirection(glm::vec3(0, -0.5f, 1), glm::vec3(0, 1, 0));
+		editorCameraGameObject->transform.setPosition(glm::vec3(0, 7.5f, -20));
+		editorCameraGameObject->transform.setRotationFromDirection(glm::vec3(0, 0.5f, -1), glm::vec3(0, 1, 0));
 
 		editorCamera = editorCameraGameObject;
 
@@ -408,6 +412,10 @@ namespace engine
 			{
 				ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 0, 0));
 				ImGui::BeginListBox("##2", ImVec2(500, 500));
+
+				 auto rootGameObjects = game->getRootGameObjects();
+				 std::vector<std::shared_ptr<GameObject>> rootGameObjectsList = std::vector<std::shared_ptr<GameObject>>(rootGameObjects.begin(), rootGameObjects.end());
+				 std::ranges::sort(rootGameObjectsList, [](std::shared_ptr<GameObject> a, std::shared_ptr<GameObject> b) { return a->name < b->name; });
 
 				for (auto gameObject : game->getRootGameObjects())
 					drawGameObject(gameObject);
