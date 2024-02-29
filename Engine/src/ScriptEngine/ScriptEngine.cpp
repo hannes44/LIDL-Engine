@@ -18,6 +18,7 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include "Audio/AudioManager.hpp"
 
 
 namespace engine
@@ -305,6 +306,7 @@ namespace engine
 		lua["__log__"] = Debug::Log;
 		lua.set_function("__addGameObject__", &Game::createGameObject, game);
 		lua.set_function("__spawnClonedGameObjectFromTag__", &Game::spawnClonedGameObjectFromTag, game);
+		lua.set_function("__playSound__", &AudioManager::playSound, &AudioManager::getInstance());
 	}
 
 	void ScriptEngine::syncGameObjectStateEngineToScript(ScriptableComponent* component)

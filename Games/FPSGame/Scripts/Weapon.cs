@@ -21,6 +21,6 @@ public class Weapon
     // Initialize is called once the component is added to the game
     public void Initialize()
     {
-
+        EngineAPI.PlaySound("AK47_Sound.wav");
     }
 }

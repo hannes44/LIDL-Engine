@@ -29,6 +29,11 @@ namespace Engine
             //(c++_API) __spawnClonedGameObjectFromTag__(tag);
         }
 
+        public static void PlaySound(string soundName)
+        {
+            //(c++_API) __playSound__(soundName);
+        }
+
         public static GameObject GetComponentGameObject()
         {
             GameObject gameObject = new GameObject();
