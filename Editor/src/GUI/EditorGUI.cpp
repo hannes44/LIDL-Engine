@@ -40,6 +40,35 @@ bool isAddComponentVisible = false;
 			scriptEngine->loadScriptStatesIntoNewLuaState(project->game.get());
 		}
 
+		auto editorCameraGameObject = std::make_shared<GameObject>();
+
+		// Create a custom controllable component for the editor camera
+		auto editorCameraControllableComponent = std::make_shared<ControllableComponent>();
+		editorCameraControllableComponent->setGameObject(editorCameraGameObject.get());
+		editorCameraControllableComponent->movementSpeed = 5.f;
+		editorCameraControllableComponent->movementType = MovementType::OnHold;
+		editorCameraControllableComponent->enableForces = false;
+		editorCameraControllableComponent->initialize();
+
+		// Create a camera component for the editor camera
+		auto editorCameraComponent = std::make_shared<CameraComponent>();		
+
+		editorCameraGameObject->addComponent(editorCameraComponent);
+		editorCameraGameObject->addComponent(std::make_unique<PhysicsComponent>());
+		editorCameraGameObject->addComponent(editorCameraControllableComponent);
+		editorCameraGameObject->name = "Editor Camera";
+		editorCameraGameObject->transform.setPosition(glm::vec3(0, 0, 5));
+
+		editorCamera = editorCameraGameObject;
+
+		auto editorGameObjects = std::map<std::string, std::shared_ptr<GameObject>>();
+		editorGameObjects[editorCameraGameObject->getUUID().id] = editorCameraGameObject;
+		auto editorPhysicsSettings = GamePhysicsSettings();
+		editorPhysicsSettings.enableGravity = false;
+		editorPhysicsSettings.enableCollisions = false;
+		editorPhysicsSettings.fixedUpdateIntervalMS = 10;
+		editorPhysicsSettings.enableFriction = false;
+
 		// We have to save the initial serialization state to avoid serializing the initiated game if the user changes settings
 		bool initialUseSerialization = editorSettings.useSerialization;
 		if (initialUseSerialization)
@@ -60,7 +89,6 @@ bool isAddComponentVisible = false;
 		InputFramework& inputFramework = InputFramework::getInstance();
 		inputFramework.addListener(this);
 
-		inputFramework.addListener(&editorCamera);
 
 		EventManager& eventManager = EventManager::getInstance();
 		eventManager.subscribe(EventType::QuitProgram, this);
@@ -84,6 +112,8 @@ bool isAddComponentVisible = false;
 			renderNewFrame();
 
 			inputFramework.getInput();
+
+			GamePhysics::getInstance().fixedUpdate(editorGameObjects, editorPhysicsSettings);
 
 			renderer->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 			renderer->renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
@@ -797,9 +827,9 @@ bool isAddComponentVisible = false;
 			}
 
 			ImGui::Text("Camera Settings");
-			ImGui::SliderFloat("Camera Speed", &editorCamera.movementSpeed, 0.001f, 1.0f);
-			ImGui::SliderFloat("Camera Sensitivity", &editorCamera.rotationSpeed, 0.001f, 0.1f); 
-			ImGui::SliderFloat("Camera FOV", &editorCamera.fov, 0.1f, 120.0f);
+			ImGui::SliderFloat("Camera Speed", &editorCamera->getComponent<CameraComponent>()->movementSpeed, 0.001f, 1.0f);
+			ImGui::SliderFloat("Camera Sensitivity", &editorCamera->getComponent<CameraComponent>()->rotationSpeed, 0.001f, 0.1f); 
+			ImGui::SliderFloat("Camera FOV", &editorCamera->getComponent<CameraComponent>()->fov, 0.1f, 120.0f);
 			
 		}
 		ImGui::Separator();
@@ -1195,7 +1225,7 @@ bool isAddComponentVisible = false;
 	{
 		if (activeViewPort == ActiveViewPort::Scene)
 		{
-			return &editorCamera;
+			return editorCamera->getComponent<CameraComponent>().get();
 		}
 		else
 		{

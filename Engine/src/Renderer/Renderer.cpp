@@ -11,6 +11,7 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
+#include "Components/PhysicsComponent.hpp"
 
 
 namespace engine
@@ -73,7 +74,7 @@ namespace engine
 		}
 
 		baseShader->setInt("numLights", lightIndex);
-		baseShader->setVec3("viewPos", camera->translation.x, camera->translation.y, camera->translation.z);
+		baseShader->setVec3("viewPos", camera->getTransform().getPosition().x, camera->getTransform().getPosition().y, camera->getTransform().getPosition().z);
 
 
 		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
@@ -121,6 +122,34 @@ namespace engine
 			graphicsAPI->drawIndexed(meshComponent->getVertexArray().get(), meshComponent->indices.size());
 		}
 
+	}
+
+	void Renderer::drawVector(glm::vec3 dir, glm::vec3 pos, CameraComponent* camera)
+	{
+		// 0 - 1
+		const float angle = 0.5f;
+
+		// 0 - 1
+		const float headLength = 0.7f;
+
+		// > 0
+		const float length = 3.f;
+
+		dir = glm::normalize(dir);
+
+		glm::vec3 color = glm::vec3(0, 1, 0);
+		
+		glm::vec3 up = glm::vec3(0, 1, 0);
+		glm::vec3 side = glm::vec3(0, 0, 1);
+		glm::vec3 end = pos + dir * length;
+
+		glm::vec3 right = (1.f + angle) * length * glm::normalize((dir == up || dir == -up) ? glm::cross(dir, side) : glm::cross(dir, up));
+		glm::vec3 midRight = pos + (pos - right) * 0.5f;
+		glm::vec3 midLeft = pos + (pos + right) * 0.5f;
+
+		drawLine(pos, end, color, camera);
+		drawLine(end, end + glm::normalize(midRight - end) * headLength, color, camera);
+		drawLine(end, end + glm::normalize(midLeft - end) * headLength, color, camera);
 	}
 
 	void Renderer::renderGizmos(Game* game, CameraComponent* camera, RendererSettings* renderingSettings)
@@ -202,11 +231,11 @@ namespace engine
 
 		glBindFramebuffer(GL_FRAMEBUFFER, textureFrameBuffer);
 
+		auto cameraGO = std::make_shared<GameObject>();
+		auto camera = std::make_shared<CameraComponent>();
+		cameraGO->addComponent(camera);
 
-		CameraComponent camera = CameraComponent();
-
-		camera.translation = glm::vec3(2.5, 0, 2.5);
-		camera.direction = glm::vec3(-1, 0, -1);
+		camera->getTransform().setPosition(glm::vec3(2.5, 0, 2.5));
 
 		graphicsAPI->setViewport(0, 0, width, height);
 
@@ -225,8 +254,8 @@ namespace engine
 
 		baseShader->bind();
 
-		glm::mat4 projectionMatrix = camera.getProjectionMatrix(width, height);
-		glm::mat4 viewMatrix = camera.getViewMatrix();
+		glm::mat4 projectionMatrix = camera->getProjectionMatrix(width, height);
+		glm::mat4 viewMatrix = camera->getViewMatrix();
 
 		PointLightComponent light = PointLightComponent();
 		light.color = glm::vec3(1, 1, 1);
@@ -244,7 +273,7 @@ namespace engine
 
 		baseShader->setInt("numLights", 1);
 
-		baseShader->setVec3("viewPos", camera.translation.x, camera.translation.y, camera.translation.z);
+		baseShader->setVec3("viewPos", camera->getTransform().getPosition().x, camera->getTransform().getPosition().y, camera->getTransform().getPosition().z);
 
 
 

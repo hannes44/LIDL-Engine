@@ -40,9 +40,6 @@ namespace engine
 
 		const void gameLoop();
 
-		// Currenly limit the game to only one camera
-		CameraComponent camera{};
-
 		std::weak_ptr<Texture> loadTexture(const std::string& textureFileName);
 
 		std::string name = "Giga Game";

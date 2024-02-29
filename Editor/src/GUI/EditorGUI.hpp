@@ -90,7 +90,7 @@ namespace engine
 
 		bool isGuizmoOperationInWorldSpace = true;
 
-		CameraComponent editorCamera{};
+		std::shared_ptr<GameObject> editorCamera;
 
 		EditorSceneState sceneState = EditorSceneState::Scene;
 

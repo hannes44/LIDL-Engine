@@ -9,6 +9,9 @@
 #include "glm/glm.hpp"
 #include "math.h"
 #include <Serializer/Serializable.hpp>
+#include "Components/ControllableComponent.hpp"
+#include "GamePhysicsSettings.hpp"
+
 
 namespace engine {
 
@@ -27,7 +30,74 @@ namespace engine {
 				continue;
 			}
 
-			glm::vec3 force = physicsComponent->getForce();
+			glm::vec3 directionForce = glm::vec3(0);
+			glm::vec3 directionVelocity = glm::vec3(0);
+
+			auto controllableComponent = gameObject->getComponent<ControllableComponent>();
+			if (controllableComponent) {
+				glm::vec3 vec = glm::vec3(0);
+
+				std::set<Direction> currentDirections = controllableComponent->currentDirections;
+
+				if (currentDirections.contains(Direction::Up) && currentDirections.contains(Direction::Down))
+				{
+					currentDirections.erase(Direction::Up);
+					currentDirections.erase(Direction::Down);
+				}
+				else if (currentDirections.contains(Direction::Left) && currentDirections.contains(Direction::Right))
+				{
+					currentDirections.erase(Direction::Left);
+					currentDirections.erase(Direction::Right);
+				}
+				else if (currentDirections.contains(Direction::Forward) && currentDirections.contains(Direction::Backward))
+				{
+					currentDirections.erase(Direction::Forward);
+					currentDirections.erase(Direction::Backward);
+				}
+
+				for (auto direction : currentDirections) {
+					switch (direction) {
+						case Direction::Up:
+							vec += controllableComponent->orientation * physicsComponent->up;
+							break;
+						case Direction::Down:
+							vec -= controllableComponent->orientation * physicsComponent->up;
+							break;
+						case Direction::Left:
+							vec -= controllableComponent->orientation * physicsComponent->right;
+							break;
+						case Direction::Right:
+							vec += controllableComponent->orientation * physicsComponent->right;
+							break;
+						case Direction::Forward:
+							vec += controllableComponent->orientation * physicsComponent->forward;
+							break;
+						case Direction::Backward:
+							vec -= controllableComponent->orientation * physicsComponent->forward;
+							break;
+					}
+				}
+
+				if (controllableComponent->enableForces)
+					physicsComponent->setForce(vec);
+				else
+					physicsComponent->setVelocity(vec);
+
+				if (currentDirections.size() > 0)
+					vec = glm::normalize(vec) * controllableComponent->movementSpeed;
+				
+				if (controllableComponent->enableForces)
+				{
+					directionForce = vec;
+				}
+				else
+				{
+					directionVelocity = vec;
+				}
+			}
+
+			glm::vec3 force = physicsComponent->getForce() + directionForce;
+			glm::vec3 velocity = physicsComponent->getVelocity() + directionVelocity;
 
 			// Apply gravity
 			if (settings.enableGravity && physicsComponent->enableGravity)
@@ -37,18 +107,20 @@ namespace engine {
 
 			// Apply friction
 			if (settings.enableFriction && zeroResultantForce)
-				force -= physicsComponent->getVelocity() * 0.5f;
+				force -= velocity * 0.5f;
 
 			physicsComponent->currentAcceleration = force / physicsComponent->mass;
+			
+			LOG_INFO("Velocity: {0}, {1}, {2}", velocity.x, velocity.y, velocity.z);
 
 			// Update the velocity, but snap to 0 if it is close to 0
-			if (zeroResultantForce && glm::length(physicsComponent->getVelocity()) < 0.1f)
+			if (zeroResultantForce && glm::length(velocity) < 0.1f)
 				physicsComponent->setVelocity(glm::vec3(0));
 			else
 				physicsComponent->applyVelocity(physicsComponent->currentAcceleration * settings.getFixedUpdateScale());
 
 			// Move the object, scaled to account for the fixed update
-			gameObject->transform.shiftPosition(physicsComponent->getVelocity() * settings.getFixedUpdateScale());
+			gameObject->transform.shiftPosition(velocity * settings.getFixedUpdateScale());
 		}
 	}
 
