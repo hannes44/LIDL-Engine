@@ -60,7 +60,8 @@ namespace engine
 					PointLightComponent* light = dynamic_cast<PointLightComponent*>(component.get());
 
 					std::string index = "[" + std::to_string(lightIndex) + "]";
-					baseShader->setVec3(("pointLights" + index + ".position").c_str(), gameObject->transform.getPosition().x, gameObject->transform.getPosition().y, gameObject->transform.getPosition().z);
+					glm::vec3 gameObjectPosition = gameObject->getGlobalTransform().getPosition();
+					baseShader->setVec3(("pointLights" + index + ".position").c_str(), gameObjectPosition.x, gameObjectPosition.y, gameObjectPosition.z);
 					baseShader->setVec3(("pointLights" + index + ".ambient").c_str(), light->color.x, light->color.y, light->color.z);
 					baseShader->setVec3(("pointLights" + index + ".diffuse").c_str(), light->color.x, light->color.y, light->color.z);
 					baseShader->setVec3(("pointLights" + index + ".specular").c_str(), light->color.x, light->color.y, light->color.z);
@@ -95,9 +96,10 @@ namespace engine
 				continue;
 
 
-			glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * gameObject->transform.transformMatrix;
+			glm::mat4 gameObjectTransformMatrix = gameObject->getGlobalTransform().transformMatrix;
+			glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * gameObjectTransformMatrix;
 			Renderer::baseShader->setMat4("modelViewProjectionMatrix", &modelViewProjectionMatrix[0].x);
-			Renderer::baseShader->setMat4("modelMatrix", &gameObject->transform.transformMatrix[0].x);
+			Renderer::baseShader->setMat4("modelMatrix", &gameObjectTransformMatrix[0].x);
 
 			Material* material = meshComponent->getMaterial();
 			// Material
@@ -295,9 +297,10 @@ namespace engine
 			return nullptr;
 		}
 
-		glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * gameObject->transform.transformMatrix;
+		glm::mat4 gameObjectTransformMatrix = gameObject->getGlobalTransform().transformMatrix;
+		glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * gameObjectTransformMatrix;
 		Renderer::baseShader->setMat4("modelViewProjectionMatrix", &modelViewProjectionMatrix[0].x);
-		Renderer::baseShader->setMat4("modelMatrix", &gameObject->transform.transformMatrix[0].x);
+		Renderer::baseShader->setMat4("modelMatrix", &gameObjectTransformMatrix[0].x);
 
 		Material* material = meshComponent->getMaterial();
 		// Material

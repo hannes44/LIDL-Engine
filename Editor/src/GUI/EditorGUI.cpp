@@ -9,6 +9,7 @@
 #include <Physics/GamePhysics.hpp>
 #include "Components/ComponentFactory.hpp"
 #include <memory>
+#include <set>
 #include <imgui_internal.h>
 #include <Windows.h>
 #include <regex>
@@ -20,19 +21,19 @@ namespace engine
 #define IMGUI_TOP_MENU_HEIGHT 18
 #define IMGUI_SHOW_DEMO_WINDOWS false
 
-// We have to undefine DELETE because it is causing a conflict with the InputEvent DELETE
+	// We have to undefine DELETE because it is causing a conflict with the InputEvent DELETE
 #undef DELETE
 
-bool isAddComponentVisible = false;
+	bool isAddComponentVisible = false;
 
-	EditorGUI::EditorGUI(std::shared_ptr<Project> project, EditorSettings& editorSettings) :  window(Window::getInstance()), project(project), editorSettings(editorSettings)
+	EditorGUI::EditorGUI(std::shared_ptr<Project> project, EditorSettings& editorSettings) : window(Window::getInstance()), project(project), editorSettings(editorSettings)
 	{
 		game = project->game;
 	}
 
 	void EditorGUI::start()
 	{
-		ActionMap::getInstance().addAction("Copy", {Key::LCTRL, Key::C});
+		ActionMap::getInstance().addAction("Copy", { Key::LCTRL, Key::C });
 
 		if (editorSettings.enableScripting)
 		{
@@ -51,13 +52,14 @@ bool isAddComponentVisible = false;
 		editorCameraControllableComponent->initialize();
 
 		// Create a camera component for the editor camera
-		auto editorCameraComponent = std::make_shared<CameraComponent>();		
+		auto editorCameraComponent = std::make_shared<CameraComponent>();
 
 		editorCameraGameObject->addComponent(editorCameraComponent);
 		editorCameraGameObject->addComponent(std::make_unique<PhysicsComponent>());
 		editorCameraGameObject->addComponent(editorCameraControllableComponent);
 		editorCameraGameObject->name = "Editor Camera";
-		editorCameraGameObject->transform.setPosition(glm::vec3(0, 0, 5));
+		editorCameraGameObject->transform.setPosition(glm::vec3(0, 7.5f, 20));
+		editorCameraGameObject->transform.setRotationFromDirection(glm::vec3(0, -0.5f, 1), glm::vec3(0, 1, 0));
 
 		editorCamera = editorCameraGameObject;
 
@@ -79,7 +81,7 @@ bool isAddComponentVisible = false;
 		{
 			game->initialize();
 		}
-		
+
 		AudioManager::getInstance().initialize();
 
 		Renderer* renderer = Renderer::getInstance();
@@ -94,7 +96,7 @@ bool isAddComponentVisible = false;
 		eventManager.subscribe(EventType::QuitProgram, this);
 
 		assetManager->buildAssetTree();
-   
+
 		selectedAssetNodeFolder = assetManager->rootNode;
 
 		rotateIconTexture = std::shared_ptr<Texture>(Texture::create("rotation_icon.png", false));
@@ -105,15 +107,17 @@ bool isAddComponentVisible = false;
 
 		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png", false));
 
+		auto editorGameObjectSet = std::set<std::shared_ptr<GameObject>>();
+		for (auto const& [id, gameObject] : editorGameObjects)
+			editorGameObjectSet.insert(gameObject);
 
-		
 		while (!quitProgram)
 		{
 			renderNewFrame();
 
 			inputFramework.getInput();
 
-			GamePhysics::getInstance().fixedUpdate(editorGameObjects, editorPhysicsSettings);
+			GamePhysics::getInstance().fixedUpdate(editorGameObjectSet, editorPhysicsSettings);
 
 			renderer->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 			renderer->renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
@@ -139,7 +143,7 @@ bool isAddComponentVisible = false;
 
 		if (initialUseSerialization)
 			GameSerializer::serializeGame(game.get());
-		
+
 		EditorSerializer::serializeEditorSettings(editorSettings);
 	}
 
@@ -151,10 +155,10 @@ bool isAddComponentVisible = false;
 		ImGuizmo::BeginFrame();
 
 
-		#if defined(_DEBUG) && IMGUI_SHOW_DEMO_WINDOWS 
-			ImGui::ShowDemoWindow();
-			ImGui::ShowStyleEditor();
-		#endif 
+#if defined(_DEBUG) && IMGUI_SHOW_DEMO_WINDOWS 
+		ImGui::ShowDemoWindow();
+		ImGui::ShowStyleEditor();
+#endif 
 
 		if (game == nullptr)
 		{
@@ -322,7 +326,6 @@ bool isAddComponentVisible = false;
 				{
 					drawSerializableVariables(dynamic_pointer_cast<Serializable>(lockedSelectedObject).get());
 				}
-
 			}
 			else
 			{
@@ -333,6 +336,57 @@ bool isAddComponentVisible = false;
 		}
 
 		ImGui::End();
+	}
+
+	void EditorGUI::drawGameObject(std::shared_ptr<GameObject> gameObject, short tabLevel)
+	{
+		if (gameObject == nullptr)
+			return;
+
+		ImGui::PushID(gameObject->uuid.id.c_str());
+
+		std::string name = std::string(tabLevel * 2, ' ') + gameObject->name;
+
+		if (gameObject->getChildren().size() > 0) {
+			// TODO: Parents are currently not selectable as they are collapsing headers instead, fix this so they can be selected
+			//if (ImGui::CollapsingHeader(gameObject->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
+			if (ImGui::Selectable(name.c_str(), selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID()))) {
+				selectedObject = gameObject; // TODO: Fix here also
+			}
+			// Hotfix until TODO above is fixed, otherwise move this back inside the if statement since we don't want to draw children if the parent is collapsed
+			for (auto& child : gameObject->getChildren())
+				drawGameObject(child, tabLevel + 1);
+		}
+		else {
+			if (ImGui::Selectable(name.c_str(), selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID())))
+			{
+				selectedObject = gameObject;
+			}
+
+			if (ImGui::BeginPopupContextItem())
+			{
+				static char name[32];
+				memcpy(name, gameObject->name.c_str(), 32);
+				char buf[64];
+				sprintf(buf, "%s###Button", name);
+				ImGui::Button(buf);
+				if (ImGui::BeginPopupContextItem("Test"))
+				{
+					ImGui::Text("Edit name:");
+					ImGui::InputText("##edit", name, IM_ARRAYSIZE(name));
+					if (ImGui::Button("Close"))
+						ImGui::CloseCurrentPopup();
+					gameObject->name = name;
+					ImGui::EndPopup();
+				}
+				ImGui::Separator();
+				if (ImGui::Button("Close"))
+					ImGui::CloseCurrentPopup();
+				ImGui::EndPopup();
+			}
+		}
+
+		ImGui::PopID();
 	}
 
 	void EditorGUI::drawLeftSidePanel()
@@ -356,38 +410,9 @@ bool isAddComponentVisible = false;
 			{
 				ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 0, 0));
 				ImGui::BeginListBox("##2", ImVec2(500, 500));
-				for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
-				{
-					ImGui::PushID(gameObjectId.c_str());
-					if (ImGui::Selectable(gameObject->name.c_str(), selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID())))
-					{
-						selectedObject = gameObject;
-					}
 
-					if (ImGui::BeginPopupContextItem())
-					{
-						static char name[32];
-						memcpy(name, gameObject->name.c_str(), 32);
-						char buf[64];
-						sprintf(buf, "%s###Button", name);
-						ImGui::Button(buf);
-						if (ImGui::BeginPopupContextItem("Test"))
-						{
-							ImGui::Text("Edit name:");
-							ImGui::InputText("##edit", name, IM_ARRAYSIZE(name));
-							if (ImGui::Button("Close"))
-								ImGui::CloseCurrentPopup();
-							gameObject->name = name;
-							ImGui::EndPopup();
-						}
-						ImGui::Separator();
-						if (ImGui::Button("Close"))
-							ImGui::CloseCurrentPopup();
-						ImGui::EndPopup();
-					}
-					
-					ImGui::PopID();
-				}
+				for (auto gameObject : game->getRootGameObjects())
+					drawGameObject(gameObject);
 
 				ImGui::EndListBox();
 				ImGui::PopStyleColor();
@@ -518,13 +543,13 @@ bool isAddComponentVisible = false;
 				char fileFilter[64] = "obj files: .obj\0*.obj*\0\0";
 				std::string filename = ResourceManager::addFileFromWindowsExplorerToProject(fileFilter);
 				if (filename != "")
-				{		
+				{
 					std::shared_ptr<GameObject> obj = std::make_shared<GameObject>();
 					obj->name = filename;
 					obj->addComponent(MeshComponent::createMeshFromObjFile(filename));
 					game->addGameObject(obj);
 					selectedObject = obj;
-					
+
 				}
 			}
 
@@ -574,16 +599,16 @@ bool isAddComponentVisible = false;
 		if (ImGui::BeginTabBar("##BottomTabs", ImGuiTabBarFlags_None))
 		{
 			ImGuiTabBarFlags tabFlags = ImGuiSelectableFlags_None;
-			
+
 			if (wasStopButtonPressed)
 				tabFlags = ImGuiTabItemFlags_SetSelected;
-			
+
 
 			if (ImGui::BeginTabItem("Scene", nullptr, tabFlags))
 			{
 				activeViewPort = ActiveViewPort::Scene;
 				ImGui::EndTabItem();
-			
+
 			}
 
 			tabFlags = ImGuiSelectableFlags_None;
@@ -646,7 +671,7 @@ bool isAddComponentVisible = false;
 				stopGame();
 			}
 
-			
+
 		}
 		if (sceneState == EditorSceneState::Scene && pushedStyleColor)
 		{
@@ -696,7 +721,7 @@ bool isAddComponentVisible = false;
 		if (auto lockedSelectedObject = selectedObject.lock())
 		{
 			if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
-			{ 
+			{
 				ImGui::Text("Name: ");
 				ImGui::SameLine();
 				static char gameObjectNameBuffer[255];
@@ -717,7 +742,7 @@ bool isAddComponentVisible = false;
 					ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, &(lockedGameObject->transform.transformMatrix[0][0]));
 				}
 
-			
+
 				for (auto component : lockedGameObject->getComponents())
 				{
 					std::string componentName = component->getName();
@@ -738,7 +763,7 @@ bool isAddComponentVisible = false;
 				{
 					isAddComponentVisible = !isAddComponentVisible;
 				}
-			
+
 			}
 		}
 		if (isAddComponentVisible)
@@ -764,7 +789,7 @@ bool isAddComponentVisible = false;
 
 			std::vector<std::string> allComponentNames = { "Box Collider", "Camera", "Mesh", "Physics", "PointLight", "Sphere Collider" };
 			std::vector<std::string> scriptComponentNames = ResourceManager::getInstance()->getAllCSharpScriptsInActiveGame();
-		
+
 			// Remove the extension from the script names
 			for (auto& scriptName : scriptComponentNames)
 			{
@@ -828,16 +853,15 @@ bool isAddComponentVisible = false;
 
 			ImGui::Text("Camera Settings");
 			ImGui::SliderFloat("Camera Speed", &editorCamera->getComponent<CameraComponent>()->movementSpeed, 0.001f, 1.0f);
-			ImGui::SliderFloat("Camera Sensitivity", &editorCamera->getComponent<CameraComponent>()->rotationSpeed, 0.001f, 0.1f); 
+			ImGui::SliderFloat("Camera Sensitivity", &editorCamera->getComponent<CameraComponent>()->rotationSpeed, 0.001f, 0.1f);
 			ImGui::SliderFloat("Camera FOV", &editorCamera->getComponent<CameraComponent>()->fov, 0.1f, 120.0f);
-			
 		}
 		ImGui::Separator();
 
 		if (ImGui::CollapsingHeader("Game Settings", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			ImGui::Text(("Game Name: " + game->name).c_str());
-			
+
 			ImGui::Text("Physics Settings");
 			drawSerializableVariables(&game->config.physicsSettings);
 		}
@@ -866,13 +890,13 @@ bool isAddComponentVisible = false;
 		{
 			if (ImGui::BeginTabItem("Assets"))
 			{
-				if(ImGui::SmallButton("New Folder"))
+				if (ImGui::SmallButton("New Folder"))
 				{
 					if (auto lockedSelectedAssetNodeFolder = selectedAssetNodeFolder.lock())
 					{
 						std::shared_ptr<AssetNode> newFolder = std::make_shared<AssetNode>(true, std::weak_ptr<Selectable>());
 						newFolder->name = "New Folder";
-						
+
 						int i = 1;
 						std::string newFolderName = newFolder->name;
 						while (assetManager->isNameInUse(lockedSelectedAssetNodeFolder, newFolderName))
@@ -987,7 +1011,7 @@ bool isAddComponentVisible = false;
 				ImGui::SameLine();
 				char name[64];
 				memcpy(name, data.c_str(), 64);
-				ImGui::InputText(("##"+seralizableVariable.name).c_str(), name, IM_ARRAYSIZE(name));
+				ImGui::InputText(("##" + seralizableVariable.name).c_str(), name, IM_ARRAYSIZE(name));
 				*static_cast<std::string*>(seralizableVariable.data) = name;
 
 				//ImGui::Text(data.c_str());
@@ -998,7 +1022,7 @@ bool isAddComponentVisible = false;
 			}
 			else if (seralizableVariable.type == SerializableType::FLOAT)
 			{
-				ImGui::InputFloat(seralizableVariable.name.c_str(), (float*)seralizableVariable.data); 
+				ImGui::InputFloat(seralizableVariable.name.c_str(), (float*)seralizableVariable.data);
 			}
 			else if (seralizableVariable.type == SerializableType::BOOLEAN)
 			{
@@ -1138,8 +1162,8 @@ bool isAddComponentVisible = false;
 			{
 				static char name[32];
 				memcpy(name, assetNode->name.c_str(), 32);
-            	char buf[64];
-            	sprintf(buf, "%s###Button", name);
+				char buf[64];
+				sprintf(buf, "%s###Button", name);
 				ImGui::Button(buf);
 				if (ImGui::BeginPopupContextItem())
 				{
@@ -1157,7 +1181,7 @@ bool isAddComponentVisible = false;
 					ImGui::CloseCurrentPopup();
 				}
 				if (ImGui::Button("Close"))
-                    ImGui::CloseCurrentPopup();
+					ImGui::CloseCurrentPopup();
 				ImGui::EndPopup();
 			}
 

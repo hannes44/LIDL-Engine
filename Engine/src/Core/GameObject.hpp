@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include <set>
 #include "Uuid.hpp"
 #include "Selectable.hpp"
 
@@ -16,10 +17,11 @@ namespace engine
 
 	class GameObject : public Selectable
 	{
+		friend class Game;
 	public:
 		GameObject() = default;
+		
 		// Called every frame
-
 		void update();
 
 		// Called at initialization
@@ -27,9 +29,14 @@ namespace engine
 
 		Transform transform;
 
+		Transform getGlobalTransform();
+
 		bool isVisible = true;
 
 		std::string name = "GameObject";
+
+		std::set<std::shared_ptr<GameObject>> getChildren() { return children; };
+		std::shared_ptr<GameObject> getParent() { return parent; };
 
 		UUID uuid{};
 
@@ -64,5 +71,9 @@ namespace engine
 	private:
 		// TODO: Should limit each component to one of each type
 		std::vector<std::shared_ptr<Component>> components{};
+		bool added = false;
+
+		std::shared_ptr<GameObject> parent = nullptr;
+		std::set<std::shared_ptr<GameObject>> children{};
 	};
 }

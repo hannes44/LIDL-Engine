@@ -28,14 +28,11 @@ namespace engine
 
 		static GamePhysics& getInstance();
 
-		void fixedUpdate(std::map<std::string, std::shared_ptr<GameObject>> gameObjects, GamePhysicsSettings& settings);
+		void fixedUpdate(const std::set<std::shared_ptr<GameObject>> gameObjects, GamePhysicsSettings& settings);
 		void checkCollisions(Game* game, std::map<std::string, std::shared_ptr<GameObject>> gameObjects, GamePhysicsSettings& settings);
 		std::pair<glm::vec3, glm::vec3> resolveCollisionFullyElastic(std::shared_ptr<PhysicsComponent> pc1, std::shared_ptr<PhysicsComponent> pc2);
 		std::pair<glm::vec3, glm::vec3> resolveCollisionFullyInelastic(std::shared_ptr<PhysicsComponent> pc1, std::shared_ptr<PhysicsComponent> pc2);
 		void run(Game* game);
-
-		// Disabled for now. TODO: Implement
-		// void incrementalUpdate();
 
 		GamePhysicsSettings& getSettings();
 	};
