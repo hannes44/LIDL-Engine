@@ -196,7 +196,7 @@ bool isAddComponentVisible = false;
 			}
 		}
 
-		if (event.getAction() == "Copy")
+		if (event.getAction() == "Copy" && event.getEventType() == InputEventType::ActionDown)
 		{
 			if (auto lockedSelectedObject = selectedObject.lock())
 			{

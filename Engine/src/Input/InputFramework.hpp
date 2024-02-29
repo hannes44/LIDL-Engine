@@ -48,6 +48,7 @@ namespace engine {
 		SDL_Event ev;
 		std::list<InputListener*> listeners{};
 		ActionMap& actionMap = ActionMap::getInstance();
+		std::list<std::string> prevActionsPressed{};
 	};
 
 }
