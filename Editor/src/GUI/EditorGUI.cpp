@@ -33,6 +33,7 @@ bool isAddComponentVisible = false;
 	void EditorGUI::start()
 	{
 		ActionMap::getInstance().addAction("Copy", {Key::LCTRL, Key::C});
+		ActionMap::getInstance().addAction("Fire", { Key::LCTRL, Key::F});
 
 		if (editorSettings.enableScripting)
 		{
@@ -51,6 +52,7 @@ bool isAddComponentVisible = false;
 			game->initialize();
 		}
 		
+
 		AudioManager::getInstance().initialize();
 
 		Renderer* renderer = Renderer::getInstance();

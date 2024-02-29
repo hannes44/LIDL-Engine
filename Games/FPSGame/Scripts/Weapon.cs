@@ -23,4 +23,19 @@ public class Weapon
     {
         EngineAPI.PlaySound("AK47_Sound.wav");
     }
+
+    public void OnInput(string action)
+    {
+        EngineAPI.Log(action);
+        if (action == "Fire")
+        {
+            ammoCount--;
+            if (ammoCount <= 0)
+            {
+                EngineAPI.Log("Out of ammo");
+            }
+
+            EngineAPI.PlaySound("AK47_Sound.wav");
+        }
+    }
 }
