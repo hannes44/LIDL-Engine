@@ -19,8 +19,7 @@ namespace engine {
 
 	void ControllableComponent::initialize() 
 	{
-		if (gameObject->game)
-			enableForces = gameObject->game->config.physicsSettings.enableForces;
+
 	}
 
 	ControllableComponent::~ControllableComponent()

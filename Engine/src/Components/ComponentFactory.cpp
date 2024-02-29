@@ -7,6 +7,7 @@
 #include "Components/PointLightComponent.hpp"
 #include "Components/CameraComponent.hpp"
 #include "Components/ScriptableComponent.hpp"
+#include "Components/ControllableComponent.hpp"
 #include "Core/Logger.hpp"
 #include "Core/ResourceManager.hpp"
 
@@ -42,6 +43,10 @@ namespace engine
 		else if (componentName == "Scriptable")
 		{
 			return std::make_shared<ScriptableComponent>();
+		}
+		else if (componentName == "Controllable")
+		{
+			return std::make_shared<ControllableComponent>();
 		}
 
 		LOG_INFO("Did not find component: {0} in list of default components, looking for script component");

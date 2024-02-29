@@ -63,7 +63,7 @@ GameObjects:
         currentRound: 1
         scriptFileName: EnemyManager.cs
   - name: GameCamera
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+    transform: [-0.482767344, 2.98023224e-08, 0.875748694, 0, 0.606744528, 0.721101403, 0.334475458, 0, -0.631503642, 0.692829549, -0.348124266, 0, 0, 0, 0, 1]
     isVisible: true
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
     tag: ""
@@ -73,6 +73,17 @@ GameObjects:
         Near Plane: 0.100000001
         Far Plane: 1000
         Is Main Camera: false
+      - name: Physics
+        Gravity: false
+        Mass: 1
+        Force: [0, 0, 0]
+        Acceleration: [0, 0, 0]
+        Velocity: [0, 0, 0]
+      - name: Controllable
+        Enable Forces: false
+        Movement Speed: 3
+        Rotation Speed: 0.00499999989
+        Allow Instant Turnaround: true
   - name: Ak-47
     transform: [-9.09963163e-08, -1.65606542e-13, -0.100000024, 0, 0, 0.0999996066, -1.65605851e-13, 0, 0.100000024, 0, -9.09963163e-08, 0, 0, 17.9843712, -13.7580671, 1]
     isVisible: true

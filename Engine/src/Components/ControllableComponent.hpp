@@ -52,6 +52,16 @@ namespace engine {
 		std::shared_ptr<Component> clone() override {
 			return std::make_shared<ControllableComponent>(*this);
 		}
+		std::vector<SerializableVariable> getSerializableVariables() override
+		{
+			return
+			{
+				{SerializableType::BOOLEAN, "Enable Forces", "Should forces affect this game object", &enableForces},
+				{SerializableType::FLOAT, "Movement Speed", "The speed at which the game object moves", &movementSpeed},
+				{SerializableType::FLOAT, "Rotation Speed", "The speed at which the game object rotates", &rotationSpeed},
+				{SerializableType::BOOLEAN, "Allow Instant Turnaround", "Should the game object be able to instantly turn around", &allowInstantTurnaround}
+			};
+		};
 	protected:
 		std::unordered_set<glm::vec3> applied{};
 		void apply(std::shared_ptr<PhysicsComponent> physicsComponent, glm::vec3 vector);
