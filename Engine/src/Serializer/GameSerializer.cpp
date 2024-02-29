@@ -233,6 +233,11 @@ namespace engine
 			LOG_ERROR("Failed to serialize material: " + material->name);
 	}
 
+	void GameSerializer::serializeActions(const Game* game, YAML::Emitter& emitter)
+	{
+		ActionMap::getInstance().getActions()
+	}
+
 	// Serializes a serializable to the given YAML emitter as key value pairs for each serializable variable
 	void GameSerializer::serializeSerializable(Serializable* serializable, YAML::Emitter& out)
 	{
