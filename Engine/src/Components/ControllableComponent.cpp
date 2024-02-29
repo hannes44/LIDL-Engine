@@ -142,15 +142,39 @@ namespace engine {
 		apply(physicsComponent, vector);
 	}
 
+	void ControllableComponent::moveOnHoldFromDirection(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent, glm::vec3 direction) 
+	{
+		if (eventType != InputEventType::KeyDown && eventType != InputEventType::KeyUp)
+			return;
+
+		Direction dir = Direction::None;
+
+		switch(event.getKey())
+		{
+			case Key::LSHIFT: dir = Direction::Up; break;
+			case Key::LCTRL: dir = Direction::Down; break;
+			case Key::A: dir = Direction::Left; break;
+			case Key::D: dir = Direction::Right; break;
+			case Key::W: dir = Direction::Forward; break;
+			case Key::S: dir = Direction::Backward; break;
+			default: return;
+		}
+
+		if (eventType == InputEventType::KeyDown)
+			currentDirections.insert(dir);
+		else
+			currentDirections.erase(dir);
+	}
+
 	void ControllableComponent::changeDirection(const InputEvent& event)
 	{
 		InputEventType EventType = event.getEventType();
 
-		LOG_INFO("Change direction event");
+		// Calculate the new orientation quaternion from the direction vector
+		orientation = glm::quatLookAt(direction, worldUp);
 
 		// Handle key and mouse input here
 		// If mouse button is pressed we want to control the camera
-		//  && !(ImGui::GetIO().WantCaptureMouse)
 		if (EventType == InputEventType::MouseButtonDown && (Key)event.getButton() == Key::MOUSE_RIGHT) 
 		{
 			isMouseDragging = true;
@@ -167,13 +191,17 @@ namespace engine {
 		{
 			if (SDL_BUTTON(SDL_BUTTON_RIGHT)) 
 			{
-				LOG_INFO("Mouse motion event");
+				// Calculate the pitch and yaw quaternions
+				glm::quat pitch = glm::angleAxis(rotationSpeed * -event.getY(), glm::vec3(1, 0, 0));
+				glm::quat yaw = glm::angleAxis(rotationSpeed * -event.getX(), glm::vec3(0, 1, 0));
 
-				glm::mat4 yaw = glm::rotate(rotationSpeed * event.getX(), worldUp);
-				glm::mat4 pitch = glm::rotate(rotationSpeed * -event.getY(), glm::normalize(glm::cross(direction, worldUp)));
-				direction = glm::vec3(pitch * yaw * glm::vec4(direction, 0.0f));
+				// Apply the pitch and yaw rotations to the orientation quaternion
+				orientation = glm::normalize(yaw * orientation * pitch);				
 
-				gameObject->transform.setRotationFromDirection(direction, worldUp);
+				// Calculate the new direction vector from the orientation quaternion
+				direction = orientation * glm::vec3(0, 0, -1);
+
+				gameObject->transform.setRotationFromQuaternion(orientation);
 			}
 		}
 	}
@@ -183,7 +211,7 @@ namespace engine {
 		InputEventType eventType = event.getEventType();
 		switch (movementType) {
 		case MovementType::OnHold:
-			moveOnHold(event, eventType, gameObject->getComponent<PhysicsComponent>());
+			moveOnHoldFromDirection(event, eventType, gameObject->getComponent<PhysicsComponent>(), direction);
 			if (gameObject->getComponent<CameraComponent>())
 			{
 				changeDirection(event);

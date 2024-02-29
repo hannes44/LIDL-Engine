@@ -6,6 +6,7 @@
 #include "PhysicsComponent.hpp"
 #include "Core/GameObject.hpp"
 #include <glm/glm.hpp>
+#include "Physics/GamePhysicsSettings.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/hash.hpp>
@@ -38,8 +39,11 @@ namespace engine {
 
 		glm::vec3 worldUp{ 0.0f, 1.0f, 0.0f };
 		glm::vec3 direction{ -1, -1, -1 };
+		glm::quat orientation{ 1, 0, 0, 0 };
 
 		float rotationSpeed = 0.005f;
+
+		std::set<Direction> currentDirections;
 
 		std::set<std::string> getRequiredComponents() override;
 
@@ -50,6 +54,7 @@ namespace engine {
 
 		void moveOnHold(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent);
 		void alwaysMove(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent);
+        void moveOnHoldFromDirection(const InputEvent &event, const InputEventType &eventType, std::shared_ptr<PhysicsComponent> physicsComponent, glm::vec3 direction);
         void changeDirection(const InputEvent &event);
     };
 }
