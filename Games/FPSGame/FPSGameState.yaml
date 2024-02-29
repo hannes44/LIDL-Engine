@@ -51,7 +51,7 @@ GameObjects:
         Primative Type: NONE
         Material: TikmfUwkrFNXXjEcaavGVjVaeuMhbFUU
       - name: Scriptable
-        ammoCount: 16
+        ammoCount: 30
         scriptFileName: Weapon.cs
   - name: Player
     transform: [1, 0, 0, 0, 0, 7.36903429, 0, 0, 0, 0, 1, 0, 0, 2.14822531, 0, 1]

@@ -32,6 +32,7 @@ public class Weapon
             if (ammoCount <= 0)
             {
                 EngineAPI.Log("Out of ammo");
+                EngineAPI.PlaySound("Out_Of_Ammo_Sound.wav");
             }
             else
             {
