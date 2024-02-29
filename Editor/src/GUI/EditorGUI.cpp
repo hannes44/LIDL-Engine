@@ -10,6 +10,7 @@
 #include "Components/ComponentFactory.hpp"
 #include <memory>
 #include <set>
+#include <ranges>
 #include <imgui_internal.h>
 #include <Windows.h>
 #include <regex>
@@ -413,6 +414,10 @@ namespace engine
 			{
 				ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 0, 0));
 				ImGui::BeginListBox("##2", ImVec2(500, 500));
+
+				 auto rootGameObjects = game->getRootGameObjects();
+				 std::vector<std::shared_ptr<GameObject>> rootGameObjectsList = std::vector<std::shared_ptr<GameObject>>(rootGameObjects.begin(), rootGameObjects.end());
+				 std::ranges::sort(rootGameObjectsList, [](std::shared_ptr<GameObject> a, std::shared_ptr<GameObject> b) { return a->name < b->name; });
 
 				for (auto gameObject : game->getRootGameObjects())
 					drawGameObject(gameObject);
