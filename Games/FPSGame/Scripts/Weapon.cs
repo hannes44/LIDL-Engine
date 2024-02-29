@@ -24,10 +24,9 @@ public class Weapon
         EngineAPI.PlaySound("AK47_Sound.wav");
     }
 
-    public void OnInput(string action)
+    public void OnInput(string action, string actionType)
     {
-        EngineAPI.Log(action);
-        if (action == "Fire")
+        if (action == "Fire" && actionType == "ActionDown")
         {
             if (ammoCount <= 0)
             {

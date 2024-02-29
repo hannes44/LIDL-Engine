@@ -292,10 +292,28 @@ namespace engine
 		sol::state_view lua(L);
 		std::string Id = component->uuid.id;
 
+		std::string eventType = "";
+		if (event.getEventType() == InputEventType::ActionDown)
+		{
+			eventType = "ActionDown";
+		}
+		else if (event.getEventType() == InputEventType::ActionHold)
+		{
+			eventType = "ActionHold";
+		}
+		else if (event.getEventType() == InputEventType::ActionUp)
+		{
+			eventType = "ActionUp";
+		}
+		else if (event.getEventType() == InputEventType::KeyHold)
+		{
+			eventType = "KeyHold";
+		}
+
 		syncGameObjectStateEngineToScript(component);
 		syncScriptableVariablesToScript(component);
 		sol::table componentTable = lua[component->uuid.id];
-		componentTable["OnInput"](componentTable, event.getAction(), event.getX(), event.getY());
+		componentTable["OnInput"](componentTable, event.getAction(), eventType);
 		syncGameObjectStateScriptToEngine(component);
 		syncScriptableVariablesToEngine(component);
 	}
