@@ -11,8 +11,28 @@ GameObjects:
         Material: hZYYcYtKpiPCHvMlODrrndOPQMbqNcru
       - name: Scriptable
         scriptFileName: Enemy.cs
+  - name: KitchenKnife.obj
+    transform: [-2.72988859e-06, -4.96819469e-12, 2.99999976, 0, -1.09195244e-05, 2.99999166, -4.96818125e-12, 0, -2.99999976, -1.09195544e-05, -2.72988859e-06, 0, 5.75572729, 35.463665, 22.657753, 1]
+    isVisible: true
+    Id: ZICwICMftFdUGViJZDSLoFIHIzlfeTji
+    tag: ""
+    Components:
+      - name: Mesh
+        OBJ File: KitchenKnife.obj
+        Primative Type: NONE
+        Material: UZVAVXNBfagCfyiPFCiALYYhQcCkfiTs
+  - name: Knife.obj
+    transform: [100, 0, 0, 0, 0, 100, 0, 0, 0, 0, 100, 0, 0, 17.6802177, 7.22515059, 1]
+    isVisible: true
+    Id: alVZDusTpgqSVGZDxqrpFHokPrGbuNDb
+    tag: ""
+    Components:
+      - name: Mesh
+        OBJ File: Knife.obj
+        Primative Type: NONE
+        Material: JHnYLBHgMrJlEapYEEiJewGOxWIDdlOH
   - name: Light
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 58.8534431, 0, 1]
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 28.6073112, 34.6792374, 21.1210766, 1]
     isVisible: true
     Id: cQTDJdjWAUkfhQiqktDDBWTtcOBPcqgc
     tag: ""
@@ -41,7 +61,7 @@ GameObjects:
         Far Plane: 1000
         Is Main Camera: false
   - name: Ak-47
-    transform: [0.100000001, 0, 0, 0, 0, 0.100000001, 0, 0, 0, 0, 0.100000001, 0, 0, 17.9843712, 0, 1]
+    transform: [-9.09963163e-08, -1.65606542e-13, -0.100000024, 0, 0, 0.0999996066, -1.65605851e-13, 0, 0.100000024, 0, -9.09963163e-08, 0, 0, 17.9843712, -13.7580671, 1]
     isVisible: true
     Id: ndlRjOYAhHQMpAEwRAEIBMKYihTpURMf
     tag: ""
@@ -74,10 +94,37 @@ GameObjects:
         Primative Type: PLANE
         Material: bkbCvuwlPUqrIjktAUENfFgZDntkKrIZ
 Textures:
+  - name: KitchenKnifeAlbedo
+    fileName: KitchenKnifeAlbedo.png
+    Id: CNfaOzQYLIKklcdDsCcAzjKCsayBNhkU
+  - name: KitchenKnifeMetal
+    fileName: KitchenKnifeMetal.png
+    Id: DpAcESxkTZTtOxVBbkjnmiyPHDllEENu
+  - name: BowieKnife_BaseColor
+    fileName: BowieKnife_BaseColor.png
+    Id: KBnHTfCYDdtVKBGtpQrUaYiePdhvXhWL
   - name: glocken
     fileName: glocken.png
     Id: hQuVVhkiCALSLeNAaVdGXGXezifThHKL
 Materials:
+  - Base Color: [1, 1, 1]
+    Transparency: 1
+    Emission: [0, 0, 0]
+    Roughness: 0
+    Shininess: 0.5
+    Name: KnifeMaterial
+    Diffuse Texture: KBnHTfCYDdtVKBGtpQrUaYiePdhvXhWL
+    Specular Texture: ""
+    Id: JHnYLBHgMrJlEapYEEiJewGOxWIDdlOH
+  - Base Color: [1, 1, 1]
+    Transparency: 1
+    Emission: [0, 0, 0]
+    Roughness: 0
+    Shininess: 0.5
+    Name: KitchenKnifeMaterial
+    Diffuse Texture: CNfaOzQYLIKklcdDsCcAzjKCsayBNhkU
+    Specular Texture: DpAcESxkTZTtOxVBbkjnmiyPHDllEENu
+    Id: UZVAVXNBfagCfyiPFCiALYYhQcCkfiTs
   - Base Color: [0.123702407, 0.764705896, 0.387644976]
     Transparency: 1
     Emission: [0, 0, 0]
