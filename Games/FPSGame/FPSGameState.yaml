@@ -51,7 +51,7 @@ GameObjects:
         Primative Type: NONE
         Material: TikmfUwkrFNXXjEcaavGVjVaeuMhbFUU
       - name: Scriptable
-        ammoCount: 30
+        ammoCount: -9
         scriptFileName: Weapon.cs
   - name: Player
     transform: [1, 0, 0, 0, 0, 7.36903429, 0, 0, 0, 0, 1, 0, 0, 2.14822531, 0, 1]
@@ -96,3 +96,6 @@ Materials:
     Diffuse Texture: hQuVVhkiCALSLeNAaVdGXGXezifThHKL
     Specular Texture: ""
     Id: hZYYcYtKpiPCHvMlODrrndOPQMbqNcru
+Actions:
+  - Copy: [224, 6]
+  - Fire: [224, 9]

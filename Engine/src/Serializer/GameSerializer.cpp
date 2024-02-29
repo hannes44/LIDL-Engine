@@ -87,6 +87,7 @@ namespace engine
 		serializeGameObjects(game, out);
 		serializeTextures(game, out);
 		serializeMaterials(game, out);
+		serializeActions(game, out);
 
 		out << YAML::EndMap;
 		std::ofstream fout(filePath + configFileName + GAME_CONFIG_FILE_EXTENSION);
@@ -235,7 +236,23 @@ namespace engine
 
 	void GameSerializer::serializeActions(const Game* game, YAML::Emitter& emitter)
 	{
-		ActionMap::getInstance().getActions()
+		emitter << YAML::Key << "Actions";
+		emitter << YAML::Value << YAML::BeginSeq;
+		for (const auto& [actionName, actionKeys] : ActionMap::getInstance().actionMap)
+		{
+			emitter << YAML::BeginMap;
+			emitter << YAML::Key << actionName;
+			std::vector<int> keys{};
+			for (const auto& key : actionKeys)
+			{
+				keys.push_back(static_cast<int>(key));
+			}
+			emitter << YAML::Flow << YAML::Value << keys;
+
+			emitter << YAML::EndMap;
+
+		}
+		emitter << YAML::EndSeq;
 	}
 
 	// Serializes a serializable to the given YAML emitter as key value pairs for each serializable variable
@@ -372,6 +389,7 @@ namespace engine
 		deserializeTextures(state, game);
 		deserializeMaterials(state, game);
 		deserializeGameObjects(state, game);
+		deserializeActions(state, game);
 
 		LOG_INFO("Deserialized game state: " + game->name);
 	}
@@ -444,6 +462,35 @@ namespace engine
 			}
 
 			game->addMaterial(std::shared_ptr<Material>(material));
+		}
+	}
+
+	void GameSerializer::deserializeActions(YAML::Node node, Game* game)
+	{
+	
+		YAML::Node actionsNode;
+		try
+		{
+			actionsNode = node["Actions"];
+		}
+		catch (const std::exception& e)
+		{
+			LOG_ERROR("Failed to deserialize actions: " + std::string(e.what()));
+			return;
+		}
+
+		for (YAML::const_iterator it = actionsNode.begin(); it != actionsNode.end(); ++it)
+		{
+			YAML::Node actionNode = *it;
+			std::string actionName = actionNode.begin()->first.as<std::string>();
+			std::vector<int> actionKeys = actionNode.begin()->second.as<std::vector<int>>();
+			
+			std::list<Key> keys{};
+			for (const auto& key : actionKeys)
+			{
+				keys.push_back(static_cast<Key>(key));
+			}
+			ActionMap::getInstance().actionMap[actionName] = keys;
 		}
 	}
 
