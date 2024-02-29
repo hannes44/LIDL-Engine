@@ -1,6 +1,6 @@
 GameObjects:
   - name: EnemyPrefab
-    transform: [1.90553308, 0, 0, 0, 0, 3.98312092, 0, 0, 0, 0, 1, 0, 63, 0, 51, 1]
+    transform: [1.90553308, 0, 0, 0, 0, 3.98312092, 0, 0, 0, 0, 1, 0, 63, 2.02980518, 51, 1]
     isVisible: true
     Id: DtuMLenGYcDLdGyqOFrcULacGKHcQDEH
     tag: EnemyPrefab
@@ -11,6 +11,9 @@ GameObjects:
         Material: hZYYcYtKpiPCHvMlODrrndOPQMbqNcru
       - name: Scriptable
         scriptFileName: Enemy.cs
+      - name: Box Collider
+        Offset: [0, 0, 0]
+        Extent: [2, 4, 1]
   - name: KitchenKnife.obj
     transform: [-2.72988859e-06, -4.96819469e-12, 2.99999976, 0, -1.09195244e-05, 2.99999166, -4.96818125e-12, 0, -2.99999976, -1.09195544e-05, -2.72988859e-06, 0, 5.75572729, 35.463665, 22.657753, 1]
     isVisible: true
@@ -32,16 +35,16 @@ GameObjects:
         Primative Type: NONE
         Material: JHnYLBHgMrJlEapYEEiJewGOxWIDdlOH
   - name: Light
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 28.6073112, 34.6792374, 21.1210766, 1]
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 28.6073112, 43.9501648, 38.7412109, 1]
     isVisible: true
     Id: cQTDJdjWAUkfhQiqktDDBWTtcOBPcqgc
     tag: ""
     Components:
       - name: PointLight
         Color: [1, 1, 1]
-        Intensity: 10
+        Intensity: 100
   - name: House.obj
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 112.499939, -0.428778648, 0, 1]
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 112.499939, -0.318172455, 0, 1]
     isVisible: true
     Id: hcOOWXgwkGmFwmMSZYGKKEOvgkQbBsNT
     tag: ""
@@ -93,6 +96,8 @@ GameObjects:
         OBJ File: ""
         Primative Type: CUBE
         Material: UaBqVGDYHiwVQLuKdRiZaRZIEqaIjnWw
+      - name: Scriptable
+        scriptFileName: Player.cs
   - name: Plane
     transform: [175.617752, 0, 0, 0, 0, 1, 0, 0, 0, 0, 129.501724, 0, 0, 0, 0, 1]
     isVisible: true
