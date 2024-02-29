@@ -58,7 +58,8 @@ namespace engine
 		editorCameraGameObject->addComponent(std::make_unique<PhysicsComponent>());
 		editorCameraGameObject->addComponent(editorCameraControllableComponent);
 		editorCameraGameObject->name = "Editor Camera";
-		editorCameraGameObject->transform.setPosition(glm::vec3(0, 0, 5));
+		editorCameraGameObject->transform.setPosition(glm::vec3(0, 7.5f, 20));
+		editorCameraGameObject->transform.setRotationFromDirection(glm::vec3(0, -0.5f, 1), glm::vec3(0, 1, 0));
 
 		editorCamera = editorCameraGameObject;
 
@@ -344,16 +345,17 @@ namespace engine
 
 		ImGui::PushID(gameObject->uuid.id.c_str());
 
-		std::string name = std::string(tabLevel, ' ') + gameObject->name;
+		std::string name = std::string(tabLevel * 2, ' ') + gameObject->name;
 
 		if (gameObject->getChildren().size() > 0) {
 			// TODO: Parents are currently not selectable as they are collapsing headers instead, fix this so they can be selected
 			//if (ImGui::CollapsingHeader(gameObject->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
 			if (ImGui::Selectable(name.c_str(), selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID()))) {
 				selectedObject = gameObject; // TODO: Fix here also
-				for (auto& child : gameObject->getChildren())
-					drawGameObject(child, tabLevel + 1);
 			}
+			// Hotfix until TODO above is fixed, otherwise move this back inside the if statement since we don't want to draw children if the parent is collapsed
+			for (auto& child : gameObject->getChildren())
+				drawGameObject(child, tabLevel + 1);
 		}
 		else {
 			if (ImGui::Selectable(name.c_str(), selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID())))
