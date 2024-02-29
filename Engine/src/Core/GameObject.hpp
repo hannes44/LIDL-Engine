@@ -29,6 +29,8 @@ namespace engine
 
 		Transform transform;
 
+		Transform getGlobalTransform();
+
 		bool isVisible = true;
 
 		std::string name = "GameObject";

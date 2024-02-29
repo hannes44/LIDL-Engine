@@ -20,8 +20,8 @@ namespace engine {
 		return *instance;
 	}
 
-	void GamePhysics::fixedUpdate(std::map<std::string, std::shared_ptr<GameObject>> gameObjects, GamePhysicsSettings& settings) {
-		for (auto const& [name, gameObject] : gameObjects) {
+	void GamePhysics::fixedUpdate(const std::set<std::shared_ptr<GameObject>> gameObjects, GamePhysicsSettings& settings) {
+		for (auto const& gameObject : gameObjects) {
 			std::shared_ptr<PhysicsComponent> physicsComponent = gameObject->getComponent<PhysicsComponent>();
 			if (!physicsComponent) {
 				continue;
@@ -171,7 +171,7 @@ namespace engine {
 		}
 
 		lastPhysicsUpdateTimestamp = Utils::getTimestampNS();
-		fixedUpdate(game->getGameObjects(), game->config.physicsSettings);
+		fixedUpdate(game->getRootGameObjects(), game->config.physicsSettings);
 		checkCollisions(game, game->getGameObjects(), game->config.physicsSettings);
 	}
 }

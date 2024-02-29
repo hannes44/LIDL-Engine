@@ -53,6 +53,7 @@ namespace engine
 		std::weak_ptr<GameObject> mainCamera;
 
 		const std::map<std::string, std::shared_ptr<GameObject>> getGameObjects() const { return gameObjects; };
+		
 		const std::set<std::shared_ptr<GameObject>> getRootGameObjects() const {
 			std::set<std::shared_ptr<GameObject>> gameGameObjects{};
 			for (auto& [id, go] : gameObjects) {

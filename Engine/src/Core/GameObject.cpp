@@ -12,6 +12,19 @@ namespace engine {
 		}
 	}
 
+	Transform GameObject::getGlobalTransform() {
+		Transform globalTransform = transform;
+		std::shared_ptr<GameObject> currentParent = parent;
+		while (currentParent) {
+			globalTransform.shiftPosition(currentParent->transform.getPosition());
+			globalTransform.setRotation(currentParent->transform.getRotation() * globalTransform.getRotation());
+			
+			currentParent = currentParent->parent;
+		}
+
+		return globalTransform;
+	}
+
 	UUID GameObject::getUUID()
 	{
 		return uuid;

@@ -98,7 +98,7 @@ namespace engine {
 
 
 		GameObject* box2 = new GameObject();
-		box2->transform.setPosition(glm::vec3(5, 0, 0));
+		box2->transform.setPosition(glm::vec3(6, 0, 0));
 		box2->addComponent(meshComponent2);
 		box2->name = "Box 2";
 		box2->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithoutGravityMovingLeft));
@@ -107,37 +107,37 @@ namespace engine {
 
 
 		GameObject* box2child1 = new GameObject();
-		box2child1->transform.setPosition(glm::vec3(10, 0, 0));
+		box2child1->transform.setPosition(glm::vec3(2.5f, 0, 0));
 		box2child1->addComponent(meshComponent2);
 		box2child1->name = "Box 2 child 1";
-		box2child1->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithoutGravityMovingLeft));
+		box2child1->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithoutGravity));
 		box2child1->addComponent(std::make_unique<engine::BoxColliderComponent>(boxColliderOffsetComponent));
 		addGameObject(std::unique_ptr<GameObject>(box2child1));
 		setParent(std::unique_ptr<GameObject>(box2child1), std::unique_ptr<GameObject>(box2));
 
 
 		GameObject* box2child2 = new GameObject();
-		box2child2->transform.setPosition(glm::vec3(15, 0, 0));
+		box2child2->transform.setPosition(glm::vec3(-2.5f, 0, 0));
 		box2child2->addComponent(meshComponent2);
 		box2child2->name = "Box 2 child 2";
-		box2child2->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithoutGravityMovingLeft));
+		box2child2->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithoutGravity));
 		box2child2->addComponent(std::make_unique<engine::BoxColliderComponent>(boxColliderOffsetComponent));
 		addGameObject(std::unique_ptr<GameObject>(box2child2));
 		setParent(std::unique_ptr<GameObject>(box2child2), std::unique_ptr<GameObject>(box2));
 
 
 		GameObject* box2child1child = new GameObject();
-		box2child1child->transform.setPosition(glm::vec3(12.5f, 0, 0));
+		box2child1child->transform.setPosition(glm::vec3(2.5f, 0, 0));
 		box2child1child->addComponent(meshComponent2);
 		box2child1child->name = "Box 2 child 1 child";
-		box2child1child->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithoutGravityMovingLeft));
+		box2child1child->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithoutGravity));
 		box2child1child->addComponent(std::make_unique<engine::BoxColliderComponent>(boxColliderOffsetComponent));
 		addGameObject(std::unique_ptr<GameObject>(box2child1child));
 		setParent(std::unique_ptr<GameObject>(box2child1child), std::unique_ptr<GameObject>(box2child1));
 
 
 		GameObject* sphere1 = new GameObject();
-		sphere1->transform.setPosition(glm::vec3(10, 0, 0));
+		sphere1->transform.setPosition(glm::vec3(15, 0, 0));
 		sphere1->addComponent(meshComponent2);
 		sphere1->name = "Sphere 1";
 		sphere1->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithoutGravity));
