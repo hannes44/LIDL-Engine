@@ -121,7 +121,6 @@ namespace engine
 				normal = glm::vec3(0, 0, -1);
 
 			snake.front().lock()->transform.setRotationFromDirection(direction, normal);
-			//snake.front().lock()->transform.setRotationFromDirection(dir);
 		}
 	}
 
@@ -136,7 +135,6 @@ namespace engine
 	}
 
 	void onHeadCollision(Game* game, GameObject* other, ColliderComponent* otherCollider) {
-		//return;
 		Snake3D* snakeGame = dynamic_cast<Snake3D*>(game);
 		if (snakeGame == nullptr)
 			return;
@@ -177,8 +175,6 @@ namespace engine
 		headControllableComponent->movementType = MovementType::Always;
 		headControllableComponent->allowInstantTurnaround = false;
 
-		// auto headCameraComponent = std::make_shared<engine::CameraComponent>();
-
 		std::shared_ptr<MeshComponent> headMesh = engine::MeshComponent::createMeshFromObjFile("amugus.obj");
 		std::weak_ptr<engine::Material> headMaterial = createMaterial("AmogusMaterial");
 		headMaterial.lock()->baseColor = glm::vec3(2.5f, 0, 0);
@@ -189,7 +185,6 @@ namespace engine
 		head->addComponent(std::make_unique<engine::PhysicsComponent>(headPhysicsComponent));
 		head->addComponent(std::make_unique<engine::BoxColliderComponent>(headColliderComponent));
 		head->addComponent(headControllableComponent);
-		//head->addComponent(headCameraComponent);
 
 		auto headPtr = std::shared_ptr<GameObject>(head);
 

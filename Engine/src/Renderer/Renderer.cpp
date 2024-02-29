@@ -160,12 +160,6 @@ namespace engine
 
 			for (auto component : gameObject->getComponents())
 			{
-				if (gameObject->name == "Head" && dynamic_cast<PhysicsComponent*>(component.get()))
-				{
-					auto physicsComponent = dynamic_cast<PhysicsComponent*>(component.get());
-					drawVector(physicsComponent->getVelocity(), gameObject->transform.getPosition(), camera);
-				}
-
 				if (dynamic_cast<ColliderComponent*>(component.get()))
 				{
 					colliderComponent = dynamic_cast<ColliderComponent*>(component.get());

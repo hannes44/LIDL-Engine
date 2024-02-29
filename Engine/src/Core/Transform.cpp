@@ -21,12 +21,6 @@ glm::quat engine::Transform::getRotation()
 	return glm::quat(transformMatrix);
 }
 
-// TODO: Fix this, I do not trust it at all
-void engine::Transform::setRotation(glm::quat rotation) 
-{
-	//transformMatrix = glm::rotate(transformMatrix, glm::angle(rotation) - glm::angle(getRotation()), glm::vec3(0, 1, 0));
-}
-
 void engine::Transform::setRotationFromDirection(glm::vec3 direction, glm::vec3 normal) 
 {
 	glm::vec3 up = normal;
