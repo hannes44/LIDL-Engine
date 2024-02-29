@@ -104,7 +104,7 @@ namespace engine
 			vel.x *= -1;
 
 		// We do not currently support rotations when moving along the Y-axis, so only rotate when moving along the X or Z axis
-		if (glm::length(vel) > 0.1f && (vel.x != 0 || vel.z != 0 || vel.y != 0) && !veceql(vel, direction)) {
+		if (glm::length(vel) > 0.1f && !veceql(vel, direction)) {
 			direction = glm::normalize(vel);
 			glm::vec3 dir = direction;
 			
