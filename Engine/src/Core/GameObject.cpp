@@ -16,9 +16,9 @@ namespace engine {
 		Transform globalTransform = transform;
 		std::shared_ptr<GameObject> currentParent = parent;
 		while (currentParent) {
+			// TODO: Update the rotation as well
 			globalTransform.shiftPosition(currentParent->transform.getPosition());
-			globalTransform.setRotation(currentParent->transform.getRotation() * globalTransform.getRotation());
-			
+
 			currentParent = currentParent->parent;
 		}
 
