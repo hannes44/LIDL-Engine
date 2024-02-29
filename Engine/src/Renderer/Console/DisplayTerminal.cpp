@@ -60,7 +60,8 @@ namespace engine {
 	}
 
 	void DisplayTerminal::drawGameObject(GameObject* gameObject) {
-		auto content = new DisplayGameObjectContent(gameObject, gameObject->transform.getPosition().x, gameObject->transform.getPosition().y, gameObject->transform.getPosition().z, Color::BLUE);
+		glm::vec3 position = gameObject->getGlobalTransform().getPosition();
+		auto content = new DisplayGameObjectContent(gameObject, position.x, position.y, position.z, Color::BLUE);
 		objects.push_back(content);
 	}
 }

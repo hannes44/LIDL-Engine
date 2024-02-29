@@ -11,6 +11,7 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
+#include "Components/PhysicsComponent.hpp"
 
 
 namespace engine
@@ -59,7 +60,8 @@ namespace engine
 					PointLightComponent* light = dynamic_cast<PointLightComponent*>(component.get());
 
 					std::string index = "[" + std::to_string(lightIndex) + "]";
-					baseShader->setVec3(("pointLights" + index + ".position").c_str(), gameObject->transform.getPosition().x, gameObject->transform.getPosition().y, gameObject->transform.getPosition().z);
+					glm::vec3 gameObjectPosition = gameObject->getGlobalTransform().getPosition();
+					baseShader->setVec3(("pointLights" + index + ".position").c_str(), gameObjectPosition.x, gameObjectPosition.y, gameObjectPosition.z);
 					baseShader->setVec3(("pointLights" + index + ".ambient").c_str(), light->color.x, light->color.y, light->color.z);
 					baseShader->setVec3(("pointLights" + index + ".diffuse").c_str(), light->color.x, light->color.y, light->color.z);
 					baseShader->setVec3(("pointLights" + index + ".specular").c_str(), light->color.x, light->color.y, light->color.z);
@@ -73,7 +75,7 @@ namespace engine
 		}
 
 		baseShader->setInt("numLights", lightIndex);
-		baseShader->setVec3("viewPos", camera->translation.x, camera->translation.y, camera->translation.z);
+		baseShader->setVec3("viewPos", camera->getTransform().getPosition().x, camera->getTransform().getPosition().y, camera->getTransform().getPosition().z);
 
 
 		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
@@ -94,9 +96,10 @@ namespace engine
 				continue;
 
 
-			glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * gameObject->transform.transformMatrix;
+			glm::mat4 gameObjectTransformMatrix = gameObject->getGlobalTransform().transformMatrix;
+			glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * gameObjectTransformMatrix;
 			Renderer::baseShader->setMat4("modelViewProjectionMatrix", &modelViewProjectionMatrix[0].x);
-			Renderer::baseShader->setMat4("modelMatrix", &gameObject->transform.transformMatrix[0].x);
+			Renderer::baseShader->setMat4("modelMatrix", &gameObjectTransformMatrix[0].x);
 
 			Material* material = meshComponent->getMaterial();
 			// Material
@@ -121,6 +124,34 @@ namespace engine
 			graphicsAPI->drawIndexed(meshComponent->getVertexArray().get(), meshComponent->indices.size());
 		}
 
+	}
+
+	void Renderer::drawVector(glm::vec3 dir, glm::vec3 pos, CameraComponent* camera)
+	{
+		// 0 - 1
+		const float angle = 0.5f;
+
+		// 0 - 1
+		const float headLength = 0.7f;
+
+		// > 0
+		const float length = 3.f;
+
+		dir = glm::normalize(dir);
+
+		glm::vec3 color = glm::vec3(0, 1, 0);
+		
+		glm::vec3 up = glm::vec3(0, 1, 0);
+		glm::vec3 side = glm::vec3(0, 0, 1);
+		glm::vec3 end = pos + dir * length;
+
+		glm::vec3 right = (1.f + angle) * length * glm::normalize((dir == up || dir == -up) ? glm::cross(dir, side) : glm::cross(dir, up));
+		glm::vec3 midRight = pos + (pos - right) * 0.5f;
+		glm::vec3 midLeft = pos + (pos + right) * 0.5f;
+
+		drawLine(pos, end, color, camera);
+		drawLine(end, end + glm::normalize(midRight - end) * headLength, color, camera);
+		drawLine(end, end + glm::normalize(midLeft - end) * headLength, color, camera);
 	}
 
 	void Renderer::renderGizmos(Game* game, CameraComponent* camera, RendererSettings* renderingSettings)
@@ -202,11 +233,11 @@ namespace engine
 
 		glBindFramebuffer(GL_FRAMEBUFFER, textureFrameBuffer);
 
+		auto cameraGO = std::make_shared<GameObject>();
+		auto camera = std::make_shared<CameraComponent>();
+		cameraGO->addComponent(camera);
 
-		CameraComponent camera = CameraComponent();
-
-		camera.translation = glm::vec3(2.5, 0, 2.5);
-		camera.direction = glm::vec3(-1, 0, -1);
+		camera->getTransform().setPosition(glm::vec3(2.5, 0, 2.5));
 
 		graphicsAPI->setViewport(0, 0, width, height);
 
@@ -225,8 +256,8 @@ namespace engine
 
 		baseShader->bind();
 
-		glm::mat4 projectionMatrix = camera.getProjectionMatrix(width, height);
-		glm::mat4 viewMatrix = camera.getViewMatrix();
+		glm::mat4 projectionMatrix = camera->getProjectionMatrix(width, height);
+		glm::mat4 viewMatrix = camera->getViewMatrix();
 
 		PointLightComponent light = PointLightComponent();
 		light.color = glm::vec3(1, 1, 1);
@@ -244,7 +275,7 @@ namespace engine
 
 		baseShader->setInt("numLights", 1);
 
-		baseShader->setVec3("viewPos", camera.translation.x, camera.translation.y, camera.translation.z);
+		baseShader->setVec3("viewPos", camera->getTransform().getPosition().x, camera->getTransform().getPosition().y, camera->getTransform().getPosition().z);
 
 
 
@@ -266,9 +297,10 @@ namespace engine
 			return nullptr;
 		}
 
-		glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * gameObject->transform.transformMatrix;
+		glm::mat4 gameObjectTransformMatrix = gameObject->getGlobalTransform().transformMatrix;
+		glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * gameObjectTransformMatrix;
 		Renderer::baseShader->setMat4("modelViewProjectionMatrix", &modelViewProjectionMatrix[0].x);
-		Renderer::baseShader->setMat4("modelMatrix", &gameObject->transform.transformMatrix[0].x);
+		Renderer::baseShader->setMat4("modelMatrix", &gameObjectTransformMatrix[0].x);
 
 		Material* material = meshComponent->getMaterial();
 		// Material

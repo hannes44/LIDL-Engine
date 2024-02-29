@@ -5,21 +5,22 @@
 #include "Texture.hpp"
 #include <string>
 #include <map>
+#include <set>
 #include "GameConfig.hpp"
 #include "Material.hpp"
 #include "GameObject.hpp"
 #include "Renderer/RendererSettings.hpp"
 
-
 namespace engine
 {
-	struct RayCollision {
+	struct RayCollision
+	{
 		bool collision = false;
 		float nearCollision = 0;
 		float farCollision = 0;
 		std::shared_ptr<GameObject> gameObject;
 
-		bool operator < (const RayCollision& other) const
+		bool operator<(const RayCollision &other) const
 		{
 			return nearCollision < other.nearCollision;
 		}
@@ -40,10 +41,7 @@ namespace engine
 
 		const void gameLoop();
 
-		// Currenly limit the game to only one camera
-		CameraComponent camera{};
-
-		std::weak_ptr<Texture> loadTexture(const std::string& textureFileName);
+		std::weak_ptr<Texture> loadTexture(const std::string &textureFileName);
 
 		std::string name = "Giga Game";
 
@@ -53,6 +51,18 @@ namespace engine
 
 		const std::map<std::string, std::shared_ptr<GameObject>> getGameObjects() const { return gameObjects; };
 
+		const std::set<std::shared_ptr<GameObject>> getRootGameObjects() const
+		{
+			std::set<std::shared_ptr<GameObject>> gameGameObjects{};
+			for (auto &[id, go] : gameObjects)
+			{
+				if (gameObjectRootIDs.contains(go->uuid.id))
+					gameGameObjects.insert(go);
+			}
+
+			return gameGameObjects;
+		};
+
 		const std::map<std::string, std::shared_ptr<Texture>> getTextures() const { return textures; };
 
 		const std::map<std::string, std::shared_ptr<Material>> getMaterials() const { return materials; };
@@ -61,30 +71,30 @@ namespace engine
 		void resetGameState();
 
 		// Returns a selectable object with the given id
-		std::weak_ptr<Selectable> getSelectable(const std::string& id);
+		std::weak_ptr<Selectable> getSelectable(const std::string &id);
 
 		void addGameObject(std::shared_ptr<GameObject> gameObject);
-		std::weak_ptr<GameObject> getGameObject(const std::string& id);
-		void deleteGameObject(const std::string& id);
-		void deleteGameObject(GameObject* gameObject);
+		std::weak_ptr<GameObject> getGameObject(const std::string &id);
+		void deleteGameObject(const std::string &id);
+		void deleteGameObject(GameObject *gameObject);
 
 		void addTexture(std::shared_ptr<Texture> texture);
-		std::weak_ptr<Texture> getTexture(const std::string& id);
-		void deleteTexture(const std::string& id);
+		std::weak_ptr<Texture> getTexture(const std::string &id);
+		void deleteTexture(const std::string &id);
 
 		void addMaterial(std::shared_ptr<Material> material);
-		std::weak_ptr<Material> getMaterial(const std::string& id);
-		void deleteMaterial(const std::string& id);
+		std::weak_ptr<Material> getMaterial(const std::string &id);
+		void deleteMaterial(const std::string &id);
 
-		void changeMainCamera(GameObject* newCamera);
+		void changeMainCamera(GameObject *newCamera);
 
-		std::weak_ptr<Material> createMaterial(const std::string& name);
+		std::weak_ptr<Material> createMaterial(const std::string &name);
 
-		std::weak_ptr<Texture> createTexture(const std::string& name);
+		std::weak_ptr<Texture> createTexture(const std::string &name);
 
-		std::weak_ptr<GameObject> createGameObject(const std::string& name);
+		std::weak_ptr<GameObject> createGameObject(const std::string &name);
 
-		CameraComponent* getMainCamera();
+		CameraComponent *getMainCamera();
 
 		RendererSettings renderingSettings{};
 
@@ -93,6 +103,8 @@ namespace engine
 
 		// Clones a game object from a gameobject with the given tag
 		void spawnClonedGameObjectFromTag(std::string tag);
+		void setParent(std::shared_ptr<GameObject> gameObject, std::shared_ptr<GameObject> newParent);
+		void removeParent(std::shared_ptr<GameObject> gameObject);
 
 	protected:
 		RayCollision checkRayCollision(std::shared_ptr<GameObject> gameObject, glm::vec3 origin, glm::vec3 direction);
@@ -110,7 +122,9 @@ namespace engine
 
 		// Material Id to Material
 		std::map<std::string, std::shared_ptr<Material>> materials{};
+
+		std::set<std::string> gameObjectRootIDs{};
 	};
 
-	Game* createGame();
+	Game *createGame();
 }

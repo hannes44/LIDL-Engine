@@ -66,6 +66,8 @@ namespace engine {
 	void Game::addGameObject(std::shared_ptr<GameObject> gameObject)
 	{
 		gameObject->game = this;
+		gameObject->added = true;
+		gameObjectRootIDs.insert(gameObject->uuid.id);
 		gameObjects[gameObject->uuid.id] = std::move(gameObject);
 	}
 
@@ -79,12 +81,13 @@ namespace engine {
 
 	void Game::deleteGameObject(const std::string& id)
 	{
+		gameObjectRootIDs.erase(id);
 		gameObjects.erase(id);
 	}
 
 	void Game::deleteGameObject(GameObject* gameObject)
 	{
-		gameObjects.erase(gameObject->uuid.id);
+		deleteGameObject(gameObject->uuid.id);
 	}
 
 	void Game::addTexture(std::shared_ptr<Texture> texture)
@@ -252,5 +255,47 @@ namespace engine {
 		float tFar = min(min(t2.x, t2.y), t2.z);
 
 		return { tNear >= 0 && tNear < tFar, tNear, tFar, gameObject };
+	}
+
+	void Game::setParent(std::shared_ptr<GameObject> gameObject, std::shared_ptr<GameObject> newParent) {
+		if (gameObject.get()->parent == newParent)
+			return;
+
+		if (!gameObject->added)
+			throw std::runtime_error("Cannot set parent before GameObject has been added.");
+
+		std::shared_ptr<GameObject> currParent = gameObject->parent;
+		while (currParent != nullptr) {
+			if (currParent == gameObject)
+				throw std::runtime_error("Cannot set parent. Circular parents.");
+
+			currParent = currParent->parent;
+		}
+
+		// Remove existing parent
+		if (gameObject->parent != nullptr || newParent == nullptr)
+			removeParent(gameObject);
+
+		// If the new parent is not null, it is no longer a root object
+		if (newParent != nullptr) {
+			gameObjectRootIDs.erase(gameObject->uuid.id);
+			newParent->children.insert(gameObject);
+		}
+
+		gameObject->parent = newParent;
+	}
+
+	void Game::removeParent(std::shared_ptr<GameObject> gameObject) {
+		if (!gameObject->added)
+			throw std::runtime_error("Cannot remove parent before GameObject has been added.");
+
+		// Without a parent, the GameObject is now a root object
+		gameObjectRootIDs.insert(gameObject->uuid.id);
+
+		// If it had a parent, we must erase it from the parent's children
+		if (gameObject->parent != nullptr)
+			gameObject->parent->children.erase(gameObject);
+
+		gameObject->parent = nullptr;
 	}
 }
