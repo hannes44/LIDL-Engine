@@ -17,16 +17,6 @@ namespace engine
 		
 	}
 
-	void CameraComponent::translate(float x, float y, float z)
-	{
-		//translation += glm::vec3(x, y, z);
-	}
-
-	void CameraComponent::rotate(float angle, float x, float y, float z)
-	{
-		//rotation += glm::vec3(angle * x, angle * y, angle * z);
-	}
-
 	Transform CameraComponent::getTransform()
 	{
 		return gameObject->transform;

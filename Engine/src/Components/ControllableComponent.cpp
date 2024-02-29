@@ -46,119 +46,37 @@ namespace engine {
 			physicsComponent->applyVelocity(vector);
 	}
 
-	void ControllableComponent::moveOnHold(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent) 
+	Direction keyToDirection(Key key) 
 	{
-		int moveDir = 0;
-		if (eventType == InputEventType::KeyDown)
-			moveDir = 1;
-		else if (eventType == InputEventType::KeyUp)
-			moveDir = -1;
-		else
-			return;
-
-		glm::vec3 vector = glm::vec3(0, 0, 0);
-
-		if (event.getKey() == Key::LSHIFT) {
-			vector = glm::vec3(0, moveDir * movementSpeed, 0);
+		switch (key) 
+		{
+			case Key::W: return Direction::Forward;
+			case Key::S: return Direction::Backward;
+			case Key::A: return Direction::Left;
+			case Key::D: return Direction::Right;
+			case Key::LCTRL: return Direction::Down;
+			case Key::LSHIFT: return Direction::Up;
+			default: return Direction::None;
 		}
-
-		else if (event.getKey() == Key::LCTRL) {
-			vector = glm::vec3(0, -moveDir * movementSpeed, 0);
-		}
-
-		else if (event.getKey() == Key::A) {
-			vector = glm::vec3(-moveDir * movementSpeed, 0, 0);
-		}
-
-		else if (event.getKey() == Key::D) {
-			vector = glm::vec3(moveDir * movementSpeed, 0, 0);
-		}
-
-		else if (event.getKey() == Key::W) {
-			vector = glm::vec3(0, 0, -moveDir * movementSpeed);
-		}
-
-		else if (event.getKey() == Key::S) {
-			vector = glm::vec3(0, 0, moveDir * movementSpeed);
-		}
-
-		else {
-			return;
-		}
-
-		if (!allowInstantTurnaround && applied.find(-vector) != applied.end())
-			return;
-
-		applied.erase(-vector);
-		applied.insert(vector);
-		apply(physicsComponent, vector);
 	}
 
 	void ControllableComponent::alwaysMove(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent) 
 	{
-		// Only change direction on key down
 		if (eventType != InputEventType::KeyDown)
 			return;
 
-		glm::vec3 vector = glm::vec3(0, 0, 0);
+		Direction dir = keyToDirection(event.getKey());
 
-		if (event.getKey() == Key::LSHIFT) {
-			vector = glm::vec3(0, movementSpeed, 0);
-		}
-
-		else if (event.getKey() == Key::LCTRL) {
-			vector = glm::vec3(0, -movementSpeed, 0);
-		}
-
-		else if (event.getKey() == Key::A) {
-			vector = glm::vec3(-movementSpeed, 0, 0);
-		}
-
-		else if (event.getKey() == Key::D) {
-			vector = glm::vec3(movementSpeed, 0, 0);
-		}
-
-		else if (event.getKey() == Key::W) {
-			vector = glm::vec3(0, 0, -movementSpeed);
-		}
-
-		else if (event.getKey() == Key::S) {
-			vector = glm::vec3(0, 0, movementSpeed);
-		}
-
-		else {
-			return;
-		}
-
-		if (!allowInstantTurnaround && applied.find(-vector) != applied.end())
-			return;
-
-		for (auto it = applied.begin(); it != applied.end();) {
-			apply(physicsComponent, -*it);
-			applied.erase(it++);
-		}
-
-		applied.insert(vector);
-		apply(physicsComponent, vector);
+		currentDirections.clear();
+		currentDirections.insert(dir);
 	}
 
-	void ControllableComponent::moveOnHoldFromDirection(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent, glm::vec3 direction) 
+	void ControllableComponent::moveOnHold(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent) 
 	{
 		if (eventType != InputEventType::KeyDown && eventType != InputEventType::KeyUp)
 			return;
 
-		Direction dir = Direction::None;
-
-		switch(event.getKey())
-		{
-			case Key::LSHIFT: dir = Direction::Up; break;
-			case Key::LCTRL: dir = Direction::Down; break;
-			case Key::A: dir = Direction::Left; break;
-			case Key::D: dir = Direction::Right; break;
-			case Key::W: dir = Direction::Forward; break;
-			case Key::S: dir = Direction::Backward; break;
-			default: return;
-		}
+		Direction dir = keyToDirection(event.getKey());
 
 		if (eventType == InputEventType::KeyDown)
 			currentDirections.insert(dir);
@@ -176,15 +94,11 @@ namespace engine {
 		// Handle key and mouse input here
 		// If mouse button is pressed we want to control the camera
 		if (EventType == InputEventType::MouseButtonDown && (Key)event.getButton() == Key::MOUSE_RIGHT) 
-		{
 			isMouseDragging = true;
-		}
 
 		// If mouse button is released we want to stop controlling the camera
 		if (!(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT))) 
-		{
 			isMouseDragging = false;
-		}
 
 		if ((EventType == InputEventType::MouseMotion || EventType == InputEventType::KeyDown || EventType == InputEventType::KeyHold)
 			&& isMouseDragging) 
@@ -211,18 +125,14 @@ namespace engine {
 		InputEventType eventType = event.getEventType();
 		switch (movementType) {
 		case MovementType::OnHold:
-			moveOnHoldFromDirection(event, eventType, gameObject->getComponent<PhysicsComponent>(), direction);
+			moveOnHold(event, eventType, gameObject->getComponent<PhysicsComponent>());
 			if (gameObject->getComponent<CameraComponent>())
-			{
 				changeDirection(event);
-			}
 			break;
 		case MovementType::Always:
 			alwaysMove(event, eventType, gameObject->getComponent<PhysicsComponent>());
 			if (gameObject->getComponent<CameraComponent>())
-			{
 				changeDirection(event);
-			}
 			break;
 		}
 	}

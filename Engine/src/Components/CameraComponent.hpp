@@ -10,8 +10,6 @@ namespace engine
 	{
 	public:
 		CameraComponent() {};
-		void translate(float x, float y, float z);
-		void rotate(float angle, float x, float y, float z);
 		
         void update();
 
