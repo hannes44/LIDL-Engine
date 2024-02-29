@@ -311,15 +311,18 @@ namespace engine
 
 		ImGui::PushID(gameObject->uuid.id.c_str());
 
+		std::string name = std::string(tabLevel, ' ') + gameObject->name;
+
 		if (gameObject->getChildren().size() > 0) {
 			// TODO: Parents are currently not selectable as they are collapsing headers instead, fix this so they can be selected
-			if (ImGui::CollapsingHeader(gameObject->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
+			//if (ImGui::CollapsingHeader(gameObject->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
+			if (ImGui::Selectable(name.c_str(), selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID()))) {
+				selectedObject = gameObject; // TODO: Fix here also
 				for (auto& child : gameObject->getChildren())
 					drawGameObject(child, tabLevel + 1);
 			}
 		}
 		else {
-			std::string name = std::string(tabLevel, ' ') + gameObject->name;
 			if (ImGui::Selectable(name.c_str(), selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID())))
 			{
 				selectedObject = gameObject;
