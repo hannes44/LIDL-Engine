@@ -219,9 +219,6 @@ namespace engine {
 			return collisions[0]->uuid.id;
 		}
 		LOG_INFO("Ray did not hit any object");
-		
-		lastOrigin = origin;
-		lastDirection = direction;
 
 		return "";
 	}

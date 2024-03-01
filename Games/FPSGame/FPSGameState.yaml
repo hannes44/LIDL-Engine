@@ -63,7 +63,7 @@ GameObjects:
         currentRound: 1
         scriptFileName: EnemyManager.cs
   - name: GameCamera
-    transform: [0.964918017, 0, -0.262551397, 0, -0.136215538, 0.854886711, -0.50061363, 0, 0.224451706, 0.518814743, 0.824895561, 0, 0, 2.65446806, -4.87807035, 1]
+    transform: [0.544159412, -1.49011612e-08, -0.838981807, 0, -0.307609975, 0.930360198, -0.1995143, 0, 0.780555308, 0.366646796, 0.506264269, 0, 0, 2.65446806, -4.87807035, 1]
     isVisible: true
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
     tag: ""
