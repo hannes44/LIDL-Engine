@@ -23,7 +23,7 @@ public class Weapon
     {
         EngineAPI.PlaySound("AK47_Sound.wav");
     }
-
+    //
     public void OnInput(string action, string actionType)
     {
         if (action == "Fire" && actionType == "ActionDown")
@@ -37,6 +37,19 @@ public class Weapon
             {
                 EngineAPI.PlaySound("AK47_Sound.wav");
                 ammoCount--;
+                //
+
+                // Fire ray in the forward direction of the weapon
+                Vector3 weaponPosition = gameObject.transform.GetTranslation();
+                Vector3 weaponForward = gameObject.transform.GetForward();
+                Console.WriteLine("Weapon position: " + weaponPosition);
+                Console.WriteLine("Weapon forward: " + weaponForward);
+                string hitId = EngineAPI.GetIdOfGameObjectHitByRay(weaponPosition.X, weaponPosition.Y, weaponPosition.Z, weaponForward.X, weaponForward.Y, weaponForward.Z);
+                if (hitId != "")
+                {
+                    EngineAPI.Log("Hit object with id: " + hitId);
+                    EngineAPI.DeleteGameObjectFromId(hitId);
+                }
             }
         }
 

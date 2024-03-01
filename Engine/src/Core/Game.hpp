@@ -75,7 +75,7 @@ namespace engine
 
 		void addGameObject(std::shared_ptr<GameObject> gameObject);
 		std::weak_ptr<GameObject> getGameObject(const std::string &id);
-		void deleteGameObject(const std::string &id);
+		void deleteGameObjectFromId(const std::string &id);
 		void deleteGameObject(GameObject *gameObject);
 
 		void addTexture(std::shared_ptr<Texture> texture);
@@ -100,6 +100,8 @@ namespace engine
 
 		/// Returns a vector of the GameObjects that collided with the ray, sorted from closest to farthest
 		std::vector<std::shared_ptr<GameObject>> checkRayCollisions(glm::vec3 origin, glm::vec3 direction);
+
+		std::string getIdOfGameObjectHitByRay(float originX, float originY, float originZ, float dirX, float dirY, float dirZ);
 
 		// Clones a game object from a gameobject with the given tag
 		void spawnClonedGameObjectFromTag(std::string tag);

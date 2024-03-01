@@ -63,7 +63,7 @@ GameObjects:
         currentRound: 1
         scriptFileName: EnemyManager.cs
   - name: GameCamera
-    transform: [0.889472127, -5.58793545e-09, 0.456989378, 0, 0.0616910383, 0.990846336, -0.12007381, 0, -0.452806264, 0.134994462, 0.881330252, 0, 0, 0, 0, 1]
+    transform: [0.964918017, 0, -0.262551397, 0, -0.136215538, 0.854886711, -0.50061363, 0, 0.224451706, 0.518814743, 0.824895561, 0, 0, 2.65446806, -4.87807035, 1]
     isVisible: true
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
     tag: ""
@@ -84,8 +84,11 @@ GameObjects:
         Movement Speed: 3
         Rotation Speed: 0.00499999989
         Allow Instant Turnaround: true
+      - name: Scriptable
+        ammoCount: 30
+        scriptFileName: Weapon.cs
   - name: Ak-47
-    transform: [-9.09963163e-08, -1.65606542e-13, -0.100000024, 0, 0, 0.0999996066, -1.65605851e-13, 0, 0.100000024, 0, -9.09963163e-08, 0, 0, 17.9843712, -13.7580671, 1]
+    transform: [-9.09962861e-09, -1.65606495e-14, -0.00999999978, 0, 0, 0.00999999978, -1.65606495e-14, 0, 0.00999999978, 0, -9.09962861e-09, 0, 0, 18.6483479, -13.7580671, 1]
     isVisible: true
     Id: ndlRjOYAhHQMpAEwRAEIBMKYihTpURMf
     tag: ""
@@ -94,9 +97,6 @@ GameObjects:
         OBJ File: Ak-47.obj
         Primative Type: NONE
         Material: TikmfUwkrFNXXjEcaavGVjVaeuMhbFUU
-      - name: Scriptable
-        ammoCount: 30
-        scriptFileName: Weapon.cs
   - name: Player
     transform: [1, 0, 0, 0, 0, 7.36903429, 0, 0, 0, 0, 1, 0, 0, 2.14822531, 0, 1]
     isVisible: true

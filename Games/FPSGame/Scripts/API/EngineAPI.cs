@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 
 namespace Engine
 {
@@ -32,6 +33,20 @@ namespace Engine
         public static void PlaySound(string soundName)
         {
             //(c++_API) __playSound__(soundName);
+        }
+
+        public static string GetIdOfGameObjectHitByRay(float originX, float originY, float originZ, float rayX, float rayY, float rayZ)
+        {
+            //(c++_API) id = __getIdOfGameObjectHitByRay__(originX, originY, originZ, rayX, rayY, rayZ);
+            //(c++_API) if (id ~= "") then return id; 
+            //(c++_API) else 
+            return "";
+            //(c++_API) end
+        }
+
+        public static void DeleteGameObjectFromId(string id)
+        {
+            //(c++_API) __deleteGameObjectFromId__(id);
         }
 
         public static GameObject GetComponentGameObject()

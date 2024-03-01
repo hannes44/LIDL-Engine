@@ -200,7 +200,7 @@ namespace engine
 					if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
 					{
 						std::string gameObjectId = lockedGameObject->getUUID().id;
-						game->deleteGameObject(lockedGameObject->getUUID().id);
+						game->deleteGameObjectFromId(lockedGameObject->getUUID().id);
 						EventManager::getInstance().notify(EventType::SelectableDeleted, gameObjectId);
 					}
 					else if (auto lockedMaterial = dynamic_pointer_cast<Material>(lockedSelectedObject))

@@ -79,7 +79,7 @@ namespace engine {
 		return std::weak_ptr<GameObject>();
 	}
 
-	void Game::deleteGameObject(const std::string& id)
+	void Game::deleteGameObjectFromId(const std::string& id)
 	{
 		gameObjectRootIDs.erase(id);
 		gameObjects.erase(id);
@@ -87,7 +87,7 @@ namespace engine {
 
 	void Game::deleteGameObject(GameObject* gameObject)
 	{
-		deleteGameObject(gameObject->uuid.id);
+		deleteGameObjectFromId(gameObject->uuid.id);
 	}
 
 	void Game::addTexture(std::shared_ptr<Texture> texture)
@@ -205,6 +205,25 @@ namespace engine {
 			collidingObjects.push_back(collision.gameObject);
 
 		return collidingObjects;
+	}
+
+	std::string Game::getIdOfGameObjectHitByRay(float originX, float originY, float originZ, float dirX, float dirY, float dirZ)
+	{
+		LOG_INFO("Checking ray collisions");
+		auto origin = glm::vec3(originX, originY, originZ);
+		auto direction = glm::vec3(dirX, dirY, dirZ);
+		auto collisions = checkRayCollisions(origin, direction);
+		if (collisions.size() > 0)
+		{
+			LOG_INFO("Ray hit object with id: " + collisions[0]->uuid.id);
+			return collisions[0]->uuid.id;
+		}
+		LOG_INFO("Ray did not hit any object");
+		
+		lastOrigin = origin;
+		lastDirection = direction;
+
+		return "";
 	}
 
 	void Game::spawnClonedGameObjectFromTag(std::string tag)

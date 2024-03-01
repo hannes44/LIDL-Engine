@@ -289,6 +289,11 @@ namespace engine
 
 	void ScriptEngine::handleInputForScriptableComponent(ScriptableComponent* component, const InputEvent& event)
 	{
+		if (!game->running)
+		{
+			return;
+		}
+
 		sol::state_view lua(L);
 		std::string Id = component->uuid.id;
 
@@ -325,6 +330,8 @@ namespace engine
 		lua.set_function("__addGameObject__", &Game::createGameObject, game);
 		lua.set_function("__spawnClonedGameObjectFromTag__", &Game::spawnClonedGameObjectFromTag, game);
 		lua.set_function("__playSound__", &AudioManager::playSound, &AudioManager::getInstance());
+		lua.set_function("__getIdOfGameObjectHitByRay__", &Game::getIdOfGameObjectHitByRay, game);
+		lua.set_function("__deleteGameObjectFromId__", &Game::deleteGameObjectFromId, game);
 	}
 
 	void ScriptEngine::syncGameObjectStateEngineToScript(ScriptableComponent* component)
