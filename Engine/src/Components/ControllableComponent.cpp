@@ -12,7 +12,7 @@
 
 namespace engine {
 
-	ControllableComponent::ControllableComponent() 
+	ControllableComponent::ControllableComponent(bool allowJump) : allowJump(allowJump)
 	{
 		InputFramework::getInstance().addListener(this);
 	}
@@ -68,7 +68,8 @@ namespace engine {
 		Direction dir = keyToDirection(event.getKey());
 
 		currentDirections.clear();
-		currentDirections.insert(dir);
+		if (dir != Direction::None)
+			currentDirections.insert(dir);
 	}
 
 	void ControllableComponent::moveOnHold(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent) 
@@ -77,6 +78,9 @@ namespace engine {
 			return;
 
 		Direction dir = keyToDirection(event.getKey());
+
+		if (dir == Direction::None)
+			return;
 
 		if (eventType == InputEventType::KeyDown)
 			currentDirections.insert(dir);
@@ -123,6 +127,18 @@ namespace engine {
 	void ControllableComponent::handleInput(const InputEvent& event) 
 	{
 		InputEventType eventType = event.getEventType();
+
+		if (allowJump && eventType == InputEventType::KeyDown && event.getKey() == Key::SPACE) 
+		{
+			std::shared_ptr<PhysicsComponent> physicsComponent = gameObject->getComponent<PhysicsComponent>();
+			if (physicsComponent) {
+				gameObject->transform.shiftPosition(glm::vec3(0, 0.1f, 0));
+				physicsComponent->applyVelocity(glm::vec3(0, 5.f, 0));
+			}
+				
+			return;
+		}
+
 		switch (movementType) {
 		case MovementType::OnHold:
 			moveOnHold(event, eventType, gameObject->getComponent<PhysicsComponent>());

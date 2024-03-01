@@ -24,8 +24,10 @@ namespace engine {
 
 	class ControllableComponent : public Component, public InputListener {
 	public:
-		ControllableComponent();
+		ControllableComponent(bool allowJump = false);
 		~ControllableComponent();
+
+		bool allowJump = false;
 
 		float movementSpeed = 3;
 		MovementType movementType = MovementType::OnHold;
