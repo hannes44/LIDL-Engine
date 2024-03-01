@@ -57,24 +57,24 @@ namespace engine {
 
 				for (auto direction : currentDirections) {
 					switch (direction) {
-						case Direction::Up:
-							vec += controllableComponent->orientation * physicsComponent->up;
-							break;
-						case Direction::Down:
-							vec -= controllableComponent->orientation * physicsComponent->up;
-							break;
-						case Direction::Left:
-							vec -= controllableComponent->orientation * physicsComponent->right;
-							break;
-						case Direction::Right:
-							vec += controllableComponent->orientation * physicsComponent->right;
-							break;
-						case Direction::Forward:
-							vec += controllableComponent->orientation * physicsComponent->forward;
-							break;
-						case Direction::Backward:
-							vec -= controllableComponent->orientation * physicsComponent->forward;
-							break;
+					case Direction::Up:
+						vec += controllableComponent->orientation * physicsComponent->up;
+						break;
+					case Direction::Down:
+						vec -= controllableComponent->orientation * physicsComponent->up;
+						break;
+					case Direction::Left:
+						vec -= controllableComponent->orientation * physicsComponent->right;
+						break;
+					case Direction::Right:
+						vec += controllableComponent->orientation * physicsComponent->right;
+						break;
+					case Direction::Forward:
+						vec += controllableComponent->orientation * physicsComponent->forward;
+						break;
+					case Direction::Backward:
+						vec -= controllableComponent->orientation * physicsComponent->forward;
+						break;
 					}
 				}
 
@@ -85,15 +85,11 @@ namespace engine {
 
 				if (currentDirections.size() > 0)
 					vec = glm::normalize(vec) * controllableComponent->movementSpeed;
-				
+
 				if (controllableComponent->enableForces)
-				{
 					directionForce = vec;
-				}
 				else
-				{
 					directionVelocity = vec;
-				}
 			}
 
 			glm::vec3 force = physicsComponent->getForce() + directionForce;
@@ -205,6 +201,16 @@ namespace engine {
 					// We cannot resolve collisions if both objects are static
 					if (!pc1 && !pc2)
 						continue;
+
+					if (colliderComponent1->isPlatform && !colliderComponent2->isPlatform) {
+						pc2->setVelocity(glm::vec3(pc2->currentVelocity.x, 0, pc2->currentVelocity.z));
+						continue;
+					}
+
+					if (!colliderComponent1->isPlatform && colliderComponent2->isPlatform) {
+						pc1->setVelocity(glm::vec3(pc1->currentVelocity.x, 0, pc1->currentVelocity.z));
+						continue;
+					}
 
 					// If only one of the objects has a PhysicsComponent, reflect it
 					if (pc1 && !pc2)
