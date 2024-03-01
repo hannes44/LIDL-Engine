@@ -10,16 +10,16 @@
 #include <set>
 #include <string>
 
-namespace engine {
+namespace engine
+{
 
-	ControllableComponent::ControllableComponent() 
+	ControllableComponent::ControllableComponent(bool allowJump) : allowJump(allowJump)
 	{
 		InputFramework::getInstance().addListener(this);
 	}
 
-	void ControllableComponent::initialize() 
+	void ControllableComponent::initialize()
 	{
-
 	}
 
 	ControllableComponent::~ControllableComponent()
@@ -27,17 +27,17 @@ namespace engine {
 		InputFramework::getInstance().removeListener(this);
 	}
 
-	std::set<std::string> ControllableComponent::getRequiredComponents() 
+	std::set<std::string> ControllableComponent::getRequiredComponents()
 	{
-		return { "Physics" };
+		return {"Physics"};
 	}
 
-	std::string ControllableComponent::getName() 
+	std::string ControllableComponent::getName()
 	{
 		return "Controllable";
 	}
 
-	void ControllableComponent::apply(std::shared_ptr<PhysicsComponent> physicsComponent, glm::vec3 vector) 
+	void ControllableComponent::apply(std::shared_ptr<PhysicsComponent> physicsComponent, glm::vec3 vector)
 	{
 		if (enableForces)
 			physicsComponent->applyForce(vector);
@@ -45,21 +45,28 @@ namespace engine {
 			physicsComponent->applyVelocity(vector);
 	}
 
-	Direction keyToDirection(Key key) 
+	Direction keyToDirection(Key key)
 	{
-		switch (key) 
+		switch (key)
 		{
-			case Key::W: return Direction::Forward;
-			case Key::S: return Direction::Backward;
-			case Key::A: return Direction::Left;
-			case Key::D: return Direction::Right;
-			case Key::LCTRL: return Direction::Down;
-			case Key::LSHIFT: return Direction::Up;
-			default: return Direction::None;
+		case Key::W:
+			return Direction::Forward;
+		case Key::S:
+			return Direction::Backward;
+		case Key::A:
+			return Direction::Left;
+		case Key::D:
+			return Direction::Right;
+		case Key::LCTRL:
+			return Direction::Down;
+		case Key::LSHIFT:
+			return Direction::Up;
+		default:
+			return Direction::None;
 		}
 	}
 
-	void ControllableComponent::alwaysMove(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent) 
+	void ControllableComponent::alwaysMove(const InputEvent &event, const InputEventType &eventType, std::shared_ptr<PhysicsComponent> physicsComponent)
 	{
 		if (eventType != InputEventType::KeyDown)
 			return;
@@ -67,17 +74,19 @@ namespace engine {
 		Direction dir = keyToDirection(event.getKey());
 
 		currentDirections.clear();
-
 		if (dir != Direction::None)
 			currentDirections.insert(dir);
 	}
 
-	void ControllableComponent::moveOnHold(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent) 
+	void ControllableComponent::moveOnHold(const InputEvent &event, const InputEventType &eventType, std::shared_ptr<PhysicsComponent> physicsComponent)
 	{
 		if (eventType != InputEventType::KeyDown && eventType != InputEventType::KeyUp)
 			return;
 
 		Direction dir = keyToDirection(event.getKey());
+
+		if (dir == Direction::None)
+			return;
 
 		if (eventType == InputEventType::KeyDown)
 			currentDirections.insert(dir);
@@ -85,7 +94,7 @@ namespace engine {
 			currentDirections.erase(dir);
 	}
 
-	void ControllableComponent::changeDirection(const InputEvent& event)
+	void ControllableComponent::changeDirection(const InputEvent &event)
 	{
 		InputEventType EventType = event.getEventType();
 
@@ -94,24 +103,23 @@ namespace engine {
 
 		// Handle key and mouse input here
 		// If mouse button is pressed we want to control the camera
-		if (EventType == InputEventType::MouseButtonDown && (Key)event.getButton() == Key::MOUSE_RIGHT) 
+		if (EventType == InputEventType::MouseButtonDown && (Key)event.getButton() == Key::MOUSE_RIGHT)
 			isMouseDragging = true;
 
 		// If mouse button is released we want to stop controlling the camera
-		if (!(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT))) 
+		if (!(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT)))
 			isMouseDragging = false;
 
-		if ((EventType == InputEventType::MouseMotion || EventType == InputEventType::KeyDown || EventType == InputEventType::KeyHold)
-			&& isMouseDragging) 
+		if ((EventType == InputEventType::MouseMotion || EventType == InputEventType::KeyDown || EventType == InputEventType::KeyHold) && isMouseDragging)
 		{
-			if (SDL_BUTTON(SDL_BUTTON_RIGHT)) 
+			if (SDL_BUTTON(SDL_BUTTON_RIGHT))
 			{
 				// Calculate the pitch and yaw quaternions
 				glm::quat pitch = glm::angleAxis(rotationSpeed * -event.getY(), glm::vec3(1, 0, 0));
 				glm::quat yaw = glm::angleAxis(rotationSpeed * -event.getX(), glm::vec3(0, 1, 0));
 
 				// Apply the pitch and yaw rotations to the orientation quaternion
-				orientation = glm::normalize(yaw * orientation * pitch);				
+				orientation = glm::normalize(yaw * orientation * pitch);
 
 				// Calculate the new direction vector from the orientation quaternion
 				direction = orientation * glm::vec3(0, 0, -1);
@@ -121,10 +129,24 @@ namespace engine {
 		}
 	}
 
-	void ControllableComponent::handleInput(const InputEvent& event) 
+	void ControllableComponent::handleInput(const InputEvent &event)
 	{
 		InputEventType eventType = event.getEventType();
-		switch (movementType) {
+
+		if (allowJump && eventType == InputEventType::KeyDown && event.getKey() == Key::SPACE)
+		{
+			std::shared_ptr<PhysicsComponent> physicsComponent = gameObject->getComponent<PhysicsComponent>();
+			if (physicsComponent)
+			{
+				gameObject->transform.shiftPosition(glm::vec3(0, 0.1f, 0));
+				physicsComponent->applyVelocity(glm::vec3(0, 5.f, 0));
+			}
+
+			return;
+		}
+
+		switch (movementType)
+		{
 		case MovementType::OnHold:
 			moveOnHold(event, eventType, gameObject->getComponent<PhysicsComponent>());
 			if (gameObject->getComponent<CameraComponent>())

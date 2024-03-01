@@ -14,7 +14,7 @@ namespace engine {
 		bool isColliding(ColliderComponent* other);
 		virtual void drawCollider(CameraComponent* camera) = 0;
 		virtual BoundingBox getBoundingBox() = 0;
-		ColliderComponent(glm::vec3 offset, glm::vec3 extent) : offset(offset), extent(extent) {}
+		ColliderComponent(glm::vec3 offset, glm::vec3 extent, bool isPlatform = false) : offset(offset), extent(extent), isPlatform(isPlatform) {}
 
 		void subscribeToCollision(std::function<void(Game*, GameObject*, ColliderComponent*)> callback) { onCollision = callback; }
 
@@ -23,7 +23,8 @@ namespace engine {
 			return
 			{
 				{SerializableType::VECTOR3, "Offset", "The offset of the collider", &offset},
-				{SerializableType::VECTOR3, "Extent", "The extent of the collider", &extent}
+				{SerializableType::VECTOR3, "Extent", "The extent of the collider", &extent},
+				{SerializableType::BOOLEAN, "IsPlatform", "Whether the collider is a platform", &isPlatform}
 			};
 		};
 
@@ -35,6 +36,7 @@ namespace engine {
 
 		glm::vec3 offset{ 0 };
 		glm::vec3 extent{ 0 };
+		bool isPlatform = false;
 
 		bool isCurrentlyColliding = false;
 		std::function<void(Game*, GameObject*, ColliderComponent*)> onCollision;
