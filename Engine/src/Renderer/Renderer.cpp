@@ -88,7 +88,7 @@ namespace engine
 					baseShader->setFloat(("spotLights" + index + ".linear").c_str(), light->linear);
 					baseShader->setFloat(("spotLights" + index + ".quadratic").c_str(), light->quadratic);
 					baseShader->setFloat(("spotLights" + index + ".cutOff").c_str(), glm::cos(glm::radians(12.5f)));
-					//baseShader->setFloat(("spotLights" + index + ".outerCutOff").c_str(), light->outerCutOff);
+					baseShader->setFloat(("spotLights" + index + ".outerCutOff").c_str(), glm::cos(glm::radians(17.5f)));
 
 					spotLightIndex++;
 				}

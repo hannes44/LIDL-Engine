@@ -80,39 +80,37 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 		baseColor = material.baseColor;
 	}
 
-
-    vec3 lightDir = normalize(light.position - fragPos);
-	float theta = dot(lightDir, normalize(-light.direction));
-	if(theta > light.cutOff) 
-	{       
-		return vec3(1, 0, 0);
-        	// ambient
-		vec3 ambient = 0.2 * baseColor;
-		// diffuse
-
-		float diff = max(dot(lightDir, normal), 0.0);
-		vec3 diffuse = diff * baseColor;
-		// specular
-		vec3 reflectDir = reflect(-lightDir, normal);
-		float spec = 0.0;
-
-		vec3 halfwayDir = normalize(lightDir + viewDir);  
-		spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess);
-
-        vec3 specular = vec3(0.3) * spec; // assuming bright white light color
-
-		float distance = length(light.position - fragPos);
+			float distance = length(light.position - fragPos);
 		float attenuation = 1.0 / (light.constant + light.linear * distance + 
   					 light.quadratic * (distance * distance));    
 
-		ambient *= attenuation;
-		diffuse *= attenuation;
-		specular *= attenuation;
-	}
+    vec3 lightDir = normalize(light.position - fragPos);
+	float theta = dot(lightDir, normalize(-light.direction));
 
+	vec3 ambient = 0.2 * baseColor;
+  
 
+	// diffuse
+	float diff = max(dot(lightDir, normal), 0.0);
+	vec3 diffuse = diff * baseColor;
+	// specular
+	vec3 reflectDir = reflect(-lightDir, normal);
+	float spec = 0.0;
 
-	return vec3(0,0,0);
+	vec3 halfwayDir = normalize(lightDir + viewDir);  
+	spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess);
+
+    vec3 specular = vec3(0.3) * spec; // assuming bright white light color
+
+	float epsilon   = light.cutOff - light.outerCutOff;
+	float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);  
+	diffuse *= intensity;
+	specular *= intensity;
+
+	ambient *= attenuation;  
+//	diffuse *= attenuation;
+//	specular *= attenuation;
+	return diffuse + specular + ambient;
 }
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)

@@ -16,7 +16,6 @@ namespace engine
 		
 		float cutOffAngle = 12.5f;
 
-
 		std::string getName() override { return name; };
 
 		inline static const std::string name = "SpotLight";
