@@ -8,8 +8,6 @@ layout(location = 3) in vec2 in_texCoord;
 uniform mat4 normalMatrix;
 uniform mat4 modelViewProjectionMatrix;
 uniform mat4 modelViewMatrix;
-uniform mat4 projectionMatrix;
-uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
 
 
@@ -23,7 +21,7 @@ void main()
 	color = vec4(in_color, 0);
 	texCoord = in_texCoord;
 
-	gl_Position = (projectionMatrix * viewMatrix * modelMatrix * vec4(in_position, 1.0));
+	gl_Position = (modelViewProjectionMatrix* vec4(in_position, 1.0));
     worldPos = vec3(modelMatrix * vec4(in_position, 1.0));
 	worldNormal = (normalMatrix * vec4(in_normal, 0.0)).xyz;
 }

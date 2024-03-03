@@ -13,8 +13,8 @@ namespace engine
 		float constant = 1.0f;
 		float linear = 0.09f;
 		float quadratic = 0.032f;
-		
 		float cutOffAngle = 12.5f;
+		float outerCutOffAngle = 17.5f;
 
 		std::string getName() override { return name; };
 
@@ -34,6 +34,7 @@ namespace engine
 				{SerializableType::FLOAT, "Linear", "The linear value of the pointlight", &linear},
 				{SerializableType::FLOAT, "Quadratic", "The quadratic value of the pointlight", &quadratic},
 				{SerializableType::FLOAT, "Cut Off Angle", "The cut off angle of the spotlight", &cutOffAngle},
+				{SerializableType::FLOAT, "Outer Cut Off Angle", "The outer cut off angle of the spotlight", &outerCutOffAngle}
 			};
 		};
 	};

@@ -16,7 +16,7 @@ uniform int enableFog;
 uniform float startFogDistance;
 uniform float endFogDistance;
 
-uniform int numLights;
+uniform int numPointLights;
 uniform int numSpotLights;
 
 uniform int hasMaterial;
@@ -115,6 +115,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
+
     vec3 baseColor = vec3(0,0,0);
     if (material.hasDiffuseTexture == 1) 
 	{
@@ -162,8 +163,8 @@ void main()
     vec3 result = vec3(0,0,0); //CalcDirLight(dirLight, norm, viewDir);
     // phase 2: Point lights
 
-  //  for(int i = 0; i < numLights; i++)
-  //     result += CalcPointLight(pointLights[i], norm, worldPos, viewDir);    
+    for(int i = 0; i < numPointLights; i++)
+       result += CalcPointLight(pointLights[i], norm, worldPos, viewDir);    
 
 	for (int i = 0; i < numSpotLights; i++)
 		result += CalcSpotLight(spotLights[i], norm, worldPos, viewDir);
