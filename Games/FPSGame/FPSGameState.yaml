@@ -13,6 +13,7 @@ GameObjects:
         Material: hZYYcYtKpiPCHvMlODrrndOPQMbqNcru
       - name: Scriptable
         scriptFileName: Enemy.cs
+        enableInput: false
       - name: Box Collider
         Offset: [0, 0, 0]
         Extent: [2, 4, 1]
@@ -75,8 +76,9 @@ GameObjects:
       - name: Scriptable
         currentRound: 1
         scriptFileName: EnemyManager.cs
+        enableInput: true
   - name: GameCamera
-    transform: [0.527279675, 2.98023224e-08, -0.849691808, 0, -0.342897058, 0.914955556, -0.212786168, 0, 0.777430236, 0.403554648, 0.482437491, 0, -2.88235736, 2.65446806, -7.40703964, 1]
+    transform: [-0.0437427759, 2.98023224e-08, 0.999042869, 0, 0.848901629, 0.527242303, 0.03716892, 0, -0.526737571, 0.849714994, -0.0230630636, 0, -2.88235736, 2.65446806, -7.40703964, 1]
     isVisible: true
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
     tag: ""
@@ -102,6 +104,7 @@ GameObjects:
       - name: Scriptable
         ammoCount: 30
         scriptFileName: Weapon.cs
+        enableInput: true
   - name: Ak-47
     transform: [-9.09962861e-09, -1.65606495e-14, -0.00999999978, 0, 0, 0.00999999978, -1.65606495e-14, 0, 0.00999999978, 0, -9.09962861e-09, 0, 0.203887343, -1.49969232, 3.72622538, 1]
     isVisible: true
@@ -128,6 +131,7 @@ GameObjects:
         Material: UaBqVGDYHiwVQLuKdRiZaRZIEqaIjnWw
       - name: Scriptable
         scriptFileName: Player.cs
+        enableInput: true
   - name: Plane
     transform: [175.617752, 0, 0, 0, 0, 1, 0, 0, 0, 0, 129.501724, 0, 0, 0, 0, 1]
     isVisible: true

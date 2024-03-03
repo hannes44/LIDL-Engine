@@ -24,6 +24,8 @@ namespace engine
 
 		void setScriptFileName(std::string scriptFileName);
 
+		bool enableInput = true;
+
 		std::string getScriptFileName() { return scriptFileName; }
 
 
@@ -41,6 +43,7 @@ namespace engine
 		{ 
 			std::vector<SerializableVariable> scriptVariables = serializableVariables;
 			scriptVariables.push_back({ SerializableType::STRING, "scriptFileName", "The file name of the C# or Lua files", &scriptFileName });
+			scriptVariables.push_back({ SerializableType::BOOLEAN, "enableInput", "Whether the script should handle input", &enableInput });
 			return scriptVariables;
 		};
 
@@ -58,6 +61,7 @@ namespace engine
 		std::shared_ptr<Component> clone() override {
 			std::shared_ptr<ScriptableComponent> clone = std::make_shared<ScriptableComponent>();
 			clone->scriptFileName = scriptFileName;
+			clone->enableInput = enableInput;
 			return clone;
 		}
 	private:
