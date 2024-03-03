@@ -694,14 +694,11 @@ namespace engine
 				}
 			}
 
-			// TODO: Reenable this once the LUA error is fixed
-			/*
 			if (auto scriptableComponent = dynamic_cast<ScriptableComponent*>(component.get()))
 			{
 				// We need to initialize the lua state for the scriptable component
 				ScriptEngine::getInstance()->initializeLuaStateForScriptableComponent(scriptableComponent);
 			}
-			*/
 
 			gameObject->addComponent(component);
 

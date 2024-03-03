@@ -49,8 +49,7 @@ namespace engine
 		{
 			return std::make_shared<ControllableComponent>();
 		}
-		// TODO: Reenable this once the LUA error is fixed
-		/*else if (componentName == "Scriptable")
+		else if (componentName == "Scriptable")
 		{
 			return std::make_shared<ScriptableComponent>();
 		}
@@ -74,7 +73,5 @@ namespace engine
 		std::shared_ptr<ScriptableComponent> scriptComponent = std::make_shared<ScriptableComponent>();
 		scriptComponent->setScriptFileName(componentName);
 		return scriptComponent;
-		*/
-		return nullptr;
 	}
 }

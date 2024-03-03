@@ -8,6 +8,7 @@
 #include <condition_variable>
 
 namespace engine {
+	// Thread safe queue
 	template <class T>
 	class SafeQueue
 	{
@@ -36,16 +37,16 @@ namespace engine {
 			c.notify_one();
 		}
 
-		// Get the "front"-element.
-		// If the queue is empty, wait till a element is avaiable.
+		// Get the front element
+		// If the queue is empty, wait until an element is available
 		T dequeue(void)
 		{
 			std::unique_lock<std::mutex> lock(m);
+			
+			// Release lock as long as the wait and reaquire it afterwards
 			while (q.empty())
-			{
-				// release lock as long as the wait and reaquire it afterwards.
 				c.wait(lock);
-			}
+			
 			T val = q.front();
 			q.pop();
 			return val;

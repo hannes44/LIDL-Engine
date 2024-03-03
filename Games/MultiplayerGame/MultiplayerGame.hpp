@@ -2,7 +2,6 @@
 
 #include <Engine.hpp>	
 #include <vector>
-#include <WinSock2.h>
 
 namespace engine {
 	class MultiplayerGame : public Game, public InputListener {

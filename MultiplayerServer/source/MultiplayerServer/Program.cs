@@ -112,7 +112,6 @@ namespace Server
 
             // Multicast message to all connected sessions except the sender
             Server.Multicast(response, Id);
-            //Server.Multicast(response);
 
             // If the buffer starts with '!' the disconnect the current session
             if (message == "!")

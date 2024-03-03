@@ -65,6 +65,7 @@ namespace engine
 
 		// Start the multiplayer receiver in a detached thread
 		std::thread receiver(Client::RunReceiver, multiplayerSocket, std::bind(&EditorGUI::onMultiplayerStateReceived, this, game, std::placeholders::_1));
+		
 		// Start the multiplayer transmitter in a detached thread
 		std::thread transmitter(Client::RunTransmitter, multiplayerSocket);
 

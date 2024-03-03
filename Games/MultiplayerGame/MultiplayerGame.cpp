@@ -1,6 +1,4 @@
 #include "MultiplayerGame.hpp"
-#include "MultiplayerClient/Client.hpp"
-#include "Serializer/GameSerializer.hpp"
 #include "Core/Logger.hpp"
 #include "Utils/Utils.hpp"
 
