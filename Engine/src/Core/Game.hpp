@@ -20,7 +20,7 @@ namespace engine
 		float farCollision = 0;
 		std::shared_ptr<GameObject> gameObject;
 
-		bool operator<(const RayCollision &other) const
+		bool operator < (const RayCollision& other) const
 		{
 			return nearCollision < other.nearCollision;
 		}
@@ -41,7 +41,7 @@ namespace engine
 
 		const void gameLoop();
 
-		std::weak_ptr<Texture> loadTexture(const std::string &textureFileName);
+		std::weak_ptr<Texture> loadTexture(const std::string& textureFileName);
 
 		std::string name = "Giga Game";
 
@@ -71,30 +71,30 @@ namespace engine
 		void resetGameState();
 
 		// Returns a selectable object with the given id
-		std::weak_ptr<Selectable> getSelectable(const std::string &id);
+		std::weak_ptr<Selectable> getSelectable(const std::string& id);
 
 		void addGameObject(std::shared_ptr<GameObject> gameObject);
-		std::weak_ptr<GameObject> getGameObject(const std::string &id);
-		void deleteGameObjectFromId(const std::string &id);
-		void deleteGameObject(GameObject *gameObject);
+		std::weak_ptr<GameObject> getGameObject(const std::string& id);
+		void deleteGameObjectFromId(const std::string& id);
+		void deleteGameObject(GameObject* gameObject);
 
 		void addTexture(std::shared_ptr<Texture> texture);
-		std::weak_ptr<Texture> getTexture(const std::string &id);
-		void deleteTexture(const std::string &id);
+		std::weak_ptr<Texture> getTexture(const std::string& id);
+		void deleteTexture(const std::string& id);
 
 		void addMaterial(std::shared_ptr<Material> material);
-		std::weak_ptr<Material> getMaterial(const std::string &id);
-		void deleteMaterial(const std::string &id);
+		std::weak_ptr<Material> getMaterial(const std::string& id);
+		void deleteMaterial(const std::string& id);
 
-		void changeMainCamera(GameObject *newCamera);
+		void changeMainCamera(GameObject* newCamera);
 
-		std::weak_ptr<Material> createMaterial(const std::string &name);
+		std::weak_ptr<Material> createMaterial(const std::string& name);
 
-		std::weak_ptr<Texture> createTexture(const std::string &name);
+		std::weak_ptr<Texture> createTexture(const std::string& name);
 
-		std::weak_ptr<GameObject> createGameObject(const std::string &name);
+		std::weak_ptr<GameObject> createGameObject(const std::string& name);
 
-		CameraComponent *getMainCamera();
+		CameraComponent* getMainCamera();
 
 		RendererSettings renderingSettings{};
 
@@ -128,5 +128,5 @@ namespace engine
 		std::set<std::string> gameObjectRootIDs{};
 	};
 
-	Game *createGame();
+	Game* createGame();
 }

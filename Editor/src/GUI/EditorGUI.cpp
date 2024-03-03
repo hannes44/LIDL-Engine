@@ -26,18 +26,18 @@ namespace engine
 
 	bool isAddComponentVisible = false;
 
-	EditorGUI::EditorGUI(std::shared_ptr<Project> project, EditorSettings &editorSettings) : window(Window::getInstance()), project(project), editorSettings(editorSettings)
+	EditorGUI::EditorGUI(std::shared_ptr<Project> project, EditorSettings& editorSettings) : window(Window::getInstance()), project(project), editorSettings(editorSettings)
 	{
 		game = project->game;
 	}
 
 	void EditorGUI::start()
 	{
-		ActionMap::getInstance().addAction("Copy", {Key::LCTRL, Key::C});
+		ActionMap::getInstance().addAction("Copy", { Key::LCTRL, Key::C });
 
 		if (editorSettings.enableScripting)
 		{
-			ScriptEngine *scriptEngine = ScriptEngine::getInstance();
+			ScriptEngine* scriptEngine = ScriptEngine::getInstance();
 			scriptEngine->loadScriptStatesIntoNewLuaState(project->game.get());
 		}
 
@@ -87,11 +87,11 @@ namespace engine
 
 		AudioManager::getInstance().initialize();
 
-		Renderer *renderer = Renderer::getInstance();
+		Renderer* renderer = Renderer::getInstance();
 
 		assetManager = std::make_unique<AssetManager>(game.get());
 
-		InputFramework &inputFramework = InputFramework::getInstance();
+		InputFramework& inputFramework = InputFramework::getInstance();
 		inputFramework.addListener(this);
 
 		EventManager &eventManager = EventManager::getInstance();
@@ -110,7 +110,7 @@ namespace engine
 		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png", false));
 
 		auto editorGameObjectSet = std::set<std::shared_ptr<GameObject>>();
-		for (auto const &[id, gameObject] : editorGameObjects)
+		for (auto const& [id, gameObject] : editorGameObjects)
 			editorGameObjectSet.insert(gameObject);
 
 		while (!quitProgram)
@@ -133,7 +133,7 @@ namespace engine
 				GamePhysics::getInstance().run(game.get());
 				game->update();
 
-				for (auto &[gameObjectId, gameObject] : game->getGameObjects())
+				for (auto& [gameObjectId, gameObject] : game->getGameObjects())
 				{
 					gameObject->update();
 				}
@@ -176,21 +176,25 @@ namespace engine
 			
 			// Temporary code until game UI system is created
 			// Crosshair for the game
-			ImGuiWindowFlags windowFlags = 0;
-			windowFlags |= ImGuiWindowFlags_NoBackground;
-			windowFlags |= ImGuiWindowFlags_NoTitleBar;
-			windowFlags |= ImGuiWindowFlags_NoMove;
-			windowFlags |= ImGuiWindowFlags_NoResize;
-			windowFlags |= ImGuiWindowFlags_NoScrollbar;
-			windowFlags |= ImGuiWindowFlags_NoScrollWithMouse;
-			windowFlags |= ImGuiWindowFlags_NoCollapse;
-			windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-			ImGui::Begin("#CH", nullptr, windowFlags);
-			auto draw = ImGui::GetBackgroundDrawList();
-			int w, h;
-			window.getWindowSize(&w, &h);
-			draw->AddCircle(ImVec2(w / 2, h / 2), 6, IM_COL32(255, 0, 0, 255), 100, 0.0f);
-			ImGui::End();
+			if (game->running)
+			{
+				ImGuiWindowFlags windowFlags = 0;
+				windowFlags |= ImGuiWindowFlags_NoBackground;
+				windowFlags |= ImGuiWindowFlags_NoTitleBar;
+				windowFlags |= ImGuiWindowFlags_NoMove;
+				windowFlags |= ImGuiWindowFlags_NoResize;
+				windowFlags |= ImGuiWindowFlags_NoScrollbar;
+				windowFlags |= ImGuiWindowFlags_NoScrollWithMouse;
+				windowFlags |= ImGuiWindowFlags_NoCollapse;
+				windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
+				ImGui::Begin("#CH", nullptr, windowFlags);
+				auto draw = ImGui::GetBackgroundDrawList();
+				int w, h;
+				window.getWindowSize(&w, &h);
+				draw->AddCircle(ImVec2(w / 2, h / 2), 6, IM_COL32(255, 0, 0, 255), 100, 0.0f);
+				ImGui::End();
+			}
+
 
 			if (!ScriptEngine::getInstance()->isSuccessfullyCompiled)
 			{
@@ -205,7 +209,7 @@ namespace engine
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
-	void EditorGUI::handleInput(const InputEvent &event)
+	void EditorGUI::handleInput(const InputEvent& event)
 	{
 		InputEventType EventType = event.getEventType();
 		if (EventType == InputEventType::KeyDown)
@@ -277,7 +281,7 @@ namespace engine
 	{
 		int w, h;
 		window.getWindowSize(&w, &h);
-		ImGui::SetNextWindowPos({0, 0});
+		ImGui::SetNextWindowPos({ 0, 0 });
 		ImGui::SetNextWindowSize(ImVec2(w, h));
 
 		ImGuiWindowFlags windowFlags = 0;
@@ -373,7 +377,7 @@ namespace engine
 				selectedObject = gameObject; // TODO: Fix here also
 			}
 			// Hotfix until TODO above is fixed, otherwise move this back inside the if statement since we don't want to draw children if the parent is collapsed
-			for (auto &child : gameObject->getChildren())
+			for (auto& child : gameObject->getChildren())
 				drawGameObject(child, tabLevel + 1);
 		}
 		else
@@ -708,7 +712,7 @@ namespace engine
 
 		bool shouldDrawGuizmos = false;
 
-		float *modelMatrixPtr = nullptr;
+		float* modelMatrixPtr = nullptr;
 		if (auto lockedSelectedObject = selectedObject.lock())
 		{
 			if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
@@ -811,7 +815,7 @@ namespace engine
 			ImGui::Text("Add Component");
 			ImGui::Separator();
 
-			std::vector<std::string> allComponentNames = {"Box Collider", "Camera", "Mesh", "Physics", "PointLight", "Sphere Collider", "Controllable"};
+			std::vector<std::string> allComponentNames = { "Box Collider", "Camera", "Mesh", "Physics", "PointLight", "Sphere Collider", "Controllable" };
 			std::vector<std::string> scriptComponentNames = ResourceManager::getInstance()->getAllCSharpScriptsInActiveGame();
 
 			// Remove the extension from the script names
@@ -994,7 +998,7 @@ namespace engine
 			ImGui::Separator();
 
 			// draw the assets in the selected folder
-			for (auto &child : lockedSelectedAssetNodeFolder->children)
+			for (auto& child : lockedSelectedAssetNodeFolder->children)
 			{
 				if (child == NULL)
 					continue;
@@ -1005,7 +1009,7 @@ namespace engine
 		}
 	}
 
-	void EditorGUI::drawSerializableVariables(Serializable *serializable)
+	void EditorGUI::drawSerializableVariables(Serializable* serializable)
 	{
 		for (auto seralizableVariable : serializable->getSerializableVariables())
 		{
@@ -1021,7 +1025,7 @@ namespace engine
 
 			if (seralizableVariable.type == SerializableType::STRING)
 			{
-				std::string data = *static_cast<std::string *>(seralizableVariable.data);
+				std::string data = *static_cast<std::string*>(seralizableVariable.data);
 				ImGui::Text((seralizableVariable.name + ":").c_str());
 				ImGui::SameLine();
 				char name[64];
@@ -1033,35 +1037,35 @@ namespace engine
 			}
 			else if (seralizableVariable.type == SerializableType::INT)
 			{
-				ImGui::InputInt(seralizableVariable.name.c_str(), (int *)seralizableVariable.data);
+				ImGui::InputInt(seralizableVariable.name.c_str(), (int*)seralizableVariable.data);
 			}
 			else if (seralizableVariable.type == SerializableType::FLOAT)
 			{
-				ImGui::InputFloat(seralizableVariable.name.c_str(), (float *)seralizableVariable.data);
+				ImGui::InputFloat(seralizableVariable.name.c_str(), (float*)seralizableVariable.data);
 			}
 			else if (seralizableVariable.type == SerializableType::BOOLEAN)
 			{
-				ImGui::Checkbox(seralizableVariable.name.c_str(), (bool *)seralizableVariable.data);
+				ImGui::Checkbox(seralizableVariable.name.c_str(), (bool*)seralizableVariable.data);
 			}
 			else if (seralizableVariable.type == SerializableType::DOUBLE)
 			{
-				ImGui::InputDouble(seralizableVariable.name.c_str(), (double *)seralizableVariable.data);
+				ImGui::InputDouble(seralizableVariable.name.c_str(), (double*)seralizableVariable.data);
 			}
 			else if (seralizableVariable.type == SerializableType::VECTOR2)
 			{
-				ImGui::InputFloat2(seralizableVariable.name.c_str(), (float *)seralizableVariable.data);
+				ImGui::InputFloat2(seralizableVariable.name.c_str(), (float*)seralizableVariable.data);
 			}
 			else if (seralizableVariable.type == SerializableType::VECTOR3)
 			{
-				ImGui::InputFloat3(seralizableVariable.name.c_str(), (float *)seralizableVariable.data);
+				ImGui::InputFloat3(seralizableVariable.name.c_str(), (float*)seralizableVariable.data);
 			}
 			else if (seralizableVariable.type == SerializableType::COLOR)
 			{
-				ImGui::ColorEdit3(seralizableVariable.name.c_str(), (float *)seralizableVariable.data);
+				ImGui::ColorEdit3(seralizableVariable.name.c_str(), (float*)seralizableVariable.data);
 			}
 			else if (seralizableVariable.type == SerializableType::VECTOR4)
 			{
-				ImGui::InputFloat4(seralizableVariable.name.c_str(), (float *)seralizableVariable.data);
+				ImGui::InputFloat4(seralizableVariable.name.c_str(), (float*)seralizableVariable.data);
 			}
 			else
 			{
@@ -1091,7 +1095,7 @@ namespace engine
 			pushedStyleColor = true;
 		}
 
-		if (ImGui::ImageButton("##rotateOperationButton", (void *)(intptr_t)rotateIconTexture->textureIDOpenGL, ImVec2(25, 25), {0, 1}, {1, 0}))
+		if (ImGui::ImageButton("##rotateOperationButton", (void*)(intptr_t)rotateIconTexture->textureIDOpenGL, ImVec2(25, 25), {0, 1}, {1, 0}))
 		{
 			guizmoOperation = ImGuizmo::ROTATE;
 		}
@@ -1106,7 +1110,7 @@ namespace engine
 			pushedStyleColor = true;
 		}
 
-		if (ImGui::ImageButton("##translateOperationButton", (void *)(intptr_t)translateIconTexture->textureIDOpenGL, ImVec2(25, 25), {0, 1}, {1, 0}))
+		if (ImGui::ImageButton("##translateOperationButton", (void*)(intptr_t)translateIconTexture->textureIDOpenGL, ImVec2(25, 25), {0, 1}, {1, 0}))
 		{
 			guizmoOperation = ImGuizmo::TRANSLATE;
 		}
@@ -1121,7 +1125,7 @@ namespace engine
 			pushedStyleColor = true;
 		}
 
-		if (ImGui::ImageButton("##scaleOperationButton", (void *)(intptr_t)scaleIconTexture->textureIDOpenGL, ImVec2(25, 25), {0, 1}, {1, 0}))
+		if (ImGui::ImageButton("##scaleOperationButton", (void*)(intptr_t)scaleIconTexture->textureIDOpenGL, ImVec2(25, 25), {0, 1}, {1, 0}))
 		{
 			guizmoOperation = ImGuizmo::SCALE;
 		}
@@ -1138,7 +1142,7 @@ namespace engine
 			pushedStyleColor = true;
 		}
 
-		if (ImGui::ImageButton("##worldOperationButton", (void *)(intptr_t)worldIconTexture->textureIDOpenGL, ImVec2(25, 25), {0, 1}, {1, 0}))
+		if (ImGui::ImageButton("##worldOperationButton", (void*)(intptr_t)worldIconTexture->textureIDOpenGL, ImVec2(25, 25), {0, 1}, {1, 0}))
 		{
 			isGuizmoOperationInWorldSpace = !isGuizmoOperationInWorldSpace;
 		}
@@ -1215,7 +1219,7 @@ namespace engine
 
 	void EditorGUI::drawCompilationErrorWindow()
 	{
-		ImGuiIO &io = ImGui::GetIO();
+		ImGuiIO& io = ImGui::GetIO();
 		ImGui::SetNextWindowSize(ImVec2(800, 500));
 		ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
 		ImGui::Begin("Compilation Error", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar);
@@ -1230,7 +1234,7 @@ namespace engine
 		ImGui::End();
 	}
 
-	bool EditorGUI::defaultCheckBox(const std::string &label, bool *value)
+	bool EditorGUI::defaultCheckBox(const std::string& label, bool* value)
 	{
 		return ImGui::Checkbox(label.c_str(), value);
 	}
@@ -1240,7 +1244,7 @@ namespace engine
 		// Save the current state of the game
 		GameSerializer::serializeGame(game.get());
 		game->running = true;
-		for (auto &[gameObjectId, gameObject] : game->getGameObjects())
+		for (auto& [gameObjectId, gameObject] : game->getGameObjects())
 		{
 			gameObject->initialize();
 		}
@@ -1259,7 +1263,7 @@ namespace engine
 		sceneState = EditorSceneState::Scene;
 	}
 
-	CameraComponent *EditorGUI::getActiveCamera()
+	CameraComponent* EditorGUI::getActiveCamera()
 	{
 		if (activeViewPort == ActiveViewPort::Scene)
 		{

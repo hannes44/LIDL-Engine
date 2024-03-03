@@ -44,7 +44,7 @@ namespace engine
 
 		UUID getUUID() override;
 
-		Game *game = nullptr;
+		Game* game = nullptr;
 
 		void addComponent(std::shared_ptr<Component> component);
 

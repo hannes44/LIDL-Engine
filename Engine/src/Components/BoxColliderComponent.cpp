@@ -41,5 +41,4 @@ namespace engine {
 	std::string BoxColliderComponent::getName() {
 		return "Box Collider";
 	}
-
 }

@@ -29,7 +29,7 @@ namespace engine
 
 	std::set<std::string> ControllableComponent::getRequiredComponents()
 	{
-		return {"Physics"};
+		return { "Physics" };
 	}
 
 	std::string ControllableComponent::getName()
@@ -66,7 +66,7 @@ namespace engine
 		}
 	}
 
-	void ControllableComponent::alwaysMove(const InputEvent &event, const InputEventType &eventType, std::shared_ptr<PhysicsComponent> physicsComponent)
+	void ControllableComponent::alwaysMove(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent)
 	{
 		if (eventType != InputEventType::KeyDown)
 			return;
@@ -78,7 +78,7 @@ namespace engine
 			currentDirections.insert(dir);
 	}
 
-	void ControllableComponent::moveOnHold(const InputEvent &event, const InputEventType &eventType, std::shared_ptr<PhysicsComponent> physicsComponent)
+	void ControllableComponent::moveOnHold(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent)
 	{
 		if (eventType != InputEventType::KeyDown && eventType != InputEventType::KeyUp)
 			return;
@@ -94,7 +94,7 @@ namespace engine
 			currentDirections.erase(dir);
 	}
 
-	void ControllableComponent::changeDirection(const InputEvent &event)
+	void ControllableComponent::changeDirection(const InputEvent& event)
 	{
 		InputEventType EventType = event.getEventType();
 
@@ -129,7 +129,7 @@ namespace engine
 		}
 	}
 
-	void ControllableComponent::handleInput(const InputEvent &event)
+	void ControllableComponent::handleInput(const InputEvent& event)
 	{
 		InputEventType eventType = event.getEventType();
 

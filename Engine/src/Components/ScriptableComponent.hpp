@@ -58,9 +58,6 @@ namespace engine
 		std::shared_ptr<Component> clone() override {
 			std::shared_ptr<ScriptableComponent> clone = std::make_shared<ScriptableComponent>();
 			clone->scriptFileName = scriptFileName;
-			
-
-
 			return clone;
 		}
 	private:
