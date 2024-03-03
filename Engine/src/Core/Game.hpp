@@ -107,6 +107,7 @@ namespace engine
 		void spawnClonedGameObjectFromTag(std::string tag);
 		void setParent(std::shared_ptr<GameObject> gameObject, std::shared_ptr<GameObject> newParent);
 		void removeParent(std::shared_ptr<GameObject> gameObject);
+		std::string getTagOfGameObject(std::string id);
 
 	protected:
 		RayCollision checkRayCollision(std::shared_ptr<GameObject> gameObject, glm::vec3 origin, glm::vec3 direction);

@@ -1,9 +1,9 @@
 GameObjects:
   - name: EnemyPrefab
-    transform: [1.90553308, 0, 0, 0, 0, 3.98312092, 0, 0, 0, 0, 1, 0, 63, 2.02980518, 51, 1]
+    transform: [1.90553308, 0, 0, 0, 0, 3.98312092, 0, 0, 0, 0, 1, 0, 63, -6.73250532, 51, 1]
     isVisible: true
     Id: DtuMLenGYcDLdGyqOFrcULacGKHcQDEH
-    tag: EnemyPrefab
+    tag: Enemy
     parent: NONE
     children: []
     Components:
@@ -78,12 +78,12 @@ GameObjects:
         scriptFileName: EnemyManager.cs
         enableInput: true
   - name: GameCamera
-    transform: [-0.0437427759, 2.98023224e-08, 0.999042869, 0, 0.848901629, 0.527242303, 0.03716892, 0, -0.526737571, 0.849714994, -0.0230630636, 0, -2.88235736, 2.65446806, -7.40703964, 1]
+    transform: [-0.937232852, 0, -0.348704278, 0, -0.0332158729, 0.995452881, 0.0892762393, 0, 0.347118676, 0.0952551365, -0.93297112, 0, -2.88235736, 6.10776234, -7.40703964, 1]
     isVisible: true
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
     tag: ""
     parent: NONE
-    children: [ndlRjOYAhHQMpAEwRAEIBMKYihTpURMf]
+    children: []
     Components:
       - name: Camera
         FOV: 50
@@ -91,13 +91,13 @@ GameObjects:
         Far Plane: 1000
         Is Main Camera: false
       - name: Physics
-        Gravity: false
+        Gravity: true
         Mass: 1
         Force: [0, 0, 0]
         Acceleration: [0, 0, 0]
         Velocity: [0, 0, 0]
       - name: Controllable
-        Enable Forces: false
+        Enable Forces: true
         Movement Speed: 3
         Rotation Speed: 0.00499999989
         Allow Instant Turnaround: true
@@ -105,12 +105,16 @@ GameObjects:
         ammoCount: 30
         scriptFileName: Weapon.cs
         enableInput: true
+      - name: Box Collider
+        Offset: [0, 0, 0]
+        Extent: [1, 2, 1]
+        IsPlatform: false
   - name: Ak-47
     transform: [-9.09962861e-09, -1.65606495e-14, -0.00999999978, 0, 0, 0.00999999978, -1.65606495e-14, 0, 0.00999999978, 0, -9.09962861e-09, 0, 0.203887343, -1.49969232, 3.72622538, 1]
     isVisible: true
     Id: ndlRjOYAhHQMpAEwRAEIBMKYihTpURMf
     tag: ""
-    parent: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
+    parent: NONE
     children: []
     Components:
       - name: Mesh
@@ -144,6 +148,10 @@ GameObjects:
         OBJ File: ""
         Primative Type: PLANE
         Material: bkbCvuwlPUqrIjktAUENfFgZDntkKrIZ
+      - name: Box Collider
+        Offset: [0, 0, 0]
+        Extent: [10000, 1, 1000]
+        IsPlatform: true
 Textures:
   - name: KitchenKnifeAlbedo
     fileName: KitchenKnifeAlbedo.png

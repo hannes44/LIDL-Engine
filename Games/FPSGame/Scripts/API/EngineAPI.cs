@@ -44,6 +44,15 @@ namespace Engine
             //(c++_API) end
         }
 
+        public static string getTagOfGameObject(string id)
+        {
+            //(c++_API) tag = __getTagOfGameObject__(id);
+            //(c++_API) if (tag ~= "") then return tag; 
+            //(c++_API) else 
+            return "";
+            //(c++_API) end
+        }
+
         public static void DeleteGameObjectFromId(string id)
         {
             //(c++_API) __deleteGameObjectFromId__(id);

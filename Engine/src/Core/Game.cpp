@@ -301,6 +301,16 @@ namespace engine {
 		gameObject->parent = newParent;
 	}
 
+	std::string Game::getTagOfGameObject(std::string id)
+	{
+		std::string tag = "";
+		if (gameObjects.count(id))
+		{
+			tag = gameObjects[id]->tag;
+		}
+		return tag;
+	}
+
 	void Game::removeParent(std::shared_ptr<GameObject> gameObject) {
 		if (!gameObject->added)
 			throw std::runtime_error("Cannot remove parent before GameObject has been added.");

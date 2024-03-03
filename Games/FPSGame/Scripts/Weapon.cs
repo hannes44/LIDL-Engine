@@ -48,7 +48,11 @@ public class Weapon
                 if (hitId != "")
                 {
                     EngineAPI.Log("Hit object with id: " + hitId);
-                    EngineAPI.DeleteGameObjectFromId(hitId);
+                    string tag = EngineAPI.getTagOfGameObject(hitId);
+                    if (tag == "Enemy")
+                    {
+                        EngineAPI.DeleteGameObjectFromId(hitId);
+                    }
                 }
             }
         }

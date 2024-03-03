@@ -34,7 +34,7 @@ public class EnemyManager
         for (int i = 0; i < enemiesToSpawn; i++)
         {
             EngineAPI.Log("Spawning enemy");
-            EngineAPI.SpawnClonedGameObjectFromTag("EnemyPrefab");
+            EngineAPI.SpawnClonedGameObjectFromTag("Enemy");
         }
     }
 

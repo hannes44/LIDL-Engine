@@ -332,6 +332,7 @@ namespace engine
 		lua.set_function("__playSound__", &AudioManager::playSound, &AudioManager::getInstance());
 		lua.set_function("__getIdOfGameObjectHitByRay__", &Game::getIdOfGameObjectHitByRay, game);
 		lua.set_function("__deleteGameObjectFromId__", &Game::deleteGameObjectFromId, game);
+		lua.set_function("__getTagOfGameObject__", &Game::getTagOfGameObject, game);
 	}
 
 	void ScriptEngine::syncGameObjectStateEngineToScript(ScriptableComponent* component)
