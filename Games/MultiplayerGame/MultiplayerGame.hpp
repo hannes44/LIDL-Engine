@@ -25,6 +25,8 @@ namespace engine {
 
 		// TODO_MULTIPLAYER: Move this to the Physics Engine once include issues are resolved
 		void sendMultiplayerState();
+		int multiplayerStateUpdateIntervalMS = 500;
+		long long lastMultiplayerStateUpdateTimestamp = 0;
 
 		// TODO_MULTIPLAYER: Move these to Game.hpp once include issues are resolved
 		std::string MULTIPLAYER_STATE_FOLDER = "../../MultiplayerStates/";

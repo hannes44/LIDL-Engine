@@ -69,7 +69,7 @@ namespace engine {
 
 	void Client::RunReceiver(SOCKET clientSocket, std::function<void(std::string)> onMessage) {
 		while (true) {
-			std::cout << "Waiting to receive..." << std::endl;
+			LOG_TRACE("Waiting to receive...");
 			std::string response = ReceiveMsg(clientSocket);
 			onMessage(response);
 		}
@@ -79,7 +79,7 @@ namespace engine {
 		while (true) {
 			ClientMessage msg;
 
-			std::cout << "Waiting to transmit..." << std::endl;
+			LOG_TRACE("Waiting to transmit...");
 			msg = messageQueue.dequeue();
 
 			SendMsg(clientSocket, msg.message, msg.type);
@@ -126,7 +126,7 @@ namespace engine {
 
 		const int chunkSize = BUF_SIZE - END_CHUNK_FLAG.length();
 
-		std::cout << "-> " << message << std::endl;
+		LOG_TRACE("-> {}", message);
 
 		std::vector<std::string> chunks{};
 
@@ -160,7 +160,7 @@ namespace engine {
 
 		data = CleanMsg(data);
 
-		std::cout << "<- " << data << std::endl;
+		LOG_TRACE("<- {}", data);
 
 		return data;
 	}

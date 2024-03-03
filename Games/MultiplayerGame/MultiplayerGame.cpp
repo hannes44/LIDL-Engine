@@ -2,6 +2,7 @@
 #include "MultiplayerClient/Client.hpp"
 #include "Serializer/GameSerializer.hpp"
 #include "Core/Logger.hpp"
+#include "Utils/Utils.hpp"
 
 #include <iostream>
 #include <sstream>
@@ -39,7 +40,6 @@ namespace engine
 	{
 		std::string filePath = MULTIPLAYER_STATE_FOLDER + "ParsedState" + MULTIPLAYER_STATE_FILE_EXTENSION;
 
-		LOG_INFO("Creating YAML file from received state: " + filePath);
 		std::ofstream outfile(filePath);
 		outfile << state.c_str();
 		outfile.close();
@@ -78,8 +78,6 @@ namespace engine
 
 		text << in_file.rdbuf();
 		std::string message = text.str();
-		std::cout << "Serialized game state to: " << filePath << std::endl;
-		std::cout << message << std::endl;
 		Client::QueueMessage({ ClientMessageType::StateUpdate, message });
 	}
 
@@ -96,9 +94,6 @@ namespace engine
 	void MultiplayerGame::moveRemoteBox() {
 		auto remoteBox = getRemoteBox();
 		remoteBox->transform.shiftPosition(glm::vec3(-2, 0, 0));
-
-		// TODO_MULTIPLAYER: Move this to the update on the Physics Engine once include issues are resolved
-		sendMultiplayerState();
 	}
 
 	void MultiplayerGame::cycleRemoteBoxColour() {
@@ -109,9 +104,6 @@ namespace engine
 			greenValue = 1.f;
 
 		material->setBaseColor(glm::vec3(0, greenValue, 0));
-
-		// TODO_MULTIPLAYER: Move this to the update on the Physics Engine once include issues are resolved
-		sendMultiplayerState();
 	}
 
 	void MultiplayerGame::handleInput(const InputEvent& event) {
@@ -137,7 +129,13 @@ namespace engine
 
 	void MultiplayerGame::update()
 	{
-
+		// TODO_MULTIPLAYER: Move this to the update on the Physics Engine once include issues are resolved
+		if (Utils::getTimestampNS() - lastMultiplayerStateUpdateTimestamp < 1000000 * multiplayerStateUpdateIntervalMS) {
+			return;
+		}
+		
+		lastMultiplayerStateUpdateTimestamp = Utils::getTimestampNS();
+		sendMultiplayerState();
 	}
 
 	void MultiplayerGame::initialize()
@@ -163,7 +161,8 @@ namespace engine
 		addGameObject(std::unique_ptr<GameObject>(light));
 
 		GameObject* camera = new GameObject();
-		camera->transform.setPosition(glm::vec3(0, 0, 10));
+		camera->transform.setPosition(glm::vec3(0, 10, -30));
+		camera->transform.setRotationFromDirection(glm::vec3(0, 0.5f, -1), glm::vec3(0, 1, 0));
 		camera->addComponent(std::make_unique<engine::CameraComponent>());
 		camera->name = "Camera";
 		addGameObject(std::unique_ptr<GameObject>(camera));
@@ -185,6 +184,7 @@ namespace engine
 		remoteBoxPtr->addComponent(remoteMesh);
 		remoteBoxPtr->addComponent(std::make_unique<engine::PhysicsComponent>(remotePhysicsComponent));
 		remoteBoxPtr->addComponent(std::make_unique<engine::MultiplayerComponent>());
+		remoteBoxPtr->addComponent(std::make_unique<engine::ControllableComponent>(false));
 
 
 		auto localBoxSharedPointer = std::shared_ptr<GameObject>(localBoxPtr);

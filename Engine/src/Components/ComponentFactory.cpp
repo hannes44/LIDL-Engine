@@ -15,7 +15,7 @@ namespace engine
 {
 	std::shared_ptr<Component> ComponentFactory::createComponent(std::string componentName)
 	{
-		LOG_INFO("Creating component: {0}", componentName);
+		LOG_TRACE("Creating component: {0}", componentName);
 		if (componentName == "Mesh")
 		{
 			return std::make_shared<MeshComponent>();

@@ -15,6 +15,13 @@
 namespace engine
 {
 
+	void logNM(std::string msg, bool serializeForMultiplayer) {
+		if (serializeForMultiplayer)
+			LOG_TRACE(msg);
+		else
+			LOG_INFO("{}", msg);
+	}
+
 	// Serializes the game into a folder with config and state yaml files
 	void GameSerializer::serializeGame(Game* game)
 	{
@@ -39,7 +46,7 @@ namespace engine
 
 	void GameSerializer::createYAMLFile(const std::string& filePath)
 	{
-		LOG_INFO("Creating YAML file: " + filePath);
+		LOG_TRACE("Creating YAML file: " + filePath);
 		std::ofstream outfile(filePath);
 		outfile.close();
 	}
@@ -77,7 +84,8 @@ namespace engine
 	// Serializes the game state to a YAML file at the given file path
 	std::string GameSerializer::serializeGameState(const std::string& folderPath, const Game* game, bool serializeForMultiplayer)
 	{
-		LOG_INFO("Serializing game state: " + game->name);
+		logNM("Serializing game state: " + game->name, serializeForMultiplayer);
+		
 		std::string stateFileName = game->name + "State";
 		std::string stateFilePath = folderPath + stateFileName + GAME_CONFIG_FILE_EXTENSION;
 		createYAMLFile(stateFilePath);
@@ -93,9 +101,7 @@ namespace engine
 		std::ofstream fout(folderPath + stateFileName + GAME_CONFIG_FILE_EXTENSION);
 		fout << out.c_str();
 
-		std::cout << "Here's the output YAML:\n" << out.c_str() << std::endl; // prints "Hello, World!"
-
-		LOG_INFO("Serialized game state: " + game->name);
+		logNM("Serialized game state: " + game->name, serializeForMultiplayer);
 
 		return stateFilePath;
 	}
@@ -116,7 +122,7 @@ namespace engine
 		out << YAML::EndSeq;
 
 		if (out.good())
-			LOG_INFO("Serialized game objects");
+			logNM("Serialized game objects", serializeForMultiplayer);
 		else
 			LOG_ERROR("Failed to serialize game objects");
 
@@ -146,7 +152,7 @@ namespace engine
 		// TODO: Add proper Id when UUID is implemented
 		out << YAML::Value << gameObject->uuid.id;
 
-		serializeComponents(gameObject->getComponents(), out);
+		serializeComponents(gameObject->getComponents(), out, serializeForMultiplayer);
 
 		out << YAML::EndMap;
 
@@ -196,7 +202,7 @@ namespace engine
 		out << YAML::EndSeq;
 
 		if (out.good())
-			LOG_INFO("Serialized textures");
+			LOG_TRACE("Serialized textures");
 		else
 			LOG_ERROR("Failed to serialize textures");
 	}
@@ -226,7 +232,7 @@ namespace engine
 		out << YAML::EndSeq;
 
 		if (out.good())
-			LOG_INFO("Serialized materials");
+			logNM("Serialized materials", serializeForMultiplayer);
 		else
 			LOG_ERROR("Failed to serialize materials");
 	}
@@ -373,7 +379,7 @@ namespace engine
 	// Deserializes the game state from a file path
 	void GameSerializer::deserializeGameState(Game* game, std::string gameStateFilePath)
 	{
-		LOG_INFO("Deserializing game state: {}", game->name);
+		LOG_TRACE("Deserializing game state: {}", game->name);
 		LOG_TRACE("Loading file: " + gameStateFilePath);
 		YAML::Node state = YAML::LoadFile(gameStateFilePath);
 
@@ -382,7 +388,7 @@ namespace engine
 		deserializeMaterials(state, game);
 		deserializeGameObjects(state, game);
 
-		LOG_INFO("Deserialized game state: " + game->name);
+		LOG_TRACE("Deserialized game state: " + game->name);
 	}
 
 	// Deserializes the game state from the game name's folder
