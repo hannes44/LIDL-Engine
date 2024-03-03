@@ -27,6 +27,8 @@ namespace Server
         public static int BUF_SIZE = 1000;
         public static int PORT = 11111;
 
+        public static bool DEBUG = false;
+
         string messageBuffer = "";
 
         static protected (ClientMessageType, string) SplitHeader(string message)
@@ -81,7 +83,9 @@ namespace Server
                 return;
 
             (ClientMessageType messageType, string body) = SplitHeader(CleanMsg(messageBuffer));
-            Console.WriteLine($"<- MessageType: {messageType}, body: {body}");
+            if (DEBUG)
+                Console.WriteLine($"<- MessageType: {messageType}, body: {body}");
+            
             messageBuffer = "";
 
             string response = null;
