@@ -54,7 +54,7 @@ namespace engine
 		const std::set<std::shared_ptr<GameObject>> getRootGameObjects() const
 		{
 			std::set<std::shared_ptr<GameObject>> gameGameObjects{};
-			for (auto &[id, go] : gameObjects)
+			for (auto& [id, go] : gameObjects)
 			{
 				if (gameObjectRootIDs.contains(go->uuid.id))
 					gameGameObjects.insert(go);

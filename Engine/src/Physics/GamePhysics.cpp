@@ -39,9 +39,6 @@ namespace engine {
 
 				std::set<Direction> currentDirections = controllableComponent->currentDirections;
 
-				if (currentDirections.contains(Direction::None))
-					continue;
-
 				if (currentDirections.contains(Direction::Up) && currentDirections.contains(Direction::Down))
 				{
 					currentDirections.erase(Direction::Up);

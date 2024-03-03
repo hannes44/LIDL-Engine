@@ -94,7 +94,7 @@ namespace engine
 		InputFramework& inputFramework = InputFramework::getInstance();
 		inputFramework.addListener(this);
 
-		EventManager &eventManager = EventManager::getInstance();
+		EventManager& eventManager = EventManager::getInstance();
 		eventManager.subscribe(EventType::QuitProgram, this);
 
 		assetManager->buildAssetTree();
@@ -173,7 +173,7 @@ namespace engine
 			drawTopMenu();
 			drawPlayButtonToolbar();
 			drawBottomPanel();
-			
+
 			// Temporary code until game UI system is created
 			// Crosshair for the game
 			if (game->running)
@@ -435,9 +435,9 @@ namespace engine
 				ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 0, 0));
 				ImGui::BeginListBox("##2", ImVec2(500, 500));
 
-				 auto rootGameObjects = game->getRootGameObjects();
-				 std::vector<std::shared_ptr<GameObject>> rootGameObjectsList = std::vector<std::shared_ptr<GameObject>>(rootGameObjects.begin(), rootGameObjects.end());
-				 std::ranges::sort(rootGameObjectsList, [](std::shared_ptr<GameObject> a, std::shared_ptr<GameObject> b) { return a->name < b->name; });
+				auto rootGameObjects = game->getRootGameObjects();
+				std::vector<std::shared_ptr<GameObject>> rootGameObjectsList = std::vector<std::shared_ptr<GameObject>>(rootGameObjects.begin(), rootGameObjects.end());
+				std::ranges::sort(rootGameObjectsList, [](std::shared_ptr<GameObject> a, std::shared_ptr<GameObject> b) { return a->name < b->name; });
 
 				for (auto gameObject : game->getRootGameObjects())
 					drawGameObject(gameObject);
@@ -819,7 +819,7 @@ namespace engine
 			std::vector<std::string> scriptComponentNames = ResourceManager::getInstance()->getAllCSharpScriptsInActiveGame();
 
 			// Remove the extension from the script names
-			for (auto &scriptName : scriptComponentNames)
+			for (auto& scriptName : scriptComponentNames)
 			{
 				scriptName = scriptName.substr(0, scriptName.find_last_of('.'));
 			}
@@ -1031,7 +1031,7 @@ namespace engine
 				char name[64];
 				memcpy(name, data.c_str(), 64);
 				ImGui::InputText(("##" + seralizableVariable.name).c_str(), name, IM_ARRAYSIZE(name));
-				*static_cast<std::string *>(seralizableVariable.data) = name;
+				*static_cast<std::string*>(seralizableVariable.data) = name;
 
 				// ImGui::Text(data.c_str());
 			}
@@ -1095,7 +1095,7 @@ namespace engine
 			pushedStyleColor = true;
 		}
 
-		if (ImGui::ImageButton("##rotateOperationButton", (void*)(intptr_t)rotateIconTexture->textureIDOpenGL, ImVec2(25, 25), {0, 1}, {1, 0}))
+		if (ImGui::ImageButton("##rotateOperationButton", (void*)(intptr_t)rotateIconTexture->textureIDOpenGL, ImVec2(25, 25), { 0, 1 }, { 1, 0 }))
 		{
 			guizmoOperation = ImGuizmo::ROTATE;
 		}
@@ -1110,7 +1110,7 @@ namespace engine
 			pushedStyleColor = true;
 		}
 
-		if (ImGui::ImageButton("##translateOperationButton", (void*)(intptr_t)translateIconTexture->textureIDOpenGL, ImVec2(25, 25), {0, 1}, {1, 0}))
+		if (ImGui::ImageButton("##translateOperationButton", (void*)(intptr_t)translateIconTexture->textureIDOpenGL, ImVec2(25, 25), { 0, 1 }, { 1, 0 }))
 		{
 			guizmoOperation = ImGuizmo::TRANSLATE;
 		}
@@ -1125,7 +1125,7 @@ namespace engine
 			pushedStyleColor = true;
 		}
 
-		if (ImGui::ImageButton("##scaleOperationButton", (void*)(intptr_t)scaleIconTexture->textureIDOpenGL, ImVec2(25, 25), {0, 1}, {1, 0}))
+		if (ImGui::ImageButton("##scaleOperationButton", (void*)(intptr_t)scaleIconTexture->textureIDOpenGL, ImVec2(25, 25), { 0, 1 }, { 1, 0 }))
 		{
 			guizmoOperation = ImGuizmo::SCALE;
 		}
@@ -1142,7 +1142,7 @@ namespace engine
 			pushedStyleColor = true;
 		}
 
-		if (ImGui::ImageButton("##worldOperationButton", (void*)(intptr_t)worldIconTexture->textureIDOpenGL, ImVec2(25, 25), {0, 1}, {1, 0}))
+		if (ImGui::ImageButton("##worldOperationButton", (void*)(intptr_t)worldIconTexture->textureIDOpenGL, ImVec2(25, 25), { 0, 1 }, { 1, 0 }))
 		{
 			isGuizmoOperationInWorldSpace = !isGuizmoOperationInWorldSpace;
 		}
@@ -1158,7 +1158,7 @@ namespace engine
 		{
 			int openGLTextureId = !assetNode->getIconTexture().expired() ? assetNode->getIconTexture().lock()->textureIDOpenGL : 0;
 
-			if (ImGui::ImageButton(("##" + assetNode->uuid.id).c_str(), (void *)(intptr_t)openGLTextureId, ImVec2(70, 70), {0, 1}, {1, 0}))
+			if (ImGui::ImageButton(("##" + assetNode->uuid.id).c_str(), (void*)(intptr_t)openGLTextureId, ImVec2(70, 70), { 0, 1 }, { 1, 0 }))
 			{
 				// Special case for script
 				if (assetNode->isScript)

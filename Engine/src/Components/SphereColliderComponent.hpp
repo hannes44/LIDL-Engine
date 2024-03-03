@@ -20,7 +20,7 @@ namespace engine
 		{
 			return {
 				{SerializableType::VECTOR3, "Offset", "The offset of the collider", &offset},
-				{SerializableType::VECTOR3, "Extent", "The extent of the collider", &extent}};
+				{SerializableType::VECTOR3, "Extent", "The extent of the collider", &extent} };
 		};
 
 		std::shared_ptr<Component> clone() override
