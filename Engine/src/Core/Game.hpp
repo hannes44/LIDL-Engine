@@ -12,10 +12,10 @@
 #include "GameObject.hpp"
 #include "Renderer/RendererSettings.hpp"
 
-
 namespace engine
 {
-	struct RayCollision {
+	struct RayCollision
+	{
 		bool collision = false;
 		float nearCollision = 0;
 		float farCollision = 0;
@@ -36,7 +36,7 @@ namespace engine
 		// Called at initialization
 		virtual void initialize() = 0;
 
-		bool running = true;
+		bool running = false;
 
 		const void run();
 
@@ -51,10 +51,12 @@ namespace engine
 		std::weak_ptr<GameObject> mainCamera;
 
 		const std::map<std::string, std::shared_ptr<GameObject>> getGameObjects() const { return gameObjects; };
-		
-		const std::set<std::shared_ptr<GameObject>> getRootGameObjects() const {
+
+		const std::set<std::shared_ptr<GameObject>> getRootGameObjects() const
+		{
 			std::set<std::shared_ptr<GameObject>> gameGameObjects{};
-			for (auto& [id, go] : gameObjects) {
+			for (auto& [id, go] : gameObjects)
+			{
 				if (gameObjectRootIDs.contains(go->uuid.id))
 					gameGameObjects.insert(go);
 			}
@@ -66,12 +68,15 @@ namespace engine
 
 		const std::map<std::string, std::shared_ptr<Material>> getMaterials() const { return materials; };
 
+		// Deletes all game objects, textures, and materials
+		void resetGameState();
+
 		// Returns a selectable object with the given id
 		std::weak_ptr<Selectable> getSelectable(const std::string& id);
 
 		void addGameObject(std::shared_ptr<GameObject> gameObject);
 		std::weak_ptr<GameObject> getGameObject(const std::string& id);
-		void deleteGameObject(const std::string& id);
+		void deleteGameObjectFromId(const std::string& id);
 		void deleteGameObject(GameObject* gameObject);
 
 		void addTexture(std::shared_ptr<Texture> texture);
@@ -101,8 +106,14 @@ namespace engine
 		/// Returns a vector of the GameObjects that collided with the ray, sorted from closest to farthest
 		std::vector<std::shared_ptr<GameObject>> checkRayCollisions(glm::vec3 origin, glm::vec3 direction);
 
+		std::string getIdOfGameObjectHitByRay(float originX, float originY, float originZ, float dirX, float dirY, float dirZ);
+
+		// Clones a game object from a gameobject with the given tag
+		void spawnClonedGameObjectFromTag(std::string tag);
 		void setParent(std::shared_ptr<GameObject> gameObject, std::shared_ptr<GameObject> newParent);
 		void removeParent(std::shared_ptr<GameObject> gameObject);
+		std::string getTagOfGameObject(std::string id);
+		int getNumberOfGameObjectsWithTag(std::string tag);
 
 	protected:
 		RayCollision checkRayCollision(std::shared_ptr<GameObject> gameObject, glm::vec3 origin, glm::vec3 direction);

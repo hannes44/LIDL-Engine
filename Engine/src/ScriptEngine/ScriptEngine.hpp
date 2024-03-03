@@ -44,6 +44,10 @@ namespace engine
 
 		void bindEngineAPIToLuaState();
 
+		void syncGameObjectStateEngineToScript(ScriptableComponent* component);
+
+		void syncGameObjectStateScriptToEngine(ScriptableComponent* component);
+
 		void syncTransformStateEngineToScript(ScriptableComponent* component);
 
 		void syncTransformStateScriptToEngine(ScriptableComponent* component);

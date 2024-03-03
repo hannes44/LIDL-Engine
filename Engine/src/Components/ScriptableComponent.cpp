@@ -46,6 +46,9 @@ namespace engine
 
 	void ScriptableComponent::handleInput(const InputEvent& event)
 	{
+		if (!enableInput)
+			InputFramework::getInstance().removeListener(this);
+
 		ScriptEngine::getInstance()->handleInputForScriptableComponent(this, event);
 	}
 

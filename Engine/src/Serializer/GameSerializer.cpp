@@ -26,6 +26,13 @@ namespace engine
 	void GameSerializer::serializeGame(Game* game)
 	{
 		LOG_INFO("Serializing game: " + game->name);
+
+		if (game->running)
+		{
+			LOG_WARN("Cannot serialize game while it is running");
+			return;
+		}
+
 		std::string directoryFilePath = GAME_FOLDER_PATH + game->name;
 		std::string insideDirectoryFilePath = directoryFilePath + "/";
 
@@ -96,6 +103,7 @@ namespace engine
 		serializeGameObjects(game, out, serializeForMultiplayer);
 		serializeTextures(game, out);
 		serializeMaterials(game, out, serializeForMultiplayer);
+		serializeActions(game, out);
 
 		out << YAML::EndMap;
 		std::ofstream fout(folderPath + stateFileName + GAME_CONFIG_FILE_EXTENSION);
@@ -151,6 +159,20 @@ namespace engine
 		out << YAML::Key << "Id";
 		// TODO: Add proper Id when UUID is implemented
 		out << YAML::Value << gameObject->uuid.id;
+		out << YAML::Key << "tag";
+		out << YAML::Value << gameObject->tag;
+		out << YAML::Key << "parent";
+		bool hasParent = gameObject->getParent() != nullptr;
+		out << YAML::Value << (hasParent ? gameObject->getParent()->uuid.id : "NONE");
+		out << YAML::Key << "children";
+
+		std::vector<std::string> childrenIds{};
+		for (const auto& child : gameObject->getChildren())
+		{
+			childrenIds.push_back(child->uuid.id);
+		}
+		out << YAML::Flow << childrenIds;
+
 
 		serializeComponents(gameObject->getComponents(), out, serializeForMultiplayer);
 
@@ -256,6 +278,27 @@ namespace engine
 			LOG_ERROR("Failed to serialize material: " + material->name);
 	}
 
+	void GameSerializer::serializeActions(const Game* game, YAML::Emitter& emitter)
+	{
+		emitter << YAML::Key << "Actions";
+		emitter << YAML::Value << YAML::BeginSeq;
+		for (const auto& [actionName, actionKeys] : ActionMap::getInstance().actionMap)
+		{
+			emitter << YAML::BeginMap;
+			emitter << YAML::Key << actionName;
+			std::vector<int> keys{};
+			for (const auto& key : actionKeys)
+			{
+				keys.push_back(static_cast<int>(key));
+			}
+			emitter << YAML::Flow << YAML::Value << keys;
+
+			emitter << YAML::EndMap;
+
+		}
+		emitter << YAML::EndSeq;
+	}
+
 	// Serializes a serializable to the given YAML emitter as key value pairs for each serializable variable
 	void GameSerializer::serializeSerializable(Serializable* serializable, YAML::Emitter& out)
 	{
@@ -353,6 +396,8 @@ namespace engine
 		LOG_TRACE("Loading file: " + gameConfigFilePath);
 		YAML::Node config = YAML::LoadFile(gameConfigFilePath);
 
+		game->resetGameState();
+
 		deserializeGameConfig(game);
 
 		deserializeGameState(game);
@@ -387,6 +432,7 @@ namespace engine
 		deserializeTextures(state, game);
 		deserializeMaterials(state, game);
 		deserializeGameObjects(state, game);
+		deserializeActions(state, game);
 
 		LOG_TRACE("Deserialized game state: " + game->name);
 	}
@@ -467,6 +513,35 @@ namespace engine
 		}
 	}
 
+	void GameSerializer::deserializeActions(YAML::Node node, Game* game)
+	{
+	
+		YAML::Node actionsNode;
+		try
+		{
+			actionsNode = node["Actions"];
+		}
+		catch (const std::exception& e)
+		{
+			LOG_ERROR("Failed to deserialize actions: " + std::string(e.what()));
+			return;
+		}
+
+		for (YAML::const_iterator it = actionsNode.begin(); it != actionsNode.end(); ++it)
+		{
+			YAML::Node actionNode = *it;
+			std::string actionName = actionNode.begin()->first.as<std::string>();
+			std::vector<int> actionKeys = actionNode.begin()->second.as<std::vector<int>>();
+			
+			std::list<Key> keys{};
+			for (const auto& key : actionKeys)
+			{
+				keys.push_back(static_cast<Key>(key));
+			}
+			ActionMap::getInstance().actionMap[actionName] = keys;
+		}
+	}
+
 	// Deserializes all game objects from the given YAML node into the game
 	void GameSerializer::deserializeGameObjects(YAML::Node node, Game* game)
 	{
@@ -517,8 +592,29 @@ namespace engine
 				gameObject->isVisible = gameObjectNode["isVisible"].as<bool>();
 				gameObject->uuid.id = gameObjectID;
 				gameObject->isExternalMultiplayerObject = isExternalMultiplayerObject;
+				gameObject->tag = gameObjectNode["tag"].as<std::string>();
 				deserializeComponents(gameObjectNode, gameObject.get(), game);
 				game->addGameObject(gameObject);
+			}
+			catch (const std::exception& e)
+			{
+				LOG_WARN("Failed to deserialize game object: " + std::string(e.what()));
+			}
+		}
+
+		// We need to iterate again to add parents and children
+		for (YAML::const_iterator it = gameObjectsNode.begin(); it != gameObjectsNode.end(); ++it)
+		{
+			try
+			{
+				YAML::Node gameObjectNode = *it;
+				std::weak_ptr<GameObject> gameObject = game->getGameObject(gameObjectNode["Id"].as<std::string>());
+				std::string parentUUID = gameObjectNode["parent"].as<std::string>();
+				if (parentUUID != "NONE")
+				{
+					std::weak_ptr<GameObject> parent = game->getGameObject(parentUUID);
+					game->setParent(gameObject.lock(), parent.lock());
+				}
 			}
 			catch (const std::exception& e)
 			{

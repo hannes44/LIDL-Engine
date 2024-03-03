@@ -76,7 +76,10 @@ namespace engine
 
 		baseShader->setInt("numLights", lightIndex);
 		baseShader->setVec3("viewPos", camera->getTransform().getPosition().x, camera->getTransform().getPosition().y, camera->getTransform().getPosition().z);
-
+		baseShader->setVec3("backgroundColor", renderingSettings->backgroundColor.x, renderingSettings->backgroundColor.y, renderingSettings->backgroundColor.z);
+		baseShader->setInt("enableFog", renderingSettings->enableFog);
+		baseShader->setFloat("startFogDistance", renderingSettings->startFogDistance);
+		baseShader->setFloat("endFogDistance", renderingSettings->endFogDistance);
 
 		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
 		{

@@ -164,7 +164,9 @@ namespace engine {
 
 	// Function to dispatch captured event to all listeners
 	void InputFramework::dispatchEvent(const InputEvent& e) {
-		for (auto* listener : listeners) {
+		// Creating copy of listeners to avoid issues with removing listeners while iterating
+		std::list<InputListener*> listenersCopy = listeners;
+		for (auto* listener : listenersCopy) {
 			if (listener) {
 				listener->handleInput(e);
 			}

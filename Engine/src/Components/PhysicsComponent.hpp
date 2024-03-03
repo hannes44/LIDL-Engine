@@ -36,6 +36,10 @@ namespace engine
 
 		std::string getName() override { return "Physics"; };
 
+		std::shared_ptr<Component> clone() override {
+			return std::make_shared<PhysicsComponent>(*this);
+		}
+
 		std::vector<SerializableVariable> getSerializableVariables() override
 		{
 			return

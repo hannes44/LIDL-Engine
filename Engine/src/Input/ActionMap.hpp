@@ -33,10 +33,11 @@ namespace engine {
 
 		std::list<std::string> getActions();
 
+		std::unordered_map<std::string, std::list<Key>> actionMap;
+
 	protected:
 		ActionMap();
 	private:
 		inline static ActionMap* instance = nullptr;
-		std::unordered_map<std::string, std::list<Key>> actionMap;
 	};
 }

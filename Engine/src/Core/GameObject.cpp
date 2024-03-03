@@ -53,10 +53,16 @@ namespace engine {
 		components.push_back(component);
 	}
 
-	GameObject GameObject::clone()
+	std::shared_ptr<GameObject> GameObject::clone()
 	{
-		GameObject newGameObject = *this;
-		newGameObject.uuid = UUID();
+		std::shared_ptr<GameObject> newGameObject = std::make_shared<GameObject>(*this);
+		newGameObject->uuid = UUID();
+
+		for (auto& component : newGameObject->components) {
+			component = component->clone();
+			component->gameObject = newGameObject.get();
+		}
+
 		return newGameObject;
 	}
 }

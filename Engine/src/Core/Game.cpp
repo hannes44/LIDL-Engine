@@ -45,6 +45,13 @@ namespace engine {
 		return texture;
 	}
 
+	void Game::resetGameState()
+	{
+		gameObjects.clear();
+		materials.clear();
+		textures.clear();
+	}
+
 	std::weak_ptr<Selectable> Game::getSelectable(const std::string& id)
 	{
 		if (gameObjects.count(id))
@@ -72,7 +79,7 @@ namespace engine {
 		return std::weak_ptr<GameObject>();
 	}
 
-	void Game::deleteGameObject(const std::string& id)
+	void Game::deleteGameObjectFromId(const std::string& id)
 	{
 		gameObjectRootIDs.erase(id);
 		gameObjects.erase(id);
@@ -80,7 +87,7 @@ namespace engine {
 
 	void Game::deleteGameObject(GameObject* gameObject)
 	{
-		deleteGameObject(gameObject->uuid.id);
+		deleteGameObjectFromId(gameObject->uuid.id);
 	}
 
 	void Game::addTexture(std::shared_ptr<Texture> texture)
@@ -200,6 +207,42 @@ namespace engine {
 		return collidingObjects;
 	}
 
+	std::string Game::getIdOfGameObjectHitByRay(float originX, float originY, float originZ, float dirX, float dirY, float dirZ)
+	{
+		LOG_INFO("Checking ray collisions");
+		auto origin = glm::vec3(originX, originY, originZ);
+		auto direction = glm::vec3(dirX, dirY, dirZ);
+		auto collisions = checkRayCollisions(origin, direction);
+		if (collisions.size() > 0)
+		{
+			LOG_INFO("Ray hit object with id: " + collisions[0]->uuid.id);
+			return collisions[0]->uuid.id;
+		}
+		LOG_INFO("Ray did not hit any object");
+
+		return "";
+	}
+
+	void Game::spawnClonedGameObjectFromTag(std::string tag)
+	{
+		LOG_INFO("Spawning object with tag: " + tag);
+		for (auto& [id, gameObject] : gameObjects)
+		{
+			if (gameObject->tag == tag)
+			{
+				std::shared_ptr<GameObject> newGameObject = gameObject->clone();
+				gameObjects[newGameObject->uuid.id] = newGameObject;
+
+				// if the game object is spawned while the game is running, initialize it
+				if (running)
+				{
+					gameObjects[newGameObject->uuid.id]->initialize();
+				}
+				break;
+			}
+		}
+	}
+
 	glm::vec3 vec3min(glm::vec3 a, glm::vec3 b) {
 		return glm::vec3(min(a.x, b.x), min(a.y, b.y), min(a.z, b.z));
 	}
@@ -256,6 +299,29 @@ namespace engine {
 		}
 
 		gameObject->parent = newParent;
+	}
+
+	std::string Game::getTagOfGameObject(std::string id)
+	{
+		std::string tag = "";
+		if (gameObjects.count(id))
+		{
+			tag = gameObjects[id]->tag;
+		}
+		return tag;
+	}
+
+	int Game::getNumberOfGameObjectsWithTag(std::string tag)
+	{
+		int count = 0;
+		for (auto& [id, gameObject] : gameObjects)
+		{
+			if (gameObject->tag == tag)
+			{
+				count++;
+			}
+		}
+		return count;
 	}
 
 	void Game::removeParent(std::shared_ptr<GameObject> gameObject) {
