@@ -13,14 +13,18 @@ public class EnemyManager
 
     public GameObject enemyPrefab = new GameObject();
 
-    public int enemiesToSpawn = 10;
+    public int enemiesToSpawn = 1;
 
 
 
     // Update is called once per frame
     public void Update()
     {
-
+        if (EngineAPI.getNumberOfGameObjectsWithTag("Enemy") == 1)
+        {
+            NextRound();
+            SpawnEnemy();
+        }
     }
 
     // Initialize is called once the component is added to the game
