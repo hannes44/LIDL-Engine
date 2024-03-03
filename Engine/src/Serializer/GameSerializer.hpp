@@ -36,8 +36,8 @@ namespace engine
 		static void serializeGameObjects(const Game* game, YAML::Emitter& emitter, bool serializeForMultiplayer = false);
 		static void serializeGameObject(GameObject* gameObject, YAML::Emitter& emitter, bool serializeForMultiplayer = false);
 
-		static void serializeComponents(std::vector<std::shared_ptr<Component>> components, YAML::Emitter& emitter);
-		static void serializeComponent(std::shared_ptr<Component>, YAML::Emitter& emitter);
+		static void serializeComponents(std::vector<std::shared_ptr<Component>> components, YAML::Emitter& emitter, bool serializeForMultiplayer = false);
+		static void serializeComponent(std::shared_ptr<Component>, YAML::Emitter& emitter, bool serializeForMultiplayer = false);
 
 		static void serializeTextures(const Game* games, YAML::Emitter& emitter);
 		static void serializeTexture(Texture* texture, YAML::Emitter& emitter);

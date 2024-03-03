@@ -157,22 +157,24 @@ namespace engine
 	}
 
 	// Serializes all components to the given YAML emitter, will create a sequence of components
-	void GameSerializer::serializeComponents(std::vector<std::shared_ptr<Component>> components, YAML::Emitter& out)
+	void GameSerializer::serializeComponents(std::vector<std::shared_ptr<Component>> components, YAML::Emitter& out, bool serializeForMultiplayer)
 	{
 		out << YAML::Key << "Components";
 		out << YAML::Value << YAML::BeginSeq;
 
 		for (const auto& component : components)
-		{
-			serializeComponent(component, out);
-		}
+			serializeComponent(component, out, serializeForMultiplayer);
 
 		out << YAML::EndSeq;
 	}
 
 	// Serializes a component to the given YAML emitter as a map
-	void GameSerializer::serializeComponent(std::shared_ptr<Component> component, YAML::Emitter& out)
+	void GameSerializer::serializeComponent(std::shared_ptr<Component> component, YAML::Emitter& out, bool serializeForMultiplayer)
 	{
+		// Do not serialize components for multiplayer that should not be serialized
+		if (serializeForMultiplayer && !component->serializeForMultiplayer())
+			return;
+		
 		std::shared_ptr<Serializable> serializable = std::dynamic_pointer_cast<Serializable>(component);
 		out << YAML::BeginMap;
 		out << YAML::Key << "name";

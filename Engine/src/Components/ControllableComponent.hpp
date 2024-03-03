@@ -37,6 +37,8 @@ namespace engine {
 		std::string getName() override;
 		void initialize() override;
 
+		bool serializeForMultiplayer() override { return false; }
+
 		bool isMouseDragging;
 
 		glm::vec3 worldUp{ 0.0f, 1.0f, 0.0f };
