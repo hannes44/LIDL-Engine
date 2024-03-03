@@ -46,8 +46,6 @@ namespace engine
 		baseShader->bind();
 
 		glm::mat4 projectionMatrix = camera->getProjectionMatrix();
-		glm::mat4 viewMatrix = camera->getViewMatrix();
-
 
 		int lightIndex = 0;
 		// TODO: There should be a list of all the lights in the game to avoid this loop
@@ -65,9 +63,9 @@ namespace engine
 					baseShader->setVec3(("pointLights" + index + ".ambient").c_str(), light->color.x, light->color.y, light->color.z);
 					baseShader->setVec3(("pointLights" + index + ".diffuse").c_str(), light->color.x, light->color.y, light->color.z);
 					baseShader->setVec3(("pointLights" + index + ".specular").c_str(), light->color.x, light->color.y, light->color.z);
-					baseShader->setFloat(("pointLights" + index + ".constant").c_str(), 10);
-					baseShader->setFloat(("pointLights" + index + ".linear").c_str(), 0);
-					baseShader->setFloat(("pointLights" + index + ".quadratic").c_str(), 0);
+					baseShader->setFloat(("pointLights" + index + ".constant").c_str(), light->constant);
+					baseShader->setFloat(("pointLights" + index + ".linear").c_str(), light->linear);
+					baseShader->setFloat(("pointLights" + index + ".quadratic").c_str(), light->quadratic);
 
 					lightIndex++;
 				}
@@ -98,14 +96,20 @@ namespace engine
 			if (meshComponent == nullptr)
 				continue;
 
-
+			glm::mat4 viewMatrix = camera->getViewMatrix();
 			glm::mat4 gameObjectTransformMatrix = gameObject->getGlobalTransform().transformMatrix;
 			glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * gameObjectTransformMatrix;
+			glm::mat4 modelViewMatrix = viewMatrix * gameObjectTransformMatrix;
 			Renderer::baseShader->setMat4("modelViewProjectionMatrix", &modelViewProjectionMatrix[0].x);
+			glm::mat4 normalMatrix = glm::transpose(glm::inverse(gameObjectTransformMatrix));
+			Renderer::baseShader->setMat4("normalMatrix", &normalMatrix[0].x);
+			modelViewMatrix = viewMatrix * gameObjectTransformMatrix;
+			Renderer::baseShader->setMat4("modelViewMatrix", &modelViewMatrix[0].x);
+			Renderer::baseShader->setMat4("viewMatrix", &viewMatrix[0].x);
 			Renderer::baseShader->setMat4("modelMatrix", &gameObjectTransformMatrix[0].x);
+			Renderer::baseShader->setMat4("projectionMatrix", &projectionMatrix[0].x);
 
 			Material* material = meshComponent->getMaterial();
-			// Material
 			Renderer::baseShader->setFloat("material.shininess", material->shininess);
 			Renderer::baseShader->setVec3("material.baseColor", material->baseColor.x, material->baseColor.y, material->baseColor.z);
 			Renderer::baseShader->setInt("material.hasDiffuseTexture", !material->diffuseTexture.expired());
@@ -302,8 +306,11 @@ namespace engine
 
 		glm::mat4 gameObjectTransformMatrix = gameObject->getGlobalTransform().transformMatrix;
 		glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * gameObjectTransformMatrix;
+		glm::mat4 modelViewMatrix = viewMatrix * gameObjectTransformMatrix;
 		Renderer::baseShader->setMat4("modelViewProjectionMatrix", &modelViewProjectionMatrix[0].x);
-		Renderer::baseShader->setMat4("modelMatrix", &gameObjectTransformMatrix[0].x);
+		Renderer::baseShader->setMat4("modelViewMatrix", &modelViewMatrix[0].x);
+		glm::mat4 normalMatrix = glm::inverse(glm::transpose(modelViewMatrix));
+		Renderer::baseShader->setMat4("normalMatrix", &normalMatrix[0].x);
 
 		Material* material = meshComponent->getMaterial();
 		// Material

@@ -11,6 +11,10 @@ namespace engine
 
 		float intensity = 10;
 
+		float constant = 1.0f;
+		float linear = 0.09f;
+		float quadratic = 0.032f;
+
 		std::string getName() override { return name; };
 
 		inline static const std::string name = "PointLight";
@@ -24,7 +28,10 @@ namespace engine
 			return
 			{
 				{SerializableType::COLOR, "Color", "The color or the pointlight", &color},
-				{SerializableType::FLOAT, "Intensity", "The intensity of the pointlight", &intensity}
+				{SerializableType::FLOAT, "Intensity", "The intensity of the pointlight", &intensity},
+				{SerializableType::FLOAT, "Constant", "The constant value of the pointlight", &constant},
+				{SerializableType::FLOAT, "Linear", "The linear value of the pointlight", &linear},
+				{SerializableType::FLOAT, "Quadratic", "The quadratic value of the pointlight", &quadratic},
 			};
 		};
 	};
