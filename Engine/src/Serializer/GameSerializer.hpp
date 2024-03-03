@@ -42,8 +42,8 @@ namespace engine
 		static void serializeTextures(const Game* games, YAML::Emitter& emitter);
 		static void serializeTexture(Texture* texture, YAML::Emitter& emitter);
 
-		static void serializeMaterials(const Game* game, YAML::Emitter& emitter);
-		static void serializeMaterial(Material* material, YAML::Emitter& emitter);
+		static void serializeMaterials(const Game* game, YAML::Emitter& emitter, bool serializeForMultiplayer = false);
+		static void serializeMaterial(Material* material, YAML::Emitter& emitter, bool serializeForMultiplayer = false);
 
 		static void deserializeGameConfig(Game* game);
 

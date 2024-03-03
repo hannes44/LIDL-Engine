@@ -87,7 +87,7 @@ namespace engine
 
 		serializeGameObjects(game, out, serializeForMultiplayer);
 		serializeTextures(game, out);
-		serializeMaterials(game, out);
+		serializeMaterials(game, out, serializeForMultiplayer);
 
 		out << YAML::EndMap;
 		std::ofstream fout(folderPath + stateFileName + GAME_CONFIG_FILE_EXTENSION);
@@ -213,14 +213,13 @@ namespace engine
 	}
 
 	// Serializes all materials to the given YAML emitter, will create a sequence of materials
-	void GameSerializer::serializeMaterials(const Game* game, YAML::Emitter& out)
+	void GameSerializer::serializeMaterials(const Game* game, YAML::Emitter& out, bool serializeForMultiplayer)
 	{
 		out << YAML::Key << "Materials";
 		out << YAML::Value << YAML::BeginSeq;
+		
 		for (const auto& [materialId, material] : game->getMaterials())
-		{
-			serializeMaterial(material.get(), out);
-		}
+			serializeMaterial(material.get(), out, serializeForMultiplayer);
 
 		out << YAML::EndSeq;
 
@@ -231,10 +230,16 @@ namespace engine
 	}
 
 	// Serializes a material to the given YAML emitter as a map
-	void GameSerializer::serializeMaterial(Material* material, YAML::Emitter& out)
+	void GameSerializer::serializeMaterial(Material* material, YAML::Emitter& out, bool serializeForMultiplayer)
 	{
+		// Do not serialize external multiplayer materials
+		if (material->isExternalMultiplayerObject)
+			return;
+		
 		out << YAML::BeginMap;
 		serializeSerializable(material, out);
+		out << YAML::Key << "isExternalMultiplayerObject";
+		out << YAML::Value << (serializeForMultiplayer || material->isExternalMultiplayerObject);
 		out << YAML::EndMap;
 
 		if (out.good())
@@ -439,18 +444,16 @@ namespace engine
 
 			deserializeSerializable(materialNode, material);
 
+			material->isExternalMultiplayerObject = materialNode["isExternalMultiplayerObject"].as<bool>();
+
 			std::string diffuseTextureId = materialNode["Diffuse Texture"].as<std::string>();
 			std::string specularTextureId = materialNode["Specular Texture"].as<std::string>();
 			
 			if (diffuseTextureId != "")
-			{
 				material->diffuseTexture = game->getTexture(diffuseTextureId);
-			}
 
 			if (specularTextureId != "")
-			{
 				material->specularTexture = game->getTexture(specularTextureId);
-			}
 
 			game->addMaterial(std::shared_ptr<Material>(material));
 		}
@@ -476,6 +479,7 @@ namespace engine
 			{
 				YAML::Node gameObjectNode = *it;
 				std::string gameObjectName = gameObjectNode["name"].as<std::string>();
+				std::string gameObjectID = gameObjectNode["Id"].as<std::string>();
 
 				bool isExternalMultiplayerObject = gameObjectNode["isExternalMultiplayerObject"].as<bool>();
 
@@ -489,7 +493,7 @@ namespace engine
 
 					// Check if the multiplayer 
 					auto multiplayerMatch = std::find_if(existingGameObjects.begin(), existingGameObjects.end(), [&](const std::pair<std::string, std::shared_ptr<GameObject>>& gameObject) {
-						return gameObject.second->name == multiplayerGameObjectName;
+						return gameObject.second->uuid.id == gameObjectID;
 					});
 					// If we have already deserialized this multiplayer object previously, delete it before recreating it
 					if (multiplayerMatch != existingGameObjects.end())
@@ -503,7 +507,7 @@ namespace engine
 				std::vector<float> transformMatrix = gameObjectNode["transform"].as<std::vector<float>>();
 				std::copy(transformMatrix.begin(), transformMatrix.end(), &gameObject->transform.transformMatrix[0][0]);
 				gameObject->isVisible = gameObjectNode["isVisible"].as<bool>();
-				gameObject->uuid.id = gameObjectNode["Id"].as<std::string>();
+				gameObject->uuid.id = gameObjectID;
 				gameObject->isExternalMultiplayerObject = isExternalMultiplayerObject;
 				deserializeComponents(gameObjectNode, gameObject.get(), game);
 				game->addGameObject(gameObject);

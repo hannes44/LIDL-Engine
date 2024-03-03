@@ -37,9 +37,6 @@ namespace engine
 
 	void MultiplayerGame::onMultiplayerStateReceived(std::string state)
 	{
-		std::cout << "MultiplayerClient received:" << std::endl;
-		std::cout << state << std::endl;
-
 		std::string filePath = MULTIPLAYER_STATE_FOLDER + "ParsedState" + MULTIPLAYER_STATE_FILE_EXTENSION;
 
 		LOG_INFO("Creating YAML file from received state: " + filePath);

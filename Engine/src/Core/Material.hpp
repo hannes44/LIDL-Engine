@@ -13,6 +13,9 @@ namespace engine
 	public:
 		glm::vec3 baseColor{ 1,1,1 };
 
+		// Note: handeled separately, do not add to serializable variables
+		bool isExternalMultiplayerObject = false;
+
 		float transparency = 1;
 		glm::vec3 emission = { 0,0,0 };
 		float roughness = 0;

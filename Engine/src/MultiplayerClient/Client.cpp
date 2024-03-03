@@ -88,7 +88,6 @@ namespace engine {
 
 	void Client::QueueMessage(ClientMessage message) {
 		messageQueue.enqueue(message);
-		std::cout << "Enqueued." << std::endl;
 	}
 
 	std::string Client::GetHeader(ClientMessageType type) {
@@ -127,7 +126,7 @@ namespace engine {
 
 		const int chunkSize = BUF_SIZE - END_CHUNK_FLAG.length();
 
-		std::string payload = message + END_MSG_FLAG;
+		std::cout << "-> " << message << std::endl;
 
 		std::vector<std::string> chunks{};
 
@@ -139,8 +138,6 @@ namespace engine {
 		for (int i = 0; i < chunks.size(); i++) {
 			std::string chunk = chunks[i] + END_CHUNK_FLAG;
 			SocketSend(socket, chunk);
-
-			LOG_INFO("[{0}] -> {1}", std::to_string(i), chunk);
 		}
 
 		SocketSend(socket, END_MSG_FLAG);
