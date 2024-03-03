@@ -13,7 +13,7 @@
 namespace engine
 {
 
-	ControllableComponent::ControllableComponent(bool allowJump) : allowJump(allowJump)
+	ControllableComponent::ControllableComponent(bool allowJump, bool enableForces) : allowJump(allowJump), enableForces(enableForces)
 	{
 		InputFramework::getInstance().addListener(this);
 	}

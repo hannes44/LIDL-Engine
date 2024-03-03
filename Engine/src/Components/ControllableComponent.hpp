@@ -24,7 +24,7 @@ namespace engine {
 
 	class ControllableComponent : public Component, public InputListener {
 	public:
-		ControllableComponent(bool allowJump = false);
+		ControllableComponent(bool allowJump = false, bool enableForces = true);
 		~ControllableComponent();
 
 		bool allowJump = false;
@@ -32,7 +32,7 @@ namespace engine {
 		float movementSpeed = 3;
 		MovementType movementType = MovementType::OnHold;
 		bool allowInstantTurnaround = true;
-		bool enableForces = false;
+		bool enableForces = true;
 
 		std::string getName() override;
 		void initialize() override;

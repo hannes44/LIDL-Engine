@@ -131,7 +131,7 @@ namespace engine
 		remoteBoxPtr->addComponent(remoteMesh);
 		remoteBoxPtr->addComponent(std::make_unique<engine::PhysicsComponent>(remotePhysicsComponent));
 		remoteBoxPtr->addComponent(std::make_unique<engine::MultiplayerComponent>());
-		remoteBoxPtr->addComponent(std::make_unique<engine::ControllableComponent>(false));
+		remoteBoxPtr->addComponent(std::make_unique<engine::ControllableComponent>(false, false));
 
 
 		auto localBoxSharedPointer = std::shared_ptr<GameObject>(localBoxPtr);

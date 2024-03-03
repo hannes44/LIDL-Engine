@@ -47,7 +47,7 @@ namespace engine {
 		amogus->addComponent(meshComponent1);
 		amogus->addComponent(std::make_unique<PhysicsComponent>(physicsComponentWithGravity));
 		amogus->addComponent(std::make_unique<BoxColliderComponent>(boxColliderComponent));
-		amogus->addComponent(std::make_unique<ControllableComponent>(true));
+		amogus->addComponent(std::make_unique<ControllableComponent>(true, true));
 		addGameObject(std::unique_ptr<GameObject>(amogus));
 
 
