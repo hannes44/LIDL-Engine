@@ -6,6 +6,7 @@
 #include "Texture.hpp"
 #include <string>
 #include <map>
+#include <set>
 #include "GameConfig.hpp"
 #include "Material.hpp"
 #include "GameObject.hpp"
@@ -14,6 +15,18 @@
 
 namespace engine
 {
+	struct RayCollision {
+		bool collision = false;
+		float nearCollision = 0;
+		float farCollision = 0;
+		std::shared_ptr<GameObject> gameObject;
+
+		bool operator < (const RayCollision& other) const
+		{
+			return nearCollision < other.nearCollision;
+		}
+	};
+
 	class Game
 	{
 	public:
@@ -29,9 +42,6 @@ namespace engine
 
 		const void gameLoop();
 
-		// Currenly limit the game to only one camera
-		CameraComponent camera{};
-
 		std::weak_ptr<Texture> loadTexture(const std::string& textureFileName);
 
 		std::string name = "Giga Game";
@@ -41,6 +51,16 @@ namespace engine
 		std::weak_ptr<GameObject> mainCamera;
 
 		const std::map<std::string, std::shared_ptr<GameObject>> getGameObjects() const { return gameObjects; };
+		
+		const std::set<std::shared_ptr<GameObject>> getRootGameObjects() const {
+			std::set<std::shared_ptr<GameObject>> gameGameObjects{};
+			for (auto& [id, go] : gameObjects) {
+				if (gameObjectRootIDs.contains(go->uuid.id))
+					gameGameObjects.insert(go);
+			}
+
+			return gameGameObjects;
+		};
 
 		const std::map<std::string, std::shared_ptr<Texture>> getTextures() const { return textures; };
 
@@ -77,8 +97,15 @@ namespace engine
 		virtual bool isMultiplayerGame() {
 			return false;
 		}
+		
+		/// Returns a vector of the GameObjects that collided with the ray, sorted from closest to farthest
+		std::vector<std::shared_ptr<GameObject>> checkRayCollisions(glm::vec3 origin, glm::vec3 direction);
+
+		void setParent(std::shared_ptr<GameObject> gameObject, std::shared_ptr<GameObject> newParent);
+		void removeParent(std::shared_ptr<GameObject> gameObject);
 
 	protected:
+		RayCollision checkRayCollision(std::shared_ptr<GameObject> gameObject, glm::vec3 origin, glm::vec3 direction);
 		// 0 is uncapped
 		virtual double getTargetFrameRate() = 0;
 
@@ -93,6 +120,8 @@ namespace engine
 
 		// Material Id to Material
 		std::map<std::string, std::shared_ptr<Material>> materials{};
+
+		std::set<std::string> gameObjectRootIDs{};
 	};
 
 	Game* createGame();

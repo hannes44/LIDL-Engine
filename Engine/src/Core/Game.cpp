@@ -5,6 +5,7 @@
 #include "Window.hpp"
 #include "Physics/GamePhysics.hpp"
 #include "Core/Logger.hpp"
+#include "Components/ColliderComponent.hpp"
 
 constexpr auto TIME_CONVERSION_FACTOR = 1000000000;
 
@@ -58,6 +59,8 @@ namespace engine {
 	void Game::addGameObject(std::shared_ptr<GameObject> gameObject)
 	{
 		gameObject->game = this;
+		gameObject->added = true;
+		gameObjectRootIDs.insert(gameObject->uuid.id);
 		gameObjects[gameObject->uuid.id] = std::move(gameObject);
 	}
 
@@ -71,12 +74,13 @@ namespace engine {
 
 	void Game::deleteGameObject(const std::string& id)
 	{
+		gameObjectRootIDs.erase(id);
 		gameObjects.erase(id);
 	}
 
 	void Game::deleteGameObject(GameObject* gameObject)
 	{
-		gameObjects.erase(gameObject->uuid.id);
+		deleteGameObject(gameObject->uuid.id);
 	}
 
 	void Game::addTexture(std::shared_ptr<Texture> texture)
@@ -177,5 +181,94 @@ namespace engine {
 		}
 
 		return nullptr;
+	}
+
+	std::vector<std::shared_ptr<GameObject>> Game::checkRayCollisions(glm::vec3 origin, glm::vec3 direction) {
+		std::vector<RayCollision> collisions{};
+		for (auto& [id, gameObject] : gameObjects) {
+			auto collision = checkRayCollision(gameObject, origin, direction);
+			if (collision.collision)
+				collisions.push_back(collision);
+		}
+
+		std::sort(collisions.begin(), collisions.end());
+
+		std::vector<std::shared_ptr<GameObject>> collidingObjects{};
+		for (auto& collision : collisions)
+			collidingObjects.push_back(collision.gameObject);
+
+		return collidingObjects;
+	}
+
+	glm::vec3 vec3min(glm::vec3 a, glm::vec3 b) {
+		return glm::vec3(min(a.x, b.x), min(a.y, b.y), min(a.z, b.z));
+	}
+
+	glm::vec3 vec3max(glm::vec3 a, glm::vec3 b) {
+		return glm::vec3(max(a.x, b.x), max(a.y, b.y), max(a.z, b.z));
+	}
+
+	RayCollision Game::checkRayCollision(std::shared_ptr<GameObject> gameObject, glm::vec3 origin, glm::vec3 direction) {
+		auto collider = gameObject->getComponent<ColliderComponent>();
+		if (collider == nullptr)
+			return { false, 0, 0, gameObject };
+
+		direction = glm::normalize(direction);
+
+		// TODO: Since we are checking multiple boxes with the same ray, this can be optimized
+		// See https://gist.github.com/DomNomNom/46bb1ce47f68d255fd5d
+		auto aabb = collider->getBoundingBox();
+		glm::vec3 tMin = (aabb.getMin() - origin) / direction;
+		glm::vec3 tMax = (aabb.getMax() - origin) / direction;
+
+		glm::vec3 t1 = vec3min(tMin, tMax);
+		glm::vec3 t2 = vec3max(tMin, tMax);
+
+		float tNear = max(max(t1.x, t1.y), t1.z);
+		float tFar = min(min(t2.x, t2.y), t2.z);
+
+		return { tNear >= 0 && tNear < tFar, tNear, tFar, gameObject };
+	}
+
+	void Game::setParent(std::shared_ptr<GameObject> gameObject, std::shared_ptr<GameObject> newParent) {
+		if (gameObject.get()->parent == newParent)
+			return;
+
+		if (!gameObject->added)
+			throw std::runtime_error("Cannot set parent before GameObject has been added.");
+
+		std::shared_ptr<GameObject> currParent = gameObject->parent;
+		while (currParent != nullptr) {
+			if (currParent == gameObject)
+				throw std::runtime_error("Cannot set parent. Circular parents.");
+
+			currParent = currParent->parent;
+		}
+
+		// Remove existing parent
+		if (gameObject->parent != nullptr || newParent == nullptr)
+			removeParent(gameObject);
+
+		// If the new parent is not null, it is no longer a root object
+		if (newParent != nullptr) {
+			gameObjectRootIDs.erase(gameObject->uuid.id);
+			newParent->children.insert(gameObject);
+		}
+
+		gameObject->parent = newParent;
+	}
+
+	void Game::removeParent(std::shared_ptr<GameObject> gameObject) {
+		if (!gameObject->added)
+			throw std::runtime_error("Cannot remove parent before GameObject has been added.");
+
+		// Without a parent, the GameObject is now a root object
+		gameObjectRootIDs.insert(gameObject->uuid.id);
+
+		// If it had a parent, we must erase it from the parent's children
+		if (gameObject->parent != nullptr)
+			gameObject->parent->children.erase(gameObject);
+
+		gameObject->parent = nullptr;
 	}
 }

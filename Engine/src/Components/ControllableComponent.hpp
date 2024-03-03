@@ -3,7 +3,10 @@
 #include "Component.hpp"
 #include "Input/InputListener.hpp"
 #include "ControllableComponent.hpp"
+#include "PhysicsComponent.hpp"
 #include "Core/GameObject.hpp"
+#include <glm/glm.hpp>
+#include "Physics/GamePhysicsSettings.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/hash.hpp>
@@ -21,14 +24,28 @@ namespace engine {
 
 	class ControllableComponent : public Component, public InputListener {
 	public:
-		ControllableComponent();
+		ControllableComponent(bool allowJump = false);
 		~ControllableComponent();
 
+		bool allowJump = false;
+
 		float movementSpeed = 3;
-		MovementType movementType = MovementType::Always;
+		MovementType movementType = MovementType::OnHold;
 		bool allowInstantTurnaround = true;
+		bool enableForces = true;
 
 		std::string getName() override;
+		void initialize() override;
+
+		bool isMouseDragging;
+
+		glm::vec3 worldUp{ 0.0f, 1.0f, 0.0f };
+		glm::vec3 direction{ -1, -1, -1 };
+		glm::quat orientation{ 1, 0, 0, 0 };
+
+		float rotationSpeed = 0.005f;
+
+		std::set<Direction> currentDirections;
 
 		std::set<std::string> getRequiredComponents() override;
 
@@ -39,5 +56,6 @@ namespace engine {
 
 		void moveOnHold(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent);
 		void alwaysMove(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent);
-	};
+        void changeDirection(const InputEvent &event);
+    };
 }

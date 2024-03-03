@@ -13,6 +13,9 @@ namespace engine {
 		glm::vec3 getCenter() { return center; }
 		glm::vec3 getExtent() { return extent; }
 
+		glm::vec3 getMin() { return center - extent / 2.0f; }
+		glm::vec3 getMax() { return center + extent / 2.0f; }
+
 	protected:
 		glm::vec3 center{ 0 };
 		glm::vec3 extent{ 0 };
