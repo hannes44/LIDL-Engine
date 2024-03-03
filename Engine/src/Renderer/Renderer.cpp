@@ -8,6 +8,7 @@
 #include "Components/PointLightComponent.hpp"
 #include "Core/Game.hpp"
 #include "Components/CameraComponent.hpp"
+#include "Components/SpotLightComponent.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
@@ -48,6 +49,8 @@ namespace engine
 		glm::mat4 projectionMatrix = camera->getProjectionMatrix();
 
 		int lightIndex = 0;
+		int spotLightIndex = 0;
+
 		// TODO: There should be a list of all the lights in the game to avoid this loop
 		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
 		{
@@ -69,10 +72,31 @@ namespace engine
 
 					lightIndex++;
 				}
+				if (dynamic_cast<SpotLightComponent*>(component.get()))
+				{
+					SpotLightComponent* light = dynamic_cast<SpotLightComponent*>(component.get());
+
+					std::string index = "[" + std::to_string(spotLightIndex) + "]";
+					glm::vec3 gameObjectPosition = gameObject->getGlobalTransform().getPosition();
+					glm::vec3 gameObjectDirection = gameObject->getGlobalTransform().getLocalForward();
+					baseShader->setVec3(("spotLights" + index + ".position").c_str(), gameObjectPosition.x, gameObjectPosition.y, gameObjectPosition.z);
+					baseShader->setVec3(("spotLights" + index + ".direction").c_str(), gameObjectDirection.x, gameObjectDirection.y, gameObjectDirection.z);
+					baseShader->setVec3(("spotLights" + index + ".ambient").c_str(), light->color.x, light->color.y, light->color.z);
+					baseShader->setVec3(("spotLights" + index + ".diffuse").c_str(), light->color.x, light->color.y, light->color.z);
+					baseShader->setVec3(("spotLights" + index + ".specular").c_str(), light->color.x, light->color.y, light->color.z);
+					baseShader->setFloat(("spotLights" + index + ".constant").c_str(), light->constant);
+					baseShader->setFloat(("spotLights" + index + ".linear").c_str(), light->linear);
+					baseShader->setFloat(("spotLights" + index + ".quadratic").c_str(), light->quadratic);
+					baseShader->setFloat(("spotLights" + index + ".cutOff").c_str(), glm::cos(glm::radians(12.5f)));
+					//baseShader->setFloat(("spotLights" + index + ".outerCutOff").c_str(), light->outerCutOff);
+
+					spotLightIndex++;
+				}
 			}
 		}
 
 		baseShader->setInt("numLights", lightIndex);
+		baseShader->setInt("numSpotLights", spotLightIndex);
 		baseShader->setVec3("viewPos", camera->getTransform().getPosition().x, camera->getTransform().getPosition().y, camera->getTransform().getPosition().z);
 		baseShader->setVec3("backgroundColor", renderingSettings->backgroundColor.x, renderingSettings->backgroundColor.y, renderingSettings->backgroundColor.z);
 		baseShader->setInt("enableFog", renderingSettings->enableFog);

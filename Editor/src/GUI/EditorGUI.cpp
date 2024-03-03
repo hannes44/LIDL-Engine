@@ -815,7 +815,7 @@ namespace engine
 			ImGui::Text("Add Component");
 			ImGui::Separator();
 
-			std::vector<std::string> allComponentNames = { "Box Collider", "Camera", "Mesh", "Physics", "PointLight", "Sphere Collider", "Controllable" };
+			std::vector<std::string> allComponentNames = { "Box Collider", "Camera", "Mesh", "Physics", "PointLight", "SpotLight", "Sphere Collider", "Controllable" };
 			std::vector<std::string> scriptComponentNames = ResourceManager::getInstance()->getAllCSharpScriptsInActiveGame();
 
 			// Remove the extension from the script names

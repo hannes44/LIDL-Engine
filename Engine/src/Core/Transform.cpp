@@ -76,3 +76,10 @@ void engine::Transform::setScale(glm::vec3 scale)
 	transformMatrix[1][1] = scale.y;
 	transformMatrix[2][2] = scale.z;
 }
+
+glm::vec3 engine::Transform::getLocalForward()
+{
+	glm::vec3 localForwardVector = glm::vec3(-transformMatrix[2][0], -transformMatrix[2][1], -transformMatrix[2][2]);
+	localForwardVector = glm::normalize(localForwardVector);
+	return localForwardVector;
+}
