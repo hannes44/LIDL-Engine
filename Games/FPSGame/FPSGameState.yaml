@@ -4,6 +4,8 @@ GameObjects:
     isVisible: true
     Id: DtuMLenGYcDLdGyqOFrcULacGKHcQDEH
     tag: EnemyPrefab
+    parent: NONE
+    children: []
     Components:
       - name: Mesh
         OBJ File: ""
@@ -14,11 +16,14 @@ GameObjects:
       - name: Box Collider
         Offset: [0, 0, 0]
         Extent: [2, 4, 1]
+        IsPlatform: false
   - name: KitchenKnife.obj
     transform: [-2.72988859e-06, -4.96819469e-12, 2.99999976, 0, -1.09195244e-05, 2.99999166, -4.96818125e-12, 0, -2.99999976, -1.09195544e-05, -2.72988859e-06, 0, 5.75572729, 35.463665, 22.657753, 1]
     isVisible: true
     Id: ZICwICMftFdUGViJZDSLoFIHIzlfeTji
     tag: ""
+    parent: NONE
+    children: []
     Components:
       - name: Mesh
         OBJ File: KitchenKnife.obj
@@ -29,6 +34,8 @@ GameObjects:
     isVisible: true
     Id: alVZDusTpgqSVGZDxqrpFHokPrGbuNDb
     tag: ""
+    parent: NONE
+    children: []
     Components:
       - name: Mesh
         OBJ File: Knife.obj
@@ -39,6 +46,8 @@ GameObjects:
     isVisible: true
     Id: cQTDJdjWAUkfhQiqktDDBWTtcOBPcqgc
     tag: ""
+    parent: NONE
+    children: []
     Components:
       - name: PointLight
         Color: [1, 1, 1]
@@ -48,6 +57,8 @@ GameObjects:
     isVisible: true
     Id: hcOOWXgwkGmFwmMSZYGKKEOvgkQbBsNT
     tag: ""
+    parent: NONE
+    children: []
     Components:
       - name: Mesh
         OBJ File: House.obj
@@ -58,15 +69,19 @@ GameObjects:
     isVisible: true
     Id: mlvFwSsLPuYXLJqjKAmWeNVUdZBiVSoJ
     tag: ""
+    parent: NONE
+    children: []
     Components:
       - name: Scriptable
         currentRound: 1
         scriptFileName: EnemyManager.cs
   - name: GameCamera
-    transform: [0.544159412, -1.49011612e-08, -0.838981807, 0, -0.307609975, 0.930360198, -0.1995143, 0, 0.780555308, 0.366646796, 0.506264269, 0, 0, 2.65446806, -4.87807035, 1]
+    transform: [0.727983415, 2.98023224e-08, -0.685594738, 0, -0.494393498, 0.692814112, -0.524960697, 0, 0.474989712, 0.721116245, 0.504357219, 0, -2.88235736, 2.65446806, -7.40703964, 1]
     isVisible: true
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
     tag: ""
+    parent: NONE
+    children: [ndlRjOYAhHQMpAEwRAEIBMKYihTpURMf]
     Components:
       - name: Camera
         FOV: 50
@@ -88,10 +103,12 @@ GameObjects:
         ammoCount: 30
         scriptFileName: Weapon.cs
   - name: Ak-47
-    transform: [-9.09962861e-09, -1.65606495e-14, -0.00999999978, 0, 0, 0.00999999978, -1.65606495e-14, 0, 0.00999999978, 0, -9.09962861e-09, 0, 0, 18.6483479, -13.7580671, 1]
+    transform: [-9.09962861e-09, -1.65606495e-14, -0.00999999978, 0, 0, 0.00999999978, -1.65606495e-14, 0, 0.00999999978, 0, -9.09962861e-09, 0, 0.203887343, -1.49969232, 3.72622538, 1]
     isVisible: true
     Id: ndlRjOYAhHQMpAEwRAEIBMKYihTpURMf
     tag: ""
+    parent: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
+    children: []
     Components:
       - name: Mesh
         OBJ File: Ak-47.obj
@@ -102,6 +119,8 @@ GameObjects:
     isVisible: true
     Id: pRTLVhHmWbDxtVlOtBwabQKFiAdUmjSP
     tag: Player
+    parent: NONE
+    children: []
     Components:
       - name: Mesh
         OBJ File: ""
@@ -114,6 +133,8 @@ GameObjects:
     isVisible: true
     Id: sMlWhtjyDGUJBMUHljEtTwiOdvZjwYTZ
     tag: ""
+    parent: NONE
+    children: []
     Components:
       - name: Mesh
         OBJ File: ""

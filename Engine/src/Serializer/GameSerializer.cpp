@@ -136,6 +136,18 @@ namespace engine
 		out << YAML::Value << gameObject->uuid.id;
 		out << YAML::Key << "tag";
 		out << YAML::Value << gameObject->tag;
+		out << YAML::Key << "parent";
+		bool hasParent = gameObject->getParent() != nullptr;
+		out << YAML::Value << (hasParent ? gameObject->getParent()->uuid.id : "NONE");
+		out << YAML::Key << "children";
+
+		std::vector<std::string> childrenIds{};
+		for (const auto& child : gameObject->getChildren())
+		{
+			childrenIds.push_back(child->uuid.id);
+		}
+		out << YAML::Flow << childrenIds;
+
 
 		serializeComponents(gameObject->getComponents(), out);
 
@@ -527,7 +539,26 @@ namespace engine
 			{
 				LOG_WARN("Failed to deserialize game object: " + std::string(e.what()));
 			}
+		}
 
+		// We need to iterate again to add parents and children
+		for (YAML::const_iterator it = gameObjectsNode.begin(); it != gameObjectsNode.end(); ++it)
+		{
+			try
+			{
+				YAML::Node gameObjectNode = *it;
+				std::weak_ptr<GameObject> gameObject = game->getGameObject(gameObjectNode["Id"].as<std::string>());
+				std::string parentUUID = gameObjectNode["parent"].as<std::string>();
+				if (parentUUID != "NONE")
+				{
+					std::weak_ptr<GameObject> parent = game->getGameObject(parentUUID);
+					game->setParent(gameObject.lock(), parent.lock());
+				}
+			}
+			catch (const std::exception& e)
+			{
+				LOG_WARN("Failed to deserialize game object: " + std::string(e.what()));
+			}
 		}
 
 	}
