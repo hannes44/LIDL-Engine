@@ -17,6 +17,11 @@ namespace engine
 	protected:
 		GamePhysics() {};
 
+		void sendMultiplayerState(Game* game);
+		std::string MULTIPLAYER_STATE_FOLDER = "../../MultiplayerStates/";
+		int multiplayerStateUpdateIntervalMS = 500;
+		long long lastMultiplayerStateUpdateTimestamp = 0;
+
 		inline static GamePhysics* instance;
 		long long lastPhysicsUpdateTimestamp = 0;
 
@@ -32,7 +37,6 @@ namespace engine
 		void checkCollisions(Game* game, std::map<std::string, std::shared_ptr<GameObject>> gameObjects, GamePhysicsSettings& settings);
 		std::pair<glm::vec3, glm::vec3> resolveCollisionFullyElastic(std::shared_ptr<PhysicsComponent> pc1, std::shared_ptr<PhysicsComponent> pc2);
 		std::pair<glm::vec3, glm::vec3> resolveCollisionFullyInelastic(std::shared_ptr<PhysicsComponent> pc1, std::shared_ptr<PhysicsComponent> pc2);
-		void sendMultiplayerState(Game* game);
 		void run(Game* game);
 
 		GamePhysicsSettings& getSettings();

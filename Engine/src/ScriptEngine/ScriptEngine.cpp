@@ -7,6 +7,7 @@
 #include <sstream>
 #include<iostream>
 #include<algorithm>
+#define _WINSOCKAPI_
 #include <windows.h>
 #include <atlstr.h>
 #include "Utils/Utils.hpp"

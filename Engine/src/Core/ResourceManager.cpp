@@ -3,6 +3,7 @@
 #include <string>
 #include <filesystem>
 #include "Core/Logger.hpp"
+#define _WINSOCKAPI_
 #include <Windows.h>
 #include <ShlObj.h>
 #include <commdlg.h>

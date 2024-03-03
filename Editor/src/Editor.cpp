@@ -5,6 +5,7 @@
 #include "GUI/MainMenuGUI.hpp"
 #include "Serializer/EditorSerializer.hpp"
 #include "Project.hpp"
+#define _WINSOCKAPI_
 #include <Windows.h>
 #include <iostream>
 

@@ -8,6 +8,7 @@
 #include "GUIHelper.hpp"
 #include "Editor.hpp"
 #include <imgui_internal.h>
+#define _WINSOCKAPI_
 #include <Windows.h>
 
 namespace engine

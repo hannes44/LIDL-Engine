@@ -1,6 +1,7 @@
 #include "AudioManager.hpp"
 #include "Core/Logger.hpp"
 #include "Core/Window.hpp"
+#define _WINSOCKAPI_
 #include <Windows.h>
 #include <MMSystem.h>
 

@@ -1,6 +1,7 @@
 #include "GameSerializer.hpp"
 #include "Core/Logger.hpp"
 #include <fstream>
+#define _WINSOCKAPI_
 #include <Windows.h>
 #include <yaml-cpp/yaml.h>
 #include <iostream>

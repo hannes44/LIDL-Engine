@@ -12,6 +12,9 @@
 #include "Components/ControllableComponent.hpp"
 #include "GamePhysicsSettings.hpp"
 
+#include "Serializer/GameSerializer.hpp"
+#include "MultiplayerClient/Client.hpp"
+#include <fstream>
 
 namespace engine {
 
@@ -21,6 +24,22 @@ namespace engine {
 			instance = new GamePhysics();
 
 		return *instance;
+	}
+
+	void GamePhysics::sendMultiplayerState(Game* game) {
+		std::string filePath = GameSerializer::serializeGameState(MULTIPLAYER_STATE_FOLDER, game, true);
+
+		if (!std::ifstream(filePath).good()) {
+			LOG_ERROR("File not found: " + filePath);
+			return;
+		}
+
+		std::ostringstream text;
+		std::ifstream in_file(filePath);
+
+		text << in_file.rdbuf();
+		std::string message = text.str();
+		Client::QueueMessage({ ClientMessageType::StateUpdate, message });
 	}
 
 	void GamePhysics::fixedUpdate(const std::set<std::shared_ptr<GameObject>> gameObjects, GamePhysicsSettings& settings) {
@@ -241,10 +260,6 @@ namespace engine {
 		}
 	}
 
-	void GamePhysics::sendMultiplayerState(Game* game) {
-		// TODO_MULTIPLAYER: Implement this when include issues are resolved
-	}
-
 	void GamePhysics::run(Game* game) {
 		if (Utils::getTimestampNS() - lastPhysicsUpdateTimestamp < PHYSICS_TIME_CONVERSION_FACTOR * game->config.physicsSettings.fixedUpdateIntervalMS) {
 			return;
@@ -253,7 +268,9 @@ namespace engine {
 		lastPhysicsUpdateTimestamp = Utils::getTimestampNS();
 		fixedUpdate(game->getRootGameObjects(), game->config.physicsSettings);
 		checkCollisions(game, game->getGameObjects(), game->config.physicsSettings);
-		if (game->isMultiplayerGame())
+		if (game->isMultiplayerGame() && game->running && Utils::getTimestampNS() - lastMultiplayerStateUpdateTimestamp > 1000000 * multiplayerStateUpdateIntervalMS) {
+			lastMultiplayerStateUpdateTimestamp = Utils::getTimestampNS();
 			sendMultiplayerState(game);
+		}	
 	}
 }

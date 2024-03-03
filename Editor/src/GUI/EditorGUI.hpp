@@ -10,6 +10,8 @@
 #include "GUIHelper.hpp"
 #include "ConsoleGUI.hpp"
 
+#include <WinSock2.h>
+
 namespace engine
 {
 	enum class EditorSceneState
@@ -41,6 +43,8 @@ namespace engine
 		void onEvent(EventType type, std::string message);
 
 		std::shared_ptr<Game> game = nullptr;
+
+		void onMultiplayerStateReceived(std::shared_ptr<Game> game, std::string state);
 	private:
 		void drawMainMenu();
 
@@ -124,5 +128,11 @@ namespace engine
 		std::shared_ptr<Texture> scaleIconTexture;
 
 		std::shared_ptr<Texture> worldIconTexture;
+
+		
+		void setupMultiplayer(std::shared_ptr<Game> game);
+		SOCKET multiplayerSocket = INVALID_SOCKET;
+		std::string MULTIPLAYER_STATE_FOLDER = "../../MultiplayerStates/";
+		std::string MULTIPLAYER_STATE_FILE_EXTENSION = ".yaml";
 	};
 }

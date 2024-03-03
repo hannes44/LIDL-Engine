@@ -12,9 +12,15 @@
 #include <set>
 #include <ranges>
 #include <imgui_internal.h>
+#define _WINSOCKAPI_
 #include <Windows.h>
 #include <regex>
 #include <ShlDisp.h>
+
+#include <thread>
+#include <fstream>
+#include "MultiplayerClient/Client.hpp"
+#include "Serializer/GameSerializer.hpp"
 
 namespace engine
 {
@@ -29,6 +35,41 @@ namespace engine
 	EditorGUI::EditorGUI(std::shared_ptr<Project> project, EditorSettings& editorSettings) : window(Window::getInstance()), project(project), editorSettings(editorSettings)
 	{
 		game = project->game;
+	}
+
+	void EditorGUI::onMultiplayerStateReceived(std::shared_ptr<Game> game, std::string state)
+	{
+		if(!game->running)
+			return;
+		
+		std::string filePath = MULTIPLAYER_STATE_FOLDER + "ParsedState" + MULTIPLAYER_STATE_FILE_EXTENSION;
+
+		if (!std::ifstream(filePath).good()) {
+			LOG_ERROR("File not found: " + filePath);
+			return;
+		}
+
+		std::ofstream outfile(filePath);
+		outfile << state.c_str();
+		outfile.close();
+
+		GameSerializer::deserializeGameState(game.get(), filePath);
+	}
+
+	void EditorGUI::setupMultiplayer(std::shared_ptr<Game> game) {
+		if (!game->isMultiplayerGame())
+			return;
+
+		// Connect to the server
+		multiplayerSocket = Client::OpenSocket();
+
+		// Start the multiplayer receiver in a detached thread
+		std::thread receiver(Client::RunReceiver, multiplayerSocket, std::bind(&EditorGUI::onMultiplayerStateReceived, this, game, std::placeholders::_1));
+		// Start the multiplayer transmitter in a detached thread
+		std::thread transmitter(Client::RunTransmitter, multiplayerSocket);
+
+		receiver.detach();
+		transmitter.detach();
 	}
 
 	void EditorGUI::start()
@@ -109,6 +150,8 @@ namespace engine
 
 		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png", false));
 
+		setupMultiplayer(game);
+
 		auto editorGameObjectSet = std::set<std::shared_ptr<GameObject>>();
 		for (auto const& [id, gameObject] : editorGameObjects)
 			editorGameObjectSet.insert(gameObject);
@@ -134,9 +177,7 @@ namespace engine
 				game->update();
 
 				for (auto& [gameObjectId, gameObject] : game->getGameObjects())
-				{
 					gameObject->update();
-				}
 			}
 
 			endFrame();
