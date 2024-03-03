@@ -240,7 +240,8 @@ namespace engine
 		auto camera = std::make_shared<CameraComponent>();
 		cameraGO->addComponent(camera);
 
-		camera->getTransform().setPosition(glm::vec3(2.5, 0, 2.5));
+		cameraGO->transform.setPosition(glm::vec3(4, 0, 0));
+		cameraGO->transform.setRotationFromDirection(glm::vec3(-1, 0, 0), glm::vec3(0, 1, 0));
 
 		graphicsAPI->setViewport(0, 0, width, height);
 
@@ -278,7 +279,7 @@ namespace engine
 
 		baseShader->setInt("numLights", 1);
 
-		baseShader->setVec3("viewPos", camera->getTransform().getPosition().x, camera->getTransform().getPosition().y, camera->getTransform().getPosition().z);
+		baseShader->setVec3("viewPos", cameraGO->transform.getPosition().x, cameraGO->transform.getPosition().y, cameraGO->transform.getPosition().z);
 
 
 
