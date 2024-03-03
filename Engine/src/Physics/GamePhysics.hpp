@@ -19,7 +19,7 @@ namespace engine
 
 		void sendMultiplayerState(Game* game);
 		std::string MULTIPLAYER_STATE_FOLDER = "../../MultiplayerStates/";
-		int multiplayerStateUpdateIntervalMS = 500;
+		int multiplayerStateUpdateIntervalMS = 1000;
 		long long lastMultiplayerStateUpdateTimestamp = 0;
 
 		inline static GamePhysics* instance;

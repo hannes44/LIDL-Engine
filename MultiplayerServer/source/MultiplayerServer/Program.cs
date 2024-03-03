@@ -24,7 +24,7 @@ namespace Server
         public static string END_MSG_FLAG = "<%>EOM<%>";
         public static string END_CHUNK_FLAG = "<%>EOC<%>";
         public static string HEADER_MSG_FLAG = "<!>";
-        public static int BUF_SIZE = 1000;
+        public static int BUF_SIZE = 2000;
         public static int PORT = 11111;
 
         public static bool DEBUG = false;

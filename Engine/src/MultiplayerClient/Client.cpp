@@ -16,7 +16,7 @@
 
 #define PORT 11111
 #define IP_ADDR "127.0.0.1"
-#define BUF_SIZE 1000
+#define BUF_SIZE 2000
 
 #define GAME_FOLDER_PATH "../../Games/"
 #define GAME_CONFIG_FILE_EXTENSION ".yaml"

@@ -110,6 +110,10 @@ namespace engine
 		camera->name = "Camera";
 		addGameObject(std::unique_ptr<GameObject>(camera));
 
+		std::weak_ptr<engine::Material> localMaterial = createMaterial("LocalMaterial");
+		localMaterial.lock()->baseColor = glm::vec3(2.0f, 0, 0);
+		localMesh->setMaterial(localMaterial);
+		localMaterial.lock()->isExternalMultiplayerObject = false;
 
 		GameObject* localBoxPtr = new GameObject();
 		localBoxPtr->transform.setPosition(glm::vec3(5, 0, 0));
