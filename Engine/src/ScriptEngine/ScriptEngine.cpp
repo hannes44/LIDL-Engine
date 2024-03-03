@@ -18,6 +18,7 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include "Audio/AudioManager.hpp"
 
 
 namespace engine
@@ -35,11 +36,11 @@ namespace engine
 	{
 		sol::state_view lua(L);
 
-		syncTransformStateEngineToScript(component);
+		syncGameObjectStateEngineToScript(component);
 		syncScriptableVariablesToScript(component);
 		sol::table componentTable = lua[component->uuid.id];
 		componentTable["Update"](componentTable);
-		syncTransformStateScriptToEngine(component);
+		syncGameObjectStateScriptToEngine(component);
 		syncScriptableVariablesToEngine(component);
 	}
 
@@ -52,11 +53,11 @@ namespace engine
 
 		sol::state_view lua(L);
 		
-		syncTransformStateEngineToScript(component);
+		syncGameObjectStateEngineToScript(component);
 		syncScriptableVariablesToScript(component);
 		sol::table componentTable = lua[component->uuid.id];
 		componentTable["Initialize"](componentTable);
-		syncTransformStateScriptToEngine(component);
+		syncGameObjectStateScriptToEngine(component);
 		syncScriptableVariablesToEngine(component);
 
 		
@@ -288,14 +289,37 @@ namespace engine
 
 	void ScriptEngine::handleInputForScriptableComponent(ScriptableComponent* component, const InputEvent& event)
 	{
+		if (!game->running)
+		{
+			return;
+		}
+
 		sol::state_view lua(L);
 		std::string Id = component->uuid.id;
 
-		syncTransformStateEngineToScript(component);
+		std::string eventType = "";
+		if (event.getEventType() == InputEventType::ActionDown)
+		{
+			eventType = "ActionDown";
+		}
+		else if (event.getEventType() == InputEventType::ActionHold)
+		{
+			eventType = "ActionHold";
+		}
+		else if (event.getEventType() == InputEventType::ActionUp)
+		{
+			eventType = "ActionUp";
+		}
+		else if (event.getEventType() == InputEventType::KeyHold)
+		{
+			eventType = "KeyHold";
+		}
+
+		syncGameObjectStateEngineToScript(component);
 		syncScriptableVariablesToScript(component);
 		sol::table componentTable = lua[component->uuid.id];
-		componentTable["OnInput"](componentTable, event.getAction(), event.getX(), event.getY());
-		syncTransformStateScriptToEngine(component);
+		componentTable["OnInput"](componentTable, event.getAction(), eventType);
+		syncGameObjectStateScriptToEngine(component);
 		syncScriptableVariablesToEngine(component);
 	}
 
@@ -304,6 +328,34 @@ namespace engine
 		sol::state_view lua(L);
 		lua["__log__"] = Debug::Log;
 		lua.set_function("__addGameObject__", &Game::createGameObject, game);
+		lua.set_function("__spawnClonedGameObjectFromTag__", &Game::spawnClonedGameObjectFromTag, game);
+		lua.set_function("__playSound__", &AudioManager::playSound, &AudioManager::getInstance());
+		lua.set_function("__getIdOfGameObjectHitByRay__", &Game::getIdOfGameObjectHitByRay, game);
+		lua.set_function("__deleteGameObjectFromId__", &Game::deleteGameObjectFromId, game);
+		lua.set_function("__getTagOfGameObject__", &Game::getTagOfGameObject, game);
+		lua.set_function("__getNumberOfGameObjectsWithTag__", &Game::getNumberOfGameObjectsWithTag, game);
+	}
+
+	void ScriptEngine::syncGameObjectStateEngineToScript(ScriptableComponent* component)
+	{
+		syncTransformStateEngineToScript(component);
+
+		sol::state_view lua(L);
+		lua[component->uuid.id]["gameObject"]["name"] = component->gameObject->name;
+		lua[component->uuid.id]["gameObject"]["tag"] = component->gameObject->tag;
+		lua[component->uuid.id]["gameObject"]["isVisible"] = component->gameObject->isVisible;
+		lua[component->uuid.id]["gameObject"]["Id"] = component->gameObject->uuid.id;
+	}
+
+	void ScriptEngine::syncGameObjectStateScriptToEngine(ScriptableComponent* component)
+	{
+		syncTransformStateScriptToEngine(component);
+
+		sol::state_view lua(L);
+		component->gameObject->name = lua[component->uuid.id]["gameObject"]["name"];
+		component->gameObject->tag = lua[component->uuid.id]["gameObject"]["tag"];
+		component->gameObject->isVisible = lua[component->uuid.id]["gameObject"]["isVisible"];
+		component->gameObject->uuid.id = lua[component->uuid.id]["gameObject"]["Id"];
 	}
 
 	// Syncs the transform state of the components gameObject to the lua state

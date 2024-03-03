@@ -26,6 +26,8 @@ namespace engine
 
 		virtual std::string getName() = 0;
 
+		virtual std::shared_ptr<Component> clone() = 0;
+
 		virtual std::set<std::string> getRequiredComponents() { return {}; };
 
 		virtual std::string getDescription() { return ""; };

@@ -12,6 +12,17 @@ namespace Engine
             transformMatrix *= Matrix4x4.CreateTranslation(translation);
         }
 
+        public Vector3 GetForward()
+        {
+            // Extract the local Z-axis (negative of the transformed local forward vector)
+            Vector3 localForwardVector = new Vector3(-transformMatrix.M31, -transformMatrix.M32, -transformMatrix.M33);
+
+            // Normalize the vector to get a unit vector
+            localForwardVector = Vector3.Normalize(localForwardVector);
+
+            return localForwardVector;
+        }
+
         public void SetTranslation(Vector3 translation)
         {
             transformMatrix.Translation = translation;

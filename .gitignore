@@ -43,3 +43,6 @@
 Games/*/*State.yaml
 Games/*/*Config.yaml
 Editor/editor_settings.yaml
+
+!/Games/FPSGame/*
+!/Games/FPSGame/Scripts/*

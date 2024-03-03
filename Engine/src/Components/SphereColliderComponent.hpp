@@ -4,9 +4,11 @@
 #include "Core/BoundingBox.hpp"
 #include "CameraComponent.hpp"
 
-namespace engine {
+namespace engine
+{
 
-	class SphereColliderComponent : public ColliderComponent {
+	class SphereColliderComponent : public ColliderComponent
+	{
 	public:
 		void drawCollider(CameraComponent* camera);
 		BoundingBox getBoundingBox();
@@ -14,7 +16,16 @@ namespace engine {
 
 		std::string getName() override;
 
-	protected:
+		std::vector<SerializableVariable> getSerializableVariables() override
+		{
+			return {
+				{SerializableType::VECTOR3, "Offset", "The offset of the collider", &offset},
+				{SerializableType::VECTOR3, "Extent", "The extent of the collider", &extent} };
+		};
 
+		std::shared_ptr<Component> clone() override
+		{
+			return std::make_shared<SphereColliderComponent>(*this);
+		}
 	};
 }

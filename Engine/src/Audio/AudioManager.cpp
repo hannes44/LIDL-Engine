@@ -23,7 +23,7 @@ namespace engine {
 	}
 
 	void AudioManager::playSound(const std::string& fileName) {
-		std::string soundAssetPath = ResourceManager::getPathToEditorResource(fileName);
+		std::string soundAssetPath = ResourceManager::getInstance()->getPathToGameResource(fileName);
 		PlaySoundA((LPCSTR)(soundAssetPath.c_str()), NULL, SND_ASYNC);
 	}
 

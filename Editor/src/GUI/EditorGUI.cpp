@@ -16,7 +16,6 @@
 #include <regex>
 #include <ShlDisp.h>
 
-
 namespace engine
 {
 #define IMGUI_TOP_MENU_HEIGHT 18
@@ -95,7 +94,6 @@ namespace engine
 		InputFramework& inputFramework = InputFramework::getInstance();
 		inputFramework.addListener(this);
 
-
 		EventManager& eventManager = EventManager::getInstance();
 		eventManager.subscribe(EventType::QuitProgram, this);
 
@@ -158,11 +156,10 @@ namespace engine
 		ImGui::NewFrame();
 		ImGuizmo::BeginFrame();
 
-
-#if defined(_DEBUG) && IMGUI_SHOW_DEMO_WINDOWS 
+#if defined(_DEBUG) && IMGUI_SHOW_DEMO_WINDOWS
 		ImGui::ShowDemoWindow();
 		ImGui::ShowStyleEditor();
-#endif 
+#endif
 
 		if (game == nullptr)
 		{
@@ -176,6 +173,28 @@ namespace engine
 			drawTopMenu();
 			drawPlayButtonToolbar();
 			drawBottomPanel();
+
+			// Temporary code until game UI system is created
+			// Crosshair for the game
+			if (game->running)
+			{
+				ImGuiWindowFlags windowFlags = 0;
+				windowFlags |= ImGuiWindowFlags_NoBackground;
+				windowFlags |= ImGuiWindowFlags_NoTitleBar;
+				windowFlags |= ImGuiWindowFlags_NoMove;
+				windowFlags |= ImGuiWindowFlags_NoResize;
+				windowFlags |= ImGuiWindowFlags_NoScrollbar;
+				windowFlags |= ImGuiWindowFlags_NoScrollWithMouse;
+				windowFlags |= ImGuiWindowFlags_NoCollapse;
+				windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
+				ImGui::Begin("#CH", nullptr, windowFlags);
+				auto draw = ImGui::GetBackgroundDrawList();
+				int w, h;
+				window.getWindowSize(&w, &h);
+				draw->AddCircle(ImVec2(w / 2, h / 2), 6, IM_COL32(255, 0, 0, 255), 100, 0.0f);
+				ImGui::End();
+			}
+
 
 			if (!ScriptEngine::getInstance()->isSuccessfullyCompiled)
 			{
@@ -203,7 +222,7 @@ namespace engine
 					if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
 					{
 						std::string gameObjectId = lockedGameObject->getUUID().id;
-						game->deleteGameObject(lockedGameObject->getUUID().id);
+						game->deleteGameObjectFromId(lockedGameObject->getUUID().id);
 						EventManager::getInstance().notify(EventType::SelectableDeleted, gameObjectId);
 					}
 					else if (auto lockedMaterial = dynamic_pointer_cast<Material>(lockedSelectedObject))
@@ -226,10 +245,9 @@ namespace engine
 				if (auto lockedCopiedGameObject = copiedGameObject.lock())
 				{
 					LOG_INFO("Pasting game object");
-					GameObject newGameObject = lockedCopiedGameObject->clone();
-					std::shared_ptr<GameObject> newGameObjectPtr = std::make_shared<GameObject>(newGameObject);
-					game->addGameObject(newGameObjectPtr);
-					selectedObject = newGameObjectPtr;
+					std::shared_ptr<GameObject> newGameObject = lockedCopiedGameObject->clone();
+					game->addGameObject(newGameObject);
+					selectedObject = newGameObject;
 				}
 			}
 		}
@@ -257,7 +275,6 @@ namespace engine
 
 	void EditorGUI::drawMainMenu()
 	{
-
 	}
 
 	void EditorGUI::drawViewPort()
@@ -351,17 +368,20 @@ namespace engine
 
 		std::string name = std::string(tabLevel * 2, ' ') + gameObject->name;
 
-		if (gameObject->getChildren().size() > 0) {
+		if (gameObject->getChildren().size() > 0)
+		{
 			// TODO: Parents are currently not selectable as they are collapsing headers instead, fix this so they can be selected
-			//if (ImGui::CollapsingHeader(gameObject->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
-			if (ImGui::Selectable(name.c_str(), selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID()))) {
+			// if (ImGui::CollapsingHeader(gameObject->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
+			if (ImGui::Selectable(name.c_str(), selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID())))
+			{
 				selectedObject = gameObject; // TODO: Fix here also
 			}
 			// Hotfix until TODO above is fixed, otherwise move this back inside the if statement since we don't want to draw children if the parent is collapsed
 			for (auto& child : gameObject->getChildren())
 				drawGameObject(child, tabLevel + 1);
 		}
-		else {
+		else
+		{
 			if (ImGui::Selectable(name.c_str(), selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID())))
 			{
 				selectedObject = gameObject;
@@ -415,9 +435,9 @@ namespace engine
 				ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 0, 0));
 				ImGui::BeginListBox("##2", ImVec2(500, 500));
 
-				 auto rootGameObjects = game->getRootGameObjects();
-				 std::vector<std::shared_ptr<GameObject>> rootGameObjectsList = std::vector<std::shared_ptr<GameObject>>(rootGameObjects.begin(), rootGameObjects.end());
-				 std::ranges::sort(rootGameObjectsList, [](std::shared_ptr<GameObject> a, std::shared_ptr<GameObject> b) { return a->name < b->name; });
+				auto rootGameObjects = game->getRootGameObjects();
+				std::vector<std::shared_ptr<GameObject>> rootGameObjectsList = std::vector<std::shared_ptr<GameObject>>(rootGameObjects.begin(), rootGameObjects.end());
+				std::ranges::sort(rootGameObjectsList, [](std::shared_ptr<GameObject> a, std::shared_ptr<GameObject> b) { return a->name < b->name; });
 
 				for (auto gameObject : game->getRootGameObjects())
 					drawGameObject(gameObject);
@@ -557,7 +577,6 @@ namespace engine
 					obj->addComponent(MeshComponent::createMeshFromObjFile(filename));
 					game->addGameObject(obj);
 					selectedObject = obj;
-
 				}
 			}
 
@@ -611,12 +630,10 @@ namespace engine
 			if (wasStopButtonPressed)
 				tabFlags = ImGuiTabItemFlags_SetSelected;
 
-
 			if (ImGui::BeginTabItem("Scene", nullptr, tabFlags))
 			{
 				activeViewPort = ActiveViewPort::Scene;
 				ImGui::EndTabItem();
-
 			}
 
 			tabFlags = ImGuiSelectableFlags_None;
@@ -678,8 +695,6 @@ namespace engine
 			{
 				stopGame();
 			}
-
-
 		}
 		if (sceneState == EditorSceneState::Scene && pushedStyleColor)
 		{
@@ -737,6 +752,13 @@ namespace engine
 				ImGui::InputText("##GameObjectNameInput", gameObjectNameBuffer, 255);
 				lockedGameObject->name = gameObjectNameBuffer;
 
+				ImGui::Text("Tag");
+				ImGui::SameLine();
+				static char gameObjectTagBuffer[255];
+				strcpy(gameObjectTagBuffer, lockedGameObject->tag.c_str());
+				ImGui::InputText("##GameObjectTagInput", gameObjectTagBuffer, 255);
+				lockedGameObject->tag = gameObjectTagBuffer;
+
 				// Since all gameobjects have a transform, we can always draw the transform
 				if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 				{
@@ -749,7 +771,6 @@ namespace engine
 
 					ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, &(lockedGameObject->transform.transformMatrix[0][0]));
 				}
-
 
 				for (auto component : lockedGameObject->getComponents())
 				{
@@ -771,7 +792,6 @@ namespace engine
 				{
 					isAddComponentVisible = !isAddComponentVisible;
 				}
-
 			}
 		}
 		if (isAddComponentVisible)
@@ -781,7 +801,7 @@ namespace engine
 	}
 	void EditorGUI::ShowAddComponent()
 	{
-		ImGuiTextFilter     Filter;
+		ImGuiTextFilter Filter;
 
 		ImGuiWindowFlags windowFlags = 0;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
@@ -795,7 +815,7 @@ namespace engine
 			ImGui::Text("Add Component");
 			ImGui::Separator();
 
-			std::vector<std::string> allComponentNames = { "Box Collider", "Camera", "Mesh", "Physics", "PointLight", "Sphere Collider" };
+			std::vector<std::string> allComponentNames = { "Box Collider", "Camera", "Mesh", "Physics", "PointLight", "Sphere Collider", "Controllable" };
 			std::vector<std::string> scriptComponentNames = ResourceManager::getInstance()->getAllCSharpScriptsInActiveGame();
 
 			// Remove the extension from the script names
@@ -823,7 +843,6 @@ namespace engine
 									lockedGameObject->addComponent(ComponentFactory::createComponent(componentName));
 								}
 							}
-
 						}
 					}
 				}
@@ -874,7 +893,6 @@ namespace engine
 			drawSerializableVariables(&game->config.physicsSettings);
 		}
 		ImGui::Separator();
-
 	}
 
 	void EditorGUI::drawBottomPanel()
@@ -888,7 +906,6 @@ namespace engine
 		windowFlags |= ImGuiWindowFlags_NoResize;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
-
 
 		ImGui::SetNextWindowPos(ImVec2(panelWidth, h - 300));
 		ImGui::SetNextWindowSize(ImVec2(w - panelWidth * 2, 300));
@@ -916,9 +933,7 @@ namespace engine
 
 						assetManager->addChild(lockedSelectedAssetNodeFolder, newFolder);
 					}
-
 				}
-
 
 				static char newScriptName[64];
 
@@ -970,21 +985,17 @@ namespace engine
 
 					ImGui::PopStyleColor();
 
-
 					ImGui::SameLine();
 					ImGui::Text(">");
 					ImGui::SameLine();
 				}
 			}
 
-
 			ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 0, 0, 0));
 			ImGui::Button(lockedSelectedAssetNodeFolder->name.c_str());
 			ImGui::PopStyleColor();
 
 			ImGui::Separator();
-
-
 
 			// draw the assets in the selected folder
 			for (auto& child : lockedSelectedAssetNodeFolder->children)
@@ -1022,7 +1033,7 @@ namespace engine
 				ImGui::InputText(("##" + seralizableVariable.name).c_str(), name, IM_ARRAYSIZE(name));
 				*static_cast<std::string*>(seralizableVariable.data) = name;
 
-				//ImGui::Text(data.c_str());
+				// ImGui::Text(data.c_str());
 			}
 			else if (seralizableVariable.type == SerializableType::INT)
 			{
@@ -1056,7 +1067,8 @@ namespace engine
 			{
 				ImGui::InputFloat4(seralizableVariable.name.c_str(), (float*)seralizableVariable.data);
 			}
-			else {
+			else
+			{
 				LOG_WARN("Cannot serialize variable type: name: {}", seralizableVariable.name);
 				return;
 			}
@@ -1092,7 +1104,6 @@ namespace engine
 
 		pushedStyleColor = false;
 
-
 		if (guizmoOperation == ImGuizmo::TRANSLATE)
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered]);
@@ -1105,7 +1116,6 @@ namespace engine
 		}
 		if (pushedStyleColor)
 			ImGui::PopStyleColor();
-
 
 		pushedStyleColor = false;
 
@@ -1121,7 +1131,6 @@ namespace engine
 		}
 		if (pushedStyleColor)
 			ImGui::PopStyleColor();
-
 
 		pushedStyleColor = false;
 
@@ -1193,7 +1202,6 @@ namespace engine
 				ImGui::EndPopup();
 			}
 
-
 			float currentX = ImGui::GetCursorPosX();
 			std::string name = assetNode->name;
 
@@ -1235,16 +1243,18 @@ namespace engine
 	{
 		// Save the current state of the game
 		GameSerializer::serializeGame(game.get());
-
+		game->running = true;
 		for (auto& [gameObjectId, gameObject] : game->getGameObjects())
 		{
 			gameObject->initialize();
 		}
+
 		sceneState = EditorSceneState::Play;
 	}
 
 	void EditorGUI::stopGame()
 	{
+		game->running = false;
 		// Overwrite the current state of the game with the saved state
 		GameSerializer::deserializeGame(game.get());
 
