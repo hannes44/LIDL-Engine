@@ -22,8 +22,6 @@ uniform int hasMaterial;
 
 uniform int hasTexture;
 
-const float screenGamma = 2.2; // Assume the monitor is calibrated to the sRGB color space
-
 in vec3 worldPos;
 in vec3 worldNormal;
 in vec4 color;
@@ -55,36 +53,40 @@ uniform Material material;
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
-    vec3 lightDir = normalize(light.position - fragPos);
-
-    // diffuse shading
-    float diff = max(dot(normal, lightDir), 0.0);
-    // specular shading
-    vec3 halfwayDir = normalize(lightDir + viewDir);  
-    float spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess);
-    // attenuation
-    float distance = length(light.position - fragPos);
-    float attenuation = 1.0 / (distance * distance);
-    // combine results
-    vec3 ambient  = light.ambient  * vec3(texture(material.diffuseTexture, texCoord)) * material.baseColor;
-    vec3 diffuse  = light.diffuse * diff * vec3(texture(material.diffuseTexture, texCoord)) * material.baseColor;
-
-    if (material.hasDiffuseTexture == 0) 
-    {
-        diffuse  = light.diffuse * diff * material.baseColor;
-        ambient = light.ambient  * material.baseColor;
-    }
-
-    vec3 specular = light.specular * spec * vec3(texture(material.specularTexture, texCoord));
-    if (material.hasSpecularTexture == 0) 
+    vec3 baseColor = vec3(0,0,0);
+    if (material.hasDiffuseTexture == 1) 
 	{
-	    specular = light.specular * spec;
+		baseColor = vec3(texture(material.diffuseTexture, texCoord)) * material.baseColor;
+	}
+	else
+	{
+		baseColor = material.baseColor;
 	}
 
-     ambient  *= attenuation;
-    // diffuse  *= attenuation;
-     specular *= attenuation;
-    return (diffuse);
+    // ambient
+    vec3 ambient = 0.2 * baseColor;
+    // diffuse
+    vec3 lightDir = normalize(light.position - fragPos);
+    float diff = max(dot(lightDir, normal), 0.0);
+    vec3 diffuse = diff * baseColor;
+    // specular
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = 0.0;
+
+    vec3 halfwayDir = normalize(lightDir + viewDir);  
+    spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess);
+
+    vec3 specular = vec3(0.3) * spec; // assuming bright white light color
+
+    float distance = length(light.position - fragPos);
+    float attenuation = 1.0 / (light.constant + light.linear * distance + 
+  			     light.quadratic * (distance * distance));    
+
+    ambient *= attenuation;
+    diffuse *= attenuation;
+    specular *= attenuation;
+
+    return ambient + diffuse + specular;
 } 
 
 // https://en.wikipedia.org/wiki/Blinn–Phong_reflection_model
@@ -92,7 +94,7 @@ void main()
 {
    // properties
     vec3 norm = normalize(worldNormal);
-    vec3 viewDir = normalize(-worldPos);
+    vec3 viewDir = normalize(viewPos - worldPos);
 
     // phase 1: Directional lighting
     vec3 result = vec3(0,0,0); //CalcDirLight(dirLight, norm, viewDir);
@@ -107,7 +109,7 @@ void main()
         if (fogAmount > 1.0)
 		    fogAmount = 1.0;
     
-     //   result = mix(result, backgroundColor, fogAmount);
+        result = mix(result, backgroundColor, fogAmount);
     }
 
     // phase 3: Spot light
