@@ -96,7 +96,15 @@ namespace engine
 		// Very bad for performance
 		std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(Texture::create(path, true));
 
-		ImGui::GetBackgroundDrawList()->AddImage((void*)(intptr_t)texture->textureIDOpenGL, ImVec2(w*ypos,h*xpos), ImVec2((w*ypos)+width,(h*xpos)-height), ImVec2(0,0), ImVec2(1, 1)); // Fix position and UVs
+		float x_center = w * xpos - width * 0.5;
+		float y_center = h * ypos - height * 0.5;
+
+		ImGui::GetBackgroundDrawList()->AddImage(
+			(void*)(intptr_t)texture->textureIDOpenGL,
+			ImVec2(x_center, y_center + height), // Top-left corner
+			ImVec2(x_center + width, y_center), // Bottom-right corner
+			ImVec2(0, 0), ImVec2(1, 1)
+		);
 	}
 	
 	void GUIHelper::setDarkStyle() {
