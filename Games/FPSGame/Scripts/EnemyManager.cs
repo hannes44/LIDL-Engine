@@ -31,6 +31,7 @@ public class EnemyManager
     // Initialize is called once the component is added to the game
     public void Initialize()
     {
+        EngineAPI.SetGameObjectMeshVisibilityFromTag("AK47", true);
         SpawnEnemy();
     }
 

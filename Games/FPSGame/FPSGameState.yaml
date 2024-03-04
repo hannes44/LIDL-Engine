@@ -35,11 +35,11 @@ GameObjects:
         Material: UZVAVXNBfagCfyiPFCiALYYhQcCkfiTs
         Render From Camera Transform: false
         Is Visible: true
-  - name: Knife.obj
-    transform: [100, 0, 0, 0, 0, 100, 0, 0, 0, 0, 100, 0, 0, 17.6802177, 7.22515059, 1]
+  - name: Knife
+    transform: [-43.6491203, 6.50373554, 10.4827576, 0, 11.7218742, 9.85183048, 42.6963806, 0, 3.84521985, 43.796814, -11.1614141, 0, 7.74807644, -6.1523304, -18.4996605, 1]
     isVisible: true
     Id: alVZDusTpgqSVGZDxqrpFHokPrGbuNDb
-    tag: ""
+    tag: Knife
     parent: NONE
     children: []
     Components:
@@ -47,7 +47,7 @@ GameObjects:
         OBJ File: Knife.obj
         Primative Type: NONE
         Material: JHnYLBHgMrJlEapYEEiJewGOxWIDdlOH
-        Render From Camera Transform: false
+        Render From Camera Transform: true
         Is Visible: true
   - name: LIGHT FOR DEVELOPING
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 37.4127464, 0, 1]
@@ -60,7 +60,7 @@ GameObjects:
       - name: PointLight
         Color: [0.965686262, 0.894679904, 0.894679904]
         Intensity: 10
-        Constant: 100
+        Constant: 1
         Linear: 0.00999999978
         Quadratic: 0
   - name: FlashLight.obj
@@ -104,7 +104,7 @@ GameObjects:
         scriptFileName: EnemyManager.cs
         enableInput: true
   - name: Player
-    transform: [-0.957146883, 7.4505806e-09, 0.289603114, 0, 0.0533852652, 0.982862651, 0.176439881, 0, -0.284640074, 0.184339404, -0.940743923, 0, 0, 4.24747086, 0, 1]
+    transform: [0.0253911614, -7.4505806e-09, -0.999677658, 0, -0.125031084, 0.992147744, -0.00317573175, 0, 0.991827965, 0.125071406, 0.0251917839, 0, 0, 4.64747047, 0, 1]
     isVisible: true
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
     tag: Player
@@ -127,6 +127,7 @@ GameObjects:
         Movement Speed: 3
         Rotation Speed: 0.00499999989
         Allow Instant Turnaround: true
+        Allow Jump: true
       - name: Scriptable
         ammoCount: 30
         scriptFileName: Weapon.cs
@@ -143,25 +144,11 @@ GameObjects:
         Quadratic: 0.0320000015
         Cut Off Angle: 1
         Outer Cut Off Angle: 17
-  - name: Ak-47
-    transform: [-9.09962861e-09, -1.65606495e-14, -0.00999999978, 0, 0, 0.00999999978, -1.65606495e-14, 0, 0.00999999978, 0, -9.09962861e-09, 0, 0, -5.13566923, 0, 1]
-    isVisible: true
-    Id: ndlRjOYAhHQMpAEwRAEIBMKYihTpURMf
-    tag: ""
-    parent: NONE
-    children: []
-    Components:
-      - name: Mesh
-        OBJ File: Ak-47.obj
-        Primative Type: NONE
-        Material: TikmfUwkrFNXXjEcaavGVjVaeuMhbFUU
-        Render From Camera Transform: false
-        Is Visible: true
-  - name: AK-48
+  - name: AK-47
     transform: [-10.0000019, 8.7340668e-05, 0, 0, 8.73406534e-05, 10, 0.000177939713, 0, 1.55413726e-09, 0.000177939743, -10.0000019, 0, 1, -1.07996511, -2.51851416, 1]
     isVisible: true
     Id: rNmeXBLIRUWrXYcTJidcyRiTATgvQsjT
-    tag: Weapon
+    tag: AK47
     parent: NONE
     children: []
     Components:
@@ -170,7 +157,7 @@ GameObjects:
         Primative Type: NONE
         Material: zjOREuYjBldEKQQErZkIggPbPzKYwBll
         Render From Camera Transform: true
-        Is Visible: true
+        Is Visible: false
   - name: Plane
     transform: [500, 0, 0, 0, 0, 1, 0, 0, 0, 0, 500, 0, 0, -1.09831452, 0, 1]
     isVisible: true

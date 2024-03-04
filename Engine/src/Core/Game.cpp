@@ -338,6 +338,21 @@ namespace engine {
 		return std::make_tuple(0.0f, 0.0f, 0.0f);
 	}
 
+	void Game::setGameObjectMeshVisibilityFromTag(std::string tag, bool visible)
+	{
+		for (auto& [id, gameObject] : gameObjects)
+		{
+			if (gameObject->tag == tag)
+			{
+				auto meshComponent = gameObject->getComponent<MeshComponent>();
+				if (meshComponent != nullptr)
+				{
+					meshComponent->isVisible = visible;
+				}
+			}
+		}
+	}
+
 	void Game::removeParent(std::shared_ptr<GameObject> gameObject) {
 		if (!gameObject->added)
 			throw std::runtime_error("Cannot remove parent before GameObject has been added.");
