@@ -30,7 +30,7 @@ public class Player
     public void Update()
     {
         if (selectedWeapon != WeaponType.Knife)
-            EngineAPI.DrawText(0.9f, 0.9f, "Ammo: " + GetSelectedWeaponAmmoCount() + "/" + GetSelectedWeaponMaxAmmo(), 1, 1, 1, 1);
+            EngineAPI.DrawText(0.9f, 0.9f, 2, "Ammo: " + GetSelectedWeaponAmmoCount() + "/" + GetSelectedWeaponMaxAmmo(), 1, 1, 1, 1);
     }
 
     // Initialize is called once the component is added to the game
