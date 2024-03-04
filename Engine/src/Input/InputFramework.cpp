@@ -49,7 +49,7 @@ namespace engine {
 
 		std::list<std::string> actionsPressed{};
 		// Check if any set of keys responsible for an action are being held
-		if (keysPressed.size() > 1) {
+		if (keysPressed.size() >= 1) {
 			for (auto action : actionMap.getActions()) {
 				if (allKeysPressed(action, keysPressed)) {
 					if (std::find(prevActionsPressed.begin(), prevActionsPressed.end(), action) != prevActionsPressed.end()) {

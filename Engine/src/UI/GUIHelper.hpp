@@ -17,8 +17,6 @@ namespace engine
 	class GUIHelper
 	{
 	public:
-		GUIHelper(const GUIHelper&) = delete;
-
 		~GUIHelper() = default;
 
 		static GUIHelper& getInstance();
