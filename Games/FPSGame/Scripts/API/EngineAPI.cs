@@ -63,9 +63,9 @@ namespace Engine
             //(c++_API) end
         }
 
-        public static void DrawText(float xPos, float yPos, string text, float r, float g, float b, float a)
+        public static void DrawText(float xPos, float yPos, float size, string text, float r, float g, float b, float a)
         {
-            //(c++_API) __drawText__(xPos, yPos, text, r, g, b, a);
+            //(c++_API) __drawText__(xPos, yPos, size, text, r, g, b, a);
         }
 
         public static void SetGameObjectMeshVisibilityFromTag(string tag, bool visibility)

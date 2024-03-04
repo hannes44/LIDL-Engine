@@ -29,11 +29,13 @@ namespace engine
 
 		static void HelpMarker(const char* desc);
 
-		void drawText(float xpos, float ypos, const std::string& text, float R, float G, float B, float A);
+		void drawText(float xpos, float ypos, float size, const std::string& text, float R, float G, float B, float A);
 
 		void drawButton(float xpos, float ypos, float width, float height, const std::string& text);
 
 		void drawImage(float xpos, float ypos, const std::string& path, float width, float height);
+
+		void setDarkStyle();
 
 	private:
 		GUIHelper();

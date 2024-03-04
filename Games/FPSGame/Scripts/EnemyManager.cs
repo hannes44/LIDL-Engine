@@ -20,7 +20,7 @@ public class EnemyManager
     // Update is called once per frame
     public void Update(float dt)
     {
-        EngineAPI.DrawText(0.0f, 0.0f, "Round: " + currentRound, 1, 1, 1, 1);
+        EngineAPI.DrawText(0.05f, 0.05f, 2.0f, "Round: " + currentRound, 1, 1, 1, 1);
         if (EngineAPI.getNumberOfGameObjectsWithTag("Enemy") == 1)
         {
             NextRound();
