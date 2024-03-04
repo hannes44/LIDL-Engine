@@ -18,8 +18,9 @@ public class EnemyManager
 
 
     // Update is called once per frame
-    public void Update()
+    public void Update(float dt)
     {
+        EngineAPI.DrawText(0.0f, 0.0f, "Round: " + currentRound, 1, 1, 1, 1);
         if (EngineAPI.getNumberOfGameObjectsWithTag("Enemy") == 1)
         {
             NextRound();
@@ -47,6 +48,6 @@ public class EnemyManager
         currentRound++;
 
         // Increasing the number of enemies to spawn each round
-        enemiesToSpawn += 5;
+        enemiesToSpawn += 1;
     }
 }

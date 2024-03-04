@@ -17,7 +17,7 @@ namespace engine
 		// Sets up the lua states and binds the engine API to the lua state
 		void loadScriptStatesIntoNewLuaState(Game* game);
 
-		void updateScriptableComponent(ScriptableComponent* component);
+		void updateScriptableComponent(ScriptableComponent* component, float deltaTime);
 
 		void initializeScriptableComponent(ScriptableComponent* component);
 

@@ -18,7 +18,7 @@ namespace engine
 
 		std::string getName() override { return name; };
 
-		void update() override;
+		void update(float deltaTime) override;
 
 		void initialize() override;
 

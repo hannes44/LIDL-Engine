@@ -30,9 +30,9 @@ namespace engine {
 		return uuid;
 	}
 
-	void GameObject::update() {
+	void GameObject::update(float deltaTime) {
 		for (auto& component : components) {
-			component->update();
+			component->update(deltaTime);
 		}
 	}
 

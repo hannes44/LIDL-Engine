@@ -96,6 +96,8 @@ add_library(engine
 	src/MultiplayerClient/Client.cpp
 	src/ScriptEngine/ScriptEngine.hpp
 	src/ScriptEngine/ScriptEngine.cpp
+	src/UI/GUIHelper.hpp
+	src/UI/GUIHelper.cpp
 	${SHADERS}
 )
 target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -133,6 +135,11 @@ source_group("Renderer" FILES
 	src/Renderer/Shader.cpp
 	src/Renderer/RendererSettings.hpp
 	src/Renderer/Vertex.hpp
+)
+
+source_group("UI" FILES
+	src/UI/GUIHelper.hpp
+	src/UI/GUIHelper.cpp
 )
 
 source_group("OpenGL" FILES
