@@ -8,6 +8,7 @@
 #include "Components/PointLightComponent.hpp"
 #include "Core/Game.hpp"
 #include "Components/CameraComponent.hpp"
+#include "Components/SpotLightComponent.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
@@ -46,10 +47,10 @@ namespace engine
 		baseShader->bind();
 
 		glm::mat4 projectionMatrix = camera->getProjectionMatrix();
-		glm::mat4 viewMatrix = camera->getViewMatrix();
 
+		int pointLightIndex = 0;
+		int spotLightIndex = 0;
 
-		int lightIndex = 0;
 		// TODO: There should be a list of all the lights in the game to avoid this loop
 		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
 		{
@@ -59,22 +60,43 @@ namespace engine
 				{
 					PointLightComponent* light = dynamic_cast<PointLightComponent*>(component.get());
 
-					std::string index = "[" + std::to_string(lightIndex) + "]";
+					std::string index = "[" + std::to_string(pointLightIndex) + "]";
 					glm::vec3 gameObjectPosition = gameObject->getGlobalTransform().getPosition();
 					baseShader->setVec3(("pointLights" + index + ".position").c_str(), gameObjectPosition.x, gameObjectPosition.y, gameObjectPosition.z);
 					baseShader->setVec3(("pointLights" + index + ".ambient").c_str(), light->color.x, light->color.y, light->color.z);
 					baseShader->setVec3(("pointLights" + index + ".diffuse").c_str(), light->color.x, light->color.y, light->color.z);
 					baseShader->setVec3(("pointLights" + index + ".specular").c_str(), light->color.x, light->color.y, light->color.z);
-					baseShader->setFloat(("pointLights" + index + ".constant").c_str(), 10);
-					baseShader->setFloat(("pointLights" + index + ".linear").c_str(), 0);
-					baseShader->setFloat(("pointLights" + index + ".quadratic").c_str(), 0);
+					baseShader->setFloat(("pointLights" + index + ".constant").c_str(), light->constant);
+					baseShader->setFloat(("pointLights" + index + ".linear").c_str(), light->linear);
+					baseShader->setFloat(("pointLights" + index + ".quadratic").c_str(), light->quadratic);
 
-					lightIndex++;
+					pointLightIndex++;
+				}
+				if (dynamic_cast<SpotLightComponent*>(component.get()))
+				{
+					SpotLightComponent* light = dynamic_cast<SpotLightComponent*>(component.get());
+
+					std::string index = "[" + std::to_string(spotLightIndex) + "]";
+					glm::vec3 gameObjectPosition = gameObject->getGlobalTransform().getPosition();
+					glm::vec3 gameObjectDirection = gameObject->getGlobalTransform().getLocalForward();
+					baseShader->setVec3(("spotLights" + index + ".position").c_str(), gameObjectPosition.x, gameObjectPosition.y, gameObjectPosition.z);
+					baseShader->setVec3(("spotLights" + index + ".direction").c_str(), gameObjectDirection.x, gameObjectDirection.y, gameObjectDirection.z);
+					baseShader->setVec3(("spotLights" + index + ".ambient").c_str(), light->color.x, light->color.y, light->color.z);
+					baseShader->setVec3(("spotLights" + index + ".diffuse").c_str(), light->color.x, light->color.y, light->color.z);
+					baseShader->setVec3(("spotLights" + index + ".specular").c_str(), light->color.x, light->color.y, light->color.z);
+					baseShader->setFloat(("spotLights" + index + ".constant").c_str(), light->constant);
+					baseShader->setFloat(("spotLights" + index + ".linear").c_str(), light->linear);
+					baseShader->setFloat(("spotLights" + index + ".quadratic").c_str(), light->quadratic);
+					baseShader->setFloat(("spotLights" + index + ".cutOff").c_str(), glm::cos(glm::radians(light->cutOffAngle)));
+					baseShader->setFloat(("spotLights" + index + ".outerCutOff").c_str(), glm::cos(glm::radians(light->outerCutOffAngle)));
+
+					spotLightIndex++;
 				}
 			}
 		}
 
-		baseShader->setInt("numLights", lightIndex);
+		baseShader->setInt("numPointLights", pointLightIndex);
+		baseShader->setInt("numSpotLights", spotLightIndex);
 		baseShader->setVec3("viewPos", camera->getTransform().getPosition().x, camera->getTransform().getPosition().y, camera->getTransform().getPosition().z);
 		baseShader->setVec3("backgroundColor", renderingSettings->backgroundColor.x, renderingSettings->backgroundColor.y, renderingSettings->backgroundColor.z);
 		baseShader->setInt("enableFog", renderingSettings->enableFog);
@@ -98,14 +120,17 @@ namespace engine
 			if (meshComponent == nullptr)
 				continue;
 
-
+			glm::mat4 viewMatrix = camera->getViewMatrix();
 			glm::mat4 gameObjectTransformMatrix = gameObject->getGlobalTransform().transformMatrix;
 			glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * gameObjectTransformMatrix;
+			glm::mat4 modelViewMatrix = viewMatrix * gameObjectTransformMatrix;
 			Renderer::baseShader->setMat4("modelViewProjectionMatrix", &modelViewProjectionMatrix[0].x);
+			glm::mat4 normalMatrix = glm::transpose(glm::inverse(gameObjectTransformMatrix));
+			Renderer::baseShader->setMat4("normalMatrix", &normalMatrix[0].x);
+			modelViewMatrix = viewMatrix * gameObjectTransformMatrix;
 			Renderer::baseShader->setMat4("modelMatrix", &gameObjectTransformMatrix[0].x);
 
 			Material* material = meshComponent->getMaterial();
-			// Material
 			Renderer::baseShader->setFloat("material.shininess", material->shininess);
 			Renderer::baseShader->setVec3("material.baseColor", material->baseColor.x, material->baseColor.y, material->baseColor.z);
 			Renderer::baseShader->setInt("material.hasDiffuseTexture", !material->diffuseTexture.expired());
@@ -303,8 +328,11 @@ namespace engine
 
 		glm::mat4 gameObjectTransformMatrix = gameObject->getGlobalTransform().transformMatrix;
 		glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * gameObjectTransformMatrix;
+		glm::mat4 modelViewMatrix = viewMatrix * gameObjectTransformMatrix;
 		Renderer::baseShader->setMat4("modelViewProjectionMatrix", &modelViewProjectionMatrix[0].x);
-		Renderer::baseShader->setMat4("modelMatrix", &gameObjectTransformMatrix[0].x);
+		Renderer::baseShader->setMat4("modelViewMatrix", &modelViewMatrix[0].x);
+		glm::mat4 normalMatrix = glm::inverse(glm::transpose(modelViewMatrix));
+		Renderer::baseShader->setMat4("normalMatrix", &normalMatrix[0].x);
 
 		Material* material = meshComponent->getMaterial();
 		// Material

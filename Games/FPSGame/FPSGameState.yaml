@@ -42,17 +42,20 @@ GameObjects:
         OBJ File: Knife.obj
         Primative Type: NONE
         Material: JHnYLBHgMrJlEapYEEiJewGOxWIDdlOH
-  - name: Light
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 28.6073112, 43.9501648, 38.7412109, 1]
+  - name: LIGHT FOR DEVELOPING
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 83.7274551, 0, 1]
     isVisible: true
-    Id: cQTDJdjWAUkfhQiqktDDBWTtcOBPcqgc
+    Id: cLQgzwlwLtoQUFDGjPXtYXpwbIqSdbzI
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: PointLight
         Color: [1, 1, 1]
-        Intensity: 100
+        Intensity: 10
+        Constant: 1
+        Linear: 0.00999999978
+        Quadratic: 0
   - name: House.obj
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 112.499939, -0.318172455, 0, 1]
     isVisible: true
@@ -78,7 +81,7 @@ GameObjects:
         scriptFileName: EnemyManager.cs
         enableInput: true
   - name: GameCamera
-    transform: [-0.084484458, 1.49011612e-08, -0.996424794, 0, -0.203239366, 0.978977442, 0.0172321945, 0, 0.975477338, 0.203968599, -0.082708478, 0, -2.88235736, 6.10776234, -7.40703964, 1]
+    transform: [-0.919570684, -7.4505806e-09, 0.392924935, 0, 0.0801403448, 0.978979528, 0.187554181, 0, -0.384665459, 0.203958452, -0.900240898, 0, -2.88235736, 6.10776234, -7.40703964, 1]
     isVisible: true
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
     tag: ""
@@ -109,6 +112,14 @@ GameObjects:
         Offset: [0, 0, 0]
         Extent: [1, 2, 1]
         IsPlatform: false
+      - name: SpotLight
+        Color: [1, 1, 1]
+        Intensity: 10
+        Constant: 1
+        Linear: 0.0900000036
+        Quadratic: 0.0320000015
+        Cut Off Angle: 1
+        Outer Cut Off Angle: 17
   - name: Ak-47
     transform: [-9.09962861e-09, -1.65606495e-14, -0.00999999978, 0, 0, 0.00999999978, -1.65606495e-14, 0, 0.00999999978, 0, -9.09962861e-09, 0, 0.203887343, -1.49969232, 3.72622538, 1]
     isVisible: true

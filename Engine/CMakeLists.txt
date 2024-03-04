@@ -44,6 +44,7 @@ add_library(engine
 	src/Components/ControllableComponent.cpp
 	src/Components/ScriptableComponent.hpp
 	src/Components/ScriptableComponent.cpp
+	src/Components/SpotLightComponent.hpp
 	src/Renderer/Console/Display.hpp
 	src/Renderer/Console/DisplayTerminal.hpp
 	src/Renderer/Console/DisplayTerminal.cpp
@@ -121,6 +122,7 @@ source_group("Components" FILES
 	src/Components/ControllableComponent.cpp
 	src/Components/ScriptableComponent.hpp
 	src/Components/ScriptableComponent.cpp
+	src/Components/SpotLightComponent.hpp
 )
 
 source_group("Renderer" FILES
