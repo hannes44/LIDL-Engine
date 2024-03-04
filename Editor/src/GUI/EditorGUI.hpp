@@ -86,6 +86,8 @@ namespace engine
 
 		Window& window;
 
+		GUIHelper& UIHelper = GUIHelper::getInstance();
+
 		std::weak_ptr<Selectable> selectedObject;
 
 		ImGuizmo::OPERATION guizmoOperation = ImGuizmo::TRANSLATE;
