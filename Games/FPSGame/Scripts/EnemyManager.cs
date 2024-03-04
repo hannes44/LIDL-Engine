@@ -31,7 +31,6 @@ public class EnemyManager
     // Initialize is called once the component is added to the game
     public void Initialize()
     {
-        EngineAPI.SetGameObjectMeshVisibilityFromTag("AK47", true);
         SpawnEnemy();
     }
 
@@ -50,5 +49,26 @@ public class EnemyManager
 
         // Increasing the number of enemies to spawn each round
         enemiesToSpawn += 1;
+    }
+
+    private void HideAllWeapons()
+    {
+        EngineAPI.SetGameObjectMeshVisibilityFromTag("Knife", false);
+        EngineAPI.SetGameObjectMeshVisibilityFromTag("AK47", false);
+    }
+
+    public void OnInput(string action, string actionType)
+    {
+        if (action == "SwitchToKnife" && actionType == "ActionDown")
+        {
+            HideAllWeapons();
+            EngineAPI.SetGameObjectMeshVisibilityFromTag("Knife", true);
+        }
+
+        if (action == "SwitchToRifle" && actionType == "ActionDown")
+        {
+            HideAllWeapons();
+            EngineAPI.SetGameObjectMeshVisibilityFromTag("AK47", true);
+        }
     }
 }
