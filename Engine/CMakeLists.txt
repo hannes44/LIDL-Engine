@@ -7,8 +7,6 @@ add_library(engine
 	src/Core/GameObject.cpp
 	src/Core/Game.hpp
 	src/Core/Game.cpp
-	src/Core/Bootstrap.hpp
-	src/Core/Bootstrap.cpp
 	src/Core/Logger.hpp
 	src/Core/Logger.cpp
 	src/Core/Window.hpp
@@ -193,8 +191,6 @@ source_group("Core" FILES
 	src/Core/GameObject.cpp
 	src/Core/Game.hpp
 	src/Core/Game.cpp
-	src/Core/Bootstrap.hpp
-	src/Core/Bootstrap.cpp
 	src/Core/Logger.hpp
 	src/Core/Logger.cpp
 	src/Core/Window.hpp
