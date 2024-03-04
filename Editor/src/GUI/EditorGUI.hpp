@@ -105,6 +105,9 @@ namespace engine
 
 		bool quitProgram = false;
 
+		// In no GUI mode, the gui will not be rendered and the game will accept relative
+		bool noGUIMode = false;
+
 		CameraComponent* getActiveCamera();
 
 		EditorSettings editorSettings{};
