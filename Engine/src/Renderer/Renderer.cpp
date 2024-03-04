@@ -374,23 +374,23 @@ namespace engine
 	{
 		std::shared_ptr<MeshComponent> meshComponent = gameObject->getComponent<MeshComponent>();
 
-		if (meshComponent == nullptr)
+		if (!meshComponent->isVisible)
 			return;
 
 		glm::mat4 projectionMatrix = camera->getProjectionMatrix();
 		glm::mat4 viewMatrix = camera->getViewMatrix();
 		glm::mat4 gameObjectTransformMatrix = gameObject->getGlobalTransform().transformMatrix;
-		glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * gameObjectTransformMatrix;
-		glm::mat4 modelViewMatrix = viewMatrix * gameObjectTransformMatrix;
 
-		if (game->running && meshComponent->renderFromCameraTransform)
+		if (meshComponent->renderFromCameraTransform)
 		{
-			modelViewProjectionMatrix = projectionMatrix * viewMatrix * camera->getTransform().transformMatrix * gameObjectTransformMatrix;
+			gameObjectTransformMatrix = camera->getTransform().transformMatrix * gameObjectTransformMatrix;
 			glClear(GL_DEPTH_BUFFER_BIT);
 		}
 
-		Renderer::baseShader->setMat4("modelViewProjectionMatrix", &modelViewProjectionMatrix[0].x);
+		glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * gameObjectTransformMatrix;
+		glm::mat4 modelViewMatrix = viewMatrix * gameObjectTransformMatrix;
 		glm::mat4 normalMatrix = glm::transpose(glm::inverse(gameObjectTransformMatrix));
+		Renderer::baseShader->setMat4("modelViewProjectionMatrix", &modelViewProjectionMatrix[0].x);
 		Renderer::baseShader->setMat4("normalMatrix", &normalMatrix[0].x);
 		modelViewMatrix = viewMatrix * gameObjectTransformMatrix;
 		Renderer::baseShader->setMat4("modelMatrix", &gameObjectTransformMatrix[0].x);
