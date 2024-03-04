@@ -35,7 +35,7 @@ namespace engine
 
 		void drawImage(float xpos, float ypos, const std::string& path, float width, float height);
 
-		void setImGuiStyle();
+		void setDarkStyle();
 
 	private:
 		GUIHelper();
