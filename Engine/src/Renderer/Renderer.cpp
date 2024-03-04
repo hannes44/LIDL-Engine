@@ -46,8 +46,6 @@ namespace engine
 
 		baseShader->bind();
 
-		glm::mat4 projectionMatrix = camera->getProjectionMatrix();
-
 		int pointLightIndex = 0;
 		int spotLightIndex = 0;
 
@@ -105,51 +103,31 @@ namespace engine
 
 		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
 		{
-			MeshComponent* meshComponent = nullptr;
-
-			// TODO: Only GameObjects with a mesh should be sent to the renderer to avoid looping
-			for (auto component : gameObject->getComponents())
-			{
-				if (dynamic_cast<MeshComponent*>(component.get()))
-				{
-					meshComponent = dynamic_cast<MeshComponent*>(component.get());
-					break;
-				}
-			}
+			std::shared_ptr<MeshComponent> meshComponent = gameObject->getComponent<MeshComponent>();
 
 			if (meshComponent == nullptr)
 				continue;
 
-			glm::mat4 viewMatrix = camera->getViewMatrix();
-			glm::mat4 gameObjectTransformMatrix = gameObject->getGlobalTransform().transformMatrix;
-			glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * gameObjectTransformMatrix;
-			glm::mat4 modelViewMatrix = viewMatrix * gameObjectTransformMatrix;
-			Renderer::baseShader->setMat4("modelViewProjectionMatrix", &modelViewProjectionMatrix[0].x);
-			glm::mat4 normalMatrix = glm::transpose(glm::inverse(gameObjectTransformMatrix));
-			Renderer::baseShader->setMat4("normalMatrix", &normalMatrix[0].x);
-			modelViewMatrix = viewMatrix * gameObjectTransformMatrix;
-			Renderer::baseShader->setMat4("modelMatrix", &gameObjectTransformMatrix[0].x);
+			// Skip rendering meshes that should be rendered in front of the camera
+			// They need to be rendered last to avoid clipping into other objects
+			if (meshComponent->renderFromCameraTransform)
+				continue;
 
-			Material* material = meshComponent->getMaterial();
-			Renderer::baseShader->setFloat("material.shininess", material->shininess);
-			Renderer::baseShader->setVec3("material.baseColor", material->baseColor.x, material->baseColor.y, material->baseColor.z);
-			Renderer::baseShader->setInt("material.hasDiffuseTexture", !material->diffuseTexture.expired());
-			Renderer::baseShader->setInt("material.hasSpecularTexture", !material->specularTexture.expired());
+			renderGameObject(game, camera, gameObject.get());
+		}
+		
+		// Can be optimized to avoid looping through all game objects twice
+		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
+		{
+			std::shared_ptr<MeshComponent> meshComponent = gameObject->getComponent<MeshComponent>();
 
-			if (!material->diffuseTexture.expired())
-			{
-				Renderer::baseShader->setInt("material.diffuseTexture", 0);
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, material->diffuseTexture.lock()->textureIDOpenGL);
-			}
-			if (!material->specularTexture.expired())
-			{
-				Renderer::baseShader->setInt("material.specularTexture", 1);
-				glActiveTexture(GL_TEXTURE1);
-				glBindTexture(GL_TEXTURE_2D, material->specularTexture.lock()->textureIDOpenGL);
-			}
+			if (meshComponent == nullptr)
+				continue;
 
-			graphicsAPI->drawIndexed(meshComponent->getVertexArray().get(), meshComponent->indices.size());
+			if (!meshComponent->renderFromCameraTransform)
+				continue;
+
+			renderGameObject(game, camera, gameObject.get());
 		}
 
 	}
@@ -391,5 +369,51 @@ namespace engine
 		}
 
 		return graphicsAPI->getType();
+	}
+	void Renderer::renderGameObject(Game* game, CameraComponent* camera, GameObject* gameObject)
+	{
+		std::shared_ptr<MeshComponent> meshComponent = gameObject->getComponent<MeshComponent>();
+
+		if (meshComponent == nullptr)
+			return;
+
+		glm::mat4 projectionMatrix = camera->getProjectionMatrix();
+		glm::mat4 viewMatrix = camera->getViewMatrix();
+		glm::mat4 gameObjectTransformMatrix = gameObject->getGlobalTransform().transformMatrix;
+		glm::mat4 modelViewProjectionMatrix = projectionMatrix * viewMatrix * gameObjectTransformMatrix;
+		glm::mat4 modelViewMatrix = viewMatrix * gameObjectTransformMatrix;
+
+		if (game->running && meshComponent->renderFromCameraTransform)
+		{
+			modelViewProjectionMatrix = projectionMatrix * viewMatrix * camera->getTransform().transformMatrix * gameObjectTransformMatrix;
+			glClear(GL_DEPTH_BUFFER_BIT);
+		}
+
+		Renderer::baseShader->setMat4("modelViewProjectionMatrix", &modelViewProjectionMatrix[0].x);
+		glm::mat4 normalMatrix = glm::transpose(glm::inverse(gameObjectTransformMatrix));
+		Renderer::baseShader->setMat4("normalMatrix", &normalMatrix[0].x);
+		modelViewMatrix = viewMatrix * gameObjectTransformMatrix;
+		Renderer::baseShader->setMat4("modelMatrix", &gameObjectTransformMatrix[0].x);
+
+		Material* material = meshComponent->getMaterial();
+		Renderer::baseShader->setFloat("material.shininess", material->shininess);
+		Renderer::baseShader->setVec3("material.baseColor", material->baseColor.x, material->baseColor.y, material->baseColor.z);
+		Renderer::baseShader->setInt("material.hasDiffuseTexture", !material->diffuseTexture.expired());
+		Renderer::baseShader->setInt("material.hasSpecularTexture", !material->specularTexture.expired());
+
+		if (!material->diffuseTexture.expired())
+		{
+			Renderer::baseShader->setInt("material.diffuseTexture", 0);
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, material->diffuseTexture.lock()->textureIDOpenGL);
+		}
+		if (!material->specularTexture.expired())
+		{
+			Renderer::baseShader->setInt("material.specularTexture", 1);
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_2D, material->specularTexture.lock()->textureIDOpenGL);
+		}
+
+		graphicsAPI->drawIndexed(meshComponent->getVertexArray().get(), meshComponent->indices.size());
 	}
 }
