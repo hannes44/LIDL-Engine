@@ -167,7 +167,6 @@ namespace engine
 		if (game->running)
 		{
 			UIHelper.drawText(0.5f, 0.5f, "+", 255.0f, 0.0f, 0.0f, 255.0f);
-			
 		}
 
 		if (noGUIMode)

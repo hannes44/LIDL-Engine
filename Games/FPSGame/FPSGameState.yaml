@@ -81,7 +81,7 @@ GameObjects:
         scriptFileName: EnemyManager.cs
         enableInput: true
   - name: Player
-    transform: [0.912164152, 0, -0.409824818, 0, -0.348228157, 0.527265966, -0.775065958, 0, 0.216086745, 0.849700212, 0.480953246, 0, 0, 4.24747086, 0, 1]
+    transform: [-0.938059807, 3.7252903e-09, 0.346474081, 0, 0.0908785015, 0.964987695, 0.246048599, 0, -0.334343225, 0.262295276, -0.905216098, 0, 0, 4.24747086, 0, 1]
     isVisible: true
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
     tag: Player

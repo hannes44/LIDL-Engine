@@ -7,8 +7,8 @@
 #include "EditorSettings.hpp"
 #include "AssetExplorer/AssetManager.hpp"
 #include "Project.hpp"
-#include "GUIHelper.hpp"
 #include "ConsoleGUI.hpp"
+#include "UI/GUIHelper.hpp"
 
 namespace engine
 {
