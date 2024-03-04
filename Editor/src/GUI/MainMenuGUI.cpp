@@ -84,7 +84,7 @@ namespace engine
 
 	void MainMenuGUI::renderHeader()
 	{
-		GUIHelper::drawCenteredText("GIGA Editor");
+		GUIHelper::getInstance().drawCenteredText("GIGA Editor");
 
 		// Very ugly solution to center the buttons
 		// https://github.com/ocornut/imgui/discussions/3862
