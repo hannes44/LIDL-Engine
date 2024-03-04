@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include <set>
 #include "Uuid.hpp"
 #include "Selectable.hpp"
 
@@ -16,10 +17,12 @@ namespace engine
 
 	class GameObject : public Selectable
 	{
+		friend class Game;
+
 	public:
 		GameObject() = default;
-		// Called every frame
 
+		// Called every frame
 		void update();
 
 		// Called at initialization
@@ -27,9 +30,15 @@ namespace engine
 
 		Transform transform;
 
+		Transform getGlobalTransform();
+
 		bool isVisible = true;
 
 		std::string name = "GameObject";
+
+		std::string tag = "";
+		std::set<std::shared_ptr<GameObject>> getChildren() { return children; };
+		std::shared_ptr<GameObject> getParent() { return parent; };
 
 		UUID uuid{};
 
@@ -39,13 +48,18 @@ namespace engine
 
 		void addComponent(std::shared_ptr<Component> component);
 
-		std::vector<std::shared_ptr<Component>>& getComponents() {
+		std::vector<std::shared_ptr<Component>> &getComponents()
+		{
 			return components;
 		}
 
-		template<typename T> std::shared_ptr<T> getComponent() {
-			for (auto& component : components) {
-				if (std::dynamic_pointer_cast<T>(component)) {
+		template <typename T>
+		std::shared_ptr<T> getComponent()
+		{
+			for (auto &component : components)
+			{
+				if (std::dynamic_pointer_cast<T>(component))
+				{
 					return std::dynamic_pointer_cast<T>(component);
 				}
 			}
@@ -53,14 +67,22 @@ namespace engine
 			return nullptr;
 		}
 
-		template<typename T> bool hasComponent() {
+		template <typename T>
+		bool hasComponent()
+		{
 			return getComponent<T>() != nullptr;
 		}
 
 		std::string getName() override { return name; };
 
+		std::shared_ptr<GameObject> clone();
+
 	private:
 		// TODO: Should limit each component to one of each type
 		std::vector<std::shared_ptr<Component>> components{};
+		bool added = false;
+
+		std::shared_ptr<GameObject> parent = nullptr;
+		std::set<std::shared_ptr<GameObject>> children{};
 	};
 }

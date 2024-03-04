@@ -15,11 +15,13 @@ namespace engine
 		void shiftPosition(glm::vec3 offset);
 
 		glm::quat getRotation();
-		void setRotation(glm::quat rotation);
-		void setRotationFromDirection(glm::vec3 direction);
+		void setRotationFromDirection(glm::vec3 direction, glm::vec3 normal);
+		void setRotationFromQuaternion(const glm::quat& orientation);
 
 		glm::vec3 getScale();
 		void setScale(glm::vec3 scale);
+
+		glm::vec3 getLocalForward();
 
 		glm::mat4 transformMatrix{ 1 };
 	};

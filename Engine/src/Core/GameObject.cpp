@@ -12,6 +12,19 @@ namespace engine {
 		}
 	}
 
+	Transform GameObject::getGlobalTransform() {
+		Transform globalTransform = transform;
+		std::shared_ptr<GameObject> currentParent = parent;
+		while (currentParent) {
+			globalTransform.shiftPosition(currentParent->transform.getPosition());
+			globalTransform.setRotationFromQuaternion(currentParent->transform.getRotation() * globalTransform.getRotation());
+
+			currentParent = currentParent->parent;
+		}
+
+		return globalTransform;
+	}
+
 	UUID GameObject::getUUID()
 	{
 		return uuid;
@@ -38,5 +51,18 @@ namespace engine {
 
 		component->setGameObject(this);
 		components.push_back(component);
+	}
+
+	std::shared_ptr<GameObject> GameObject::clone()
+	{
+		std::shared_ptr<GameObject> newGameObject = std::make_shared<GameObject>(*this);
+		newGameObject->uuid = UUID();
+
+		for (auto& component : newGameObject->components) {
+			component = component->clone();
+			component->gameObject = newGameObject.get();
+		}
+
+		return newGameObject;
 	}
 }

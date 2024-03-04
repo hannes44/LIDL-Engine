@@ -15,8 +15,6 @@ namespace engine
 
 	void engine::Editor::start()
 	{
-		engine::Logger::init();
-
 		LOG_INFO("Starting Editor");
 
 		Window &window = Window::getInstance();

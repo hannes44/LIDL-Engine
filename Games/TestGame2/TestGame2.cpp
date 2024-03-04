@@ -1,8 +1,15 @@
 #include "TestGame2.hpp"
 
 extern "C" {
-	__declspec(dllexport) engine::Game* createGame() {
-		return new engine::TestGame2();
+	__declspec(dllexport) engine::Game* createGame(engine::Renderer* renderer, engine::Window* window, engine::InputFramework* inputFramework, engine::ResourceManager* resourceManager) {
+		engine::Game* game = new engine::TestGame2();
+		engine::Renderer::instance = renderer;
+		engine::Window::instance = window;
+		engine::InputFramework::instance = inputFramework;
+		engine::Logger::init();
+		engine::ResourceManager::instance = resourceManager;
+		resourceManager->changeGame(game);
+		return game;
 	}
 }
 namespace engine {
@@ -13,6 +20,7 @@ namespace engine {
 	TestGame2::TestGame2()
 	{
 		name = "TestGame2";
+		glewInit();
 	}
 
 	void TestGame2::update() {
@@ -20,58 +28,58 @@ namespace engine {
 	}
 
 	void TestGame2::initialize() {
-		Logger::init();
 
-		std::shared_ptr<MeshComponent> meshComponent1 = engine::MeshComponent::createMeshFromObjFile("amugus.obj");
-		std::shared_ptr<MeshComponent> meshComponent2 = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
-		engine::PointLightComponent pointLightComponent = engine::PointLightComponent();
-		engine::PhysicsComponent physicsComponentWithGravity = engine::PhysicsComponent();
-		physicsComponentWithGravity.setVelocity(glm::vec3(0, 10, 0));
-		
-		engine::PhysicsComponent physicsComponentWithoutGravity = engine::PhysicsComponent(true);
-		physicsComponentWithoutGravity.setVelocity(glm::vec3(0, 0, 0));
-		
-		engine::PhysicsComponent physicsComponentWithHigherGravity = engine::PhysicsComponent();
-		physicsComponentWithHigherGravity.setVelocity(glm::vec3(0, 10, 0));
-		
-		physicsComponentWithHigherGravity.overrideGravityCoefficient = true;
-		physicsComponentWithHigherGravity.gravityCoefficient *= 1.2f;
+		std::shared_ptr<MeshComponent> meshComponent1 = MeshComponent::createMeshFromObjFile("amugus.obj");
+		std::shared_ptr<MeshComponent> meshComponent2 = MeshComponent::createPrimative(PrimativeMeshType::CUBE);
+		PointLightComponent pointLightComponent = PointLightComponent();
 
-		//meshComponent2->material.diffuseTexture = loadTexture("glocken.png");
+		PhysicsComponent physicsComponentWithGravity = PhysicsComponent(true);
+		PhysicsComponent physicsComponentWithoutGravity = PhysicsComponent(false);
 
-		
-		GameObject* sphere1 = new GameObject();
-		sphere1->transform.setScale(glm::vec3(2, 2, 2));
-		sphere1->transform.setPosition(glm::vec3(10, 10, 0));
-		sphere1->addComponent(meshComponent1);
-		sphere1->name = "SIGMA AMUGUS";
-		addGameObject(std::unique_ptr<GameObject>(sphere1));
+		auto boxColliderComponent = BoxColliderComponent(glm::vec3(0, 0, 0), glm::vec3(1.5f, 3.f, 1.5f));
+		auto groundColliderComponent = BoxColliderComponent(glm::vec3(0, 0, 0), glm::vec3(10.1f, 0.3f, 10.1f), true);
+		auto platformColliderComponent = BoxColliderComponent(glm::vec3(0, 0, 0), glm::vec3(2.f, 0.1f, 2.f), true);
+
+
+		GameObject* amogus = new GameObject();
+		amogus->transform.setPosition(glm::vec3(0, 1.8f, 0));
+		amogus->name = "Player";
+		amogus->addComponent(meshComponent1);
+		amogus->addComponent(std::make_unique<PhysicsComponent>(physicsComponentWithGravity));
+		amogus->addComponent(std::make_unique<BoxColliderComponent>(boxColliderComponent));
+		amogus->addComponent(std::make_unique<ControllableComponent>(true));
+		addGameObject(std::unique_ptr<GameObject>(amogus));
+
+
+		GameObject* ground = new GameObject();
+		ground->transform.setScale(glm::vec3(10.f, 0.2f, 10.f));
+		ground->transform.setPosition(glm::vec3(0, 0, 0));
+		ground->name = "Ground";
+		ground->addComponent(meshComponent2);
+		ground->addComponent(std::make_unique<BoxColliderComponent>(groundColliderComponent));
+		addGameObject(std::unique_ptr<GameObject>(ground));
+
+		GameObject* platform = new GameObject();
+		platform->transform.setScale(glm::vec3(2.f, 0.1f, 2.f));
+		platform->transform.setPosition(glm::vec3(2.f, 1.f, 0));
+		platform->name = "Platform";
+		platform->addComponent(meshComponent2);
+		platform->addComponent(std::make_unique<BoxColliderComponent>(platformColliderComponent));
+		addGameObject(std::unique_ptr<GameObject>(platform));
+
 
 		GameObject* camera = new GameObject();
-		camera->transform.setPosition(glm::vec3(0, 0, 10));
-		camera->addComponent(std::make_unique<engine::CameraComponent>());
+		camera->transform.setPosition(glm::vec3(0, 0, 15));
+		camera->addComponent(std::make_unique<CameraComponent>());
 		camera->name = "Camera";
-		addGameObject(std::unique_ptr<GameObject>(camera));
-
-		GameObject* sphere2 = new GameObject();
-		float width = 5;
-		float height = width / 0.52f;
-		float depth = width / 2.f;
-		sphere2->transform.setScale(glm::vec3(width, height, depth));
-		sphere2->transform.setPosition(glm::vec3(15, 10, 0));
-		sphere2->addComponent(meshComponent2);
-		sphere2->name = "BOMPASPY";
-		addGameObject(std::unique_ptr<GameObject>(sphere2));
+		addGameObject(std::unique_ptr<GameObject>(camera));;
 
 
-		
 		GameObject* light = new GameObject();
 		light->transform.setPosition(glm::vec3(0, 20, 0));
-		light->addComponent(std::make_unique<engine::PointLightComponent>(pointLightComponent));
+		light->addComponent(std::make_unique<PointLightComponent>(pointLightComponent));
 		light->name = "Light";
 		addGameObject(std::unique_ptr<GameObject>(light));
-
-
 	}
 
 }

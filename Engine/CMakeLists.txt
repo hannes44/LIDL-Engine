@@ -7,8 +7,6 @@ add_library(engine
 	src/Core/GameObject.cpp
 	src/Core/Game.hpp
 	src/Core/Game.cpp
-	src/Core/Bootstrap.hpp
-	src/Core/Bootstrap.cpp
 	src/Core/Logger.hpp
 	src/Core/Logger.cpp
 	src/Core/Window.hpp
@@ -44,6 +42,7 @@ add_library(engine
 	src/Components/ControllableComponent.cpp
 	src/Components/ScriptableComponent.hpp
 	src/Components/ScriptableComponent.cpp
+	src/Components/SpotLightComponent.hpp
 	src/Renderer/Console/Display.hpp
 	src/Renderer/Console/DisplayTerminal.hpp
 	src/Renderer/Console/DisplayTerminal.cpp
@@ -93,8 +92,8 @@ add_library(engine
 	src/Input/ActionMap.hpp
 	src/Audio/AudioManager.cpp
 	src/Audio/AudioManager.hpp
-	src/Multiplayer/Client/Client.hpp
-	src/Multiplayer/Client/Client.cpp
+	src/MultiplayerClient/Client.hpp
+	src/MultiplayerClient/Client.cpp
 	src/ScriptEngine/ScriptEngine.hpp
 	src/ScriptEngine/ScriptEngine.cpp
 	${SHADERS}
@@ -121,6 +120,7 @@ source_group("Components" FILES
 	src/Components/ControllableComponent.cpp
 	src/Components/ScriptableComponent.hpp
 	src/Components/ScriptableComponent.cpp
+	src/Components/SpotLightComponent.hpp
 )
 
 source_group("Renderer" FILES
@@ -191,8 +191,6 @@ source_group("Core" FILES
 	src/Core/GameObject.cpp
 	src/Core/Game.hpp
 	src/Core/Game.cpp
-	src/Core/Bootstrap.hpp
-	src/Core/Bootstrap.cpp
 	src/Core/Logger.hpp
 	src/Core/Logger.cpp
 	src/Core/Window.hpp
@@ -235,8 +233,8 @@ source_group("Audio" FILES
 )
 
 source_group("Multiplayer" FILES
-	src/Multiplayer/Client/Client.hpp
-	src/Multiplayer/Client/Client.cpp
+	src/MultiplayerClient/Client.hpp
+	src/MultiplayerClient/Client.cpp
 )
 
 

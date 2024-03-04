@@ -1,38 +1,68 @@
 GameObjects:
-  - name: Camera
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 10, 1]
+  - name: Light
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1]
     isVisible: true
-    Id: 7C2b2yX9son2hIL02WgOK0X4g6tetb0c
+    Id: HBYQmPzTfsbuytQHgaJSnMRlVzJlsOSg
+    Components:
+      - name: PointLight
+        Color: [1, 1, 1]
+        Intensity: 10
+  - name: Camera
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 15, 1]
+    isVisible: true
+    Id: baGMbZmchsqqbSzDPNJIGzLiOBCBtijV
     Components:
       - name: Camera
         FOV: 50
         Near Plane: 0.100000001
         Far Plane: 1000
         Is Main Camera: false
-  - name: BOMPASPY
-    transform: [5, 0, 0, 0, 0, 9.61538506, 0, 0, 0, 0, 2.5, 0, 15, 10, 0, 1]
+  - name: Platform
+    transform: [2, 0, 0, 0, 0, 0.100000001, 0, 0, 0, 0, 2, 0, 2, 1, 0, 1]
     isVisible: true
-    Id: 7Z036PG1LJDkRw4D9oSAn0MFh1A6Xta1
+    Id: mlbwljSQHFlATKVIoYtjTRocBZLrFkns
     Components:
       - name: Mesh
         OBJ File: ""
-        Material: KXPVzX3fNNtSPO8P61UkAqncFG48k3FM
-  - name: SIGMA AMUGUS
-    transform: [2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 10, 10, 0, 1]
+        Primative Type: CUBE
+        Material: hinurioNNgKvHQjWljuDUtphiocxoKhJ
+      - name: Box Collider
+        Offset: [0, 0, 0]
+        Extent: [2, 0.100000001, 2]
+        IsPlatform: true
+  - name: Ground
+    transform: [10, 0, 0, 0, 0, 0.200000003, 0, 0, 0, 0, 10, 0, 0, 0, 0, 1]
     isVisible: true
-    Id: EPIE9M9EQgMOxu97uceogLI6Pi6Av0KZ
+    Id: ttKGuhJPiSGyavcDMAJMYmPBqiwMFADn
+    Components:
+      - name: Mesh
+        OBJ File: ""
+        Primative Type: CUBE
+        Material: hinurioNNgKvHQjWljuDUtphiocxoKhJ
+      - name: Box Collider
+        Offset: [0, 0, 0]
+        Extent: [10.1000004, 0.300000012, 10.1000004]
+        IsPlatform: true
+  - name: Player
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1.79999995, 0, 1]
+    isVisible: true
+    Id: yNEAepWyMyXtKlUvNMmOVBTsIfajaRMP
     Components:
       - name: Mesh
         OBJ File: amugus.obj
-        Material: fDnFV71mxedDQFUXRakgUGy3RN5URA4M
-  - name: Light
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1]
-    isVisible: true
-    Id: ZdiVbLmKU08Lcj3bAwgLD6vBLRjNaR16
-    Components:
-      - name: PointLight
-        Color: [1, 1, 1]
-        Intensity: 10
+        Primative Type: NONE
+        Material: EJqRufUncwkKkCjYdDWjGAGNFmIEHwPD
+      - name: Physics
+        Gravity: true
+        Mass: 1
+        Force: [0, 0, 0]
+        Acceleration: [0, 0, 0]
+        Velocity: [0, 0, 0]
+      - name: Box Collider
+        Offset: [0, 0, 0]
+        Extent: [1.5, 3, 1.5]
+        IsPlatform: false
+      - name: Controllable
 Textures:
   []
 Materials:

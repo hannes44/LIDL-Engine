@@ -1,5 +1,4 @@
 #include "InputFramework.hpp"
-#include "Core/Bootstrap.hpp"
 #include "Core/Logger.hpp"
 #include <SDL.h>
 #include <imgui_impl_sdl3.h>
@@ -47,16 +46,37 @@ namespace engine {
 				keysPressed.push_back(key);
 			}
 		}
+
+		std::list<std::string> actionsPressed{};
 		// Check if any set of keys responsible for an action are being held
 		if (keysPressed.size() > 1) {
 			for (auto action : actionMap.getActions()) {
 				if (allKeysPressed(action, keysPressed)) {
-					ie.setEventType(InputEventType::Action);
+					if (std::find(prevActionsPressed.begin(), prevActionsPressed.end(), action) != prevActionsPressed.end()) {
+						ie.setEventType(InputEventType::ActionHold);
+					}
+					else {
+						ie.setEventType(InputEventType::ActionDown);
+					}
+					actionsPressed.push_back(action);
 					ie.setAction(action);
 					dispatchEvent(ie);
 				}
 			}
 		}
+
+		// Check if any action was released
+		for (auto action : prevActionsPressed) {
+			if (std::find(actionsPressed.begin(), actionsPressed.end(), action) == actionsPressed.end()) {
+				ie.setEventType(InputEventType::ActionUp);
+				ie.setAction(action);
+				dispatchEvent(ie);
+			}
+		}
+
+		// Update the list of keys being held
+		prevActionsPressed.clear();
+		prevActionsPressed = actionsPressed;
 	}
 
 	bool InputFramework::allKeysPressed(std::string action, std::list<Key> keysPressed) {
@@ -143,7 +163,9 @@ namespace engine {
 
 	// Function to dispatch captured event to all listeners
 	void InputFramework::dispatchEvent(const InputEvent& e) {
-		for (auto* listener : listeners) {
+		// Creating copy of listeners to avoid issues with removing listeners while iterating
+		std::list<InputListener*> listenersCopy = listeners;
+		for (auto* listener : listenersCopy) {
 			if (listener) {
 				listener->handleInput(e);
 			}

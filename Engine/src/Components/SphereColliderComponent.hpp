@@ -4,26 +4,28 @@
 #include "Core/BoundingBox.hpp"
 #include "CameraComponent.hpp"
 
-namespace engine {
+namespace engine
+{
 
-	class SphereColliderComponent : public ColliderComponent {
+	class SphereColliderComponent : public ColliderComponent
+	{
 	public:
 		void drawCollider(CameraComponent* camera);
 		BoundingBox getBoundingBox();
-		SphereColliderComponent(glm::vec3 offset = glm::vec3(0, 0, 0), glm::vec3 extent = glm::vec3(1, 1, 1)) : ColliderComponent(offset, extent) {}
+		SphereColliderComponent(glm::vec3 offset = glm::vec3(0, 0, 0), glm::vec3 extent = glm::vec3(1, 1, 1), bool isPlatform = false) : ColliderComponent(offset, extent, isPlatform) {}
 
 		std::string getName() override;
 
 		std::vector<SerializableVariable> getSerializableVariables() override
 		{
-			return
-			{
+			return {
 				{SerializableType::VECTOR3, "Offset", "The offset of the collider", &offset},
-				{SerializableType::VECTOR3, "Extent", "The extent of the collider", &extent}
-			};
+				{SerializableType::VECTOR3, "Extent", "The extent of the collider", &extent} };
 		};
 
-	protected:
-
+		std::shared_ptr<Component> clone() override
+		{
+			return std::make_shared<SphereColliderComponent>(*this);
+		}
 	};
 }

@@ -137,7 +137,9 @@ namespace engine {
 	};
 	enum class InputEventType {
 		QuitProgram,
-		Action,
+		ActionDown,
+		ActionHold,
+		ActionUp,
 		KeyDown,
 		KeyUp,
 		MouseButtonDown,
@@ -147,6 +149,7 @@ namespace engine {
 		KeyHold,
 		NULL_EVENT
 	};
+
 	class InputEvent {
 	public:
 		InputEvent(float x, float y, float button, const Key key, const InputEventType eventType);

@@ -19,6 +19,8 @@ namespace engine
 
 		void drawLine(glm::vec3 start, glm::vec3 end, glm::vec3 color, CameraComponent* camera);
 
+		void drawVector(glm::vec3 dir, glm::vec3 pos, CameraComponent* camera);
+
 		// Creates a texture from the renderered GameObject. Can be used to create icons for materials, meshes etc. Position of the GameObject doesn't matter
 		// since it will be placed in frame under good lighting conditions
 		std::shared_ptr<Texture> renderTextureOfGameObject(GameObject* gameObject);

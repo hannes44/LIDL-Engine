@@ -20,6 +20,8 @@ namespace engine
 		void closeWindow() override;
 
 		void newFrame() override;
+
+		void setRelativeMouseMode(bool enabled) override;
 	private:
 		SDL_Window* window = nullptr;
 	};
