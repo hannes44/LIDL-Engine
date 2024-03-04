@@ -68,6 +68,11 @@ namespace Engine
             //(c++_API) __drawText__(xPos, yPos, size, text, r, g, b, a);
         }
 
+        public static void SetGameObjectMeshVisibilityFromTag(string tag, bool visibility)
+        {
+            //(c++_API) __setGameObjectMeshVisibilityFromTag__(tag, visibility);
+        }
+
         public static int getNumberOfGameObjectsWithTag(string tag)
         {
             //(c++_API) number = __getNumberOfGameObjectsWithTag__(tag);
