@@ -88,13 +88,13 @@ namespace engine
 
 	// Draw an image at a specific window position (no widget)
 	// The image is drawn with the top-left corner at the specified position
-	void GUIHelper::drawImage(float xpos, float ypos, const std::string& path, float width, float height) {
+	void GUIHelper::drawImage(float xpos, float ypos, const std::string& filename, float width, float height) {
 
 		int w, h;
 		window.getWindowSize(&w, &h);
 
 		// Very bad for performance
-		std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(Texture::create(path, true));
+		std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(Texture::create(filename, true));
 
 		float x_center = w * xpos - width * 0.5;
 		float y_center = h * ypos - height * 0.5;

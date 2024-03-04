@@ -17,7 +17,7 @@ public class Weapon
     // Update is called once per frame
     public void Update(float dt)
     {
-        EngineAPI.DrawText(0.9f, 0.9f, "Ammo: " + ammoCount + "/" + maxAmmo, 1, 1, 1, 1);
+        EngineAPI.DrawText(0.9f, 0.9f, 2.0f, "Ammo: " + ammoCount + "/" + maxAmmo, 1, 1, 1, 1);
     }
 
     // Initialize is called once the component is added to the game
