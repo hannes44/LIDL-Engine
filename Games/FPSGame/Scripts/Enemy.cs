@@ -23,11 +23,22 @@ public class Enemy
     // Initialize is called once the component is added to the game
     public void Initialize()
     {
+        Vector3 playerPosition = EngineAPI.GetGameObjectPositionFromTag("Player");
         EngineAPI.Log("Enemy initialized");
         // Randomize the position of the enemy
         Random random = new Random();
-        int x = random.Next(-100, 100);
-        int y = random.Next(-100, 100);
+        float x = 0;
+        float y = 0;
+        while (true)
+        {
+            x = random.Next(-200, 200);
+            y = random.Next(-200, 200);
+            // Don't spawn the enemy too close to the player
+            if (Math.Abs(x - playerPosition.X) > 50 && Math.Abs(y - playerPosition.Z) > 50)
+            {
+                break;
+            }
+        }
         gameObject.transform.SetTranslation(new Vector3(x, 0, y));
     }
 }

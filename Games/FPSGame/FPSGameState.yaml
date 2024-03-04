@@ -54,7 +54,7 @@ GameObjects:
       - name: PointLight
         Color: [0.965686262, 0.894679904, 0.894679904]
         Intensity: 10
-        Constant: 1
+        Constant: 100
         Linear: 0.00999999978
         Quadratic: 0
   - name: House.obj
@@ -82,7 +82,7 @@ GameObjects:
         scriptFileName: EnemyManager.cs
         enableInput: true
   - name: Player
-    transform: [-0.0545796156, 0, -0.998509347, 0, -0.0851683542, 0.996355712, 0.0046553947, 0, 0.994870484, 0.0852954984, -0.0543806553, 0, 0, 4.24747086, 0, 1]
+    transform: [-0.992347121, -1.86264515e-09, 0.123480663, 0, 0.0608615875, 0.870095253, 0.489111573, 0, -0.10743995, 0.492883593, -0.86343658, 0, 0, 4.24747086, 0, 1]
     isVisible: true
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
     tag: Player
@@ -146,7 +146,7 @@ GameObjects:
         Primative Type: NONE
         Material: zjOREuYjBldEKQQErZkIggPbPzKYwBll
   - name: Plane
-    transform: [175.617752, 0, 0, 0, 0, 1, 0, 0, 0, 0, 129.501724, 0, 0, -1.09831452, 0, 1]
+    transform: [500, 0, 0, 0, 0, 1, 0, 0, 0, 0, 500, 0, 0, -1.09831452, 0, 1]
     isVisible: true
     Id: sMlWhtjyDGUJBMUHljEtTwiOdvZjwYTZ
     tag: ""
