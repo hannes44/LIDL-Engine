@@ -84,4 +84,8 @@ namespace engine
 	{
 		SDL_GL_SwapWindow(window);
 	}
+	void SDLWindow::setRelativeMouseMode(bool enabled)
+	{
+		SDL_SetRelativeMouseMode(enabled ? SDL_TRUE : SDL_FALSE);
+	}
 }

@@ -115,6 +115,7 @@ namespace engine
 
 		while (!quitProgram)
 		{
+
 			renderNewFrame();
 
 			inputFramework.getInput();
@@ -161,6 +162,32 @@ namespace engine
 		ImGui::ShowStyleEditor();
 #endif
 
+		// Temporary code until game UI system is created
+		// Crosshair for the game
+		if (game->running)
+		{
+			ImGuiWindowFlags windowFlags = 0;
+			windowFlags |= ImGuiWindowFlags_NoBackground;
+			windowFlags |= ImGuiWindowFlags_NoTitleBar;
+			windowFlags |= ImGuiWindowFlags_NoMove;
+			windowFlags |= ImGuiWindowFlags_NoResize;
+			windowFlags |= ImGuiWindowFlags_NoScrollbar;
+			windowFlags |= ImGuiWindowFlags_NoScrollWithMouse;
+			windowFlags |= ImGuiWindowFlags_NoCollapse;
+			windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
+			ImGui::Begin("#CH", nullptr, windowFlags);
+			auto draw = ImGui::GetBackgroundDrawList();
+			int w, h;
+			window.getWindowSize(&w, &h);
+			draw->AddCircle(ImVec2(w / 2, h / 2), 6, IM_COL32(255, 0, 0, 255), 100, 0.0f);
+			ImGui::End();
+		}
+
+		if (noGUIMode)
+		{
+			return;
+		}
+
 		if (game == nullptr)
 		{
 			drawMainMenu();
@@ -173,28 +200,6 @@ namespace engine
 			drawTopMenu();
 			drawPlayButtonToolbar();
 			drawBottomPanel();
-
-			// Temporary code until game UI system is created
-			// Crosshair for the game
-			if (game->running)
-			{
-				ImGuiWindowFlags windowFlags = 0;
-				windowFlags |= ImGuiWindowFlags_NoBackground;
-				windowFlags |= ImGuiWindowFlags_NoTitleBar;
-				windowFlags |= ImGuiWindowFlags_NoMove;
-				windowFlags |= ImGuiWindowFlags_NoResize;
-				windowFlags |= ImGuiWindowFlags_NoScrollbar;
-				windowFlags |= ImGuiWindowFlags_NoScrollWithMouse;
-				windowFlags |= ImGuiWindowFlags_NoCollapse;
-				windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-				ImGui::Begin("#CH", nullptr, windowFlags);
-				auto draw = ImGui::GetBackgroundDrawList();
-				int w, h;
-				window.getWindowSize(&w, &h);
-				draw->AddCircle(ImVec2(w / 2, h / 2), 6, IM_COL32(255, 0, 0, 255), 100, 0.0f);
-				ImGui::End();
-			}
-
 
 			if (!ScriptEngine::getInstance()->isSuccessfullyCompiled)
 			{
@@ -249,6 +254,11 @@ namespace engine
 					game->addGameObject(newGameObject);
 					selectedObject = newGameObject;
 				}
+			}
+			if ((Key)event.getKey() == Key::ESCAPE)
+			{
+				noGUIMode = !noGUIMode;
+				window.setRelativeMouseMode(noGUIMode);
 			}
 		}
 
