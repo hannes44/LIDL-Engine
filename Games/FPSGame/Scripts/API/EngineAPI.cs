@@ -44,6 +44,16 @@ namespace Engine
             //(c++_API) end
         }
 
+        public static Vector3 GetGameObjectPositionFromTag(string tag)
+        {
+            Vector3 position = new Vector3(0, 0, 0);
+            //(c++_API) x, y, z = __getGameObjectPositionFromTag__(tag);
+            //(c++_API) if (true) then return SystemNumerics.Vector3(x, y, z);
+            //(c++_API) else 
+            return position;
+            //(c++_API) end
+        }
+
         public static string getTagOfGameObject(string id)
         {
             //(c++_API) tag = __getTagOfGameObject__(id);

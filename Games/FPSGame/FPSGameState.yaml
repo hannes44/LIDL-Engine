@@ -80,11 +80,11 @@ GameObjects:
         currentRound: 1
         scriptFileName: EnemyManager.cs
         enableInput: true
-  - name: GameCamera
-    transform: [-0.586709499, 0, 0.809797466, 0, -0.0684278831, 0.996423483, -0.0495769568, 0, -0.806901157, -0.0844999999, -0.584611177, 0, -2.88235736, 6.10776234, -7.40703964, 1]
+  - name: Player
+    transform: [-0.570396483, -1.03807929e-06, 0.821369648, 0, 0.199545026, 0.970039666, 0.138574377, 0, -0.796762049, 0.24294281, -0.553307533, 0, -2.88235736, 6.10776234, -7.40703964, 1]
     isVisible: true
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
-    tag: ""
+    tag: Player
     parent: NONE
     children: []
     Components:
@@ -132,21 +132,6 @@ GameObjects:
         OBJ File: Ak-47.obj
         Primative Type: NONE
         Material: TikmfUwkrFNXXjEcaavGVjVaeuMhbFUU
-  - name: Player
-    transform: [1, 0, 0, 0, 0, 7.36903429, 0, 0, 0, 0, 1, 0, 0, 2.14822531, 0, 1]
-    isVisible: true
-    Id: pRTLVhHmWbDxtVlOtBwabQKFiAdUmjSP
-    tag: Player
-    parent: NONE
-    children: []
-    Components:
-      - name: Mesh
-        OBJ File: ""
-        Primative Type: CUBE
-        Material: UaBqVGDYHiwVQLuKdRiZaRZIEqaIjnWw
-      - name: Scriptable
-        scriptFileName: Player.cs
-        enableInput: true
   - name: Plane
     transform: [175.617752, 0, 0, 0, 0, 1, 0, 0, 0, 0, 129.501724, 0, 0, 0, 0, 1]
     isVisible: true

@@ -334,6 +334,7 @@ namespace engine
 		lua.set_function("__deleteGameObjectFromId__", &Game::deleteGameObjectFromId, game);
 		lua.set_function("__getTagOfGameObject__", &Game::getTagOfGameObject, game);
 		lua.set_function("__getNumberOfGameObjectsWithTag__", &Game::getNumberOfGameObjectsWithTag, game);
+		lua.set_function("__getGameObjectPositionFromTag__", &Game::getGameObjectPositionFromTag, game);
 	}
 
 	void ScriptEngine::syncGameObjectStateEngineToScript(ScriptableComponent* component)
