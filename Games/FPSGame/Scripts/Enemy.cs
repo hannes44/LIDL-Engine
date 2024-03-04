@@ -13,7 +13,10 @@ public class Enemy
     // Update is called once per frame
     public void Update()
     {
-
+        Vector3 playerPosition = EngineAPI.GetGameObjectPositionFromTag("Player");
+        Vector3 dirToPlayer = playerPosition - gameObject.transform.GetTranslation();
+        dirToPlayer = Vector3.Normalize(dirToPlayer);
+        gameObject.transform.Translate(dirToPlayer * 0.05f);
     }
 
     // Initialize is called once the component is added to the game

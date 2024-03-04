@@ -356,55 +356,62 @@ namespace engine
 		ImGui::End();
 	}
 
-	void EditorGUI::drawGameObject(std::shared_ptr<GameObject> gameObject, short tabLevel)
+	void EditorGUI::drawGameObject(std::shared_ptr<GameObject> gameObject)
 	{
 		if (gameObject == nullptr)
 			return;
 
 		ImGui::PushID(gameObject->uuid.id.c_str());
 
-		std::string name = std::string(tabLevel * 2, ' ') + gameObject->name;
+		std::string name = gameObject->name;
 
 		if (gameObject->getChildren().size() > 0)
 		{
-			// TODO: Parents are currently not selectable as they are collapsing headers instead, fix this so they can be selected
-			// if (ImGui::CollapsingHeader(gameObject->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
-			if (ImGui::Selectable(name.c_str(), selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID())))
+			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+			if (selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID()))
+				flags |= ImGuiTreeNodeFlags_Selected;
+
+			bool open = ImGui::TreeNodeEx(name.c_str(), flags);
+
+			if (ImGui::IsItemClicked())
+				selectedObject = gameObject;
+
+			if (open)
 			{
-				selectedObject = gameObject; // TODO: Fix here also
+				for (auto child : gameObject->getChildren())
+				{
+					drawGameObject(child);
+				}
+				ImGui::TreePop();
 			}
-			// Hotfix until TODO above is fixed, otherwise move this back inside the if statement since we don't want to draw children if the parent is collapsed
-			for (auto& child : gameObject->getChildren())
-				drawGameObject(child, tabLevel + 1);
 		}
 		else
 		{
-			if (ImGui::Selectable(name.c_str(), selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID())))
-			{
+			ImGui::Selectable(name.c_str(), selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID()));
+			if (ImGui::IsItemClicked())
 				selectedObject = gameObject;
-			}
+		}
 
-			if (ImGui::BeginPopupContextItem())
+		if (ImGui::BeginPopupContextItem())
+		{
+			static char name[32];
+			memcpy(name, gameObject->name.c_str(), 32);
+			char buf[64];
+			sprintf(buf, "%s###Button", name);
+			ImGui::Button(buf);
+			if (ImGui::BeginPopupContextItem("Test"))
 			{
-				static char name[32];
-				memcpy(name, gameObject->name.c_str(), 32);
-				char buf[64];
-				sprintf(buf, "%s###Button", name);
-				ImGui::Button(buf);
-				if (ImGui::BeginPopupContextItem("Test"))
-				{
-					ImGui::Text("Edit name:");
-					ImGui::InputText("##edit", name, IM_ARRAYSIZE(name));
-					if (ImGui::Button("Close"))
-						ImGui::CloseCurrentPopup();
-					gameObject->name = name;
-					ImGui::EndPopup();
-				}
-				ImGui::Separator();
+				ImGui::Text("Edit name:");
+				ImGui::InputText("##edit", name, IM_ARRAYSIZE(name));
 				if (ImGui::Button("Close"))
 					ImGui::CloseCurrentPopup();
+				gameObject->name = name;
 				ImGui::EndPopup();
 			}
+			ImGui::Separator();
+			if (ImGui::Button("Close"))
+				ImGui::CloseCurrentPopup();
+			ImGui::EndPopup();
 		}
 
 		ImGui::PopID();

@@ -43,7 +43,7 @@ GameObjects:
         Primative Type: NONE
         Material: JHnYLBHgMrJlEapYEEiJewGOxWIDdlOH
   - name: LIGHT FOR DEVELOPING
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 83.7274551, 0, 1]
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 37.4127464, 0, 1]
     isVisible: true
     Id: cLQgzwlwLtoQUFDGjPXtYXpwbIqSdbzI
     tag: ""
@@ -51,13 +51,13 @@ GameObjects:
     children: []
     Components:
       - name: PointLight
-        Color: [1, 1, 1]
+        Color: [0.965686262, 0.894679904, 0.894679904]
         Intensity: 10
         Constant: 1
         Linear: 0.00999999978
         Quadratic: 0
   - name: House.obj
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 112.499939, -0.318172455, 0, 1]
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0.999919236, 0, 112.499939, -1.60997248, 0, 1]
     isVisible: true
     Id: hcOOWXgwkGmFwmMSZYGKKEOvgkQbBsNT
     tag: ""
@@ -80,11 +80,11 @@ GameObjects:
         currentRound: 1
         scriptFileName: EnemyManager.cs
         enableInput: true
-  - name: GameCamera
-    transform: [-0.586709499, 0, 0.809797466, 0, -0.0684278831, 0.996423483, -0.0495769568, 0, -0.806901157, -0.0844999999, -0.584611177, 0, -2.88235736, 6.10776234, -7.40703964, 1]
+  - name: Player
+    transform: [0.912164152, 0, -0.409824818, 0, -0.348228157, 0.527265966, -0.775065958, 0, 0.216086745, 0.849700212, 0.480953246, 0, 0, 4.24747086, 0, 1]
     isVisible: true
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
-    tag: ""
+    tag: Player
     parent: NONE
     children: []
     Components:
@@ -121,7 +121,7 @@ GameObjects:
         Cut Off Angle: 1
         Outer Cut Off Angle: 17
   - name: Ak-47
-    transform: [-9.09962861e-09, -1.65606495e-14, -0.00999999978, 0, 0, 0.00999999978, -1.65606495e-14, 0, 0.00999999978, 0, -9.09962861e-09, 0, 0.203887343, -1.49969232, 3.72622538, 1]
+    transform: [-9.09962861e-09, -1.65606495e-14, -0.00999999978, 0, 0, 0.00999999978, -1.65606495e-14, 0, 0.00999999978, 0, -9.09962861e-09, 0, 0, -5.13566923, 0, 1]
     isVisible: true
     Id: ndlRjOYAhHQMpAEwRAEIBMKYihTpURMf
     tag: ""
@@ -132,23 +132,20 @@ GameObjects:
         OBJ File: Ak-47.obj
         Primative Type: NONE
         Material: TikmfUwkrFNXXjEcaavGVjVaeuMhbFUU
-  - name: Player
-    transform: [1, 0, 0, 0, 0, 7.36903429, 0, 0, 0, 0, 1, 0, 0, 2.14822531, 0, 1]
+  - name: AK-48
+    transform: [-7.94949341, -1.44674887e-05, 6.06675863, 0, -2.92403092e-05, 10, -1.44674887e-05, 0, -6.06675863, -2.92403092e-05, -7.94949341, 0, 9.71035576, 8.70111752, 0, 1]
     isVisible: true
-    Id: pRTLVhHmWbDxtVlOtBwabQKFiAdUmjSP
-    tag: Player
+    Id: rNmeXBLIRUWrXYcTJidcyRiTATgvQsjT
+    tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
-        OBJ File: ""
-        Primative Type: CUBE
-        Material: UaBqVGDYHiwVQLuKdRiZaRZIEqaIjnWw
-      - name: Scriptable
-        scriptFileName: Player.cs
-        enableInput: true
+        OBJ File: AK-48.obj
+        Primative Type: NONE
+        Material: zjOREuYjBldEKQQErZkIggPbPzKYwBll
   - name: Plane
-    transform: [175.617752, 0, 0, 0, 0, 1, 0, 0, 0, 0, 129.501724, 0, 0, 0, 0, 1]
+    transform: [175.617752, 0, 0, 0, 0, 1, 0, 0, 0, 0, 129.501724, 0, 0, -1.09831452, 0, 1]
     isVisible: true
     Id: sMlWhtjyDGUJBMUHljEtTwiOdvZjwYTZ
     tag: ""
@@ -170,6 +167,9 @@ Textures:
   - name: KitchenKnifeMetal
     fileName: KitchenKnifeMetal.png
     Id: DpAcESxkTZTtOxVBbkjnmiyPHDllEENu
+  - name: AK 47_Material_BaseColor
+    fileName: AK 47_Material_BaseColor.png
+    Id: HDnmNjOrNtEjlwhcDACrqRPqYsiDKCND
   - name: BowieKnife_BaseColor
     fileName: BowieKnife_BaseColor.png
     Id: KBnHTfCYDdtVKBGtpQrUaYiePdhvXhWL
@@ -225,6 +225,15 @@ Materials:
     Diffuse Texture: KUraiXCrlPXGbdWQTchbZfzYsiZnjsXn
     Specular Texture: ""
     Id: jhlXRMcQvymIssELRfYEwWNFIGGUTuFa
+  - Base Color: [1, 1, 1]
+    Transparency: 1
+    Emission: [0, 0, 0]
+    Roughness: 0
+    Shininess: 0.5
+    Name: AK48Material
+    Diffuse Texture: HDnmNjOrNtEjlwhcDACrqRPqYsiDKCND
+    Specular Texture: ""
+    Id: zjOREuYjBldEKQQErZkIggPbPzKYwBll
 Actions:
   - Reload: [21]
   - Copy: [224, 6]
