@@ -36,7 +36,7 @@ GameObjects:
         Render From Camera Transform: false
         Is Visible: true
   - name: Knife
-    transform: [-43.6491203, 6.50373554, 10.4827576, 0, 11.7218742, 9.85183048, 42.6963806, 0, 3.84521985, 43.796814, -11.1614141, 0, 7.74807644, -6.1523304, -18.4996605, 1]
+    transform: [-43.6491203, 6.50373554, 10.4827576, 0, 11.7218742, 9.85183048, 42.6963806, 0, 3.84521985, 43.796814, -11.1614141, 0, 7.78205824, -6.1523304, -18.4996605, 1]
     isVisible: true
     Id: alVZDusTpgqSVGZDxqrpFHokPrGbuNDb
     tag: Knife
@@ -48,7 +48,7 @@ GameObjects:
         Primative Type: NONE
         Material: JHnYLBHgMrJlEapYEEiJewGOxWIDdlOH
         Render From Camera Transform: true
-        Is Visible: true
+        Is Visible: false
   - name: LIGHT FOR DEVELOPING
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 37.4127464, 0, 1]
     isVisible: true
@@ -91,6 +91,20 @@ GameObjects:
         Material: jhlXRMcQvymIssELRfYEwWNFIGGUTuFa
         Render From Camera Transform: false
         Is Visible: true
+  - name: Glock
+    transform: [0.101430178, -0.190825716, 0.976347983, 0, -0.0706905052, 0.97753948, 0.198402449, 0, -0.99220562, -0.0891359225, 0.085656099, 0, 0.130550236, -0.192591578, -0.312077612, 1]
+    isVisible: true
+    Id: jykpoAumHdlBiQOvUQQdnwtfajWsQfke
+    tag: Pistol
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: GLOCK19.obj
+        Primative Type: NONE
+        Material: COTEmqWtabZVUsHHEpmQVDpKbypoOODB
+        Render From Camera Transform: true
+        Is Visible: true
   - name: EnemyManager
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
     isVisible: true
@@ -104,7 +118,7 @@ GameObjects:
         scriptFileName: EnemyManager.cs
         enableInput: true
   - name: Player
-    transform: [0.385172546, 0, -0.922844589, 0, -0.446801722, 0.874981105, -0.186484009, 0, 0.807471573, 0.484157056, 0.337018728, 0, 0, 4.64747047, 0, 1]
+    transform: [0.329140663, -1.49011612e-08, -0.944280803, 0, -0.0993424878, 0.994450629, -0.0346270539, 0, 0.939040601, 0.105204388, 0.327314138, 0, 0, 4.64747047, 0, 1]
     isVisible: true
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
     tag: Player
@@ -128,10 +142,6 @@ GameObjects:
         Rotation Speed: 0.00499999989
         Allow Instant Turnaround: true
         Allow Jump: true
-      - name: Scriptable
-        ammoCount: 30
-        scriptFileName: Weapon.cs
-        enableInput: true
       - name: Box Collider
         Offset: [0, 0, 0]
         Extent: [1, 2, 6]
@@ -144,6 +154,11 @@ GameObjects:
         Quadratic: 0.0320000015
         Cut Off Angle: 1
         Outer Cut Off Angle: 17
+      - name: Scriptable
+        ammoCountAK: 30
+        ammoCountGlock: 20
+        scriptFileName: Player.cs
+        enableInput: true
   - name: AK-47
     transform: [-10.0000019, 8.7340668e-05, 0, 0, 8.73406534e-05, 10, 0.000177939713, 0, 1.55413726e-09, 0.000177939743, -10.0000019, 0, 1, -1.07996511, -2.51851416, 1]
     isVisible: true
@@ -198,7 +213,19 @@ Textures:
   - name: glocken
     fileName: glocken.png
     Id: hQuVVhkiCALSLeNAaVdGXGXezifThHKL
+  - name: glock_4K_BaseColor
+    fileName: glock_4K_BaseColor.png
+    Id: szOnTQheLAzOyRNCpTYnNEQnkWTxAmNa
 Materials:
+  - Base Color: [1, 1, 1]
+    Transparency: 1
+    Emission: [0, 0, 0]
+    Roughness: 0
+    Shininess: 0.5
+    Name: GlockMaterial
+    Diffuse Texture: szOnTQheLAzOyRNCpTYnNEQnkWTxAmNa
+    Specular Texture: ""
+    Id: COTEmqWtabZVUsHHEpmQVDpKbypoOODB
   - Base Color: [1, 1, 1]
     Transparency: 1
     Emission: [0, 0, 0]
