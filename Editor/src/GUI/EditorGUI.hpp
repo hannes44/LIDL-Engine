@@ -50,7 +50,7 @@ namespace engine
 
 		void drawLeftSidePanel();
 
-		void drawGameObject(std::shared_ptr<GameObject> gameObject, short tabLevel = 0);
+		void drawGameObject(std::shared_ptr<GameObject> gameObject);
 
 		void drawTopMenu();
 

@@ -359,14 +359,14 @@ namespace engine
 		ImGui::End();
 	}
 
-	void EditorGUI::drawGameObject(std::shared_ptr<GameObject> gameObject, short tabLevel)
+	void EditorGUI::drawGameObject(std::shared_ptr<GameObject> gameObject)
 	{
 		if (gameObject == nullptr)
 			return;
 
 		ImGui::PushID(gameObject->uuid.id.c_str());
 
-		std::string name = std::string(tabLevel * 2, ' ') + gameObject->name;
+		std::string name = gameObject->name;
 
 		if (gameObject->getChildren().size() > 0)
 		{
@@ -383,7 +383,7 @@ namespace engine
 			{
 				for (auto child : gameObject->getChildren())
 				{
-					drawGameObject(child, tabLevel + 1);
+					drawGameObject(child);
 				}
 				ImGui::TreePop();
 			}
