@@ -34,9 +34,6 @@ namespace engine
 	void EditorGUI::start()
 	{
 		ActionMap::getInstance().addAction("Copy", { Key::LCTRL, Key::C });
-		ActionMap::getInstance().addAction("SwitchToKnife", { Key::NUM_1 });
-		ActionMap::getInstance().addAction("SwitchToPistol", { Key::NUM_2 });
-		ActionMap::getInstance().addAction("SwitchToRifle", { Key::NUM_3 });
 
 		if (editorSettings.enableScripting)
 		{
