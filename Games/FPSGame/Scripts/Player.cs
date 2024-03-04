@@ -52,7 +52,7 @@ public class Player
     {
         if (selectedWeapon == WeaponType.Knife)
         {
-            //  EngineAPI.PlaySound("Out_Of_Ammo_Sound.wav");
+            return;
         }
         else if (selectedWeapon == WeaponType.Glock)
         {
@@ -68,7 +68,7 @@ public class Player
     {
         if (selectedWeapon == WeaponType.Knife)
         {
-            return ammoCountGlock;
+            return -1;
         }
         else if (selectedWeapon == WeaponType.Glock)
         {
@@ -85,7 +85,7 @@ public class Player
     {
         if (selectedWeapon == WeaponType.Knife)
         {
-            return maxAmmoGlock;
+            return -1;
         }
         else if (selectedWeapon == WeaponType.Glock)
         {
@@ -102,7 +102,7 @@ public class Player
     {
         if (selectedWeapon == WeaponType.Knife)
         {
-            //  EngineAPI.PlaySound("Out_Of_Ammo_Sound.wav");
+            return;
         }
         else if (selectedWeapon == WeaponType.Glock)
         {
@@ -118,7 +118,7 @@ public class Player
     {
         if (selectedWeapon == WeaponType.Knife)
         {
-            //  EngineAPI.PlaySound("Out_Of_Ammo_Sound.wav");
+            return;
         }
         else if (selectedWeapon == WeaponType.Glock)
         {
@@ -149,7 +149,7 @@ public class Player
 
             if (selectedWeapon == WeaponType.Knife)
             {
-                // Fire knife
+                return;
             }
             else if (selectedWeapon == WeaponType.Glock)
             {
