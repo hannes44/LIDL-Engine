@@ -11,6 +11,8 @@ GameObjects:
         OBJ File: ""
         Primative Type: CUBE
         Material: hZYYcYtKpiPCHvMlODrrndOPQMbqNcru
+        Render From Camera Transform: false
+        Is Visible: true
       - name: Scriptable
         moveSpeed: 5
         scriptFileName: Enemy.cs
@@ -31,6 +33,8 @@ GameObjects:
         OBJ File: KitchenKnife.obj
         Primative Type: NONE
         Material: UZVAVXNBfagCfyiPFCiALYYhQcCkfiTs
+        Render From Camera Transform: false
+        Is Visible: true
   - name: Knife.obj
     transform: [100, 0, 0, 0, 0, 100, 0, 0, 0, 0, 100, 0, 0, 17.6802177, 7.22515059, 1]
     isVisible: true
@@ -43,6 +47,8 @@ GameObjects:
         OBJ File: Knife.obj
         Primative Type: NONE
         Material: JHnYLBHgMrJlEapYEEiJewGOxWIDdlOH
+        Render From Camera Transform: false
+        Is Visible: true
   - name: LIGHT FOR DEVELOPING
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 37.4127464, 0, 1]
     isVisible: true
@@ -57,6 +63,20 @@ GameObjects:
         Constant: 100
         Linear: 0.00999999978
         Quadratic: 0
+  - name: FlashLight.obj
+    transform: [1.27390379e-07, 2.31840724e-13, 0.139995128, 0, 5.09519964e-07, -0.139983818, -2.3182232e-13, 0, 0.140000045, 5.09579024e-07, -1.27394856e-07, 0, -1.40301001, -1.05442345, -2.66778755, 1]
+    isVisible: true
+    Id: fQJlgIlJNzavEavmlKoMTtzInYrjrzlH
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: FlashLight.obj
+        Primative Type: NONE
+        Material: inbGYwvvrCOUbkIgSZPVSjfRXOrVrbgt
+        Render From Camera Transform: true
+        Is Visible: true
   - name: House.obj
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0.999919236, 0, 112.499939, -1.60997248, 0, 1]
     isVisible: true
@@ -69,6 +89,8 @@ GameObjects:
         OBJ File: House.obj
         Primative Type: NONE
         Material: jhlXRMcQvymIssELRfYEwWNFIGGUTuFa
+        Render From Camera Transform: false
+        Is Visible: true
   - name: EnemyManager
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
     isVisible: true
@@ -82,7 +104,7 @@ GameObjects:
         scriptFileName: EnemyManager.cs
         enableInput: true
   - name: Player
-    transform: [-0.992347121, -1.86264515e-09, 0.123480663, 0, 0.0608615875, 0.870095253, 0.489111573, 0, -0.10743995, 0.492883593, -0.86343658, 0, 0, 4.24747086, 0, 1]
+    transform: [-0.957146883, 7.4505806e-09, 0.289603114, 0, 0.0533852652, 0.982862651, 0.176439881, 0, -0.284640074, 0.184339404, -0.940743923, 0, 0, 4.24747086, 0, 1]
     isVisible: true
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
     tag: Player
@@ -111,7 +133,7 @@ GameObjects:
         enableInput: true
       - name: Box Collider
         Offset: [0, 0, 0]
-        Extent: [1, 2, 1]
+        Extent: [1, 2, 6]
         IsPlatform: false
       - name: SpotLight
         Color: [1, 1, 1]
@@ -133,11 +155,13 @@ GameObjects:
         OBJ File: Ak-47.obj
         Primative Type: NONE
         Material: TikmfUwkrFNXXjEcaavGVjVaeuMhbFUU
+        Render From Camera Transform: false
+        Is Visible: true
   - name: AK-48
-    transform: [-7.94949341, -1.44674887e-05, 6.06675863, 0, -2.92403092e-05, 10, -1.44674887e-05, 0, -6.06675863, -2.92403092e-05, -7.94949341, 0, 9.71035576, 8.70111752, 0, 1]
+    transform: [-10.0000019, 8.7340668e-05, 0, 0, 8.73406534e-05, 10, 0.000177939713, 0, 1.55413726e-09, 0.000177939743, -10.0000019, 0, 1, -1.07996511, -2.51851416, 1]
     isVisible: true
     Id: rNmeXBLIRUWrXYcTJidcyRiTATgvQsjT
-    tag: ""
+    tag: Weapon
     parent: NONE
     children: []
     Components:
@@ -145,6 +169,8 @@ GameObjects:
         OBJ File: AK-48.obj
         Primative Type: NONE
         Material: zjOREuYjBldEKQQErZkIggPbPzKYwBll
+        Render From Camera Transform: true
+        Is Visible: true
   - name: Plane
     transform: [500, 0, 0, 0, 0, 1, 0, 0, 0, 0, 500, 0, 0, -1.09831452, 0, 1]
     isVisible: true
@@ -157,6 +183,8 @@ GameObjects:
         OBJ File: ""
         Primative Type: PLANE
         Material: bkbCvuwlPUqrIjktAUENfFgZDntkKrIZ
+        Render From Camera Transform: false
+        Is Visible: true
       - name: Box Collider
         Offset: [0, 0, 0]
         Extent: [10000, 1, 1000]
@@ -168,6 +196,9 @@ Textures:
   - name: KitchenKnifeMetal
     fileName: KitchenKnifeMetal.png
     Id: DpAcESxkTZTtOxVBbkjnmiyPHDllEENu
+  - name: torch_BaseColor
+    fileName: torch_BaseColor.png
+    Id: GdwNGHOzqkMaWVIJfFpwQAXtBLKxZTzA
   - name: AK 47_Material_BaseColor
     fileName: AK 47_Material_BaseColor.png
     Id: HDnmNjOrNtEjlwhcDACrqRPqYsiDKCND
@@ -217,6 +248,15 @@ Materials:
     Diffuse Texture: hQuVVhkiCALSLeNAaVdGXGXezifThHKL
     Specular Texture: ""
     Id: hZYYcYtKpiPCHvMlODrrndOPQMbqNcru
+  - Base Color: [1, 1, 1]
+    Transparency: 1
+    Emission: [0, 0, 0]
+    Roughness: 0
+    Shininess: 0.5
+    Name: FlashLightMaterial
+    Diffuse Texture: GdwNGHOzqkMaWVIJfFpwQAXtBLKxZTzA
+    Specular Texture: GdwNGHOzqkMaWVIJfFpwQAXtBLKxZTzA
+    Id: inbGYwvvrCOUbkIgSZPVSjfRXOrVrbgt
   - Base Color: [1, 1, 1]
     Transparency: 1
     Emission: [0, 0, 0]
