@@ -58,12 +58,23 @@ namespace engine
     }
 
 	// Draw text at a specific window position (no widget)
-	void GUIHelper::drawText(float xpos, float ypos, const std::string& text, float R, float G, float B, float A) {
+	void GUIHelper::drawText(float xpos, float ypos, float size, const std::string& text, float R, float G, float B, float A) {
 
 		int w, h;
 		window.getWindowSize(&w, &h);
 
-		ImGui::GetBackgroundDrawList()->AddText(ImVec2(xpos*w, ypos*h), ImColor(R, G, B, A), text.c_str());
+		float old_size = ImGui::GetFont()->Scale;
+
+		ImGui::GetFont()->Scale *= size;
+		ImGui::PushFont(ImGui::GetFont());
+
+		ImVec2 text_size = ImGui::CalcTextSize(text.c_str());
+		ImVec2 text_position = ImVec2((xpos * w - text_size.x * 0.5), (ypos * h - text_size.y * 0.5));
+
+		ImGui::GetBackgroundDrawList()->AddText(text_position, ImColor(R, G, B, A), text.c_str());
+
+		ImGui::GetFont()->Scale = old_size;
+		ImGui::PopFont();
 	}
 
 	// Is this function necessary?

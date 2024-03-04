@@ -169,7 +169,9 @@ namespace engine
 		// Crosshair for the game
 		if (game->running)
 		{
-			UIHelper.drawText(0.5f, 0.5f, "+", 255.0f, 0.0f, 0.0f, 255.0f);
+			UIHelper.drawText(0.5f, 0.5f, 1.0f, "+", 255.0f, 0.0f, 0.0f, 255.0f);
+
+			UIHelper.drawText(0.5f, 0.5f, 2.0f, "+", 255.0f, 0.0f, 0.0f, 255.0f);
 		}
 
 		if (noGUIMode)
