@@ -63,6 +63,11 @@ namespace Engine
             //(c++_API) end
         }
 
+        public static void DrawText(float xPos, float yPos, string text, float r, float g, float b, float a)
+        {
+            //(c++_API) __drawText__(xPos, yPos, text, r, g, b, a);
+        }
+
         public static int getNumberOfGameObjectsWithTag(string tag)
         {
             //(c++_API) number = __getNumberOfGameObjectsWithTag__(tag);

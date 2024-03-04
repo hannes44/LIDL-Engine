@@ -19,7 +19,7 @@
 #include <iostream>
 #include <sstream>
 #include "Audio/AudioManager.hpp"
-
+#include "UI/GUIHelper.hpp"
 
 namespace engine
 {
@@ -335,7 +335,7 @@ namespace engine
 		lua.set_function("__getTagOfGameObject__", &Game::getTagOfGameObject, game);
 		lua.set_function("__getNumberOfGameObjectsWithTag__", &Game::getNumberOfGameObjectsWithTag, game);
 		lua.set_function("__getGameObjectPositionFromTag__", &Game::getGameObjectPositionFromTag, game);
-		//lua.set_function("__drawText__", &UIHelper::drawText, game);
+		lua.set_function("__drawText__", &GUIHelper::drawText, GUIHelper::getInstance());
 	}
 
 	void ScriptEngine::syncGameObjectStateEngineToScript(ScriptableComponent* component)

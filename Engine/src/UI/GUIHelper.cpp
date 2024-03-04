@@ -82,6 +82,7 @@ namespace engine
 		int w, h;
 		window.getWindowSize(&w, &h);
 
+		// Very bad for performance
 		std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(Texture::create(path, true));
 
 		ImGui::GetBackgroundDrawList()->AddImage((void*)(intptr_t)texture->textureIDOpenGL, ImVec2(w*ypos,h*xpos), ImVec2((w*ypos)+width,(h*xpos)-height), ImVec2(0,0), ImVec2(1, 1)); // Fix position and UVs

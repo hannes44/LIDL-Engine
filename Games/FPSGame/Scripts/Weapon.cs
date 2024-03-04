@@ -9,13 +9,15 @@ public class Weapon
     // The gameObject this component is attached to
     public GameObject gameObject = new GameObject();
 
-    [SerializableData] public int ammoCount = 30;
+    const int maxAmmo = 30;
+
+    [SerializableData] public int ammoCount = maxAmmo;
 
 
     // Update is called once per frame
     public void Update()
     {
-
+        EngineAPI.DrawText(0.9f, 0.9f, "Ammo: " + ammoCount + "/" + maxAmmo, 1, 1, 1, 1);
     }
 
     // Initialize is called once the component is added to the game
