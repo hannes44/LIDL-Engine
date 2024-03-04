@@ -15,7 +15,7 @@ public class Weapon
 
 
     // Update is called once per frame
-    public void Update()
+    public void Update(float dt)
     {
         EngineAPI.DrawText(0.9f, 0.9f, "Ammo: " + ammoCount + "/" + maxAmmo, 1, 1, 1, 1);
     }

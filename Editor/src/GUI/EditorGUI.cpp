@@ -113,8 +113,11 @@ namespace engine
 		for (auto const& [id, gameObject] : editorGameObjects)
 			editorGameObjectSet.insert(gameObject);
 
+		float deltaTime = 0.0f;
+
 		while (!quitProgram)
 		{
+			deltaTime = ImGui::GetIO().DeltaTime;
 
 			renderNewFrame();
 
@@ -136,7 +139,7 @@ namespace engine
 
 				for (auto& [gameObjectId, gameObject] : game->getGameObjects())
 				{
-					gameObject->update();
+					gameObject->update(deltaTime);
 				}
 			}
 

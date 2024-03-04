@@ -32,14 +32,14 @@ namespace engine
 
 	#pragma comment(lib, "../../vendor/Lua/lua54.lib")
 
-	void ScriptEngine::updateScriptableComponent(ScriptableComponent* component)
+	void ScriptEngine::updateScriptableComponent(ScriptableComponent* component, float deltaTime)
 	{
 		sol::state_view lua(L);
 
 		syncGameObjectStateEngineToScript(component);
 		syncScriptableVariablesToScript(component);
 		sol::table componentTable = lua[component->uuid.id];
-		componentTable["Update"](componentTable);
+		componentTable["Update"](componentTable, deltaTime);
 		syncGameObjectStateScriptToEngine(component);
 		syncScriptableVariablesToEngine(component);
 	}

@@ -9,14 +9,15 @@ public class Enemy
     // The gameObject this component is attached to
     public GameObject gameObject = new GameObject();
 
+    [SerializableData] public float moveSpeed = 5.0f;
 
     // Update is called once per frame
-    public void Update()
+    public void Update(float dt)
     {
         Vector3 playerPosition = EngineAPI.GetGameObjectPositionFromTag("Player");
         Vector3 dirToPlayer = playerPosition - gameObject.transform.GetTranslation();
         dirToPlayer = Vector3.Normalize(dirToPlayer);
-        gameObject.transform.Translate(dirToPlayer * 0.05f);
+        gameObject.transform.Translate(dirToPlayer * moveSpeed * dt);
     }
 
     // Initialize is called once the component is added to the game

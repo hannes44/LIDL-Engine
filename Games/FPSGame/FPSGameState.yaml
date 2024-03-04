@@ -12,6 +12,7 @@ GameObjects:
         Primative Type: CUBE
         Material: hZYYcYtKpiPCHvMlODrrndOPQMbqNcru
       - name: Scriptable
+        moveSpeed: 5
         scriptFileName: Enemy.cs
         enableInput: false
       - name: Box Collider
@@ -81,7 +82,7 @@ GameObjects:
         scriptFileName: EnemyManager.cs
         enableInput: true
   - name: Player
-    transform: [0.366640747, -2.98023224e-08, -0.930362701, 0, -0.3062253, 0.944278955, -0.120678455, 0, 0.878521919, 0.329146206, 0.346211135, 0, 0, 4.24747086, 0, 1]
+    transform: [-0.0545796156, 0, -0.998509347, 0, -0.0851683542, 0.996355712, 0.0046553947, 0, 0.994870484, 0.0852954984, -0.0543806553, 0, 0, 4.24747086, 0, 1]
     isVisible: true
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
     tag: Player
