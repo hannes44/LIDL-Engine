@@ -177,7 +177,7 @@ namespace engine
 		auto headPhysicsComponent = engine::PhysicsComponent(false);
 
 
-		auto headControllableComponent = std::make_shared<engine::ControllableComponent>();
+		auto headControllableComponent = std::make_shared<engine::ControllableComponent>(false, false);
 		headControllableComponent->movementSpeed = 10.f;
 		headControllableComponent->movementType = MovementType::Always;
 		headControllableComponent->allowInstantTurnaround = false;
