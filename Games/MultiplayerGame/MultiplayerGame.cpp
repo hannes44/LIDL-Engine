@@ -87,8 +87,6 @@ namespace engine
 
 	void MultiplayerGame::initialize()
 	{
-		engine::PointLightComponent pointLightComponent = engine::PointLightComponent();
-
 		std::shared_ptr<MeshComponent> localMesh = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
 		std::shared_ptr<MeshComponent> remoteMesh = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
 
@@ -98,9 +96,13 @@ namespace engine
 		engine::PhysicsComponent remotePhysicsComponent = engine::PhysicsComponent(false);
 		remotePhysicsComponent.setForce(glm::vec3(0, 0, 0));
 
+		auto pointLightComponent = std::make_shared<PointLightComponent>();
+		pointLightComponent->quadratic = 0;
+		pointLightComponent->linear = 0;
+		pointLightComponent->constant = 3.5f;
 		GameObject* light = new GameObject();
 		light->transform.setPosition(glm::vec3(0, 20, 0));
-		light->addComponent(std::make_unique<engine::PointLightComponent>(pointLightComponent));
+		light->addComponent(pointLightComponent);
 		light->name = "Light";
 		addGameObject(std::unique_ptr<GameObject>(light));
 
@@ -112,7 +114,7 @@ namespace engine
 		addGameObject(std::unique_ptr<GameObject>(camera));
 
 		std::weak_ptr<engine::Material> localMaterial = createMaterial("LocalMaterial");
-		localMaterial.lock()->baseColor = glm::vec3(2.0f, 0, 0);
+		localMaterial.lock()->baseColor = glm::vec3(1.5f, 0, 0);
 		localMesh->setMaterial(localMaterial);
 		localMaterial.lock()->isExternalMultiplayerObject = true;
 
@@ -123,7 +125,7 @@ namespace engine
 		localBoxPtr->addComponent(std::make_unique<engine::PhysicsComponent>(localPhysicsComponent));
 
 		std::weak_ptr<engine::Material> remoteMaterial = createMaterial("RemoteMaterial");
-		remoteMaterial.lock()->baseColor = glm::vec3(0, 2.5f, 0);
+		remoteMaterial.lock()->baseColor = glm::vec3(0, 1.5f, 0);
 		remoteMesh->setMaterial(remoteMaterial);
 
 		GameObject* remoteBoxPtr = new GameObject();

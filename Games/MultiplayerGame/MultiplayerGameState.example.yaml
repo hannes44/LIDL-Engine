@@ -1,53 +1,102 @@
 GameObjects:
-  - name: Camera
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 10, 1]
+  - name: Remote box
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
     isVisible: true
-    Id: TeRZnqasqGtIYsRCThhtVINDVamtIEwv
+    isExternalMultiplayerObject: false
+    Id: BOsUfmJrNfmeMicetHHcTqYsGYDlMSRa
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        Id: rluPIYywQGnUlmCaWRfpNeZLgYNQWHOF
+        OBJ File: ""
+        Primative Type: CUBE
+        Material: ctrKNAPMdyjxTjVgLBOmGAQjlKVXGnkT
+        Render From Camera Transform: false
+        Is Visible: true
+      - name: Physics
+        Id: oBiwYfXYnUUfvblzwEzePxCPVseCNJQb
+        Gravity: false
+        Mass: 1
+        Force: [0, 0, 0]
+        Acceleration: [0, 0, 0]
+        Velocity: [0, 0, 0]
+      - name: Multiplayer
+        Id: qSUZtQLvBSljzifcYOtODHVdUNiZQcOp
+      - name: Controllable
+        Id: ZUGqetgvaiMkFGEHdIluDqbONAqQvKAr
+        Enable Forces: false
+        Movement Speed: 3
+        Rotation Speed: 0.00499999989
+        Allow Instant Turnaround: true
+        Allow Jump: false
+  - name: Local box
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 5, 0, 0, 1]
+    isVisible: true
+    isExternalMultiplayerObject: false
+    Id: MCUETMENBwxgequHMZRVtYuJioJeIbDV
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        Id: qzjCmBPCUfAKJTtzcpkUnjWmfENLhNIM
+        OBJ File: ""
+        Primative Type: CUBE
+        Material: CVwnqOlsimwerkqcOzAGUHHNCOOXGDWQ
+        Render From Camera Transform: false
+        Is Visible: true
+      - name: Physics
+        Id: NLDyRAJLmrmBmUniPePTxactLjcYtutZ
+        Gravity: false
+        Mass: 1
+        Force: [0, 0, 0]
+        Acceleration: [0, 0, 0]
+        Velocity: [0, 0, 0]
+  - name: Camera
+    transform: [-1, 0, 0, 0, 0, 0.89442718, 0.5, 0, 0, 0.44721359, -1, 0, 0, 10, -30, 1]
+    isVisible: true
+    isExternalMultiplayerObject: false
+    Id: WzqysToIYJvzTLplFPNCHWmxYWuaApHw
+    tag: ""
+    parent: NONE
+    children: []
     Components:
       - name: Camera
+        Id: tMeNkHPUTOVBONNndqQeFupghWaoYOlE
         FOV: 50
         Near Plane: 0.100000001
         Far Plane: 1000
         Is Main Camera: false
-  - name: Remote box
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
-    isVisible: true
-    Id: qGERkDvJBWJWWLqectSWtFieEcUTprKn
-    Components:
-      - name: Mesh
-        OBJ File: ""
-        Primative Type: CUBE
-        Material: uMZCQJpNlEAoiIXAaEZIStZtsXaNNTjS
-      - name: Physics
-        Gravity: false
-        Mass: 1
-        Force: [0, 0, 0]
-        Acceleration: [0, 0, 0]
-        Velocity: [0, 0, 0]
-  - name: Local box
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -10, 0, 0, 1]
-    isVisible: true
-    Id: uDarpTyUHpKPYJLfUikOPemTUjLnKIEc
-    Components:
-      - name: Mesh
-        OBJ File: ""
-        Primative Type: CUBE
-        Material: XgrmDgilsmNJROfaHhePMwQHaagiCYnB
-      - name: Physics
-        Gravity: false
-        Mass: 1
-        Force: [0, 0, 0]
-        Acceleration: [0, 0, 0]
-        Velocity: [0, 0, 0]
   - name: Light
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1]
     isVisible: true
-    Id: zrkpTmGkVbOjffxULBgrSrYCsYPicFcw
+    isExternalMultiplayerObject: false
+    Id: cGvXMkulqBqmvzMFFqYKqrPQMLlZEpPJ
+    tag: ""
+    parent: NONE
+    children: []
     Components:
       - name: PointLight
+        Id: SaFWVltLQYoigTZWhgCeVEmlqvLjWlbq
         Color: [1, 1, 1]
         Intensity: 10
+        Constant: 3.5
+        Linear: 0
+        Quadratic: 0
 Textures:
   []
 Materials:
-  []
+  - Base Color: [0, 1.5, 0]
+    Transparency: 1
+    Emission: [0, 0, 0]
+    Roughness: 0
+    Shininess: 0.5
+    Name: RemoteMaterial
+    Diffuse Texture: ""
+    Specular Texture: ""
+    Id: ctrKNAPMdyjxTjVgLBOmGAQjlKVXGnkT
+    isExternalMultiplayerObject: false
+Actions:
+  - Copy: [224, 6]
