@@ -31,6 +31,7 @@ namespace engine {
 		bool enableFriction = true;
 		bool enableGravity = true;
 		float gravity = 9.82f;
+		float frictionCoefficient = 2.f;
 
 		bool enableCollisions = true;
 
@@ -52,6 +53,7 @@ namespace engine {
 			return {
 				{SerializableType::BOOLEAN, "Enable Forces", "Enable forces that generate acceleration, or only set position based on velocity", &enableForces},
 				{SerializableType::BOOLEAN, "Enable Friction", "Enable friction to slow down objects", &enableFriction},
+				{SerializableType::FLOAT, "Friction Coefficient", "The coefficient of friction to use", &frictionCoefficient},
 				{SerializableType::BOOLEAN, "Use Gravity", "Should gravity be used in the game", &enableGravity},
 				{SerializableType::FLOAT, "Gravity", "The gravitational acceleration (g) to use", &gravity},
 				{SerializableType::BOOLEAN, "Enable Collisions", "Enable collision detection and resolution", &enableCollisions},

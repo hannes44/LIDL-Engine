@@ -344,7 +344,7 @@ GameObjects:
         scriptFileName: EnemyManager.cs
         enableInput: true
   - name: Player
-    transform: [0.998146772, 0, 0.0608527437, 0, -0.00210536458, 0.999401331, 0.0345335789, 0, -0.0608163103, -0.0345976986, 0.997549176, 0, 0, 4.94747019, 0, 1]
+    transform: [0.998146772, 0, 0.0608520247, 0, -0.00210533943, 0.999401331, 0.0345335715, 0, -0.0608155951, -0.0345976874, 0.997549236, 0, 0, 5.59546518, 0, 1]
     isVisible: true
     isExternalMultiplayerObject: false
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
@@ -657,7 +657,7 @@ Materials:
 Actions:
   - Reload: [21]
   - Copy: [224, 6]
-  - Fire: [9]
   - SwitchToKnife: [30]
+  - Fire: [9]
   - SwitchToPistol: [31]
   - SwitchToRifle: [32]

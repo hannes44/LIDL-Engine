@@ -120,6 +120,8 @@ namespace engine {
 			glm::vec3 force = physicsComponent->getForce() + directionForce;
 			glm::vec3 velocity = physicsComponent->getVelocity() + directionVelocity;
 
+			const bool applyFriction = settings.enableForces ? glm::length(force) < 0.0001f : true;
+
 			// Apply gravity
 			if (settings.enableGravity && physicsComponent->enableGravity)
 				force.y -= physicsComponent->overrideGravityCoefficient ? physicsComponent->gravityCoefficient : settings.gravity;
@@ -127,8 +129,8 @@ namespace engine {
 			const bool zeroResultantForce = settings.enableForces ? glm::length(force) < 0.0001f : true;
 
 			// Apply friction
-			if (settings.enableFriction && zeroResultantForce)
-				force -= velocity * 0.5f;
+			if (settings.enableFriction && applyFriction)
+				force -= velocity * settings.frictionCoefficient;
 
 			physicsComponent->currentAcceleration = force / physicsComponent->mass;
 
