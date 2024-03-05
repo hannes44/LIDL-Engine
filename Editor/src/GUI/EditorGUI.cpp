@@ -215,13 +215,6 @@ namespace engine
 		ImGui::ShowStyleEditor();
 #endif
 
-		// Temporary code until game UI system is created
-		// Crosshair for the game
-		if (game->running)
-		{
-			UIHelper.drawText(0.5f, 0.5f, 1.0f, "+", 255.0f, 0.0f, 0.0f, 255.0f);
-		}
-
 		if (noGUIMode)
 		{
 			return;

@@ -29,6 +29,7 @@ public class Player
     // Update is called once per frame
     public void Update()
     {
+        EngineAPI.DrawText(0.5f, 0.5f, 2.0f, "+", 255.0f, 0.0f, 0.0f, 255.0f);
         if (selectedWeapon != WeaponType.Knife)
             EngineAPI.DrawText(0.9f, 0.9f, 2, "Ammo: " + GetSelectedWeaponAmmoCount() + "/" + GetSelectedWeaponMaxAmmo(), 1, 1, 1, 1);
     }
