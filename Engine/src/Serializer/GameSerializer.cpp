@@ -601,7 +601,6 @@ namespace engine
 		{
 			std::string name = textureNode["name"].as<std::string>();
 			std::string filename = textureNode["fileName"].as<std::string>();
-			std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(Texture::create(filename));
 			texture->uuid.id = textureNode["Id"].as<std::string>();
 		}
 		catch (const std::exception& e)
