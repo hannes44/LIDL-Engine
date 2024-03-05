@@ -34,6 +34,8 @@ namespace engine
 
 		virtual void newFrame() = 0;
 
+		virtual void setRelativeMouseMode(bool enabled) = 0;
+
 		inline static Window* instance = nullptr;
 	private:
 

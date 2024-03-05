@@ -47,5 +47,7 @@ namespace engine
 
 		// Temporary hack to sync the renderer state with the editor and game
 		inline static Renderer* instance;
+	private:
+		void renderGameObject(Game* game, CameraComponent* camera, GameObject* gameObject);
 	};
 }

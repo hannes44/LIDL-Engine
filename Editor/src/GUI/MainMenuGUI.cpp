@@ -5,7 +5,7 @@
 #include "Serializer/EditorSerializer.hpp"
 #include "Serializer/GameSerializer.hpp"
 #include "../Project.hpp"
-#include "GUIHelper.hpp"
+#include "UI/GUIHelper.hpp"
 #include "Editor.hpp"
 #include <imgui_internal.h>
 #define _WINSOCKAPI_
@@ -85,7 +85,7 @@ namespace engine
 
 	void MainMenuGUI::renderHeader()
 	{
-		GUIHelper::drawCenteredText("GIGA Editor");
+		GUIHelper::getInstance().drawCenteredText("GIGA Editor");
 
 		// Very ugly solution to center the buttons
 		// https://github.com/ocornut/imgui/discussions/3862

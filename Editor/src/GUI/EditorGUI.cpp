@@ -157,6 +157,7 @@ namespace engine
 		translateIconTexture = std::shared_ptr<Texture>(Texture::create("translation_icon.png", false));
 
 		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png", false));
+		playIconTexture = std::shared_ptr<Texture>(Texture::create("play_icon.png", false));
 
 		setupMultiplayer(game);
 
@@ -164,8 +165,12 @@ namespace engine
 		for (auto const& [id, gameObject] : editorGameObjects)
 			editorGameObjectSet.insert(gameObject);
 
+		float deltaTime = 0.0f;
+
 		while (!quitProgram)
 		{
+			deltaTime = ImGui::GetIO().DeltaTime;
+
 			renderNewFrame();
 
 			inputFramework.getInput();
@@ -185,7 +190,7 @@ namespace engine
 				game->update();
 
 				for (auto& [gameObjectId, gameObject] : game->getGameObjects())
-					gameObject->update();
+					gameObject->update(deltaTime);
 			}
 
 			endFrame();
@@ -210,6 +215,18 @@ namespace engine
 		ImGui::ShowStyleEditor();
 #endif
 
+		// Temporary code until game UI system is created
+		// Crosshair for the game
+		if (game->running)
+		{
+			UIHelper.drawText(0.5f, 0.5f, 1.0f, "+", 255.0f, 0.0f, 0.0f, 255.0f);
+		}
+
+		if (noGUIMode)
+		{
+			return;
+		}
+
 		if (game == nullptr)
 		{
 			drawMainMenu();
@@ -222,28 +239,6 @@ namespace engine
 			drawTopMenu();
 			drawPlayButtonToolbar();
 			drawBottomPanel();
-
-			// Temporary code until game UI system is created
-			// Crosshair for the game
-			if (game->running)
-			{
-				ImGuiWindowFlags windowFlags = 0;
-				windowFlags |= ImGuiWindowFlags_NoBackground;
-				windowFlags |= ImGuiWindowFlags_NoTitleBar;
-				windowFlags |= ImGuiWindowFlags_NoMove;
-				windowFlags |= ImGuiWindowFlags_NoResize;
-				windowFlags |= ImGuiWindowFlags_NoScrollbar;
-				windowFlags |= ImGuiWindowFlags_NoScrollWithMouse;
-				windowFlags |= ImGuiWindowFlags_NoCollapse;
-				windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-				ImGui::Begin("#CH", nullptr, windowFlags);
-				auto draw = ImGui::GetBackgroundDrawList();
-				int w, h;
-				window.getWindowSize(&w, &h);
-				draw->AddCircle(ImVec2(w / 2, h / 2), 6, IM_COL32(255, 0, 0, 255), 100, 0.0f);
-				ImGui::End();
-			}
-
 
 			if (!ScriptEngine::getInstance()->isSuccessfullyCompiled)
 			{
@@ -298,6 +293,11 @@ namespace engine
 					game->addGameObject(newGameObject);
 					selectedObject = newGameObject;
 				}
+			}
+			if ((Key)event.getKey() == Key::ESCAPE)
+			{
+				noGUIMode = !noGUIMode;
+				window.setRelativeMouseMode(noGUIMode);
 			}
 		}
 
@@ -408,55 +408,62 @@ namespace engine
 		ImGui::End();
 	}
 
-	void EditorGUI::drawGameObject(std::shared_ptr<GameObject> gameObject, short tabLevel)
+	void EditorGUI::drawGameObject(std::shared_ptr<GameObject> gameObject)
 	{
 		if (gameObject == nullptr)
 			return;
 
 		ImGui::PushID(gameObject->uuid.id.c_str());
 
-		std::string name = std::string(tabLevel * 2, ' ') + gameObject->name;
+		std::string name = gameObject->name;
 
 		if (gameObject->getChildren().size() > 0)
 		{
-			// TODO: Parents are currently not selectable as they are collapsing headers instead, fix this so they can be selected
-			// if (ImGui::CollapsingHeader(gameObject->name.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
-			if (ImGui::Selectable(name.c_str(), selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID())))
+			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+			if (selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID()))
+				flags |= ImGuiTreeNodeFlags_Selected;
+
+			bool open = ImGui::TreeNodeEx(name.c_str(), flags);
+
+			if (ImGui::IsItemClicked())
+				selectedObject = gameObject;
+
+			if (open)
 			{
-				selectedObject = gameObject; // TODO: Fix here also
+				for (auto child : gameObject->getChildren())
+				{
+					drawGameObject(child);
+				}
+				ImGui::TreePop();
 			}
-			// Hotfix until TODO above is fixed, otherwise move this back inside the if statement since we don't want to draw children if the parent is collapsed
-			for (auto& child : gameObject->getChildren())
-				drawGameObject(child, tabLevel + 1);
 		}
 		else
 		{
-			if (ImGui::Selectable(name.c_str(), selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID())))
-			{
+			ImGui::Selectable(name.c_str(), selectedObject.lock() && (gameObject->getUUID() == selectedObject.lock()->getUUID()));
+			if (ImGui::IsItemClicked())
 				selectedObject = gameObject;
-			}
+		}
 
-			if (ImGui::BeginPopupContextItem())
+		if (ImGui::BeginPopupContextItem())
+		{
+			static char name[32];
+			memcpy(name, gameObject->name.c_str(), 32);
+			char buf[64];
+			sprintf(buf, "%s###Button", name);
+			ImGui::Button(buf);
+			if (ImGui::BeginPopupContextItem("Test"))
 			{
-				static char name[32];
-				memcpy(name, gameObject->name.c_str(), 32);
-				char buf[64];
-				sprintf(buf, "%s###Button", name);
-				ImGui::Button(buf);
-				if (ImGui::BeginPopupContextItem("Test"))
-				{
-					ImGui::Text("Edit name:");
-					ImGui::InputText("##edit", name, IM_ARRAYSIZE(name));
-					if (ImGui::Button("Close"))
-						ImGui::CloseCurrentPopup();
-					gameObject->name = name;
-					ImGui::EndPopup();
-				}
-				ImGui::Separator();
+				ImGui::Text("Edit name:");
+				ImGui::InputText("##edit", name, IM_ARRAYSIZE(name));
 				if (ImGui::Button("Close"))
 					ImGui::CloseCurrentPopup();
+				gameObject->name = name;
 				ImGui::EndPopup();
 			}
+			ImGui::Separator();
+			if (ImGui::Button("Close"))
+				ImGui::CloseCurrentPopup();
+			ImGui::EndPopup();
 		}
 
 		ImGui::PopID();
@@ -700,55 +707,41 @@ namespace engine
 		}
 
 		ImGui::SameLine();
-		ImGui::Dummy(ImVec2(150.0f, 20.0f));
-		ImGui::SameLine();
-
-		wasPlayButtonPressed = false;
-
-		bool pushedStyleColor = false;
-		if (sceneState == EditorSceneState::Play)
-		{
-			ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 0, 100, 255));
-			pushedStyleColor = true;
-		}
-		if (ImGui::Button("Play"))
-		{
-			wasPlayButtonPressed = true;
-
-			// Only start the game if it isn't already playing
-			if (sceneState != EditorSceneState::Play)
-			{
-				playGame();
-			}
-		}
-		if (sceneState == EditorSceneState::Play && pushedStyleColor)
-		{
-			ImGui::PopStyleColor();
-		}
-
-		ImGui::SameLine();
-
-		wasStopButtonPressed = false;
-
-		pushedStyleColor = false;
+	
 		if (sceneState == EditorSceneState::Scene)
 		{
-			ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 0, 100, 255));
-			pushedStyleColor = true;
+			ImVec4 color = ImGui::GetStyle().Colors[ImGuiCol_MenuBarBg];
+			ImGui::PushStyleColor(ImGuiCol_Button, color);
 		}
-		if (ImGui::Button("Stop"))
+		else
 		{
-			wasStopButtonPressed = true;
+			ImVec4 secondaryColor = ImGui::GetStyle().Colors[ImGuiCol_Button];
+			ImGui::PushStyleColor(ImGuiCol_Button, secondaryColor);
+		}
+		auto windowWidth = ImGui::GetWindowSize().x;
+		auto textWidth = 15;
 
-			if (sceneState != EditorSceneState::Scene)
+		float buttonMarginTop = 5;
+		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() - buttonMarginTop);
+		if (ImGui::ImageButton("##playIcon", (void*)(intptr_t)playIconTexture->textureIDOpenGL, ImVec2(15, 15), { 0, 1 }, { 1, 0 }))
+		{
+			if (sceneState == EditorSceneState::Scene)
 			{
+				sceneState = EditorSceneState::Play;
+				wasPlayButtonPressed = true;
+				wasStopButtonPressed = false;
+				playGame();
+			}
+			else
+			{
+				sceneState = EditorSceneState::Scene;
+				wasPlayButtonPressed = false;
+				wasStopButtonPressed = true;
 				stopGame();
 			}
 		}
-		if (sceneState == EditorSceneState::Scene && pushedStyleColor)
-		{
-			ImGui::PopStyleColor();
-		}
+		ImGui::PopStyleColor();
 
 		ImGui::End();
 	}
@@ -864,7 +857,7 @@ namespace engine
 			ImGui::Text("Add Component");
 			ImGui::Separator();
 
-			std::vector<std::string> allComponentNames = { "Box Collider", "Camera", "Mesh", "Physics", "PointLight", "Sphere Collider", "Controllable" };
+			std::vector<std::string> allComponentNames = { "Box Collider", "Camera", "Mesh", "Physics", "PointLight", "SpotLight", "Sphere Collider", "Controllable" };
 			std::vector<std::string> scriptComponentNames = ResourceManager::getInstance()->getAllCSharpScriptsInActiveGame();
 
 			// Remove the extension from the script names
@@ -907,12 +900,16 @@ namespace engine
 	void EditorGUI::drawGameSettingsTab()
 	{
 		ImGui::Text("Application FPS: %.1f", ImGui::GetIO().Framerate);
+
 		ImGui::Separator();
+
 		if (ImGui::CollapsingHeader("Editor Settings", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			ImGui::Text("RENDERING SETTINGS");
 
 			drawSerializableVariables(&editorSettings.rendererSettings);
+
+			ImGui::Separator();
 
 			ImGui::Text("EDITOR SETTINGS");
 
@@ -920,18 +917,21 @@ namespace engine
 
 			if (editorSettings.useDarkTheme)
 			{
-				ImGui::StyleColorsDark();
+				UIHelper.setDarkStyle();
 			}
 			else if (!editorSettings.useDarkTheme)
 			{
 				ImGui::StyleColorsLight();
 			}
 
+			ImGui::Separator();
+
 			ImGui::Text("Camera Settings");
 			ImGui::SliderFloat("Camera Speed", &editorCamera->getComponent<CameraComponent>()->movementSpeed, 0.001f, 1.0f);
 			ImGui::SliderFloat("Camera Sensitivity", &editorCamera->getComponent<CameraComponent>()->rotationSpeed, 0.001f, 0.1f);
 			ImGui::SliderFloat("Camera FOV", &editorCamera->getComponent<CameraComponent>()->fov, 0.1f, 120.0f);
 		}
+
 		ImGui::Separator();
 
 		if (ImGui::CollapsingHeader("Game Settings", ImGuiTreeNodeFlags_DefaultOpen))

@@ -9,6 +9,7 @@
 #include "Components/MultiplayerComponent.hpp"
 #include "Components/ScriptableComponent.hpp"
 #include "Components/ControllableComponent.hpp"
+#include "Components/SpotLightComponent.hpp"
 #include "Core/Logger.hpp"
 #include "Core/ResourceManager.hpp"
 
@@ -36,6 +37,10 @@ namespace engine
 		else if (componentName == "PointLight")
 		{
 			return std::make_shared<PointLightComponent>();
+		}
+		else if (componentName == "SpotLight")
+		{
+			return std::make_shared<SpotLightComponent>();
 		}
 		else if (componentName == "Camera")
 		{

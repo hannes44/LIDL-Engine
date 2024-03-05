@@ -7,8 +7,8 @@
 #include "EditorSettings.hpp"
 #include "AssetExplorer/AssetManager.hpp"
 #include "Project.hpp"
-#include "GUIHelper.hpp"
 #include "ConsoleGUI.hpp"
+#include "UI/GUIHelper.hpp"
 
 #include <WinSock2.h>
 #include <mutex>
@@ -55,7 +55,7 @@ namespace engine
 
 		void drawLeftSidePanel();
 
-		void drawGameObject(std::shared_ptr<GameObject> gameObject, short tabLevel = 0);
+		void drawGameObject(std::shared_ptr<GameObject> gameObject);
 
 		void drawTopMenu();
 
@@ -91,6 +91,8 @@ namespace engine
 
 		Window& window;
 
+		GUIHelper& UIHelper = GUIHelper::getInstance();
+
 		std::weak_ptr<Selectable> selectedObject;
 
 		ImGuizmo::OPERATION guizmoOperation = ImGuizmo::TRANSLATE;
@@ -109,6 +111,9 @@ namespace engine
 		bool wasStopButtonPressed = false;
 
 		bool quitProgram = false;
+
+		// In no GUI mode, the gui will not be rendered and the game will accept relative
+		bool noGUIMode = false;
 
 		CameraComponent* getActiveCamera();
 
@@ -129,6 +134,8 @@ namespace engine
 		std::shared_ptr<Texture> scaleIconTexture;
 
 		std::shared_ptr<Texture> worldIconTexture;
+
+		std::shared_ptr<Texture> playIconTexture;
 
 		
 		void setupMultiplayer(std::shared_ptr<Game> game);

@@ -21,6 +21,8 @@ namespace engine
 		glm::vec3 getScale();
 		void setScale(glm::vec3 scale);
 
+		glm::vec3 getLocalForward();
+
 		glm::mat4 transformMatrix{ 1 };
 	};
 }

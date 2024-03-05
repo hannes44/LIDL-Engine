@@ -44,6 +44,16 @@ namespace Engine
             //(c++_API) end
         }
 
+        public static Vector3 GetGameObjectPositionFromTag(string tag)
+        {
+            Vector3 position = new Vector3(0, 0, 0);
+            //(c++_API) x, y, z = __getGameObjectPositionFromTag__(tag);
+            //(c++_API) if (true) then return SystemNumerics.Vector3(x, y, z);
+            //(c++_API) else 
+            return position;
+            //(c++_API) end
+        }
+
         public static string getTagOfGameObject(string id)
         {
             //(c++_API) tag = __getTagOfGameObject__(id);
@@ -51,6 +61,16 @@ namespace Engine
             //(c++_API) else 
             return "";
             //(c++_API) end
+        }
+
+        public static void DrawText(float xPos, float yPos, float size, string text, float r, float g, float b, float a)
+        {
+            //(c++_API) __drawText__(xPos, yPos, size, text, r, g, b, a);
+        }
+
+        public static void SetGameObjectMeshVisibilityFromTag(string tag, bool visibility)
+        {
+            //(c++_API) __setGameObjectMeshVisibilityFromTag__(tag, visibility);
         }
 
         public static int getNumberOfGameObjectsWithTag(string tag)

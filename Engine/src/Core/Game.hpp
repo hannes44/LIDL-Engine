@@ -117,6 +117,8 @@ namespace engine
 		void removeParent(std::shared_ptr<GameObject> gameObject);
 		std::string getTagOfGameObject(std::string id);
 		int getNumberOfGameObjectsWithTag(std::string tag);
+		std::tuple<float, float, float> getGameObjectPositionFromTag(std::string tag);
+		void setGameObjectMeshVisibilityFromTag(std::string tag, bool visible);
 
 	protected:
 		RayCollision checkRayCollision(std::shared_ptr<GameObject> gameObject, glm::vec3 origin, glm::vec3 direction);

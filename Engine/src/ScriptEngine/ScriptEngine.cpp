@@ -20,7 +20,7 @@
 #include <iostream>
 #include <sstream>
 #include "Audio/AudioManager.hpp"
-
+#include "UI/GUIHelper.hpp"
 
 namespace engine
 {
@@ -33,14 +33,14 @@ namespace engine
 
 	#pragma comment(lib, "../../vendor/Lua/lua54.lib")
 
-	void ScriptEngine::updateScriptableComponent(ScriptableComponent* component)
+	void ScriptEngine::updateScriptableComponent(ScriptableComponent* component, float deltaTime)
 	{
 		sol::state_view lua(L);
 
 		syncGameObjectStateEngineToScript(component);
 		syncScriptableVariablesToScript(component);
 		sol::table componentTable = lua[component->uuid.id];
-		componentTable["Update"](componentTable);
+		componentTable["Update"](componentTable, deltaTime);
 		syncGameObjectStateScriptToEngine(component);
 		syncScriptableVariablesToEngine(component);
 	}
@@ -335,6 +335,9 @@ namespace engine
 		lua.set_function("__deleteGameObjectFromId__", &Game::deleteGameObjectFromId, game);
 		lua.set_function("__getTagOfGameObject__", &Game::getTagOfGameObject, game);
 		lua.set_function("__getNumberOfGameObjectsWithTag__", &Game::getNumberOfGameObjectsWithTag, game);
+		lua.set_function("__getGameObjectPositionFromTag__", &Game::getGameObjectPositionFromTag, game);
+		lua.set_function("__drawText__", &GUIHelper::drawText, GUIHelper::getInstance());
+		lua.set_function("__setGameObjectMeshVisibilityFromTag__", &Game::setGameObjectMeshVisibilityFromTag, game);
 	}
 
 	void ScriptEngine::syncGameObjectStateEngineToScript(ScriptableComponent* component)

@@ -23,7 +23,7 @@ namespace engine
 		GameObject() = default;
 
 		// Called every frame
-		void update();
+		void update(float deltaTime);
 
 		// Called at initialization
 		void initialize();

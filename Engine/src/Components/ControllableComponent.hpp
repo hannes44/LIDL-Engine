@@ -63,7 +63,8 @@ namespace engine {
 				{SerializableType::BOOLEAN, "Enable Forces", "Should forces affect this game object", &enableForces},
 				{SerializableType::FLOAT, "Movement Speed", "The speed at which the game object moves", &movementSpeed},
 				{SerializableType::FLOAT, "Rotation Speed", "The speed at which the game object rotates", &rotationSpeed},
-				{SerializableType::BOOLEAN, "Allow Instant Turnaround", "Should the game object be able to instantly turn around", &allowInstantTurnaround}
+				{SerializableType::BOOLEAN, "Allow Instant Turnaround", "Should the game object be able to instantly turn around", &allowInstantTurnaround},
+				{SerializableType::BOOLEAN, "Allow Jump", "Should the game object be able to jump", &allowJump}
 			};
 		};
 	protected:

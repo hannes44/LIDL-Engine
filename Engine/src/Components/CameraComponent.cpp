@@ -6,7 +6,6 @@
 #include <glm/gtx/transform.hpp>
 #include "Core/Window.hpp"
 #include <iostream>
-#include "Core/Bootstrap.hpp"
 #include <imgui_impl_sdl3.h>
 #include "CameraComponent.hpp"
 

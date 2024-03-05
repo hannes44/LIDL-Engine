@@ -48,13 +48,10 @@ namespace engine
 
 		SDL_GL_MakeCurrent(window, glContext);
 
-		// Only initialize ImGui if the editor is enabled
-#ifdef EDITOR
 		ImGui::CreateContext();
 		ImGui::SetCurrentContext(ImGui::GetCurrentContext());
 		ImGui_ImplOpenGL3_Init();
 		ImGui_ImplSDL3_InitForOpenGL(window, glContext);
-#endif 
 
 		// flip textures
 		stbi_set_flip_vertically_on_load(true);
@@ -83,5 +80,9 @@ namespace engine
 	void SDLWindow::newFrame()
 	{
 		SDL_GL_SwapWindow(window);
+	}
+	void SDLWindow::setRelativeMouseMode(bool enabled)
+	{
+		SDL_SetRelativeMouseMode(enabled ? SDL_TRUE : SDL_FALSE);
 	}
 }

@@ -16,8 +16,8 @@ namespace engine {
 		Transform globalTransform = transform;
 		std::shared_ptr<GameObject> currentParent = parent;
 		while (currentParent) {
-			// TODO: Update the rotation as well
 			globalTransform.shiftPosition(currentParent->transform.getPosition());
+			globalTransform.setRotationFromQuaternion(currentParent->transform.getRotation() * globalTransform.getRotation());
 
 			currentParent = currentParent->parent;
 		}
@@ -30,9 +30,9 @@ namespace engine {
 		return uuid;
 	}
 
-	void GameObject::update() {
+	void GameObject::update(float deltaTime) {
 		for (auto& component : components) {
-			component->update();
+			component->update(deltaTime);
 		}
 	}
 

@@ -333,6 +333,35 @@ namespace engine {
 		return count;
 	}
 
+	std::tuple<float, float, float> Game::getGameObjectPositionFromTag(std::string tag)
+	{
+		for (auto& [id, gameObject] : gameObjects)
+		{
+			if (gameObject->tag == tag)
+			{
+				return std::make_tuple(gameObject->transform.getPosition().x, gameObject->transform.getPosition().y, gameObject->transform.getPosition().z);
+			}
+		}
+
+		LOG_WARN("No game object with tag: " + tag);
+		return std::make_tuple(0.0f, 0.0f, 0.0f);
+	}
+
+	void Game::setGameObjectMeshVisibilityFromTag(std::string tag, bool visible)
+	{
+		for (auto& [id, gameObject] : gameObjects)
+		{
+			if (gameObject->tag == tag)
+			{
+				auto meshComponent = gameObject->getComponent<MeshComponent>();
+				if (meshComponent != nullptr)
+				{
+					meshComponent->isVisible = visible;
+				}
+			}
+		}
+	}
+
 	void Game::removeParent(std::shared_ptr<GameObject> gameObject) {
 		if (!gameObject->added)
 			throw std::runtime_error("Cannot remove parent before GameObject has been added.");

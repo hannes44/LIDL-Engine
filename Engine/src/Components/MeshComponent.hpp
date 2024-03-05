@@ -46,6 +46,12 @@ namespace engine
 
 		inline const static std::string componentName = "Mesh";
 
+		// If true, the mesh will be rendered using the camera transform * model transform
+		// Useful for rendering objects that always are in front of the camera
+		// For example weapons in first person shooters
+		bool renderFromCameraTransform = false;
+
+		bool isVisible = true;
 
 		PrimativeMeshType primativeType = NONE;
 
@@ -61,7 +67,9 @@ namespace engine
 			{
 				{SerializableType::STRING, "OBJ File", "The file path to the obj file", &objFileName},
 				{SerializableType::STRING, "Primative Type", "The type of primative to create", &primativeTypeAsString},
-				{SerializableType::STRING, "Material", "Id of the meshes material", &getMaterial()->uuid.id}
+				{SerializableType::STRING, "Material", "Id of the meshes material", &getMaterial()->uuid.id},
+				{SerializableType::BOOLEAN, "Render From Camera Transform", "If true, the mesh will be rendered using the camera transform * model transform", &renderFromCameraTransform},
+				{SerializableType::BOOLEAN, "Is Visible", "If true, the mesh will be rendered", &isVisible}
 			};
 		};
 
