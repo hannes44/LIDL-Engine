@@ -1,4 +1,16 @@
 GameObjects:
+  - name: tree
+    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 0, 11.6904411, -10, 1]
+    isVisible: true
+    Id: AEPGwuLvbUpmtuZuhPNPALpfnXFsFBGM
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: raw2.obj
+        Primative Type: NONE
+        Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
   - name: EnemyPrefab
     transform: [1.90553308, 0, 0, 0, 0, 3.98312092, 0, 0, 0, 0, 1, 0, 63, -6.73250532, 51, 1]
     isVisible: true
@@ -81,7 +93,7 @@ GameObjects:
         scriptFileName: EnemyManager.cs
         enableInput: true
   - name: Player
-    transform: [0.912164152, 0, -0.409824818, 0, -0.348228157, 0.527265966, -0.775065958, 0, 0.216086745, 0.849700212, 0.480953246, 0, 0, 4.24747086, 0, 1]
+    transform: [-0.883269668, 1.11758709e-08, -0.468865544, 0, -0.120719239, 0.966286063, 0.227416247, 0, 0.453058213, 0.257470936, -0.853491068, 0, 0, 4.24747086, 0, 1]
     isVisible: true
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
     tag: Player
@@ -132,6 +144,18 @@ GameObjects:
         OBJ File: Ak-47.obj
         Primative Type: NONE
         Material: TikmfUwkrFNXXjEcaavGVjVaeuMhbFUU
+  - name: DeadTree.obj
+    transform: [0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 1]
+    isVisible: true
+    Id: oWlqMHkSsxPktJLTEbjXNhPLpTBOunab
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: DeadTree.obj
+        Primative Type: NONE
+        Material: OeRWJuLJtlngqaKRijjLgLlPxWWpwQBu
   - name: AK-48
     transform: [-7.94949341, -1.44674887e-05, 6.06675863, 0, -2.92403092e-05, 10, -1.44674887e-05, 0, -6.06675863, -2.92403092e-05, -7.94949341, 0, 9.71035576, 8.70111752, 0, 1]
     isVisible: true
@@ -170,6 +194,9 @@ Textures:
   - name: AK 47_Material_BaseColor
     fileName: AK 47_Material_BaseColor.png
     Id: HDnmNjOrNtEjlwhcDACrqRPqYsiDKCND
+  - name: raw3
+    fileName: raw3.jpeg
+    Id: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
   - name: BowieKnife_BaseColor
     fileName: BowieKnife_BaseColor.png
     Id: KBnHTfCYDdtVKBGtpQrUaYiePdhvXhWL
@@ -185,10 +212,28 @@ Materials:
     Emission: [0, 0, 0]
     Roughness: 0
     Shininess: 0.5
+    Name: Tree2Material
+    Diffuse Texture: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+    Specular Texture: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+    Id: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+  - Base Color: [1, 1, 1]
+    Transparency: 1
+    Emission: [0, 0, 0]
+    Roughness: 0
+    Shininess: 0.5
     Name: KnifeMaterial
     Diffuse Texture: KBnHTfCYDdtVKBGtpQrUaYiePdhvXhWL
     Specular Texture: ""
     Id: JHnYLBHgMrJlEapYEEiJewGOxWIDdlOH
+  - Base Color: [0.450980365, 0.383619398, 0.123798527]
+    Transparency: 1
+    Emission: [0, 0, 0]
+    Roughness: 0
+    Shininess: 0.5
+    Name: TreeMaterial
+    Diffuse Texture: ""
+    Specular Texture: ""
+    Id: OeRWJuLJtlngqaKRijjLgLlPxWWpwQBu
   - Base Color: [1, 1, 1]
     Transparency: 1
     Emission: [0, 0, 0]
