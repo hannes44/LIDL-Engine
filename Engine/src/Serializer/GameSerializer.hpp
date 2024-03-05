@@ -53,7 +53,9 @@ namespace engine
 
 		static void deserializeGameState(Game* game);
 
+		static void updateTextures(YAML::Node node, Game* game);
 		static void deserializeTextures(YAML::Node node, Game* game);
+		static void deserializeTexture(YAML::Node textureNode, Game* game, Texture* texture);
 
 		static void updateMaterials(YAML::Node node, Game* game);
 		static void deserializeMaterials(YAML::Node node, Game* game);
@@ -63,11 +65,10 @@ namespace engine
 
 		static void updateGameObjects(YAML::Node node, Game* game);
 		static void deserializeGameObjects(YAML::Node node, Game* game);
-		static void deserializeGameObject(YAML::Node node, Game* game, GameObject* gameObject);
+		static void deserializeGameObject(YAML::Node gameObjectNode, Game* game, GameObject* gameObject);
 
 		static void deserializeComponents(YAML::Node node, GameObject* gameObject, Game* game);
-
-		static void deserializeComponent(YAML::Node node, GameObject* gameObject, Game* game, Component* component);
+		static void deserializeComponent(YAML::Node componentNode, GameObject* gameObject, Game* game, Component* component);
 
 	};
 }

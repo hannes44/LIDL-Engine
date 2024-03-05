@@ -431,7 +431,7 @@ namespace engine
 		LOG_TRACE("Loading file: " + gameStateFilePath);
 		YAML::Node state = YAML::LoadFile(gameStateFilePath);
 
-
+		updateTextures(state, game);
 		updateMaterials(state, game);
 		updateGameObjects(state, game);
 
@@ -537,6 +537,40 @@ namespace engine
 		deserializeGameState(game, gameStateFilePath);
 	}
 
+	// Deserializes and updates all textures from the given YAML node into the game
+	void GameSerializer::updateTextures(YAML::Node node, Game* game) {
+		YAML::Node texturesNode;
+		try
+		{
+			texturesNode = node["Textures"];
+		}
+		catch (const std::exception& e)
+		{
+			LOG_ERROR("Failed to deserialize textures: " + std::string(e.what()));
+			return;
+		}
+
+		for (YAML::const_iterator it = texturesNode.begin(); it != texturesNode.end(); ++it)
+		{
+			YAML::Node textureNode = *it;
+			std::string filename = textureNode["fileName"].as<std::string>();
+			std::string textureID = textureNode["Id"].as<std::string>();
+
+			auto existingTexture = game->getTexture(textureID);
+			bool exists = !existingTexture.expired();
+			
+			std::shared_ptr<Texture> texture;
+			if (!exists)
+				texture = std::shared_ptr<Texture>(Texture::create(filename));
+			else
+				texture = existingTexture.lock();
+
+			deserializeTexture(textureNode, game, texture.get());
+			if (!exists)
+				game->addTexture(texture);
+		}
+	}
+
 	// Deserializes all textures from the given YAML node into the game
 	void GameSerializer::deserializeTextures(YAML::Node node, Game* game)
 	{
@@ -553,20 +587,26 @@ namespace engine
 
 		for (YAML::const_iterator it = texturesNode.begin(); it != texturesNode.end(); ++it)
 		{
-			try
-			{
-				YAML::Node textureNode = *it;
-				std::string name = textureNode["name"].as<std::string>();
-				std::string filename = textureNode["fileName"].as<std::string>();
-				std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(Texture::create(filename));
-				texture->uuid.id = textureNode["Id"].as<std::string>();
-				game->addTexture(texture);
-			}
-			catch (const std::exception& e)
-			{
-				LOG_WARN("Failed to deserialize texture: " + std::string(e.what()));
-			}
+			YAML::Node textureNode = *it;
+			std::string filename = textureNode["fileName"].as<std::string>();
+			Texture* texture = Texture::create(filename);
+			deserializeTexture(*it, game, texture);
+			game->addTexture(std::shared_ptr<Texture>(texture));
+		}
+	}
 
+	// Deserializes a texture from the given YAML node into the provided texture
+	void GameSerializer::deserializeTexture(YAML::Node textureNode, Game* game, Texture* texture) {
+		try
+		{
+			std::string name = textureNode["name"].as<std::string>();
+			std::string filename = textureNode["fileName"].as<std::string>();
+			std::shared_ptr<Texture> texture = std::shared_ptr<Texture>(Texture::create(filename));
+			texture->uuid.id = textureNode["Id"].as<std::string>();
+		}
+		catch (const std::exception& e)
+		{
+			LOG_WARN("Failed to deserialize texture: " + std::string(e.what()));
 		}
 	}
 
