@@ -6,10 +6,19 @@
 #include "Physics/GamePhysics.hpp"
 #include "Core/Logger.hpp"
 #include "Components/ColliderComponent.hpp"
+#include <thread>
 
 constexpr auto TIME_CONVERSION_FACTOR = 1000000000;
 
 namespace engine {
+	Game::Game() {
+		auto tid = std::this_thread::get_id();
+		std::stringstream ss;
+		ss << tid;
+		instanceId = ss.str();
+		LOG_INFO("Game {} created", instanceId);
+	}
+	
 	const void Game::run() {
 		if (getTargetFrameRate() > 0 && Utils::getTimestampNS() - lastFrameTime < TIME_CONVERSION_FACTOR / (long long)getTargetFrameRate()) {
 			return;

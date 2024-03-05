@@ -15,6 +15,7 @@
 #include "Serializer/GameSerializer.hpp"
 #include "MultiplayerClient/Client.hpp"
 #include <fstream>
+#include <filesystem>
 
 namespace engine {
 
@@ -27,7 +28,11 @@ namespace engine {
 	}
 
 	void GamePhysics::sendMultiplayerState(Game* game) {
-		std::string filePath = GameSerializer::serializeGameState(MULTIPLAYER_STATE_FOLDER, game, true);
+		auto tid = std::this_thread::get_id();
+		std::string folderPath = MULTIPLAYER_STATE_FOLDER + game->instanceId + "/";
+		std::filesystem::create_directory(folderPath);
+		multiplayerSendLock.lock();
+		std::string filePath = GameSerializer::serializeGameState(folderPath, game, true);
 
 		if (!std::ifstream(filePath).good()) {
 			LOG_ERROR("File not found: " + filePath);
@@ -39,6 +44,7 @@ namespace engine {
 
 		text << in_file.rdbuf();
 		std::string message = text.str();
+		multiplayerSendLock.unlock();
 		Client::QueueMessage({ ClientMessageType::StateUpdate, message });
 	}
 

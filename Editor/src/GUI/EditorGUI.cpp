@@ -21,6 +21,7 @@
 #include <fstream>
 #include "MultiplayerClient/Client.hpp"
 #include "Serializer/GameSerializer.hpp"
+#include <filesystem>
 
 namespace engine
 {
@@ -39,21 +40,27 @@ namespace engine
 
 	void EditorGUI::onMultiplayerStateReceived(std::shared_ptr<Game> game, std::string state)
 	{
-		if(!game->running)
+		if (!game->running)
 			return;
+
+		std::string folderPath = MULTIPLAYER_STATE_FOLDER + game->instanceId + "/";
+		std::filesystem::create_directory(folderPath);
+
+		std::string filePath = folderPath + "ParsedState" + MULTIPLAYER_STATE_FILE_EXTENSION;
 		
-		std::string filePath = MULTIPLAYER_STATE_FOLDER + "ParsedState" + MULTIPLAYER_STATE_FILE_EXTENSION;
+
+		multiplayerReceiveLock.lock();
+		std::ofstream outfile(filePath);
+		outfile << state.c_str();
+		outfile.close();
 
 		if (!std::ifstream(filePath).good()) {
 			LOG_ERROR("File not found: " + filePath);
 			return;
 		}
 
-		std::ofstream outfile(filePath);
-		outfile << state.c_str();
-		outfile.close();
-
-		GameSerializer::deserializeGameState(game.get(), filePath);
+		GameSerializer::updateGameState(game.get(), filePath);
+		multiplayerReceiveLock.unlock();
 	}
 
 	void EditorGUI::setupMultiplayer(std::shared_ptr<Game> game) {
@@ -65,7 +72,7 @@ namespace engine
 
 		// Start the multiplayer receiver in a detached thread
 		std::thread receiver(Client::RunReceiver, multiplayerSocket, std::bind(&EditorGUI::onMultiplayerStateReceived, this, game, std::placeholders::_1));
-		
+
 		// Start the multiplayer transmitter in a detached thread
 		std::thread transmitter(Client::RunTransmitter, multiplayerSocket);
 
