@@ -31,8 +31,16 @@ namespace engine {
 	void TestGame2::initialize() {
 
 		std::shared_ptr<MeshComponent> meshComponent1 = MeshComponent::createMeshFromObjFile("amugus.obj");
+		std::weak_ptr<engine::Material> amogusMaterial = createMaterial("AmogusMaterial");
+		amogusMaterial.lock()->baseColor = glm::vec3(1.f, 0, 0);
+		meshComponent1->setMaterial(amogusMaterial);
+		
 		std::shared_ptr<MeshComponent> meshComponent2 = MeshComponent::createPrimative(PrimativeMeshType::CUBE);
-		PointLightComponent pointLightComponent = PointLightComponent();
+
+		std::shared_ptr<MeshComponent> platformMesh = MeshComponent::createPrimative(PrimativeMeshType::CUBE);
+		std::weak_ptr<engine::Material> platformMaterial = createMaterial("PlatformMaterial");
+		platformMaterial.lock()->baseColor = glm::vec3(0, 0.5f, 0);
+		platformMesh->setMaterial(platformMaterial);
 
 		PhysicsComponent physicsComponentWithGravity = PhysicsComponent(true);
 		PhysicsComponent physicsComponentWithoutGravity = PhysicsComponent(false);
@@ -64,7 +72,7 @@ namespace engine {
 		platform->transform.setScale(glm::vec3(2.f, 0.1f, 2.f));
 		platform->transform.setPosition(glm::vec3(2.f, 1.f, 0));
 		platform->name = "Platform";
-		platform->addComponent(meshComponent2);
+		platform->addComponent(platformMesh);
 		platform->addComponent(std::make_unique<BoxColliderComponent>(platformColliderComponent));
 		addGameObject(std::unique_ptr<GameObject>(platform));
 
@@ -75,10 +83,13 @@ namespace engine {
 		camera->name = "Camera";
 		addGameObject(std::unique_ptr<GameObject>(camera));;
 
-
+		auto pointLightComponent = std::make_shared<PointLightComponent>();
+		pointLightComponent->quadratic = 0;
+		pointLightComponent->linear = 0;
+		pointLightComponent->constant = 2.5f;
 		GameObject* light = new GameObject();
 		light->transform.setPosition(glm::vec3(0, 20, 0));
-		light->addComponent(std::make_unique<PointLightComponent>(pointLightComponent));
+		light->addComponent(pointLightComponent);
 		light->name = "Light";
 		addGameObject(std::unique_ptr<GameObject>(light));
 	}

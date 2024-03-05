@@ -33,7 +33,6 @@ namespace engine {
 
 		std::shared_ptr<MeshComponent> meshComponent1 = engine::MeshComponent::createMeshFromObjFile("amugus.obj");
 		std::shared_ptr<MeshComponent> meshComponent2 = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
-		engine::PointLightComponent pointLightComponent = engine::PointLightComponent();
 
 		engine::PhysicsComponent physicsComponentWithGravity = engine::PhysicsComponent();
 		physicsComponentWithGravity.setForce(glm::vec3(0, 10, 0));
@@ -75,9 +74,13 @@ namespace engine {
 		addGameObject(std::unique_ptr<GameObject>(ball1));
 
 
+		auto pointLightComponent = std::make_shared<PointLightComponent>();
+		pointLightComponent->quadratic = 0;
+		pointLightComponent->linear = 0;
+		pointLightComponent->constant = 2.5f;
 		GameObject* light = new GameObject();
 		light->transform.setPosition(glm::vec3(0, 20, 0));
-		light->addComponent(std::make_unique<engine::PointLightComponent>(pointLightComponent));
+		light->addComponent(pointLightComponent);
 		light->name = "Light";
 		addGameObject(std::unique_ptr<GameObject>(light));
 
