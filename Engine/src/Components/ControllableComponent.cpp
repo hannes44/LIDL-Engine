@@ -133,6 +133,7 @@ namespace engine
 	{
 		InputEventType eventType = event.getEventType();
 
+		// Jump
 		if (allowJump && eventType == InputEventType::KeyDown && event.getKey() == Key::SPACE)
 		{
 			std::shared_ptr<PhysicsComponent> physicsComponent = gameObject->getComponent<PhysicsComponent>();

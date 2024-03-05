@@ -360,7 +360,7 @@ GameObjects:
         scriptFileName: EnemyManager.cs
         enableInput: true
   - name: Player
-    transform: [0.371286869, 1.49011612e-08, -0.928518176, 0, -0.32744801, 0.935752869, -0.130936712, 0, 0.868863583, 0.352656513, 0.347432733, 0, 0, 4.94747019, 0, 1]
+    transform: [0.998146772, 0, 0.0608520247, 0, -0.00210533943, 0.999401331, 0.0345335715, 0, -0.0608155951, -0.0345976874, 0.997549236, 0, 0, 5.59546518, 0, 1]
     isVisible: true
     isExternalMultiplayerObject: false
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
