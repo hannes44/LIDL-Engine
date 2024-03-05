@@ -109,6 +109,8 @@ namespace engine
 
 		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png", false));
 
+		playIconTexture = std::shared_ptr<Texture>(Texture::create("play_icon.png", false));
+
 		auto editorGameObjectSet = std::set<std::shared_ptr<GameObject>>();
 		for (auto const& [id, gameObject] : editorGameObjects)
 			editorGameObjectSet.insert(gameObject);
@@ -657,59 +659,42 @@ namespace engine
 		}
 
 		ImGui::SameLine();
-		ImGui::Dummy(ImVec2(150.0f, 20.0f));
-		ImGui::SameLine();
-
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.33f, 0.67f, 0.86f, 0.77f));
-
-		wasPlayButtonPressed = false;
-
-		bool pushedStyleColor = false;
-		if (sceneState == EditorSceneState::Play)
-		{
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.19f, 0.19f, 0.19f, 1.0f));
-			pushedStyleColor = true;
-		}
-		if (ImGui::Button("Play"))
-		{
-			wasPlayButtonPressed = true;
-
-			// Only start the game if it isn't already playing
-			if (sceneState != EditorSceneState::Play)
-			{
-				playGame();
-			}
-		}
-		if (sceneState == EditorSceneState::Play && pushedStyleColor)
-		{
-			ImGui::PopStyleColor();
-		}
-
-		ImGui::SameLine();
-
-		wasStopButtonPressed = false;
-
-		pushedStyleColor = false;
+	
 		if (sceneState == EditorSceneState::Scene)
 		{
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.19f, 0.19f, 0.19f, 1.0f));
-			pushedStyleColor = true;
+			ImVec4 color = ImGui::GetStyle().Colors[ImGuiCol_MenuBarBg];
+			ImGui::PushStyleColor(ImGuiCol_Button, color);
 		}
-		if (ImGui::Button("Stop"))
+		else
 		{
-			wasStopButtonPressed = true;
+			ImVec4 secondaryColor = ImGui::GetStyle().Colors[ImGuiCol_Button];
+			ImGui::PushStyleColor(ImGuiCol_Button, secondaryColor);
+		}
+		auto windowWidth = ImGui::GetWindowSize().x;
+		auto textWidth = 15;
 
-			if (sceneState != EditorSceneState::Scene)
+		float buttonMarginTop = 5;
+		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() - buttonMarginTop);
+		if (ImGui::ImageButton("##playIcon", (void*)(intptr_t)playIconTexture->textureIDOpenGL, ImVec2(15, 15), { 0, 1 }, { 1, 0 }))
+		{
+			if (sceneState == EditorSceneState::Scene)
 			{
+				sceneState = EditorSceneState::Play;
+				wasPlayButtonPressed = true;
+				wasStopButtonPressed = false;
+				playGame();
+			}
+			else
+			{
+				sceneState = EditorSceneState::Scene;
+				wasPlayButtonPressed = false;
+				wasStopButtonPressed = true;
 				stopGame();
 			}
 		}
-		if (sceneState == EditorSceneState::Scene && pushedStyleColor)
-		{
-			ImGui::PopStyleColor();
-		}
-
 		ImGui::PopStyleColor();
+
 		ImGui::End();
 	}
 
