@@ -30,6 +30,7 @@
 #include "Components/CameraComponent.hpp"
 #include "Components/ControllableComponent.hpp"
 #include "Components/ScriptableComponent.hpp"
+#include "Components/MultiplayerComponent.hpp"
 
 //Events
 #include "Events/EventManager.hpp"

@@ -32,6 +32,8 @@ namespace engine
 
 		virtual std::string getDescription() { return ""; };
 
+		virtual bool serializeForMultiplayer() { return true; }
+
 		UUID uuid{};
 
 		void setGameObject(GameObject *gameObject)

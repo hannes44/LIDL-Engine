@@ -43,5 +43,10 @@ Games/*/*State.yaml
 Games/*/*Config.yaml
 Editor/editor_settings.yaml
 
+# Keep FPSGame files
 !/Games/FPSGame/*
 !/Games/FPSGame/Scripts/*
+
+# Ignore temporary multiplayer states
+MultiplayerStates/*
+!MultiplayerStates/.gitkeep

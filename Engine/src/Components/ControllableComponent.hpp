@@ -24,7 +24,7 @@ namespace engine {
 
 	class ControllableComponent : public Component, public InputListener {
 	public:
-		ControllableComponent(bool allowJump = false);
+		ControllableComponent(bool allowJump = false, bool enableForces = true);
 		~ControllableComponent();
 
 		bool allowJump = false;
@@ -36,6 +36,8 @@ namespace engine {
 
 		std::string getName() override;
 		void initialize() override;
+
+		bool serializeForMultiplayer() override { return false; }
 
 		bool isMouseDragging;
 

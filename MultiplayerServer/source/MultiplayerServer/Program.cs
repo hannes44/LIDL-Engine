@@ -24,8 +24,10 @@ namespace Server
         public static string END_MSG_FLAG = "<%>EOM<%>";
         public static string END_CHUNK_FLAG = "<%>EOC<%>";
         public static string HEADER_MSG_FLAG = "<!>";
-        public static int BUF_SIZE = 1000;
+        public static int BUF_SIZE = 2000;
         public static int PORT = 11111;
+
+        public static bool DEBUG = false;
 
         string messageBuffer = "";
 
@@ -37,7 +39,7 @@ namespace Server
                 return (ClientMessageType.Undefined, "");
             }
 
-            string body = message.Substring(message.LastIndexOf(HEADER_MSG_FLAG) + HEADER_MSG_FLAG.Count());
+            string body = message.Substring(message.LastIndexOf(HEADER_MSG_FLAG) + HEADER_MSG_FLAG.Length);
 
             string header = message.Substring(message.IndexOf(HEADER_MSG_FLAG), message.LastIndexOf(HEADER_MSG_FLAG)).Trim().Replace(HEADER_MSG_FLAG, "");
             switch (header)
@@ -81,7 +83,9 @@ namespace Server
                 return;
 
             (ClientMessageType messageType, string body) = SplitHeader(CleanMsg(messageBuffer));
-            Console.WriteLine($"<- MessageType: {messageType}, body: {body}");
+            if (DEBUG)
+                Console.WriteLine($"<- MessageType: {messageType}, body: {body}");
+            
             messageBuffer = "";
 
             string response = null;
@@ -107,8 +111,7 @@ namespace Server
             }
 
             // Multicast message to all connected sessions except the sender
-            //Server.Multicast(response, Id);
-            Server.Multicast(response);
+            Server.Multicast(response, Id);
 
             // If the buffer starts with '!' the disconnect the current session
             if (message == "!")

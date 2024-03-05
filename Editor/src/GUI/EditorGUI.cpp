@@ -12,9 +12,16 @@
 #include <set>
 #include <ranges>
 #include <imgui_internal.h>
+#define _WINSOCKAPI_
 #include <Windows.h>
 #include <regex>
 #include <ShlDisp.h>
+
+#include <thread>
+#include <fstream>
+#include "MultiplayerClient/Client.hpp"
+#include "Serializer/GameSerializer.hpp"
+#include <filesystem>
 
 namespace engine
 {
@@ -29,6 +36,48 @@ namespace engine
 	EditorGUI::EditorGUI(std::shared_ptr<Project> project, EditorSettings& editorSettings) : window(Window::getInstance()), project(project), editorSettings(editorSettings)
 	{
 		game = project->game;
+	}
+
+	void EditorGUI::onMultiplayerStateReceived(std::shared_ptr<Game> game, std::string state)
+	{
+		if (!game->running)
+			return;
+
+		std::string folderPath = MULTIPLAYER_STATE_FOLDER + game->instanceId + "/";
+		std::filesystem::create_directory(folderPath);
+
+		std::string filePath = folderPath + "ParsedState" + MULTIPLAYER_STATE_FILE_EXTENSION;
+		
+
+		multiplayerReceiveLock.lock();
+		std::ofstream outfile(filePath);
+		outfile << state.c_str();
+		outfile.close();
+
+		if (!std::ifstream(filePath).good()) {
+			LOG_ERROR("File not found: " + filePath);
+			return;
+		}
+
+		GameSerializer::updateGameState(game.get(), filePath);
+		multiplayerReceiveLock.unlock();
+	}
+
+	void EditorGUI::setupMultiplayer(std::shared_ptr<Game> game) {
+		if (!game->isMultiplayerGame())
+			return;
+
+		// Connect to the server
+		multiplayerSocket = Client::OpenSocket();
+
+		// Start the multiplayer receiver in a detached thread
+		std::thread receiver(Client::RunReceiver, multiplayerSocket, std::bind(&EditorGUI::onMultiplayerStateReceived, this, game, std::placeholders::_1));
+
+		// Start the multiplayer transmitter in a detached thread
+		std::thread transmitter(Client::RunTransmitter, multiplayerSocket);
+
+		receiver.detach();
+		transmitter.detach();
 	}
 
 	void EditorGUI::start()
@@ -108,8 +157,9 @@ namespace engine
 		translateIconTexture = std::shared_ptr<Texture>(Texture::create("translation_icon.png", false));
 
 		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png", false));
-
 		playIconTexture = std::shared_ptr<Texture>(Texture::create("play_icon.png", false));
+
+		setupMultiplayer(game);
 
 		auto editorGameObjectSet = std::set<std::shared_ptr<GameObject>>();
 		for (auto const& [id, gameObject] : editorGameObjects)
@@ -140,9 +190,7 @@ namespace engine
 				game->update();
 
 				for (auto& [gameObjectId, gameObject] : game->getGameObjects())
-				{
 					gameObject->update(deltaTime);
-				}
 			}
 
 			endFrame();

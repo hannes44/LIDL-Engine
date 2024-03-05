@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <regex>
+#include <queue>
 
 #include <stdio.h>
 #include <winsock2.h>
@@ -15,7 +16,7 @@
 
 #define PORT 11111
 #define IP_ADDR "127.0.0.1"
-#define BUF_SIZE 1000
+#define BUF_SIZE 2000
 
 #define GAME_FOLDER_PATH "../../Games/"
 #define GAME_CONFIG_FILE_EXTENSION ".yaml"
@@ -25,7 +26,9 @@ namespace engine {
 	const std::string END_CHUNK_FLAG = "<%>EOC<%>";
 	const std::string HEADER_MSG_FLAG = "<!>";
 
-	int Client::run(std::function<void(std::string)> onMessage) {
+	SafeQueue<ClientMessage> Client::messageQueue = SafeQueue<ClientMessage>();
+
+	SOCKET Client::OpenSocket() {
 		WSADATA wsaData;
 		int wserr;
 		WORD wVersionRequested = MAKEWORD(2, 2);
@@ -33,7 +36,7 @@ namespace engine {
 
 		if (wserr != 0) {
 			std::cout << "Error: The winsock dll was not found!" << std::endl;
-			return 0;
+			return INVALID_SOCKET;
 		}
 
 		// Create socket
@@ -42,7 +45,7 @@ namespace engine {
 		if (clientSocket == INVALID_SOCKET) {
 			std::cout << "Error during socket creation: " << WSAGetLastError() << std::endl;
 			WSACleanup();
-			return 0;
+			return INVALID_SOCKET;
 		}
 
 		// Connect to server
@@ -55,28 +58,36 @@ namespace engine {
 			std::cout << "Socket error: could not connect to server: " << WSAGetLastError() << std::endl;
 			std::cout << "Make sure the server is running on the specified IP and port" << std::endl;
 			WSACleanup();
-			return 0;
+			return INVALID_SOCKET;
 		}
 		else {
 			std::cout << "Socket connected to server!" << std::endl;
 		}
 
-		while (true) {
-			std::string msg;
-			printf("Enter the message to send to the server: ");
-			std::getline(std::cin, msg);
-			if (msg == "state") {
-				std::string state = GetGameState("TestGame");
-				SendMsg(clientSocket, state, StateUpdate);
-			}
-			else {
-				SendMsg(clientSocket, msg, CustomMessage);
-			}
+		return clientSocket;
+	}
 
+	void Client::RunReceiver(SOCKET clientSocket, std::function<void(std::string)> onMessage) {
+		while (true) {
+			LOG_TRACE("Waiting to receive...");
 			std::string response = ReceiveMsg(clientSocket);
 			onMessage(response);
 		}
+	}
 
+	void Client::RunTransmitter(SOCKET clientSocket) {
+		while (true) {
+			ClientMessage msg;
+
+			LOG_TRACE("Waiting to transmit...");
+			msg = messageQueue.dequeue();
+
+			SendMsg(clientSocket, msg.message, msg.type);
+		}
+	}
+
+	void Client::QueueMessage(ClientMessage message) {
+		messageQueue.enqueue(message);
 	}
 
 	std::string Client::GetHeader(ClientMessageType type) {
@@ -115,7 +126,7 @@ namespace engine {
 
 		const int chunkSize = BUF_SIZE - END_CHUNK_FLAG.length();
 
-		std::string payload = message + END_MSG_FLAG;
+		LOG_TRACE("-> {}", message);
 
 		std::vector<std::string> chunks{};
 
@@ -127,8 +138,6 @@ namespace engine {
 		for (int i = 0; i < chunks.size(); i++) {
 			std::string chunk = chunks[i] + END_CHUNK_FLAG;
 			SocketSend(socket, chunk);
-
-			LOG_INFO("[{0}] -> {1}", std::to_string(i), chunk);
 		}
 
 		SocketSend(socket, END_MSG_FLAG);
@@ -151,7 +160,7 @@ namespace engine {
 
 		data = CleanMsg(data);
 
-		std::cout << "<- " << data << std::endl;
+		LOG_TRACE("<- {}", data);
 
 		return data;
 	}

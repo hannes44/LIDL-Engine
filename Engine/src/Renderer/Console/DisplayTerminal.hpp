@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include <iostream>
+#define _WINSOCKAPI_
 #include <Windows.h>
 
 namespace engine {

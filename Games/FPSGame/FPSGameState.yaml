@@ -2,12 +2,14 @@ GameObjects:
   - name: tree
     transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 0, 11.3525867, -10, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: AEPGwuLvbUpmtuZuhPNPALpfnXFsFBGM
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYeVCuBWNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
         Primative Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
@@ -16,12 +18,14 @@ GameObjects:
   - name: tree
     transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 49.8615761, 11.2828608, -51.543808, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: DWAoqFuzIXFnNwSWPEvPmGMlflwoxMrm
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYeVCuBWNaiQIgriOsyGFDHLMC
         OBJ File: raw2.obj
         Primative Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
@@ -30,34 +34,40 @@ GameObjects:
   - name: EnemyPrefab
     transform: [1.90553308, 0, 0, 0, 0, 3.98312092, 0, 0, 0, 0, 1, 0, 63, -6.73250532, 51, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: DtuMLenGYcDLdGyqOFrcULacGKHcQDEH
     tag: Enemy
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYeVCuBWNaiQIgriOsySlHLJG
         OBJ File: ""
         Primative Type: CUBE
         Material: hZYYcYtKpiPCHvMlODrrndOPQMbqNcru
         Render From Camera Transform: false
         Is Visible: true
       - name: Scriptable
+        Id: DRMzIdqXYeVCuBWNaiQIgrGJsySlHLMC
         moveSpeed: 5
         scriptFileName: Enemy.cs
         enableInput: false
       - name: Box Collider
+        Id: DRMzIdqXYeVCuBWNaiQKGgriOsySlHLMC
         Offset: [0, 0, 0]
         Extent: [2, 4, 1]
         IsPlatform: false
   - name: tree
     transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 0, 11.3525867, -31.8640194, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: FNYPKyDnuYbgrlbLFkkpdcwCFIhUtTAZ
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYeVCuBWNaiGKDgriOsySlHLMC
         OBJ File: raw2.obj
         Primative Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
@@ -66,12 +76,14 @@ GameObjects:
   - name: tree
     transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 55.7229538, 11.2828608, -14.925951, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: GzGeAecFyNWCVpTgtboqKTvXQOnHslIE
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYeVCuBWNaiiOsySlHLMC
         OBJ File: raw2.obj
         Primative Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
@@ -80,12 +92,14 @@ GameObjects:
   - name: tree
     transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 33.6069069, 11.2828608, -29.2655926, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: HJKAKugIZEmOGBaJZIFTPqHWBebuHYfF
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYeVCugfdNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
         Primative Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
@@ -94,12 +108,14 @@ GameObjects:
   - name: tree
     transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, -19.7820358, 11.2828608, -16.3715839, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: JjiGbvCQXDIKGUGjlOVIRdGNOBiNezbL
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYeVCuBhgfaiQIgriOsySlHLMC
         OBJ File: raw2.obj
         Primative Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
@@ -108,12 +124,14 @@ GameObjects:
   - name: tree
     transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 32.907711, 11.2828608, -47.7493324, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: OPxqGaQTmmqTdSXLZAasORtnZNkVpOIF
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXdsfCuBWNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
         Primative Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
@@ -122,12 +140,14 @@ GameObjects:
   - name: tree
     transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 38.5798225, 11.3525867, -10, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: QvXzqbYtBmCsBwqOsxniEPBMKBTYpMQt
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXsaasCuBWNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
         Primative Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
@@ -136,26 +156,30 @@ GameObjects:
   - name: tree
     transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, -23.8965645, 11.2828608, -33.7765541, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: SvPPRqunfbNlCeZZUMdhOvQswkJnlDZE
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYeBWNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
         Primative Type: NONE
-        Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+        Material: ItXRTbrlfhBepfgdpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
   - name: tree
     transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 11.0181522, 11.2828608, -10, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: TcQLEaYZbCPAqDykUEUBaqONGNQJiriq
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYeVCuBWNaiQIgriOsySlHLMCdjgfkl
         OBJ File: raw2.obj
         Primative Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
@@ -164,12 +188,14 @@ GameObjects:
   - name: KitchenKnife.obj
     transform: [-2.72988859e-06, -4.96819469e-12, 2.99999976, 0, -1.09195244e-05, 2.99999166, -4.96818125e-12, 0, -2.99999976, -1.09195544e-05, -2.72988859e-06, 0, 5.75572729, 35.463665, 22.657753, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: ZICwICMftFdUGViJZDSLoFIHIzlfeTji
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYeVCuBWNaiQIgriOsySlHLfsdgsdMC
         OBJ File: KitchenKnife.obj
         Primative Type: NONE
         Material: UZVAVXNBfagCfyiPFCiALYYhQcCkfiTs
@@ -178,12 +204,14 @@ GameObjects:
   - name: Knife
     transform: [-43.6491203, 6.50373554, 10.4827576, 0, 11.7218742, 9.85183048, 42.6963806, 0, 3.84521985, 43.796814, -11.1614141, 0, 7.78205824, -6.1523304, -18.4996605, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: alVZDusTpgqSVGZDxqrpFHokPrGbuNDb
     tag: Knife
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYeVCuBWNaiQIgdgfdOsySlHLMC
         OBJ File: Knife.obj
         Primative Type: NONE
         Material: JHnYLBHgMrJlEapYEEiJewGOxWIDdlOH
@@ -192,12 +220,14 @@ GameObjects:
   - name: LIGHT FOR DEVELOPING
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 37.4127464, 0, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: cLQgzwlwLtoQUFDGjPXtYXpwbIqSdbzI
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: PointLight
+        Id: DRMzIdqXYeVCsdfgsduBWNaiQIgriOsySlHLMC
         Color: [0.965686262, 0.894679904, 0.894679904]
         Intensity: 10
         Constant: 100
@@ -206,12 +236,14 @@ GameObjects:
   - name: tree
     transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, -3.47496367, 11.2828608, 3.99023676, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: cXAwBuWDsgFwRUHgQbwXFsSerczIJGho
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYeadsfasuBWNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
         Primative Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
@@ -220,12 +252,14 @@ GameObjects:
   - name: tree
     transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 11.0181522, 11.2828608, -51.6943817, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: euhEdsEhImohQwJUcTVeeTGNIumPLGTe
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYeVCadfafdsBWNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
         Primative Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
@@ -234,12 +268,14 @@ GameObjects:
   - name: FlashLight.obj
     transform: [1.27390379e-07, 2.31840724e-13, 0.139995128, 0, 5.09519964e-07, -0.139983818, -2.3182232e-13, 0, 0.140000045, 5.09579024e-07, -1.27394856e-07, 0, -1.40301001, -1.05442345, -2.66778755, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: fQJlgIlJNzavEavmlKoMTtzInYrjrzlH
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYesdfgVCuBWNaiQIgriOsySlHLMC
         OBJ File: FlashLight.obj
         Primative Type: NONE
         Material: inbGYwvvrCOUbkIgSZPVSjfRXOrVrbgt
@@ -248,12 +284,14 @@ GameObjects:
   - name: tree
     transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 31.6646576, 11.2828608, 6.63354969, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: gMRAajYMrJucfllHCDXRJKDJuxuNFbMB
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYeVCuBWNaisgdfQIgriOsySlHLMC
         OBJ File: raw2.obj
         Primative Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
@@ -262,12 +300,14 @@ GameObjects:
   - name: House.obj
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0.999919236, 0, 68.5070877, -1.60997248, -12.526413, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: hcOOWXgwkGmFwmMSZYGKKEOvgkQbBsNT
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYeVCuBWNaiQIgriOsySlHLMCsdfggsdf
         OBJ File: House.obj
         Primative Type: NONE
         Material: jhlXRMcQvymIssELRfYEwWNFIGGUTuFa
@@ -276,12 +316,14 @@ GameObjects:
   - name: Glock
     transform: [0.101430178, -0.190825716, 0.976347983, 0, -0.0706905052, 0.97753948, 0.198402449, 0, -0.99220562, -0.0891359225, 0.085656099, 0, 0.130550236, -0.192591578, -0.312077612, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: jykpoAumHdlBiQOvUQQdnwtfajWsQfke
     tag: Pistol
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYeVCuBWNaiQIgriOsySlHLMCdsfgdfg
         OBJ File: GLOCK19.obj
         Primative Type: NONE
         Material: COTEmqWtabZVUsHHEpmQVDpKbypoOODB
@@ -290,53 +332,62 @@ GameObjects:
   - name: EnemyManager
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: mlvFwSsLPuYXLJqjKAmWeNVUdZBiVSoJ
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Scriptable
+        Id: DRMzIdqXYeVCuBWNaiQIgriOsySlHLMCsadftgas
         currentRound: 1
         scriptFileName: EnemyManager.cs
         enableInput: true
   - name: Player
-    transform: [-0.47468698, -7.4505806e-09, -0.880154908, 0, -0.205280334, 0.97242111, 0.1107122, 0, 0.855881155, 0.233232081, -0.461595654, 0, 0, 4.84747028, 0, 1]
+    transform: [0.998146772, 0, 0.0608527437, 0, -0.00210536458, 0.999401331, 0.0345335789, 0, -0.0608163103, -0.0345976986, 0.997549176, 0, 0, 4.94747019, 0, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
     tag: Player
     parent: NONE
     children: []
     Components:
       - name: Camera
+        Id: DRMzIdqXYeVCuBWNaiQIgriOsySlHLMCsdfg
         FOV: 50
         Near Plane: 0.100000001
         Far Plane: 1000
         Is Main Camera: false
       - name: Physics
+        Id: DRMzIdqXYeVCuBWNaiQIgriOsySlHLMCdfgh
         Gravity: true
         Mass: 1
         Force: [0, 0, 0]
         Acceleration: [0, 0, 0]
-        Velocity: [0, 10, 0]
+        Velocity: [0, 15, 0]
       - name: Controllable
+        Id: DRMzIdqXYeVCuBWNaiQIgriOsySlHLMCsgdfdsgf
         Enable Forces: true
         Movement Speed: 3
         Rotation Speed: 0.00499999989
         Allow Instant Turnaround: true
         Allow Jump: true
       - name: Box Collider
+        Id: DRMzIdqXYeVCuBWNaiQIgriOsySlHLMCsdgf
         Offset: [0, 0, 0]
         Extent: [1, 2, 6]
         IsPlatform: false
       - name: SpotLight
+        Id: DRMzIdqXYeVCuBWNaiQIsdgfgriOsySlHLMC
         Color: [1, 1, 1]
         Intensity: 10
         Constant: 1
         Linear: 0.0900000036
         Quadratic: 0.0320000015
         Cut Off Angle: 1
-        Outer Cut Off Angle: 17
+        Outer Cut Off Angle: 25
       - name: Scriptable
+        Id: DRMzIdqXYeVCuBWNaisdgfQIgriOsySlHLMC
         ammoCountAK: 30
         ammoCountGlock: 20
         scriptFileName: Player.cs
@@ -344,12 +395,14 @@ GameObjects:
   - name: tree
     transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 16.3710613, 11.3525867, -39.602562, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: nuSNwzvtHNpKvAUZzNhAeJGKLiQLGdUp
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYeVCuBsdfgaiQIgriOsySlHLMC
         OBJ File: raw2.obj
         Primative Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
@@ -358,12 +411,14 @@ GameObjects:
   - name: tree
     transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, -6.68417168, 11.2828608, -44.2687912, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: pQwanxaVqKizRabXXFEjXeXGSUftqpJQ
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXgsdfCuBWNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
         Primative Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
@@ -372,12 +427,14 @@ GameObjects:
   - name: tree
     transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 44.742527, 11.2828608, -37.6219177, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: qbwhHBDpTfgMGkbunIYymTOmEhSCXpbm
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYswdfhuBWNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
         Primative Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
@@ -386,12 +443,14 @@ GameObjects:
   - name: tree
     transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 0.0644311905, 11.2828608, 22.4972935, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: rFmMLPLiViVdEBBnmGHXrXjftylJXNPU
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYeVsdgfhWNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
         Primative Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
@@ -400,12 +459,14 @@ GameObjects:
   - name: AK-47
     transform: [-10.0000019, 8.7340668e-05, 0, 0, 8.73406534e-05, 10, 0.000177939713, 0, 1.55413726e-09, 0.000177939743, -10.0000019, 0, 1, -1.07996511, -2.51851416, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: rNmeXBLIRUWrXYcTJidcyRiTATgvQsjT
     tag: AK47
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYeVCshdQIgriOsySlHLMC
         OBJ File: AK-48.obj
         Primative Type: NONE
         Material: zjOREuYjBldEKQQErZkIggPbPzKYwBll
@@ -414,30 +475,35 @@ GameObjects:
   - name: Plane
     transform: [500, 0, 0, 0, 0, 1, 0, 0, 0, 0, 500, 0, 0, -1.09831452, 0, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: sMlWhtjyDGUJBMUHljEtTwiOdvZjwYTZ
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYeVCudfdaiQIgriOsySlHLMC
         OBJ File: ""
         Primative Type: PLANE
         Material: bkbCvuwlPUqrIjktAUENfFgZDntkKrIZ
         Render From Camera Transform: false
         Is Visible: true
       - name: Box Collider
+        Id: DRMzIdqXYeVCuBWNaisfgjriOsySlHLMC
         Offset: [0, 0, 0]
         Extent: [10000, 1, 1000]
         IsPlatform: true
   - name: tree
     transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 11.0181522, 11.2828608, 9.24892616, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: tTYtsGNzFRFVSZZaryLeqAjqmceKrLeE
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqXYsdfgaiQIgriOsySlHLMC
         OBJ File: raw2.obj
         Primative Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
@@ -446,45 +512,47 @@ GameObjects:
   - name: tree
     transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 24.5694027, 11.3542585, -10, 1]
     isVisible: true
+    isExternalMultiplayerObject: false
     Id: wDqpynJXUTEauLWjQkkhAIhvRVrlwFpr
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
+        Id: DRMzIdqasdBWNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
         Primative Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
 Textures:
-  - name: KitchenKnifeAlbedo
-    fileName: KitchenKnifeAlbedo.png
-    Id: CNfaOzQYLIKklcdDsCcAzjKCsayBNhkU
-  - name: KitchenKnifeMetal
-    fileName: KitchenKnifeMetal.png
-    Id: DpAcESxkTZTtOxVBbkjnmiyPHDllEENu
-  - name: torch_BaseColor
-    fileName: torch_BaseColor.png
-    Id: GdwNGHOzqkMaWVIJfFpwQAXtBLKxZTzA
-  - name: AK 47_Material_BaseColor
-    fileName: AK 47_Material_BaseColor.png
-    Id: HDnmNjOrNtEjlwhcDACrqRPqYsiDKCND
   - name: raw3
     fileName: raw3.jpeg
-    Id: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
-  - name: BowieKnife_BaseColor
-    fileName: BowieKnife_BaseColor.png
-    Id: KBnHTfCYDdtVKBGtpQrUaYiePdhvXhWL
-  - name: cottage_diffuse
-    fileName: cottage_diffuse.png
-    Id: KUraiXCrlPXGbdWQTchbZfzYsiZnjsXn
+    Id: EgOTFKKkuARwfdWCxmhkEGHjdEzMSqoZ
   - name: glocken
     fileName: glocken.png
-    Id: hQuVVhkiCALSLeNAaVdGXGXezifThHKL
+    Id: JjfjttdKnZctclOuflRBgdPhDqHgdwBs
+  - name: BowieKnife_BaseColor
+    fileName: BowieKnife_BaseColor.png
+    Id: KpYDWiCfoUmjoEkoqcZjkfNCjhOIfBdr
   - name: glock_4K_BaseColor
     fileName: glock_4K_BaseColor.png
-    Id: szOnTQheLAzOyRNCpTYnNEQnkWTxAmNa
+    Id: LmPpNxBhhPuTmdIiCKaPwQbqeDDqpQpl
+  - name: cottage_diffuse
+    fileName: cottage_diffuse.png
+    Id: PhvqSKuTAVWAnzSUBZeAApHVNheUGXYL
+  - name: AK 47_Material_BaseColor
+    fileName: AK 47_Material_BaseColor.png
+    Id: XasKIHHljunDgtWlEQrWwzaLfvpLapnS
+  - name: torch_BaseColor
+    fileName: torch_BaseColor.png
+    Id: ijeHPDMfjyFTNfHPjjkiMWqzmaPJpKCd
+  - name: KitchenKnifeAlbedo
+    fileName: KitchenKnifeAlbedo.png
+    Id: nSvflCebFWxXmUKBkCHOVqIxccKJvQFF
+  - name: KitchenKnifeMetal
+    fileName: KitchenKnifeMetal.png
+    Id: tmgyCIpWAeAaWLjuuXbPJkwocphpyCHM
 Materials:
   - Base Color: [1, 1, 1]
     Transparency: 1
@@ -492,27 +560,30 @@ Materials:
     Roughness: 0
     Shininess: 0.5
     Name: GlockMaterial
-    Diffuse Texture: szOnTQheLAzOyRNCpTYnNEQnkWTxAmNa
+    Diffuse Texture: LmPpNxBhhPuTmdIiCKaPwQbqeDDqpQpl
     Specular Texture: ""
     Id: COTEmqWtabZVUsHHEpmQVDpKbypoOODB
+    isExternalMultiplayerObject: false
   - Base Color: [1, 1, 1]
     Transparency: 1
     Emission: [0, 0, 0]
     Roughness: 0
     Shininess: 0.5
     Name: Tree2Material
-    Diffuse Texture: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
-    Specular Texture: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+    Diffuse Texture: EgOTFKKkuARwfdWCxmhkEGHjdEzMSqoZ
+    Specular Texture: ""
     Id: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+    isExternalMultiplayerObject: false
   - Base Color: [1, 1, 1]
     Transparency: 1
     Emission: [0, 0, 0]
     Roughness: 0
     Shininess: 0.5
     Name: KnifeMaterial
-    Diffuse Texture: KBnHTfCYDdtVKBGtpQrUaYiePdhvXhWL
+    Diffuse Texture: KpYDWiCfoUmjoEkoqcZjkfNCjhOIfBdr
     Specular Texture: ""
     Id: JHnYLBHgMrJlEapYEEiJewGOxWIDdlOH
+    isExternalMultiplayerObject: false
   - Base Color: [0.450980365, 0.383619398, 0.123798527]
     Transparency: 1
     Emission: [0, 0, 0]
@@ -522,15 +593,17 @@ Materials:
     Diffuse Texture: ""
     Specular Texture: ""
     Id: OeRWJuLJtlngqaKRijjLgLlPxWWpwQBu
+    isExternalMultiplayerObject: false
   - Base Color: [1, 1, 1]
     Transparency: 1
     Emission: [0, 0, 0]
     Roughness: 0
     Shininess: 0.5
     Name: KitchenKnifeMaterial
-    Diffuse Texture: CNfaOzQYLIKklcdDsCcAzjKCsayBNhkU
-    Specular Texture: DpAcESxkTZTtOxVBbkjnmiyPHDllEENu
+    Diffuse Texture: tmgyCIpWAeAaWLjuuXbPJkwocphpyCHM
+    Specular Texture: tmgyCIpWAeAaWLjuuXbPJkwocphpyCHM
     Id: UZVAVXNBfagCfyiPFCiALYYhQcCkfiTs
+    isExternalMultiplayerObject: false
   - Base Color: [0.283333361, 0.269691378, 0.201481491]
     Transparency: 1
     Emission: [0, 0, 0]
@@ -540,46 +613,51 @@ Materials:
     Diffuse Texture: ""
     Specular Texture: ""
     Id: bkbCvuwlPUqrIjktAUENfFgZDntkKrIZ
+    isExternalMultiplayerObject: false
   - Base Color: [1, 1, 1]
     Transparency: 1
     Emission: [0, 0, 0]
     Roughness: 0
     Shininess: 0.5
     Name: Enemy Material
-    Diffuse Texture: hQuVVhkiCALSLeNAaVdGXGXezifThHKL
+    Diffuse Texture: JjfjttdKnZctclOuflRBgdPhDqHgdwBs
     Specular Texture: ""
     Id: hZYYcYtKpiPCHvMlODrrndOPQMbqNcru
+    isExternalMultiplayerObject: false
   - Base Color: [1, 1, 1]
     Transparency: 1
     Emission: [0, 0, 0]
     Roughness: 0
     Shininess: 0.5
     Name: FlashLightMaterial
-    Diffuse Texture: GdwNGHOzqkMaWVIJfFpwQAXtBLKxZTzA
-    Specular Texture: GdwNGHOzqkMaWVIJfFpwQAXtBLKxZTzA
+    Diffuse Texture: ijeHPDMfjyFTNfHPjjkiMWqzmaPJpKCd
+    Specular Texture: ijeHPDMfjyFTNfHPjjkiMWqzmaPJpKCd
     Id: inbGYwvvrCOUbkIgSZPVSjfRXOrVrbgt
+    isExternalMultiplayerObject: false
   - Base Color: [1, 1, 1]
     Transparency: 1
     Emission: [0, 0, 0]
     Roughness: 0
     Shininess: 0.5
     Name: HouseMaterial
-    Diffuse Texture: KUraiXCrlPXGbdWQTchbZfzYsiZnjsXn
+    Diffuse Texture: PhvqSKuTAVWAnzSUBZeAApHVNheUGXYL
     Specular Texture: ""
     Id: jhlXRMcQvymIssELRfYEwWNFIGGUTuFa
+    isExternalMultiplayerObject: false
   - Base Color: [1, 1, 1]
     Transparency: 1
     Emission: [0, 0, 0]
     Roughness: 0
     Shininess: 0.5
     Name: AK48Material
-    Diffuse Texture: HDnmNjOrNtEjlwhcDACrqRPqYsiDKCND
+    Diffuse Texture: XasKIHHljunDgtWlEQrWwzaLfvpLapnS
     Specular Texture: ""
     Id: zjOREuYjBldEKQQErZkIggPbPzKYwBll
+    isExternalMultiplayerObject: false
 Actions:
   - Reload: [21]
   - Copy: [224, 6]
-  - SwitchToKnife: [30]
   - Fire: [9]
+  - SwitchToKnife: [30]
   - SwitchToPistol: [31]
   - SwitchToRifle: [32]

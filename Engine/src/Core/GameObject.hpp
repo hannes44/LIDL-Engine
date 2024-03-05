@@ -42,6 +42,8 @@ namespace engine
 
 		UUID uuid{};
 
+		bool isExternalMultiplayerObject = false;
+
 		UUID getUUID() override;
 
 		Game* game = nullptr;

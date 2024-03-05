@@ -8,6 +8,8 @@
 #include "Components/PhysicsComponent.hpp"
 #include "GamePhysicsSettings.hpp"
 
+#include <mutex>
+
 namespace engine
 {
 	constexpr auto PHYSICS_TIME_CONVERSION_FACTOR = 1000000;
@@ -16,6 +18,12 @@ namespace engine
 	{
 	protected:
 		GamePhysics() {};
+
+		void sendMultiplayerState(Game* game);
+		std::string MULTIPLAYER_STATE_FOLDER = "../../MultiplayerStates/";
+		std::mutex multiplayerSendLock{};
+		int multiplayerStateUpdateIntervalMS = 25;
+		long long lastMultiplayerStateUpdateTimestamp = 0;
 
 		inline static GamePhysics* instance;
 		long long lastPhysicsUpdateTimestamp = 0;

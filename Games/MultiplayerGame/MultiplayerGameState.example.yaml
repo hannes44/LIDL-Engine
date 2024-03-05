@@ -1,0 +1,53 @@
+GameObjects:
+  - name: Camera
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 10, 1]
+    isVisible: true
+    Id: TeRZnqasqGtIYsRCThhtVINDVamtIEwv
+    Components:
+      - name: Camera
+        FOV: 50
+        Near Plane: 0.100000001
+        Far Plane: 1000
+        Is Main Camera: false
+  - name: Remote box
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+    isVisible: true
+    Id: qGERkDvJBWJWWLqectSWtFieEcUTprKn
+    Components:
+      - name: Mesh
+        OBJ File: ""
+        Primative Type: CUBE
+        Material: uMZCQJpNlEAoiIXAaEZIStZtsXaNNTjS
+      - name: Physics
+        Gravity: false
+        Mass: 1
+        Force: [0, 0, 0]
+        Acceleration: [0, 0, 0]
+        Velocity: [0, 0, 0]
+  - name: Local box
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -10, 0, 0, 1]
+    isVisible: true
+    Id: uDarpTyUHpKPYJLfUikOPemTUjLnKIEc
+    Components:
+      - name: Mesh
+        OBJ File: ""
+        Primative Type: CUBE
+        Material: XgrmDgilsmNJROfaHhePMwQHaagiCYnB
+      - name: Physics
+        Gravity: false
+        Mass: 1
+        Force: [0, 0, 0]
+        Acceleration: [0, 0, 0]
+        Velocity: [0, 0, 0]
+  - name: Light
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1]
+    isVisible: true
+    Id: zrkpTmGkVbOjffxULBgrSrYCsYPicFcw
+    Components:
+      - name: PointLight
+        Color: [1, 1, 1]
+        Intensity: 10
+Textures:
+  []
+Materials:
+  []

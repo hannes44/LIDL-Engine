@@ -11,8 +11,9 @@ extern "C"
 		engine::Window::instance = window;
 		engine::InputFramework::instance = inputFramework;
 		engine::Logger::init();
-		engine::Game* game = new engine::Snake3D();
 		engine::ResourceManager::instance = resourceManager;
+		
+		engine::Game* game = new engine::Snake3D();
 		resourceManager->changeGame(game);
 		return game;
 	}

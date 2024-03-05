@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Components/CameraComponent.hpp"
 #include <memory>
 #include <vector>
@@ -29,6 +30,7 @@ namespace engine
 	class Game
 	{
 	public:
+		Game();
 		// Called every frame
 		virtual void update() = 0;
 
@@ -98,6 +100,12 @@ namespace engine
 
 		RendererSettings renderingSettings{};
 
+		virtual bool isMultiplayerGame() {
+			return false;
+		}
+
+		std::string instanceId = "";
+		
 		/// Returns a vector of the GameObjects that collided with the ray, sorted from closest to farthest
 		std::vector<std::shared_ptr<GameObject>> checkRayCollisions(glm::vec3 origin, glm::vec3 direction);
 

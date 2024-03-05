@@ -1,18 +1,84 @@
+#pragma once
+
 #include <winsock2.h>
 #include <string>
 #include <functional>
+#include <queue>
+#include <mutex>
+#include <condition_variable>
 
 namespace engine {
+	// Thread safe queue
+	template <class T>
+	class SafeQueue
+	{
+	public:
+		SafeQueue()
+			: q()
+			, m()
+			, c()
+		{}
+
+		~SafeQueue()
+		{}
+
+		void clear()
+		{
+			std::lock_guard<std::mutex> lock(m);
+			std::queue<T> empty;
+			std::swap(q, empty);
+		}
+
+		// Add an element to the queue.
+		void enqueue(T t)
+		{
+			std::lock_guard<std::mutex> lock(m);
+			q.push(t);
+			c.notify_one();
+		}
+
+		// Get the front element
+		// If the queue is empty, wait until an element is available
+		T dequeue(void)
+		{
+			std::unique_lock<std::mutex> lock(m);
+			
+			// Release lock as long as the wait and reaquire it afterwards
+			while (q.empty())
+				c.wait(lock);
+			
+			T val = q.front();
+			q.pop();
+			return val;
+		}
+
+	private:
+		std::queue<T> q;
+		mutable std::mutex m;
+		std::condition_variable c;
+	};
+
 	enum ClientMessageType {
 		StateUpdate,
 		CustomMessage
 	};
 
+	struct ClientMessage {
+		ClientMessageType type;
+		std::string message;
+	};
+
 	class Client {
 	public:
-		static int run(std::function<void(std::string)> onStateUpdate);
+		static SOCKET OpenSocket();
+		static void RunReceiver(SOCKET clientSocket, std::function<void(std::string)> onStateUpdate);
+		static void RunTransmitter(SOCKET clientSocket);
+		static void QueueMessage(ClientMessage message);
 
 	private:
+		static std::mutex m;
+		static SafeQueue<ClientMessage> messageQueue;
+
 		static std::string GetHeader(ClientMessageType type);
 		static bool SocketSend(SOCKET socket, std::string message);
 		static bool SendMsg(SOCKET socket, std::string message, ClientMessageType type);

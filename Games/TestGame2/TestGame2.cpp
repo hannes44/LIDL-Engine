@@ -2,12 +2,13 @@
 
 extern "C" {
 	__declspec(dllexport) engine::Game* createGame(engine::Renderer* renderer, engine::Window* window, engine::InputFramework* inputFramework, engine::ResourceManager* resourceManager) {
-		engine::Game* game = new engine::TestGame2();
 		engine::Renderer::instance = renderer;
 		engine::Window::instance = window;
 		engine::InputFramework::instance = inputFramework;
 		engine::Logger::init();
 		engine::ResourceManager::instance = resourceManager;
+		
+		engine::Game* game = new engine::TestGame2();
 		resourceManager->changeGame(game);
 		return game;
 	}
@@ -47,7 +48,7 @@ namespace engine {
 		amogus->addComponent(meshComponent1);
 		amogus->addComponent(std::make_unique<PhysicsComponent>(physicsComponentWithGravity));
 		amogus->addComponent(std::make_unique<BoxColliderComponent>(boxColliderComponent));
-		amogus->addComponent(std::make_unique<ControllableComponent>(true));
+		amogus->addComponent(std::make_unique<ControllableComponent>(true, true));
 		addGameObject(std::unique_ptr<GameObject>(amogus));
 
 

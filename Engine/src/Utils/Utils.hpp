@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#define _WINSOCKAPI_
 #include <Windows.h>
 #include <atlstr.h>
 

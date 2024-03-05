@@ -21,7 +21,7 @@ namespace engine
 
 
 
-		LOG_INFO("MeshComponent: Created mesh with {0} vertices and {1} indices", vertices.size(), indices.size());
+		LOG_TRACE("MeshComponent: Created mesh with {0} vertices and {1} indices", vertices.size(), indices.size());
 	}
 
 	std::shared_ptr<MeshComponent> MeshComponent::createMeshFromObjFile(const std::string& filename, bool isGameAsset)
@@ -216,7 +216,7 @@ namespace engine
 	}
 	std::shared_ptr<MeshComponent> MeshComponent::createCube()
 	{
-		LOG_INFO("Creating cube mesh");
+		LOG_TRACE("Creating cube mesh");
 		std::vector<Vertex> vertices{};
 		std::vector<uint32_t> indices{};
 

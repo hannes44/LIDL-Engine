@@ -1,6 +1,7 @@
 #include "Display.hpp"
 #include "DisplayTerminal.hpp"
 #include <stdlib.h>
+#define _WINSOCKAPI_
 #include <windows.h>
 #include <iostream>
 #include <algorithm>

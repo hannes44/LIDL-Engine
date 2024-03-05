@@ -6,6 +6,7 @@
 #include "Components/SphereColliderComponent.hpp"
 #include "Components/PointLightComponent.hpp"
 #include "Components/CameraComponent.hpp"
+#include "Components/MultiplayerComponent.hpp"
 #include "Components/ScriptableComponent.hpp"
 #include "Components/ControllableComponent.hpp"
 #include "Components/SpotLightComponent.hpp"
@@ -16,7 +17,7 @@ namespace engine
 {
 	std::shared_ptr<Component> ComponentFactory::createComponent(std::string componentName)
 	{
-		LOG_INFO("Creating component: {0}", componentName);
+		LOG_TRACE("Creating component: {0}", componentName);
 		if (componentName == "Mesh")
 		{
 			return std::make_shared<MeshComponent>();
@@ -45,16 +46,21 @@ namespace engine
 		{
 			return std::make_shared<CameraComponent>();
 		}
-		else if (componentName == "Scriptable")
+		else if (componentName == "Multiplayer")
 		{
-			return std::make_shared<ScriptableComponent>();
+			return std::make_shared<MultiplayerComponent>();
 		}
 		else if (componentName == "Controllable")
 		{
 			return std::make_shared<ControllableComponent>();
 		}
+		else if (componentName == "Scriptable")
+		{
+			return std::make_shared<ScriptableComponent>();
+		}
 
 		LOG_INFO("Did not find component: {0} in list of default components, looking for script component");
+		
 		
 		// Add .cs extension to the component if it is not already there
 		if (componentName.find(".cs") == std::string::npos)

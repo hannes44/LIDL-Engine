@@ -55,8 +55,9 @@ namespace engine
 			for (auto component : gameObject->getComponents())
 			{
 				if (dynamic_cast<PointLightComponent*>(component.get()))
-				{
-					PointLightComponent* light = dynamic_cast<PointLightComponent*>(component.get());
+					if (dynamic_cast<PointLightComponent*>(component.get()))
+					{
+						PointLightComponent* light = dynamic_cast<PointLightComponent*>(component.get());
 
 					std::string index = "[" + std::to_string(pointLightIndex) + "]";
 					glm::vec3 gameObjectPosition = gameObject->getGlobalTransform().getPosition();
@@ -146,7 +147,7 @@ namespace engine
 		dir = glm::normalize(dir);
 
 		glm::vec3 color = glm::vec3(0, 1, 0);
-		
+
 		glm::vec3 up = glm::vec3(0, 1, 0);
 		glm::vec3 side = glm::vec3(0, 0, 1);
 		glm::vec3 end = pos + dir * length;
