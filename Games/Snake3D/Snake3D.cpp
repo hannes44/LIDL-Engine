@@ -155,16 +155,19 @@ namespace engine
 
 	void Snake3D::initialize()
 	{
-		engine::PointLightComponent pointLightComponent = engine::PointLightComponent();
+		auto pointLightComponent = std::make_shared<PointLightComponent>();
+		pointLightComponent->quadratic = 0;
+		pointLightComponent->linear = 0;
+		pointLightComponent->constant = 2.5f;
 
 		GameObject* light = new GameObject();
 		light->transform.setPosition(glm::vec3(0, 20, 0));
-		light->addComponent(std::make_unique<engine::PointLightComponent>(pointLightComponent));
+		light->addComponent(pointLightComponent);
 		light->name = "Light";
 		addGameObject(std::unique_ptr<GameObject>(light));
 
 		GameObject* camera = new GameObject();
-		camera->transform.setPosition(glm::vec3(3, 0, 25));
+		camera->transform.setPosition(glm::vec3(3, 0, 40));
 		camera->addComponent(std::make_unique<engine::CameraComponent>());
 		camera->name = "Camera";
 		addGameObject(std::unique_ptr<GameObject>(camera));
@@ -184,7 +187,7 @@ namespace engine
 
 		std::shared_ptr<MeshComponent> headMesh = engine::MeshComponent::createMeshFromObjFile("amugus.obj");
 		std::weak_ptr<engine::Material> headMaterial = createMaterial("AmogusMaterial");
-		headMaterial.lock()->baseColor = glm::vec3(2.5f, 0, 0);
+		headMaterial.lock()->baseColor = glm::vec3(1.f, 0, 0);
 		headMesh->setMaterial(headMaterial);
 
 		head->addComponent(headMesh);
@@ -205,7 +208,7 @@ namespace engine
 
 		std::shared_ptr<MeshComponent> appleMesh = engine::MeshComponent::createMeshFromObjFile("apple.obj");
 		std::weak_ptr<engine::Material> appleMaterial = createMaterial("Apple");
-		appleMaterial.lock()->baseColor = glm::vec3(0, 2.5f, 0);
+		appleMaterial.lock()->baseColor = glm::vec3(0, 1.f, 0);
 		appleMesh->setMaterial(appleMaterial);
 		applePtr->addComponent(appleMesh);
 

@@ -3,29 +3,50 @@ GameObjects:
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1]
     isVisible: true
     isExternalMultiplayerObject: false
-    Id: CNvALjkeoPiPyCyaVpOgaDbjupIhDBaP
+    Id: IAJEYFIhRiQqfcfyINiKijJRfwKYvaYG
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: PointLight
-        Id: jIIpelJYXnwGwjVTmveXUAEkZnKrulev
+        Id: dEYSWxfvrJtHwFhjkcLHNsbAUlFBvqCi
         Color: [1, 1, 1]
         Intensity: 10
-        Constant: 1
-        Linear: 0.0900000036
-        Quadratic: 0.0320000015
-  - name: Camera
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 3, 0, 25, 1]
+        Constant: 2.5
+        Linear: 0
+        Quadratic: 0
+  - name: Apple
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 4, -3, -9, 1]
     isVisible: true
     isExternalMultiplayerObject: false
-    Id: EmMihsSgPHMJwLRvuYDAjxqrccrdDUhF
+    Id: QrnwqExBqNEbkBCLJFwedThJemUCzNCz
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Box Collider
+        Id: TVJOwJLMuBkIIdEBuYRsQHmOFJYGOHvY
+        Offset: [0, 0, 0]
+        Extent: [6, 6, 6]
+        IsPlatform: false
+      - name: Mesh
+        Id: FlYrKpCGMfMOQRjqUbTjTNHkjoMNtVSK
+        OBJ File: apple.obj
+        Primative Type: NONE
+        Material: UEwBpZSsTMtxVjrCEVtAMWtGYTWWXhJP
+        Render From Camera Transform: false
+        Is Visible: true
+  - name: Camera
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 3, 0, 40, 1]
+    isVisible: true
+    isExternalMultiplayerObject: false
+    Id: ZZHDSHOstmqzXdDXxPribvFTcQKsoCAw
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Camera
-        Id: ZSgTkMRvatpKmEAKTiYXWDBXeUUlNlUe
+        Id: rQOpWMZSgwqaalwQlVKPlqOsyZgBBHjI
         FOV: 50
         Near Plane: 0.100000001
         Far Plane: 1000
@@ -34,62 +55,41 @@ GameObjects:
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
     isVisible: true
     isExternalMultiplayerObject: false
-    Id: SpEKkVsEsFAJQPWPVHsZSCuSoLQMxoYO
+    Id: fEymcKCBcXceYElzUhHsxgCDTZZqgMcn
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
-        Id: bDcZurCBrOeVuLupqZmmKqKqdzIdLIVx
+        Id: XIHooOSXoOOoLsRlYiVggAGttPrZtBmH
         OBJ File: amugus.obj
         Primative Type: NONE
-        Material: ZWBWxiGUIejVXShqOjalLvrvGjBSvahr
+        Material: OtoySuUKRvQljOIIuRpMwjhfAWdcrTzQ
         Render From Camera Transform: false
         Is Visible: true
       - name: Physics
-        Id: AoDeUJuOpMYOnhLekUlakwqFOepHVXZr
+        Id: fKIpvdCLtNlErniWKmqBuLZrQmKKuCBM
         Gravity: false
         Mass: 1
         Force: [0, 0, 0]
         Acceleration: [0, 0, 0]
         Velocity: [0, 0, 0]
       - name: Box Collider
-        Id: gXbfObjtAFneUvXfJncfneuVIgqqiMTd
+        Id: HgElatIsggPrBaaFaBMzkeygaSPjidvT
         Offset: [0, 0, 0]
         Extent: [1, 1.5, 1]
         IsPlatform: false
       - name: Controllable
-        Id: FhCkZlKmYpbgSvrBrJtuUhfPxpRNcWtr
+        Id: UqCTOSgEnjltrgaoQwjAAoKKnYmIEnDN
         Enable Forces: false
         Movement Speed: 10
         Rotation Speed: 0.00499999989
         Allow Instant Turnaround: false
         Allow Jump: false
-  - name: Apple
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 4, -3, -9, 1]
-    isVisible: true
-    isExternalMultiplayerObject: false
-    Id: fWNggMsLfYAoKakCmtumkzLhnqEvHIIl
-    tag: ""
-    parent: NONE
-    children: []
-    Components:
-      - name: Box Collider
-        Id: WRYlbbDMqgXGVjaDsfNlvonwuLoIAHKf
-        Offset: [0, 0, 0]
-        Extent: [6, 6, 6]
-        IsPlatform: false
-      - name: Mesh
-        Id: iMjDSPcKhgiTeenWORmZkLThhoLOyGqD
-        OBJ File: apple.obj
-        Primative Type: NONE
-        Material: bRBjXHLKYrFBDfSEZSietHtKevmACVfR
-        Render From Camera Transform: false
-        Is Visible: true
 Textures:
   []
 Materials:
-  - Base Color: [2.5, 0, 0]
+  - Base Color: [1, 0, 0]
     Transparency: 1
     Emission: [0, 0, 0]
     Roughness: 0
@@ -97,9 +97,9 @@ Materials:
     Name: AmogusMaterial
     Diffuse Texture: ""
     Specular Texture: ""
-    Id: ZWBWxiGUIejVXShqOjalLvrvGjBSvahr
+    Id: OtoySuUKRvQljOIIuRpMwjhfAWdcrTzQ
     isExternalMultiplayerObject: false
-  - Base Color: [0, 2.5, 0]
+  - Base Color: [0, 1, 0]
     Transparency: 1
     Emission: [0, 0, 0]
     Roughness: 0
@@ -107,7 +107,7 @@ Materials:
     Name: Apple
     Diffuse Texture: ""
     Specular Texture: ""
-    Id: bRBjXHLKYrFBDfSEZSietHtKevmACVfR
+    Id: UEwBpZSsTMtxVjrCEVtAMWtGYTWWXhJP
     isExternalMultiplayerObject: false
 Actions:
   - Copy: [224, 6]
