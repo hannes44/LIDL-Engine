@@ -25,7 +25,7 @@ namespace engine {
 	}
 
 	void FPSGame::update() {
-
+		
 	}
 
 	void FPSGame::initialize() {

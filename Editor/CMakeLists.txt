@@ -10,8 +10,6 @@ target_sources(Editor PRIVATE
 	src/GUI/EditorGUI.cpp
 	src/GUI/MainMenuGUI.hpp
 	src/GUI/MainMenuGUI.cpp
-	src/GUI/GUIHelper.hpp
-	src/GUI/GUIHelper.cpp
 	src/AssetExplorer/AssetManager.hpp
 	src/AssetExplorer/AssetManager.cpp
 	src/AssetExplorer/AssetNode.hpp
@@ -28,8 +26,6 @@ source_group("GUI" FILES
 	src/GUI/EditorGUI.cpp
 	src/GUI/MainMenuGUI.hpp
 	src/GUI/MainMenuGUI.cpp
-	src/GUI/GUIHelper.hpp
-	src/GUI/GUIHelper.cpp
 	src/GUI/ConsoleGUI.hpp
 	src/GUI/ConsoleGUI.cpp
 )

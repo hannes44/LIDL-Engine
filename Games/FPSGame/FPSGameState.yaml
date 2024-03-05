@@ -23,7 +23,10 @@ GameObjects:
         OBJ File: ""
         Primative Type: CUBE
         Material: hZYYcYtKpiPCHvMlODrrndOPQMbqNcru
+        Render From Camera Transform: false
+        Is Visible: true
       - name: Scriptable
+        moveSpeed: 5
         scriptFileName: Enemy.cs
         enableInput: false
       - name: Box Collider
@@ -42,11 +45,13 @@ GameObjects:
         OBJ File: KitchenKnife.obj
         Primative Type: NONE
         Material: UZVAVXNBfagCfyiPFCiALYYhQcCkfiTs
-  - name: Knife.obj
-    transform: [100, 0, 0, 0, 0, 100, 0, 0, 0, 0, 100, 0, 0, 17.6802177, 7.22515059, 1]
+        Render From Camera Transform: false
+        Is Visible: true
+  - name: Knife
+    transform: [-43.6491203, 6.50373554, 10.4827576, 0, 11.7218742, 9.85183048, 42.6963806, 0, 3.84521985, 43.796814, -11.1614141, 0, 7.78205824, -6.1523304, -18.4996605, 1]
     isVisible: true
     Id: alVZDusTpgqSVGZDxqrpFHokPrGbuNDb
-    tag: ""
+    tag: Knife
     parent: NONE
     children: []
     Components:
@@ -54,6 +59,8 @@ GameObjects:
         OBJ File: Knife.obj
         Primative Type: NONE
         Material: JHnYLBHgMrJlEapYEEiJewGOxWIDdlOH
+        Render From Camera Transform: true
+        Is Visible: false
   - name: LIGHT FOR DEVELOPING
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 37.4127464, 0, 1]
     isVisible: true
@@ -68,6 +75,20 @@ GameObjects:
         Constant: 1
         Linear: 0.00999999978
         Quadratic: 0
+  - name: FlashLight.obj
+    transform: [1.27390379e-07, 2.31840724e-13, 0.139995128, 0, 5.09519964e-07, -0.139983818, -2.3182232e-13, 0, 0.140000045, 5.09579024e-07, -1.27394856e-07, 0, -1.40301001, -1.05442345, -2.66778755, 1]
+    isVisible: true
+    Id: fQJlgIlJNzavEavmlKoMTtzInYrjrzlH
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: FlashLight.obj
+        Primative Type: NONE
+        Material: inbGYwvvrCOUbkIgSZPVSjfRXOrVrbgt
+        Render From Camera Transform: true
+        Is Visible: true
   - name: House.obj
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0.999919236, 0, 112.499939, -1.60997248, 0, 1]
     isVisible: true
@@ -80,6 +101,22 @@ GameObjects:
         OBJ File: House.obj
         Primative Type: NONE
         Material: jhlXRMcQvymIssELRfYEwWNFIGGUTuFa
+        Render From Camera Transform: false
+        Is Visible: true
+  - name: Glock
+    transform: [0.101430178, -0.190825716, 0.976347983, 0, -0.0706905052, 0.97753948, 0.198402449, 0, -0.99220562, -0.0891359225, 0.085656099, 0, 0.130550236, -0.192591578, -0.312077612, 1]
+    isVisible: true
+    Id: jykpoAumHdlBiQOvUQQdnwtfajWsQfke
+    tag: Pistol
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: GLOCK19.obj
+        Primative Type: NONE
+        Material: COTEmqWtabZVUsHHEpmQVDpKbypoOODB
+        Render From Camera Transform: true
+        Is Visible: true
   - name: EnemyManager
     transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
     isVisible: true
@@ -93,7 +130,7 @@ GameObjects:
         scriptFileName: EnemyManager.cs
         enableInput: true
   - name: Player
-    transform: [-0.883269668, 1.11758709e-08, -0.468865544, 0, -0.120719239, 0.966286063, 0.227416247, 0, 0.453058213, 0.257470936, -0.853491068, 0, 0, 4.24747086, 0, 1]
+    transform: [-0.997633338, -1.16415322e-10, 0.0687580779, 0, -0.001003891, 0.999893427, -0.0145657808, 0, -0.0687507465, -0.0146003347, -0.997527003, 0, 0, 4.64747047, 0, 1]
     isVisible: true
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
     tag: Player
@@ -116,13 +153,10 @@ GameObjects:
         Movement Speed: 3
         Rotation Speed: 0.00499999989
         Allow Instant Turnaround: true
-      - name: Scriptable
-        ammoCount: 30
-        scriptFileName: Weapon.cs
-        enableInput: true
+        Allow Jump: true
       - name: Box Collider
         Offset: [0, 0, 0]
-        Extent: [1, 2, 1]
+        Extent: [1, 2, 6]
         IsPlatform: false
       - name: SpotLight
         Color: [1, 1, 1]
@@ -132,6 +166,13 @@ GameObjects:
         Quadratic: 0.0320000015
         Cut Off Angle: 1
         Outer Cut Off Angle: 17
+      - name: Scriptable
+        ammoCountAK: 30
+        ammoCountGlock: 20
+        scriptFileName: Player.cs
+        enableInput: true
+  - name: AK-47
+    transform: [-10.0000019, 8.7340668e-05, 0, 0, 8.73406534e-05, 10, 0.000177939713, 0, 1.55413726e-09, 0.000177939743, -10.0000019, 0, 1, -1.07996511, -2.51851416, 1]
   - name: Ak-47
     transform: [-9.09962861e-09, -1.65606495e-14, -0.00999999978, 0, 0, 0.00999999978, -1.65606495e-14, 0, 0.00999999978, 0, -9.09962861e-09, 0, 0, -5.13566923, 0, 1]
     isVisible: true
@@ -160,7 +201,7 @@ GameObjects:
     transform: [-7.94949341, -1.44674887e-05, 6.06675863, 0, -2.92403092e-05, 10, -1.44674887e-05, 0, -6.06675863, -2.92403092e-05, -7.94949341, 0, 9.71035576, 8.70111752, 0, 1]
     isVisible: true
     Id: rNmeXBLIRUWrXYcTJidcyRiTATgvQsjT
-    tag: ""
+    tag: AK47
     parent: NONE
     children: []
     Components:
@@ -168,8 +209,10 @@ GameObjects:
         OBJ File: AK-48.obj
         Primative Type: NONE
         Material: zjOREuYjBldEKQQErZkIggPbPzKYwBll
+        Render From Camera Transform: true
+        Is Visible: false
   - name: Plane
-    transform: [175.617752, 0, 0, 0, 0, 1, 0, 0, 0, 0, 129.501724, 0, 0, -1.09831452, 0, 1]
+    transform: [500, 0, 0, 0, 0, 1, 0, 0, 0, 0, 500, 0, 0, -1.09831452, 0, 1]
     isVisible: true
     Id: sMlWhtjyDGUJBMUHljEtTwiOdvZjwYTZ
     tag: ""
@@ -180,6 +223,8 @@ GameObjects:
         OBJ File: ""
         Primative Type: PLANE
         Material: bkbCvuwlPUqrIjktAUENfFgZDntkKrIZ
+        Render From Camera Transform: false
+        Is Visible: true
       - name: Box Collider
         Offset: [0, 0, 0]
         Extent: [10000, 1, 1000]
@@ -191,6 +236,9 @@ Textures:
   - name: KitchenKnifeMetal
     fileName: KitchenKnifeMetal.png
     Id: DpAcESxkTZTtOxVBbkjnmiyPHDllEENu
+  - name: torch_BaseColor
+    fileName: torch_BaseColor.png
+    Id: GdwNGHOzqkMaWVIJfFpwQAXtBLKxZTzA
   - name: AK 47_Material_BaseColor
     fileName: AK 47_Material_BaseColor.png
     Id: HDnmNjOrNtEjlwhcDACrqRPqYsiDKCND
@@ -206,7 +254,19 @@ Textures:
   - name: glocken
     fileName: glocken.png
     Id: hQuVVhkiCALSLeNAaVdGXGXezifThHKL
+  - name: glock_4K_BaseColor
+    fileName: glock_4K_BaseColor.png
+    Id: szOnTQheLAzOyRNCpTYnNEQnkWTxAmNa
 Materials:
+  - Base Color: [1, 1, 1]
+    Transparency: 1
+    Emission: [0, 0, 0]
+    Roughness: 0
+    Shininess: 0.5
+    Name: GlockMaterial
+    Diffuse Texture: szOnTQheLAzOyRNCpTYnNEQnkWTxAmNa
+    Specular Texture: ""
+    Id: COTEmqWtabZVUsHHEpmQVDpKbypoOODB
   - Base Color: [1, 1, 1]
     Transparency: 1
     Emission: [0, 0, 0]
@@ -266,6 +326,15 @@ Materials:
     Emission: [0, 0, 0]
     Roughness: 0
     Shininess: 0.5
+    Name: FlashLightMaterial
+    Diffuse Texture: GdwNGHOzqkMaWVIJfFpwQAXtBLKxZTzA
+    Specular Texture: GdwNGHOzqkMaWVIJfFpwQAXtBLKxZTzA
+    Id: inbGYwvvrCOUbkIgSZPVSjfRXOrVrbgt
+  - Base Color: [1, 1, 1]
+    Transparency: 1
+    Emission: [0, 0, 0]
+    Roughness: 0
+    Shininess: 0.5
     Name: HouseMaterial
     Diffuse Texture: KUraiXCrlPXGbdWQTchbZfzYsiZnjsXn
     Specular Texture: ""
@@ -282,4 +351,7 @@ Materials:
 Actions:
   - Reload: [21]
   - Copy: [224, 6]
+  - SwitchToKnife: [30]
   - Fire: [9]
+  - SwitchToPistol: [31]
+  - SwitchToRifle: [32]

@@ -13,9 +13,9 @@ namespace engine
 		EventManager::getInstance().unsubscribe(EventType::ScriptsRecompiled, this);
 		InputFramework::getInstance().removeListener(this);
 	}
-	void ScriptableComponent::update()
+	void ScriptableComponent::update(float deltaTime)
 	{
-		ScriptEngine::getInstance()->updateScriptableComponent(this);
+		ScriptEngine::getInstance()->updateScriptableComponent(this, deltaTime);
 	}
 
 	void ScriptableComponent::initialize()

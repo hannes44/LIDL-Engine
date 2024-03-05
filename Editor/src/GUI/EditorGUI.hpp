@@ -7,8 +7,8 @@
 #include "EditorSettings.hpp"
 #include "AssetExplorer/AssetManager.hpp"
 #include "Project.hpp"
-#include "GUIHelper.hpp"
 #include "ConsoleGUI.hpp"
+#include "UI/GUIHelper.hpp"
 
 namespace engine
 {
@@ -85,6 +85,8 @@ namespace engine
 		void changeGame(std::shared_ptr<Game> game);
 
 		Window& window;
+
+		GUIHelper& UIHelper = GUIHelper::getInstance();
 
 		std::weak_ptr<Selectable> selectedObject;
 

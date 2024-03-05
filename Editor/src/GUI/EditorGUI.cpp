@@ -113,8 +113,11 @@ namespace engine
 		for (auto const& [id, gameObject] : editorGameObjects)
 			editorGameObjectSet.insert(gameObject);
 
+		float deltaTime = 0.0f;
+
 		while (!quitProgram)
 		{
+			deltaTime = ImGui::GetIO().DeltaTime;
 
 			renderNewFrame();
 
@@ -136,7 +139,7 @@ namespace engine
 
 				for (auto& [gameObjectId, gameObject] : game->getGameObjects())
 				{
-					gameObject->update();
+					gameObject->update(deltaTime);
 				}
 			}
 
@@ -166,21 +169,7 @@ namespace engine
 		// Crosshair for the game
 		if (game->running)
 		{
-			ImGuiWindowFlags windowFlags = 0;
-			windowFlags |= ImGuiWindowFlags_NoBackground;
-			windowFlags |= ImGuiWindowFlags_NoTitleBar;
-			windowFlags |= ImGuiWindowFlags_NoMove;
-			windowFlags |= ImGuiWindowFlags_NoResize;
-			windowFlags |= ImGuiWindowFlags_NoScrollbar;
-			windowFlags |= ImGuiWindowFlags_NoScrollWithMouse;
-			windowFlags |= ImGuiWindowFlags_NoCollapse;
-			windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-			ImGui::Begin("#CH", nullptr, windowFlags);
-			auto draw = ImGui::GetBackgroundDrawList();
-			int w, h;
-			window.getWindowSize(&w, &h);
-			draw->AddCircle(ImVec2(w / 2, h / 2), 6, IM_COL32(255, 0, 0, 255), 100, 0.0f);
-			ImGui::End();
+			UIHelper.drawText(0.5f, 0.5f, 1.0f, "+", 255.0f, 0.0f, 0.0f, 255.0f);
 		}
 
 		if (noGUIMode)
@@ -671,12 +660,14 @@ namespace engine
 		ImGui::Dummy(ImVec2(150.0f, 20.0f));
 		ImGui::SameLine();
 
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.33f, 0.67f, 0.86f, 0.77f));
+
 		wasPlayButtonPressed = false;
 
 		bool pushedStyleColor = false;
 		if (sceneState == EditorSceneState::Play)
 		{
-			ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 0, 100, 255));
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.19f, 0.19f, 0.19f, 1.0f));
 			pushedStyleColor = true;
 		}
 		if (ImGui::Button("Play"))
@@ -701,7 +692,7 @@ namespace engine
 		pushedStyleColor = false;
 		if (sceneState == EditorSceneState::Scene)
 		{
-			ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 0, 100, 255));
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.19f, 0.19f, 0.19f, 1.0f));
 			pushedStyleColor = true;
 		}
 		if (ImGui::Button("Stop"))
@@ -718,6 +709,7 @@ namespace engine
 			ImGui::PopStyleColor();
 		}
 
+		ImGui::PopStyleColor();
 		ImGui::End();
 	}
 
@@ -875,12 +867,16 @@ namespace engine
 	void EditorGUI::drawGameSettingsTab()
 	{
 		ImGui::Text("Application FPS: %.1f", ImGui::GetIO().Framerate);
+
 		ImGui::Separator();
+
 		if (ImGui::CollapsingHeader("Editor Settings", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			ImGui::Text("RENDERING SETTINGS");
 
 			drawSerializableVariables(&editorSettings.rendererSettings);
+
+			ImGui::Separator();
 
 			ImGui::Text("EDITOR SETTINGS");
 
@@ -888,18 +884,21 @@ namespace engine
 
 			if (editorSettings.useDarkTheme)
 			{
-				ImGui::StyleColorsDark();
+				UIHelper.setDarkStyle();
 			}
 			else if (!editorSettings.useDarkTheme)
 			{
 				ImGui::StyleColorsLight();
 			}
 
+			ImGui::Separator();
+
 			ImGui::Text("Camera Settings");
 			ImGui::SliderFloat("Camera Speed", &editorCamera->getComponent<CameraComponent>()->movementSpeed, 0.001f, 1.0f);
 			ImGui::SliderFloat("Camera Sensitivity", &editorCamera->getComponent<CameraComponent>()->rotationSpeed, 0.001f, 0.1f);
 			ImGui::SliderFloat("Camera FOV", &editorCamera->getComponent<CameraComponent>()->fov, 0.1f, 120.0f);
 		}
+
 		ImGui::Separator();
 
 		if (ImGui::CollapsingHeader("Game Settings", ImGuiTreeNodeFlags_DefaultOpen))

@@ -22,7 +22,7 @@ namespace engine
 
 		bool enableScripting = true;
 
-		std::string defaultGame = "Snake3D";
+		std::string defaultGame = "FPSGame";
 		
 		std::vector<SerializableVariable> getSerializableVariables() override
 		{
