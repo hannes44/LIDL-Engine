@@ -46,7 +46,7 @@ namespace engine {
 
 		engine::PhysicsComponent physicsComponentWithoutGravityMovingLeft = engine::PhysicsComponent(false);
 		physicsComponentWithoutGravityMovingLeft.mass = 2.f;
-		physicsComponentWithoutGravityMovingLeft.setVelocity(glm::vec3(-5.f, 0, 0));
+		physicsComponentWithoutGravityMovingLeft.setVelocity(glm::vec3(-4.f, 0, 0));
 		//physicsComponentWithoutGravityMovingLeft.setForce(glm::vec3(-2.f, 0, 0));
 
 		engine::PhysicsComponent physicsComponentWithHigherGravity = engine::PhysicsComponent();
@@ -86,7 +86,8 @@ namespace engine {
 
 
 		GameObject* camera = new GameObject();
-		camera->transform.setPosition(glm::vec3(0, 0, 10));
+		camera->transform.setPosition(glm::vec3(0, 10, 25));
+		camera->transform.setRotationFromDirection(glm::vec3(0, -0.5f, 1), glm::vec3(0, 1, 0));
 		camera->addComponent(std::make_unique<engine::CameraComponent>());
 		camera->name = "Camera";
 		addGameObject(std::unique_ptr<GameObject>(camera));
@@ -109,7 +110,7 @@ namespace engine {
 		box2->addComponent(std::make_unique<engine::BoxColliderComponent>(boxColliderOffsetComponent));
 		addGameObject(std::unique_ptr<GameObject>(box2));
 
-
+		/*
 		GameObject* box2child1 = new GameObject();
 		box2child1->transform.setPosition(glm::vec3(2.5f, 0, 0));
 		box2child1->addComponent(meshComponent2);
@@ -138,7 +139,7 @@ namespace engine {
 		box2child1child->addComponent(std::make_unique<engine::BoxColliderComponent>(boxColliderOffsetComponent));
 		addGameObject(std::unique_ptr<GameObject>(box2child1child));
 		setParent(std::unique_ptr<GameObject>(box2child1child), std::unique_ptr<GameObject>(box2child1));
-
+		*/
 
 		GameObject* sphere1 = new GameObject();
 		sphere1->transform.setPosition(glm::vec3(15, 0, 0));
