@@ -113,7 +113,7 @@ namespace engine
 		std::weak_ptr<engine::Material> localMaterial = createMaterial("LocalMaterial");
 		localMaterial.lock()->baseColor = glm::vec3(2.0f, 0, 0);
 		localMesh->setMaterial(localMaterial);
-		localMaterial.lock()->isExternalMultiplayerObject = false;
+		localMaterial.lock()->isExternalMultiplayerObject = true;
 
 		GameObject* localBoxPtr = new GameObject();
 		localBoxPtr->transform.setPosition(glm::vec3(5, 0, 0));

@@ -56,21 +56,22 @@ namespace engine
 			for (auto component : gameObject->getComponents())
 			{
 				if (dynamic_cast<PointLightComponent*>(component.get()))
-				{
-					PointLightComponent* light = dynamic_cast<PointLightComponent*>(component.get());
+					if (dynamic_cast<PointLightComponent*>(component.get()))
+					{
+						PointLightComponent* light = dynamic_cast<PointLightComponent*>(component.get());
 
-					std::string index = "[" + std::to_string(lightIndex) + "]";
-					glm::vec3 gameObjectPosition = gameObject->getGlobalTransform().getPosition();
-					baseShader->setVec3(("pointLights" + index + ".position").c_str(), gameObjectPosition.x, gameObjectPosition.y, gameObjectPosition.z);
-					baseShader->setVec3(("pointLights" + index + ".ambient").c_str(), light->color.x, light->color.y, light->color.z);
-					baseShader->setVec3(("pointLights" + index + ".diffuse").c_str(), light->color.x, light->color.y, light->color.z);
-					baseShader->setVec3(("pointLights" + index + ".specular").c_str(), light->color.x, light->color.y, light->color.z);
-					baseShader->setFloat(("pointLights" + index + ".constant").c_str(), 10);
-					baseShader->setFloat(("pointLights" + index + ".linear").c_str(), 0);
-					baseShader->setFloat(("pointLights" + index + ".quadratic").c_str(), 0);
+						std::string index = "[" + std::to_string(lightIndex) + "]";
+						glm::vec3 gameObjectPosition = gameObject->getGlobalTransform().getPosition();
+						baseShader->setVec3(("pointLights" + index + ".position").c_str(), gameObjectPosition.x, gameObjectPosition.y, gameObjectPosition.z);
+						baseShader->setVec3(("pointLights" + index + ".ambient").c_str(), light->color.x, light->color.y, light->color.z);
+						baseShader->setVec3(("pointLights" + index + ".diffuse").c_str(), light->color.x, light->color.y, light->color.z);
+						baseShader->setVec3(("pointLights" + index + ".specular").c_str(), light->color.x, light->color.y, light->color.z);
+						baseShader->setFloat(("pointLights" + index + ".constant").c_str(), 10);
+						baseShader->setFloat(("pointLights" + index + ".linear").c_str(), 0);
+						baseShader->setFloat(("pointLights" + index + ".quadratic").c_str(), 0);
 
-					lightIndex++;
-				}
+						lightIndex++;
+					}
 			}
 		}
 
@@ -105,6 +106,7 @@ namespace engine
 			Renderer::baseShader->setMat4("modelMatrix", &gameObjectTransformMatrix[0].x);
 
 			Material* material = meshComponent->getMaterial();
+
 			// Material
 			Renderer::baseShader->setFloat("material.shininess", material->shininess);
 			Renderer::baseShader->setVec3("material.baseColor", material->baseColor.x, material->baseColor.y, material->baseColor.z);
@@ -143,7 +145,7 @@ namespace engine
 		dir = glm::normalize(dir);
 
 		glm::vec3 color = glm::vec3(0, 1, 0);
-		
+
 		glm::vec3 up = glm::vec3(0, 1, 0);
 		glm::vec3 side = glm::vec3(0, 0, 1);
 		glm::vec3 end = pos + dir * length;

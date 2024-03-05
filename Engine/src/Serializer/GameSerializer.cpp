@@ -93,7 +93,7 @@ namespace engine
 	std::string GameSerializer::serializeGameState(const std::string& folderPath, const Game* game, bool serializeForMultiplayer)
 	{
 		logNM("Serializing game state: " + game->name, serializeForMultiplayer);
-		
+
 		std::string stateFileName = game->name + "State";
 		std::string stateFilePath = folderPath + stateFileName + GAME_CONFIG_FILE_EXTENSION;
 		createYAMLFile(stateFilePath);
@@ -141,22 +141,22 @@ namespace engine
 	void GameSerializer::serializeGameObject(GameObject* gameObject, YAML::Emitter& out, bool serializeForMultiplayer)
 	{
 		out << YAML::BeginMap;
-		
+
 		out << YAML::Key << "name";
 		out << YAML::Value << gameObject->name;
-		
+
 		out << YAML::Key << "transform";
 		Transform transform = gameObject->transform;
 		float* mat4Pointer = &transform.transformMatrix[0][0];
 		std::vector<float> mat4Vector(mat4Pointer, mat4Pointer + 16);
 		out << YAML::Value << YAML::Flow << mat4Vector;
-		
+
 		out << YAML::Key << "isVisible";
 		out << YAML::Value << gameObject->isVisible;
-		
+
 		out << YAML::Key << "isExternalMultiplayerObject";
 		out << YAML::Value << (serializeForMultiplayer || gameObject->isExternalMultiplayerObject);
-		
+
 		out << YAML::Key << "Id";
 		// TODO: Add proper Id when UUID is implemented
 		out << YAML::Value << gameObject->uuid.id;
@@ -203,11 +203,13 @@ namespace engine
 		// Do not serialize components for multiplayer that should not be serialized
 		if (serializeForMultiplayer && !component->serializeForMultiplayer())
 			return;
-		
+
 		std::shared_ptr<Serializable> serializable = std::dynamic_pointer_cast<Serializable>(component);
 		out << YAML::BeginMap;
 		out << YAML::Key << "name";
 		out << YAML::Value << component->getName();
+		out << YAML::Key << "Id";
+		out << YAML::Value << component->uuid.id;
 		serializeSerializable(serializable.get(), out);
 		out << YAML::EndMap;
 	}
@@ -248,7 +250,7 @@ namespace engine
 	{
 		out << YAML::Key << "Materials";
 		out << YAML::Value << YAML::BeginSeq;
-		
+
 		for (const auto& [materialId, material] : game->getMaterials())
 			serializeMaterial(material.get(), out, serializeForMultiplayer);
 
@@ -266,7 +268,7 @@ namespace engine
 		// Do not serialize external multiplayer materials
 		if (material->isExternalMultiplayerObject)
 			return;
-		
+
 		out << YAML::BeginMap;
 		serializeSerializable(material, out);
 		out << YAML::Key << "isExternalMultiplayerObject";
@@ -422,6 +424,96 @@ namespace engine
 	{
 	}
 
+	// Deserializes and updates the game state from a file path
+	void GameSerializer::updateGameState(Game* game, std::string gameStateFilePath)
+	{
+		LOG_TRACE("Updating game state: {}", game->name);
+		LOG_TRACE("Loading file: " + gameStateFilePath);
+		YAML::Node state = YAML::LoadFile(gameStateFilePath);
+
+
+		updateMaterials(state, game);
+		updateGameObjects(state, game);
+
+		LOG_TRACE("Deserialized game state: " + game->name);
+	}
+
+	// Updates all game objects from the given YAML node into the game
+	void GameSerializer::updateGameObjects(YAML::Node node, Game* game)
+	{
+		YAML::Node gameObjectsNode;
+		try
+		{
+			gameObjectsNode = node["GameObjects"];
+		}
+		catch (const std::exception& e)
+		{
+			LOG_ERROR("Failed to deserialize game objects: " + std::string(e.what()));
+			return;
+		}
+
+		for (YAML::const_iterator it = gameObjectsNode.begin(); it != gameObjectsNode.end(); ++it)
+		{
+			try
+			{
+				YAML::Node gameObjectNode = *it;
+
+				std::string gameObjectID = gameObjectNode["Id"].as<std::string>();
+
+				auto existingGameObject = game->getGameObject(gameObjectID);
+				bool exists = !existingGameObject.expired();
+				std::shared_ptr<GameObject> gameObject;
+
+				if (!exists)
+					gameObject = std::make_shared<GameObject>();
+				else
+					gameObject = existingGameObject.lock();
+
+				deserializeGameObject(gameObjectNode, game, gameObject.get());
+
+				if (!exists)
+					game->addGameObject(gameObject);
+			}
+			catch (const std::exception& e)
+			{
+				LOG_WARN("Failed to update game objects: " + std::string(e.what()));
+			}
+		}
+	}
+
+	// Deserializes all materials from the given YAML node into the game
+	void GameSerializer::updateMaterials(YAML::Node node, Game* game)
+	{
+		YAML::Node materialNode;
+		try
+		{
+			materialNode = node["Materials"];
+		}
+		catch (const std::exception& e)
+		{
+			LOG_ERROR("Failed to deserialize textures: " + std::string(e.what()));
+			return;
+		}
+
+		for (YAML::const_iterator it = materialNode.begin(); it != materialNode.end(); ++it)
+		{
+			YAML::Node materialNode = *it;
+
+			std::string materialID = materialNode["Id"].as<std::string>();
+			auto existingMaterial = game->getMaterial(materialID);
+			bool exists = !existingMaterial.expired();
+			std::shared_ptr<Material> material;
+			if (!exists)
+				material = std::make_shared<Material>();
+			else
+				material = existingMaterial.lock();
+
+			deserializeMaterial(materialNode, game, material.get());
+			if (!exists)
+				game->addMaterial(material);
+		}
+	}
+
 	// Deserializes the game state from a file path
 	void GameSerializer::deserializeGameState(Game* game, std::string gameStateFilePath)
 	{
@@ -492,31 +584,38 @@ namespace engine
 			return;
 		}
 
-		for (YAML::const_iterator it = materialNode.begin(); it != materialNode.end(); ++it)
-		{
-			YAML::Node materialNode = *it;
+		for (YAML::const_iterator it = materialNode.begin(); it != materialNode.end(); ++it) {
 			Material* material = new Material();
-
-			deserializeSerializable(materialNode, material);
-
-			material->isExternalMultiplayerObject = materialNode["isExternalMultiplayerObject"].as<bool>();
-
-			std::string diffuseTextureId = materialNode["Diffuse Texture"].as<std::string>();
-			std::string specularTextureId = materialNode["Specular Texture"].as<std::string>();
-			
-			if (diffuseTextureId != "")
-				material->diffuseTexture = game->getTexture(diffuseTextureId);
-
-			if (specularTextureId != "")
-				material->specularTexture = game->getTexture(specularTextureId);
-
+			deserializeMaterial(*it, game, material);
 			game->addMaterial(std::shared_ptr<Material>(material));
 		}
 	}
 
+	// Deserializes all materials from the given YAML node into the game
+	void GameSerializer::deserializeMaterial(YAML::Node materialNode, Game* game, Material* material)
+	{
+		std::string materialName = materialNode["Name"].as<std::string>();
+		std::string materialID = materialNode["Id"].as<std::string>();
+
+		deserializeSerializable(materialNode, material);
+
+		material->name = materialName;
+		material->isExternalMultiplayerObject = materialNode["isExternalMultiplayerObject"].as<bool>();
+		material->uuid.id = materialID;
+
+		std::string diffuseTextureId = materialNode["Diffuse Texture"].as<std::string>();
+		std::string specularTextureId = materialNode["Specular Texture"].as<std::string>();
+
+		if (diffuseTextureId != "")
+			material->diffuseTexture = game->getTexture(diffuseTextureId);
+
+		if (specularTextureId != "")
+			material->specularTexture = game->getTexture(specularTextureId);
+	}
+
 	void GameSerializer::deserializeActions(YAML::Node node, Game* game)
 	{
-	
+
 		YAML::Node actionsNode;
 		try
 		{
@@ -533,7 +632,7 @@ namespace engine
 			YAML::Node actionNode = *it;
 			std::string actionName = actionNode.begin()->first.as<std::string>();
 			std::vector<int> actionKeys = actionNode.begin()->second.as<std::vector<int>>();
-			
+
 			std::list<Key> keys{};
 			for (const auto& key : actionKeys)
 			{
@@ -557,51 +656,12 @@ namespace engine
 			return;
 		}
 
-		for (YAML::const_iterator it = gameObjectsNode.begin(); it != gameObjectsNode.end(); ++it)
-		{
-			try
-			{
-				YAML::Node gameObjectNode = *it;
-				std::string gameObjectName = gameObjectNode["name"].as<std::string>();
-				std::string gameObjectID = gameObjectNode["Id"].as<std::string>();
-
-				bool isExternalMultiplayerObject = gameObjectNode["isExternalMultiplayerObject"].as<bool>();
-
-				// If the GameObject is from another multiplayer instance
-				if (isExternalMultiplayerObject) {
-					// External multiplayer game objects are prefixed with MGO_
-					const std::string multiplayerPrefix = "MGO_";
-					std::string multiplayerGameObjectName = gameObjectName._Starts_with(multiplayerPrefix) ? gameObjectName : multiplayerPrefix + gameObjectName;
-					
-					auto existingGameObjects = game->getGameObjects();
-
-					// Check if the multiplayer 
-					auto multiplayerMatch = std::find_if(existingGameObjects.begin(), existingGameObjects.end(), [&](const std::pair<std::string, std::shared_ptr<GameObject>>& gameObject) {
-						return gameObject.second->uuid.id == gameObjectID;
-					});
-					// If we have already deserialized this multiplayer object previously, delete it before recreating it
-					if (multiplayerMatch != existingGameObjects.end())
-						game->deleteGameObject(game->getGameObject(multiplayerMatch->second->uuid.id).lock().get());
-
-					gameObjectName = multiplayerGameObjectName;
-				}
-				
-				std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>();
-				gameObject->name = gameObjectName;
-				std::vector<float> transformMatrix = gameObjectNode["transform"].as<std::vector<float>>();
-				std::copy(transformMatrix.begin(), transformMatrix.end(), &gameObject->transform.transformMatrix[0][0]);
-				gameObject->isVisible = gameObjectNode["isVisible"].as<bool>();
-				gameObject->uuid.id = gameObjectID;
-				gameObject->isExternalMultiplayerObject = isExternalMultiplayerObject;
-				gameObject->tag = gameObjectNode["tag"].as<std::string>();
-				deserializeComponents(gameObjectNode, gameObject.get(), game);
-				game->addGameObject(gameObject);
-			}
-			catch (const std::exception& e)
-			{
-				LOG_WARN("Failed to deserialize game object: " + std::string(e.what()));
-			}
+		for (YAML::const_iterator it = gameObjectsNode.begin(); it != gameObjectsNode.end(); ++it) {
+			GameObject* gameObject = new GameObject();
+			deserializeGameObject(*it, game, gameObject);
+			game->addGameObject(std::shared_ptr<GameObject>(gameObject));
 		}
+
 
 		// We need to iterate again to add parents and children
 		for (YAML::const_iterator it = gameObjectsNode.begin(); it != gameObjectsNode.end(); ++it)
@@ -619,18 +679,44 @@ namespace engine
 			}
 			catch (const std::exception& e)
 			{
-				LOG_WARN("Failed to deserialize game object: " + std::string(e.what()));
+				LOG_WARN("Failed to deserialize game object hierarchy: " + std::string(e.what()));
 			}
 		}
 	}
 
+	// Deserializes a game object from the given YAML node into the game
+	void GameSerializer::deserializeGameObject(YAML::Node gameObjectNode, Game* game, GameObject* gameObject)
+	{
+		try
+		{
+			std::string gameObjectName = gameObjectNode["name"].as<std::string>();
+			bool isExternal = gameObjectNode["isExternalMultiplayerObject"].as<bool>();
+			if (isExternal)
+				gameObjectName = "MGO_" + gameObjectName;
+			std::string gameObjectID = gameObjectNode["Id"].as<std::string>();
+
+			gameObject->name = gameObjectName;
+			std::vector<float> transformMatrix = gameObjectNode["transform"].as<std::vector<float>>();
+			std::copy(transformMatrix.begin(), transformMatrix.end(), &gameObject->transform.transformMatrix[0][0]);
+			gameObject->isVisible = gameObjectNode["isVisible"].as<bool>();
+			gameObject->uuid.id = gameObjectID;
+			gameObject->isExternalMultiplayerObject = isExternal;
+			gameObject->tag = gameObjectNode["tag"].as<std::string>();
+			deserializeComponents(gameObjectNode, gameObject, game);
+		}
+		catch (const std::exception& e)
+		{
+			LOG_WARN("Failed to deserialize game object: " + std::string(e.what()));
+		}
+	}
+
 	// Deserializes all components from the given YAML node into the given game object
-	void GameSerializer::deserializeComponents(YAML::Node node, GameObject* gameObject, Game* game)
+	void GameSerializer::deserializeComponents(YAML::Node gameObjectNode, GameObject* gameObject, Game* game)
 	{
 		YAML::Node componentsNode;
 		try
 		{
-			componentsNode = node["Components"];
+			componentsNode = gameObjectNode["Components"];
 		}
 		catch (const std::exception& e)
 		{
@@ -643,7 +729,30 @@ namespace engine
 			try
 			{
 				YAML::Node componentNode = *it;
-				deserializeComponent(componentNode, gameObject, game);
+				std::string componentName = componentNode["name"].as<std::string>();
+				std::string componentID = componentNode["Id"].as<std::string>();
+
+				std::shared_ptr<Component> component;
+				bool exists = false;
+				for (auto existingComponent : gameObject->getComponents())
+				{
+					if (existingComponent->uuid.id == componentID)
+					{
+						component = existingComponent;
+						exists = true;
+						break;
+					}
+				}
+
+				if (!exists) {
+					component = ComponentFactory::createComponent(componentName);
+					component->uuid.id = componentID;
+				}
+					
+
+				deserializeComponent(componentNode, gameObject, game, component.get());
+				if(!exists)
+					gameObject->addComponent(component);
 			}
 			catch (const std::exception& e)
 			{
@@ -653,13 +762,11 @@ namespace engine
 	}
 
 	// Deserializes a component from the given YAML node into the given game object
-	void GameSerializer::deserializeComponent(YAML::Node node, GameObject* gameObject, Game* game)
+	void GameSerializer::deserializeComponent(YAML::Node node, GameObject* gameObject, Game* game, Component* component)
 	{
 		try
 		{
 			std::string componentName = node["name"].as<std::string>();
-
-			std::shared_ptr<Component> component = ComponentFactory::createComponent(componentName);
 
 			if (component == nullptr)
 			{
@@ -667,12 +774,12 @@ namespace engine
 				return;
 			}
 
-			deserializeSerializable(node, component.get());
+			deserializeSerializable(node, component);
 
 			// Special case for mesh component
 			if (componentName == "Mesh")
 			{
-				MeshComponent* meshComponent = dynamic_cast<MeshComponent*>(component.get());
+				MeshComponent* meshComponent = dynamic_cast<MeshComponent*>(component);
 				if (meshComponent != nullptr)
 				{
 					if (meshComponent->objFileName != "")
@@ -694,14 +801,11 @@ namespace engine
 				}
 			}
 
-			if (auto scriptableComponent = dynamic_cast<ScriptableComponent*>(component.get()))
+			if (auto scriptableComponent = dynamic_cast<ScriptableComponent*>(component))
 			{
 				// We need to initialize the lua state for the scriptable component
 				ScriptEngine::getInstance()->initializeLuaStateForScriptableComponent(scriptableComponent);
 			}
-
-			gameObject->addComponent(component);
-
 		}
 		catch (const std::exception& e)
 		{

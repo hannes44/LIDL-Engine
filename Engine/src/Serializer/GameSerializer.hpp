@@ -5,6 +5,7 @@
 #include <yaml-cpp/yaml.h>
 #include "Core/Material.hpp"
 #include "Core/Texture.hpp"
+#include "Components/Component.hpp"
 
 namespace engine
 {
@@ -29,6 +30,7 @@ namespace engine
 		static void deserializeSerializable(YAML::Node node, Serializable* serializable);
 
 		static void deserializeGameState(Game* game, std::string filePath);
+		static void updateGameState(Game* game, std::string gameStateFilePath);
 
 	private:
 		static void serializeGameConfig(const std::string& filePath, const Game* game);
@@ -53,14 +55,19 @@ namespace engine
 
 		static void deserializeTextures(YAML::Node node, Game* game);
 
+		static void updateMaterials(YAML::Node node, Game* game);
 		static void deserializeMaterials(YAML::Node node, Game* game);
+		static void deserializeMaterial(YAML::Node materialNode, Game* game, Material* material);
 
 		static void deserializeActions(YAML::Node node, Game* game);
 
+		static void updateGameObjects(YAML::Node node, Game* game);
 		static void deserializeGameObjects(YAML::Node node, Game* game);
+		static void deserializeGameObject(YAML::Node node, Game* game, GameObject* gameObject);
+
 		static void deserializeComponents(YAML::Node node, GameObject* gameObject, Game* game);
 
-		static void deserializeComponent(YAML::Node node, GameObject* gameObject, Game* game);
+		static void deserializeComponent(YAML::Node node, GameObject* gameObject, Game* game, Component* component);
 
 	};
 }
