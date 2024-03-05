@@ -1,6 +1,6 @@
 GameObjects:
   - name: tree
-    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 0, 11.6904411, -10, 1]
+    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 0, 11.3525867, -10, 1]
     isVisible: true
     Id: AEPGwuLvbUpmtuZuhPNPALpfnXFsFBGM
     tag: ""
@@ -11,6 +11,22 @@ GameObjects:
         OBJ File: raw2.obj
         Primative Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+        Render From Camera Transform: false
+        Is Visible: true
+  - name: tree
+    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 49.8615761, 11.2828608, -51.543808, 1]
+    isVisible: true
+    Id: DWAoqFuzIXFnNwSWPEvPmGMlflwoxMrm
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: raw2.obj
+        Primative Type: NONE
+        Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+        Render From Camera Transform: false
+        Is Visible: true
   - name: EnemyPrefab
     transform: [1.90553308, 0, 0, 0, 0, 3.98312092, 0, 0, 0, 0, 1, 0, 63, -6.73250532, 51, 1]
     isVisible: true
@@ -33,6 +49,118 @@ GameObjects:
         Offset: [0, 0, 0]
         Extent: [2, 4, 1]
         IsPlatform: false
+  - name: tree
+    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 0, 11.3525867, -31.8640194, 1]
+    isVisible: true
+    Id: FNYPKyDnuYbgrlbLFkkpdcwCFIhUtTAZ
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: raw2.obj
+        Primative Type: NONE
+        Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+        Render From Camera Transform: false
+        Is Visible: true
+  - name: tree
+    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 55.7229538, 11.2828608, -14.925951, 1]
+    isVisible: true
+    Id: GzGeAecFyNWCVpTgtboqKTvXQOnHslIE
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: raw2.obj
+        Primative Type: NONE
+        Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+        Render From Camera Transform: false
+        Is Visible: true
+  - name: tree
+    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 33.6069069, 11.2828608, -29.2655926, 1]
+    isVisible: true
+    Id: HJKAKugIZEmOGBaJZIFTPqHWBebuHYfF
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: raw2.obj
+        Primative Type: NONE
+        Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+        Render From Camera Transform: false
+        Is Visible: true
+  - name: tree
+    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, -19.7820358, 11.2828608, -16.3715839, 1]
+    isVisible: true
+    Id: JjiGbvCQXDIKGUGjlOVIRdGNOBiNezbL
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: raw2.obj
+        Primative Type: NONE
+        Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+        Render From Camera Transform: false
+        Is Visible: true
+  - name: tree
+    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 32.907711, 11.2828608, -47.7493324, 1]
+    isVisible: true
+    Id: OPxqGaQTmmqTdSXLZAasORtnZNkVpOIF
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: raw2.obj
+        Primative Type: NONE
+        Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+        Render From Camera Transform: false
+        Is Visible: true
+  - name: tree
+    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 38.5798225, 11.3525867, -10, 1]
+    isVisible: true
+    Id: QvXzqbYtBmCsBwqOsxniEPBMKBTYpMQt
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: raw2.obj
+        Primative Type: NONE
+        Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+        Render From Camera Transform: false
+        Is Visible: true
+  - name: tree
+    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, -23.8965645, 11.2828608, -33.7765541, 1]
+    isVisible: true
+    Id: SvPPRqunfbNlCeZZUMdhOvQswkJnlDZE
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: raw2.obj
+        Primative Type: NONE
+        Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+        Render From Camera Transform: false
+        Is Visible: true
+  - name: tree
+    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 11.0181522, 11.2828608, -10, 1]
+    isVisible: true
+    Id: TcQLEaYZbCPAqDykUEUBaqONGNQJiriq
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: raw2.obj
+        Primative Type: NONE
+        Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+        Render From Camera Transform: false
+        Is Visible: true
   - name: KitchenKnife.obj
     transform: [-2.72988859e-06, -4.96819469e-12, 2.99999976, 0, -1.09195244e-05, 2.99999166, -4.96818125e-12, 0, -2.99999976, -1.09195544e-05, -2.72988859e-06, 0, 5.75572729, 35.463665, 22.657753, 1]
     isVisible: true
@@ -72,9 +200,37 @@ GameObjects:
       - name: PointLight
         Color: [0.965686262, 0.894679904, 0.894679904]
         Intensity: 10
-        Constant: 1
-        Linear: 0.00999999978
+        Constant: 100
+        Linear: 0
         Quadratic: 0
+  - name: tree
+    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, -3.47496367, 11.2828608, 3.99023676, 1]
+    isVisible: true
+    Id: cXAwBuWDsgFwRUHgQbwXFsSerczIJGho
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: raw2.obj
+        Primative Type: NONE
+        Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+        Render From Camera Transform: false
+        Is Visible: true
+  - name: tree
+    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 11.0181522, 11.2828608, -51.6943817, 1]
+    isVisible: true
+    Id: euhEdsEhImohQwJUcTVeeTGNIumPLGTe
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: raw2.obj
+        Primative Type: NONE
+        Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+        Render From Camera Transform: false
+        Is Visible: true
   - name: FlashLight.obj
     transform: [1.27390379e-07, 2.31840724e-13, 0.139995128, 0, 5.09519964e-07, -0.139983818, -2.3182232e-13, 0, 0.140000045, 5.09579024e-07, -1.27394856e-07, 0, -1.40301001, -1.05442345, -2.66778755, 1]
     isVisible: true
@@ -89,8 +245,22 @@ GameObjects:
         Material: inbGYwvvrCOUbkIgSZPVSjfRXOrVrbgt
         Render From Camera Transform: true
         Is Visible: true
+  - name: tree
+    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 31.6646576, 11.2828608, 6.63354969, 1]
+    isVisible: true
+    Id: gMRAajYMrJucfllHCDXRJKDJuxuNFbMB
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: raw2.obj
+        Primative Type: NONE
+        Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+        Render From Camera Transform: false
+        Is Visible: true
   - name: House.obj
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0.999919236, 0, 112.499939, -1.60997248, 0, 1]
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0.999919236, 0, 68.5070877, -1.60997248, -12.526413, 1]
     isVisible: true
     Id: hcOOWXgwkGmFwmMSZYGKKEOvgkQbBsNT
     tag: ""
@@ -130,7 +300,7 @@ GameObjects:
         scriptFileName: EnemyManager.cs
         enableInput: true
   - name: Player
-    transform: [-0.997633338, -1.16415322e-10, 0.0687580779, 0, -0.001003891, 0.999893427, -0.0145657808, 0, -0.0687507465, -0.0146003347, -0.997527003, 0, 0, 4.64747047, 0, 1]
+    transform: [-0.47468698, -7.4505806e-09, -0.880154908, 0, -0.205280334, 0.97242111, 0.1107122, 0, 0.855881155, 0.233232081, -0.461595654, 0, 0, 4.84747028, 0, 1]
     isVisible: true
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
     tag: Player
@@ -147,7 +317,7 @@ GameObjects:
         Mass: 1
         Force: [0, 0, 0]
         Acceleration: [0, 0, 0]
-        Velocity: [0, 0, 0]
+        Velocity: [0, 10, 0]
       - name: Controllable
         Enable Forces: true
         Movement Speed: 3
@@ -171,34 +341,64 @@ GameObjects:
         ammoCountGlock: 20
         scriptFileName: Player.cs
         enableInput: true
+  - name: tree
+    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 16.3710613, 11.3525867, -39.602562, 1]
+    isVisible: true
+    Id: nuSNwzvtHNpKvAUZzNhAeJGKLiQLGdUp
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: raw2.obj
+        Primative Type: NONE
+        Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+        Render From Camera Transform: false
+        Is Visible: true
+  - name: tree
+    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, -6.68417168, 11.2828608, -44.2687912, 1]
+    isVisible: true
+    Id: pQwanxaVqKizRabXXFEjXeXGSUftqpJQ
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: raw2.obj
+        Primative Type: NONE
+        Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+        Render From Camera Transform: false
+        Is Visible: true
+  - name: tree
+    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 44.742527, 11.2828608, -37.6219177, 1]
+    isVisible: true
+    Id: qbwhHBDpTfgMGkbunIYymTOmEhSCXpbm
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: raw2.obj
+        Primative Type: NONE
+        Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+        Render From Camera Transform: false
+        Is Visible: true
+  - name: tree
+    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 0.0644311905, 11.2828608, 22.4972935, 1]
+    isVisible: true
+    Id: rFmMLPLiViVdEBBnmGHXrXjftylJXNPU
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: raw2.obj
+        Primative Type: NONE
+        Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+        Render From Camera Transform: false
+        Is Visible: true
   - name: AK-47
     transform: [-10.0000019, 8.7340668e-05, 0, 0, 8.73406534e-05, 10, 0.000177939713, 0, 1.55413726e-09, 0.000177939743, -10.0000019, 0, 1, -1.07996511, -2.51851416, 1]
-  - name: Ak-47
-    transform: [-9.09962861e-09, -1.65606495e-14, -0.00999999978, 0, 0, 0.00999999978, -1.65606495e-14, 0, 0.00999999978, 0, -9.09962861e-09, 0, 0, -5.13566923, 0, 1]
-    isVisible: true
-    Id: ndlRjOYAhHQMpAEwRAEIBMKYihTpURMf
-    tag: ""
-    parent: NONE
-    children: []
-    Components:
-      - name: Mesh
-        OBJ File: Ak-47.obj
-        Primative Type: NONE
-        Material: TikmfUwkrFNXXjEcaavGVjVaeuMhbFUU
-  - name: DeadTree.obj
-    transform: [0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 1]
-    isVisible: true
-    Id: oWlqMHkSsxPktJLTEbjXNhPLpTBOunab
-    tag: ""
-    parent: NONE
-    children: []
-    Components:
-      - name: Mesh
-        OBJ File: DeadTree.obj
-        Primative Type: NONE
-        Material: OeRWJuLJtlngqaKRijjLgLlPxWWpwQBu
-  - name: AK-48
-    transform: [-7.94949341, -1.44674887e-05, 6.06675863, 0, -2.92403092e-05, 10, -1.44674887e-05, 0, -6.06675863, -2.92403092e-05, -7.94949341, 0, 9.71035576, 8.70111752, 0, 1]
     isVisible: true
     Id: rNmeXBLIRUWrXYcTJidcyRiTATgvQsjT
     tag: AK47
@@ -229,6 +429,34 @@ GameObjects:
         Offset: [0, 0, 0]
         Extent: [10000, 1, 1000]
         IsPlatform: true
+  - name: tree
+    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 11.0181522, 11.2828608, 9.24892616, 1]
+    isVisible: true
+    Id: tTYtsGNzFRFVSZZaryLeqAjqmceKrLeE
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: raw2.obj
+        Primative Type: NONE
+        Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+        Render From Camera Transform: false
+        Is Visible: true
+  - name: tree
+    transform: [-1.59613478e-07, 3.65153074, 1.63287783, 0, -3.64456701, 0.672893763, -1.50476205, 0, -1.6483295, -1.48775637, 3.32700133, 0, 24.5694027, 11.3542585, -10, 1]
+    isVisible: true
+    Id: wDqpynJXUTEauLWjQkkhAIhvRVrlwFpr
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        OBJ File: raw2.obj
+        Primative Type: NONE
+        Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
+        Render From Camera Transform: false
+        Is Visible: true
 Textures:
   - name: KitchenKnifeAlbedo
     fileName: KitchenKnifeAlbedo.png
@@ -303,7 +531,7 @@ Materials:
     Diffuse Texture: CNfaOzQYLIKklcdDsCcAzjKCsayBNhkU
     Specular Texture: DpAcESxkTZTtOxVBbkjnmiyPHDllEENu
     Id: UZVAVXNBfagCfyiPFCiALYYhQcCkfiTs
-  - Base Color: [0.123702407, 0.764705896, 0.387644976]
+  - Base Color: [0.283333361, 0.269691378, 0.201481491]
     Transparency: 1
     Emission: [0, 0, 0]
     Roughness: 0

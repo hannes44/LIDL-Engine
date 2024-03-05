@@ -110,6 +110,7 @@ namespace engine
 		mesh->objFileName = filename;
 
 		LOG_INFO("Loaded mesh from file: {0}", filename);
+		LOG_INFO("Mesh has {0} vertices and {1} indices", vertices.size(), indices.size());
 	}
 
 	std::shared_ptr<MeshComponent> MeshComponent::createPrimative(PrimativeMeshType type)
