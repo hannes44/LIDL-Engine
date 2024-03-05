@@ -16,8 +16,9 @@ extern "C"
 		engine::Window::instance = window;
 		engine::InputFramework::instance = inputFramework;
 		engine::Logger::init();
-		engine::Game* game = new engine::MultiplayerGame();
 		engine::ResourceManager::instance = resourceManager;
+		
+		engine::Game* game = new engine::MultiplayerGame();
 		resourceManager->changeGame(game);
 		return game;
 	}
