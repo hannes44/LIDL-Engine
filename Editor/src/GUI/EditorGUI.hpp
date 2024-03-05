@@ -129,5 +129,7 @@ namespace engine
 		std::shared_ptr<Texture> scaleIconTexture;
 
 		std::shared_ptr<Texture> worldIconTexture;
+
+		std::shared_ptr<Texture> playIconTexture;
 	};
 }
