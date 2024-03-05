@@ -185,6 +185,22 @@ GameObjects:
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
+  - name: Lobster.obj
+    transform: [15.3361597, -9.45238018, 8.68646717, 0, 11.3905525, 3.77768803, -15.999506, 0, 5.92093468, 17.2157364, 8.28015423, 0, 0, 0, 0, 1]
+    isVisible: true
+    isExternalMultiplayerObject: false
+    Id: WYXvBbDNpoSDlgNHUMeIbsAPcAiYoItA
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        Id: EKElUQjpuVjLQltNcVcFaceeUzwNZTWc
+        OBJ File: Lobster.obj
+        Primative Type: NONE
+        Material: AJwGhrIZOsYfVvbtpRmHJxupYJYZgrrn
+        Render From Camera Transform: false
+        Is Visible: true
   - name: KitchenKnife.obj
     transform: [-2.72988859e-06, -4.96819469e-12, 2.99999976, 0, -1.09195244e-05, 2.99999166, -4.96818125e-12, 0, -2.99999976, -1.09195544e-05, -2.72988859e-06, 0, 5.75572729, 35.463665, 22.657753, 1]
     isVisible: true
@@ -230,7 +246,7 @@ GameObjects:
         Id: DRMzIdqXYeVCsdfgsduBWNaiQIgriOsySlHLMC
         Color: [0.965686262, 0.894679904, 0.894679904]
         Intensity: 10
-        Constant: 100
+        Constant: 1
         Linear: 0
         Quadratic: 0
   - name: tree
@@ -344,7 +360,7 @@ GameObjects:
         scriptFileName: EnemyManager.cs
         enableInput: true
   - name: Player
-    transform: [0.998146772, 0, 0.0608527437, 0, -0.00210536458, 0.999401331, 0.0345335789, 0, -0.0608163103, -0.0345976986, 0.997549176, 0, 0, 4.94747019, 0, 1]
+    transform: [0.371286869, 1.49011612e-08, -0.928518176, 0, -0.32744801, 0.935752869, -0.130936712, 0, 0.868863583, 0.352656513, 0.347432733, 0, 0, 4.94747019, 0, 1]
     isVisible: true
     isExternalMultiplayerObject: false
     Id: nZSiKTnqXjdapUnSbkQJRvLAXfJhmaMh
@@ -547,6 +563,9 @@ Textures:
   - name: torch_BaseColor
     fileName: torch_BaseColor.png
     Id: ijeHPDMfjyFTNfHPjjkiMWqzmaPJpKCd
+  - name: Lobster_material_1
+    fileName: Lobster_material_1.png
+    Id: lDUXQHzChqlHHbOjjpmfKOpsvombHgtX
   - name: KitchenKnifeAlbedo
     fileName: KitchenKnifeAlbedo.png
     Id: nSvflCebFWxXmUKBkCHOVqIxccKJvQFF
@@ -554,6 +573,16 @@ Textures:
     fileName: KitchenKnifeMetal.png
     Id: tmgyCIpWAeAaWLjuuXbPJkwocphpyCHM
 Materials:
+  - Base Color: [1, 1, 1]
+    Transparency: 1
+    Emission: [0, 0, 0]
+    Roughness: 0
+    Shininess: 0.5
+    Name: lobsterMaterial
+    Diffuse Texture: lDUXQHzChqlHHbOjjpmfKOpsvombHgtX
+    Specular Texture: lDUXQHzChqlHHbOjjpmfKOpsvombHgtX
+    Id: AJwGhrIZOsYfVvbtpRmHJxupYJYZgrrn
+    isExternalMultiplayerObject: false
   - Base Color: [1, 1, 1]
     Transparency: 1
     Emission: [0, 0, 0]
@@ -657,7 +686,7 @@ Materials:
 Actions:
   - Reload: [21]
   - Copy: [224, 6]
-  - Fire: [9]
   - SwitchToKnife: [30]
+  - Fire: [9]
   - SwitchToPistol: [31]
   - SwitchToRifle: [32]
