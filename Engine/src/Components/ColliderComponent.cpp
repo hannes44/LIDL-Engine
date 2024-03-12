@@ -30,15 +30,14 @@ namespace engine {
 		auto firstSphere = dynamic_cast<SphereColliderComponent*>(this);
 		auto secondSphere = dynamic_cast<SphereColliderComponent*>(other);
 
-		if (firstBox && secondBox) {
+		if (firstBox && secondBox)
 			return ColliderChecks::boxBoxCollisionCheck(firstBox, secondBox);
-		}
-		else if (firstBox && secondSphere) {
+		else if (firstBox && secondSphere)
 			return ColliderChecks::boxSphereCollisionCheck(firstBox, secondSphere);
-		}
-		else if (firstSphere && secondBox) {
+		else if (firstSphere && secondBox)
 			return ColliderChecks::boxSphereCollisionCheck(secondBox, firstSphere);
-		}
+		else if (firstSphere && secondSphere)
+			return ColliderChecks::sphereSphereCollisionCheck(firstSphere, secondSphere);
 
 		return false;
 	}

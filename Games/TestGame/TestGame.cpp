@@ -36,6 +36,7 @@ namespace engine {
 		std::shared_ptr<MeshComponent> box1Mesh = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
 		std::shared_ptr<MeshComponent> box2Mesh = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
 		std::shared_ptr<MeshComponent> sphere1Mesh = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
+		std::shared_ptr<MeshComponent> sphere2Mesh = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
 
 		engine::PhysicsComponent physicsComponentWithGravity = engine::PhysicsComponent();
 		physicsComponentWithGravity.setForce(glm::vec3(0, 10, 0));
@@ -64,10 +65,12 @@ namespace engine {
 		box1Mesh->setMaterial(material);
 		box2Mesh->setMaterial(material);
 		sphere1Mesh->setMaterial(material);
+		sphere2Mesh->setMaterial(material);
 
 		auto boxColliderComponent = engine::BoxColliderComponent(glm::vec3(0, 0, 0), glm::vec3(1.f, 1.f, 1.f));
 		auto boxColliderOffsetComponent = engine::BoxColliderComponent(glm::vec3(0.3f, 0.1f, 0.1f), glm::vec3(1.1f, 1.1f, 1.1f));
-		auto sphereColliderComponent = engine::SphereColliderComponent(glm::vec3(0, 0, 0), glm::vec3(1.1f, 1.1f, 1.1f));
+		auto sphere1ColliderComponent = engine::SphereColliderComponent(glm::vec3(0, 0, 0), 1.f);
+		auto sphere2ColliderComponent = engine::SphereColliderComponent(glm::vec3(0, 0, 0), 2.f);
 
 
 		GameObject* ball1 = new GameObject();
@@ -152,10 +155,17 @@ namespace engine {
 		sphere1->addComponent(sphere1Mesh);
 		sphere1->name = "Sphere 1";
 		sphere1->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithoutGravity));
-		sphere1->addComponent(std::make_unique<engine::SphereColliderComponent>(sphereColliderComponent));
+		sphere1->addComponent(std::make_unique<engine::SphereColliderComponent>(sphere1ColliderComponent));
 		addGameObject(std::unique_ptr<GameObject>(sphere1));
-	}
 
+		GameObject* sphere2 = new GameObject();
+		sphere2->transform.setPosition(glm::vec3(20, 0, 0));
+		sphere2->addComponent(sphere2Mesh);
+		sphere2->name = "Sphere 2";
+		sphere2->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithoutGravity));
+		sphere2->addComponent(std::make_unique<engine::SphereColliderComponent>(sphere2ColliderComponent));
+		addGameObject(std::unique_ptr<GameObject>(sphere2));
+	}
 }
 
 engine::Game* engine::createGame() {
