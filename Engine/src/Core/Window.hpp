@@ -36,6 +36,8 @@ namespace engine
 
 		virtual void setRelativeMouseMode(bool enabled) = 0;
 
+		virtual bool isWindowMinimized() = 0;
+
 		inline static Window* instance = nullptr;
 	private:
 

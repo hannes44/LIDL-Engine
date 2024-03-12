@@ -22,6 +22,8 @@ namespace engine
 		void newFrame() override;
 
 		void setRelativeMouseMode(bool enabled) override;
+
+		bool isWindowMinimized() override;
 	private:
 		SDL_Window* window = nullptr;
 	};
