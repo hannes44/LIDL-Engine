@@ -12,6 +12,7 @@
 #include "Components/ComponentFactory.hpp"
 #include "Serializable.hpp"
 #include "Components/ScriptableComponent.hpp"
+#include "Physics/GamePhysics.hpp"
 
 namespace engine
 {
@@ -78,6 +79,8 @@ namespace engine
 
 		out << YAML::Key << "graphicsAPI";
 		out << YAML::Value << (game->config.graphicsAPIType == GraphicsAPIType::OpenGL ? "OpenGL" : "UNKNOWN");
+
+		serializeSerializable((Serializable*)&(game->config.physicsSettings), out);
 
 		out << YAML::EndMap;
 
@@ -422,6 +425,23 @@ namespace engine
 
 	void GameSerializer::deserializeGameConfig(Game* game)
 	{
+		LOG_TRACE("Deserializing game config: " + game->name);
+		std::string gameConfigFilePath = GAME_FOLDER_PATH + game->name + "/" + game->name + "Config" + GAME_CONFIG_FILE_EXTENSION;
+		LOG_TRACE("Loading file: " + gameConfigFilePath);
+		YAML::Node config = YAML::LoadFile(gameConfigFilePath);
+
+		try
+		{
+			game->config.isDefaultFullscreen = config["isDefaultFullscreen"].as<bool>();
+
+			deserializeSerializable(config, &(game->config.physicsSettings));
+		}
+		catch (const std::exception& e)
+		{
+			LOG_WARN("Failed to deserialize game config: " + std::string(e.what()));
+		}
+
+		LOG_TRACE("Deserialized game config: " + game->name);
 	}
 
 	// Deserializes and updates the game state from a file path
