@@ -114,7 +114,7 @@ namespace engine
 			if (meshComponent->renderFromCameraTransform)
 				continue;
 
-			renderGameObject(game, camera, gameObject.get());
+			renderGameObject(camera, gameObject.get());
 		}
 		
 		// Can be optimized to avoid looping through all game objects twice
@@ -128,7 +128,7 @@ namespace engine
 			if (!meshComponent->renderFromCameraTransform)
 				continue;
 
-			renderGameObject(game, camera, gameObject.get());
+			renderGameObject(camera, gameObject.get());
 		}
 
 	}
@@ -159,6 +159,18 @@ namespace engine
 		drawLine(pos, end, color, camera);
 		drawLine(end, end + glm::normalize(midRight - end) * headLength, color, camera);
 		drawLine(end, end + glm::normalize(midLeft - end) * headLength, color, camera);
+	}
+
+	void Renderer::drawOutlineOfSphere(glm::vec3 position, float radius, CameraComponent* camera)
+	{
+		GameObject gameObject = GameObject();
+		gameObject.addComponent(sphereDebugMesh);
+		gameObject.transform.setPosition(position);
+		gameObject.transform.setScale(glm::vec3(radius, radius, radius));
+
+		graphicsAPI->setDrawTriangleOutline(true);
+
+		renderGameObject(camera, &gameObject);
 	}
 
 	void Renderer::renderGizmos(Game* game, CameraComponent* camera, RendererSettings* renderingSettings)
@@ -360,6 +372,11 @@ namespace engine
 			LOG_FATAL("Graphics API not supported!");
 			abort();
 		}
+
+		sphereDebugMesh = MeshComponent::createSphere(10, 10);
+		sphereDebugMaterial = std::make_shared<Material>();
+		sphereDebugMaterial->baseColor = glm::vec3(0, 1, 0);
+		sphereDebugMesh->setMaterial(sphereDebugMaterial);
 	}
 	GraphicsAPIType Renderer::getAPIType()
 	{
@@ -371,7 +388,7 @@ namespace engine
 
 		return graphicsAPI->getType();
 	}
-	void Renderer::renderGameObject(Game* game, CameraComponent* camera, GameObject* gameObject)
+	void Renderer::renderGameObject(CameraComponent* camera, GameObject* gameObject)
 	{
 		std::shared_ptr<MeshComponent> meshComponent = gameObject->getComponent<MeshComponent>();
 

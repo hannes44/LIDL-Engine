@@ -21,6 +21,8 @@ namespace engine
 
 		void drawVector(glm::vec3 dir, glm::vec3 pos, CameraComponent* camera);
 
+		void drawOutlineOfSphere(glm::vec3 position, float radius, CameraComponent* camera);
+
 		// Creates a texture from the renderered GameObject. Can be used to create icons for materials, meshes etc. Position of the GameObject doesn't matter
 		// since it will be placed in frame under good lighting conditions
 		std::shared_ptr<Texture> renderTextureOfGameObject(GameObject* gameObject);
@@ -47,7 +49,12 @@ namespace engine
 
 		// Temporary hack to sync the renderer state with the editor and game
 		inline static Renderer* instance;
+
+		// Debug mesh used to render sphere outlines
+		std::shared_ptr<MeshComponent> sphereDebugMesh;
+		std::shared_ptr<Material> sphereDebugMaterial;
+
 	private:
-		void renderGameObject(Game* game, CameraComponent* camera, GameObject* gameObject);
+		void renderGameObject(CameraComponent* camera, GameObject* gameObject);
 	};
 }

@@ -61,6 +61,8 @@ namespace engine
 
 		void setMaterial(std::weak_ptr<Material> material);
 
+		static std::shared_ptr<MeshComponent> createSphere(int stacks = 100, int slices = 100);
+
 		virtual std::vector<SerializableVariable> getSerializableVariables()
 		{
 			return
@@ -90,8 +92,6 @@ namespace engine
 		std::weak_ptr<Material> material;
 
 		static std::shared_ptr<MeshComponent> createCube();
-
-		static std::shared_ptr<MeshComponent> createSphere(int stacks = 100, int slices = 100);
 
 		static std::shared_ptr<MeshComponent> createPlane();
 
