@@ -276,9 +276,10 @@ namespace engine {
 		lastPhysicsUpdateTimestamp = Utils::getTimestampNS();
 		fixedUpdate(game->getRootGameObjects(), game->config.physicsSettings);
 		checkCollisions(game, game->getGameObjects(), game->config.physicsSettings);
+		
 		if (game->isMultiplayerGame() && game->running && Utils::getTimestampNS() - lastMultiplayerStateUpdateTimestamp > 1000000 * multiplayerStateUpdateIntervalMS) {
 			lastMultiplayerStateUpdateTimestamp = Utils::getTimestampNS();
 			sendMultiplayerState(game);
-		}	
+		}
 	}
 }

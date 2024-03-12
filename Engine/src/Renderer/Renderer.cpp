@@ -59,18 +59,18 @@ namespace engine
 					{
 						PointLightComponent* light = dynamic_cast<PointLightComponent*>(component.get());
 
-					std::string index = "[" + std::to_string(pointLightIndex) + "]";
-					glm::vec3 gameObjectPosition = gameObject->getGlobalTransform().getPosition();
-					baseShader->setVec3(("pointLights" + index + ".position").c_str(), gameObjectPosition.x, gameObjectPosition.y, gameObjectPosition.z);
-					baseShader->setVec3(("pointLights" + index + ".ambient").c_str(), light->color.x, light->color.y, light->color.z);
-					baseShader->setVec3(("pointLights" + index + ".diffuse").c_str(), light->color.x, light->color.y, light->color.z);
-					baseShader->setVec3(("pointLights" + index + ".specular").c_str(), light->color.x, light->color.y, light->color.z);
-					baseShader->setFloat(("pointLights" + index + ".constant").c_str(), light->constant);
-					baseShader->setFloat(("pointLights" + index + ".linear").c_str(), light->linear);
-					baseShader->setFloat(("pointLights" + index + ".quadratic").c_str(), light->quadratic);
+						std::string index = "[" + std::to_string(pointLightIndex) + "]";
+						glm::vec3 gameObjectPosition = gameObject->getGlobalTransform().getPosition();
+						baseShader->setVec3(("pointLights" + index + ".position").c_str(), gameObjectPosition.x, gameObjectPosition.y, gameObjectPosition.z);
+						baseShader->setVec3(("pointLights" + index + ".ambient").c_str(), light->color.x, light->color.y, light->color.z);
+						baseShader->setVec3(("pointLights" + index + ".diffuse").c_str(), light->color.x, light->color.y, light->color.z);
+						baseShader->setVec3(("pointLights" + index + ".specular").c_str(), light->color.x, light->color.y, light->color.z);
+						baseShader->setFloat(("pointLights" + index + ".constant").c_str(), light->constant);
+						baseShader->setFloat(("pointLights" + index + ".linear").c_str(), light->linear);
+						baseShader->setFloat(("pointLights" + index + ".quadratic").c_str(), light->quadratic);
 
-					pointLightIndex++;
-				}
+						pointLightIndex++;
+					}
 				if (dynamic_cast<SpotLightComponent*>(component.get()))
 				{
 					SpotLightComponent* light = dynamic_cast<SpotLightComponent*>(component.get());
@@ -116,7 +116,7 @@ namespace engine
 
 			renderGameObject(camera, gameObject.get());
 		}
-		
+
 		// Can be optimized to avoid looping through all game objects twice
 		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
 		{
@@ -163,6 +163,7 @@ namespace engine
 
 	void Renderer::drawOutlineOfSphere(glm::vec3 position, float radius, CameraComponent* camera)
 	{
+		baseShader->bind();
 		GameObject gameObject = GameObject();
 		gameObject.addComponent(sphereDebugMesh);
 		gameObject.transform.setPosition(position);
@@ -180,18 +181,18 @@ namespace engine
 			std::shared_ptr<ColliderComponent> colliderComponent = gameObject->getComponent<ColliderComponent>();
 			std::shared_ptr<MeshComponent> meshComponent = gameObject->getComponent<MeshComponent>();
 
-			if (colliderComponent != nullptr) {
-				if (renderingSettings->drawColliders)
-					colliderComponent->drawCollider(camera);
-				
-				if (renderingSettings->drawColliderAABBs)
-					colliderComponent->drawColliderAABB(camera, colliderComponent->isCurrentlyColliding);
-			}
-
 			if (renderingSettings->drawMeshBoundingBoxes && meshComponent != nullptr)
 				meshComponent->drawBoundingBox(camera);
-		}
 
+			if (!gameObject->hasComponent<ColliderComponent>())
+				continue;
+
+			if (renderingSettings->drawColliders)
+				colliderComponent->drawCollider(camera);
+
+			if (renderingSettings->drawColliderAABBs)
+				colliderComponent->drawColliderAABB(camera, colliderComponent->isCurrentlyColliding);
+		}
 	}
 
 	void Renderer::drawLine(glm::vec3 start, glm::vec3 end, glm::vec3 color, CameraComponent* camera)
