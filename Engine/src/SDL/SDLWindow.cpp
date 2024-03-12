@@ -85,4 +85,12 @@ namespace engine
 	{
 		SDL_SetRelativeMouseMode(enabled ? SDL_TRUE : SDL_FALSE);
 	}
+	bool SDLWindow::isWindowMinimized()
+	{
+		Uint32 flags = SDL_GetWindowFlags(window);
+		if (flags & SDL_WINDOW_MINIMIZED)
+			return true;
+
+		return false;
+	}
 }

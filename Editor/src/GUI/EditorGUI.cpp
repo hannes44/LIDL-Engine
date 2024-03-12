@@ -205,6 +205,11 @@ namespace engine
 
 	void EditorGUI::renderNewFrame()
 	{
+		if (window.isWindowMinimized())
+		{
+			return;
+		}
+
 		ImGui_ImplSDL3_NewFrame();
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui::NewFrame();
