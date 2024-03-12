@@ -16,6 +16,7 @@
 #include <Windows.h>
 #include <regex>
 #include <ShlDisp.h>
+#include "Utils/Utils.hpp"
 
 #include <thread>
 #include <fstream>
@@ -296,6 +297,22 @@ namespace engine
 			{
 				noGUIMode = !noGUIMode;
 				window.setRelativeMouseMode(noGUIMode);
+			}
+
+			if ((Key)event.getKey() == Key::B)
+			{
+				glm::vec3 rayDirection = Utils::getMouseRayDirection(window, *getActiveCamera());
+				glm::vec3 rayOrigin = getActiveCamera()->getTransform().getPosition();
+
+				auto gameObjects = Utils::getAABBGameObjectCollisions(game.get(), rayOrigin, rayDirection);
+				if (gameObjects.size() > 0)
+				{
+					selectedObject = gameObjects[0];
+				}
+				else
+				{
+					selectedObject.reset();
+				}
 			}
 		}
 

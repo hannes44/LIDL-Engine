@@ -1,6 +1,7 @@
 #include "Utils.hpp"
 #include "Renderer/Renderer.hpp"
 
+
 namespace engine
 {
 	long long Utils::getTimestampNS() {
@@ -110,5 +111,54 @@ namespace engine
 			// Move to the next position
 			nextPos += nextPointOffset;
 		}
+	}
+
+	glm::vec3 Utils::getMouseRayDirection(Window& window, CameraComponent& camera)
+	{
+		int mouseX, mouseY;
+		window.getMousePosition(&mouseX, &mouseY);
+
+		int width, height;
+		window.getWindowSize(&width, &height);
+
+		float aspectRatio = float(width) / float(height);
+
+		glm::mat4 projectionMatrix = camera.getProjectionMatrix();
+
+		glm::vec3 rayDirection = glm::vec3(0, 0, 0);
+
+		float x = (2.0f * mouseX) / width - 1.0f;
+		float y = 1.0f - (2.0f * mouseY) / height;
+		float z = 1.0f;
+		glm::vec3 ray_nds = glm::vec3(x, y, -1);
+
+		glm::vec4 ray_clip = glm::vec4(ray_nds.x, ray_nds.y, -1.0, 1.0);
+
+		glm::vec4 ray_eye = glm::inverse(projectionMatrix) * ray_clip;
+
+		ray_eye = glm::vec4(ray_eye.x, ray_eye.y, -1.0, 0.0);
+
+		glm::vec4 temp = glm::inverse(camera.getViewMatrix()) * ray_eye;
+		glm::vec3 ray_wor = { temp.x, temp.y, temp.z };
+		ray_wor = glm::normalize(ray_wor);
+		return ray_wor;
+	}
+
+	std::vector<std::shared_ptr<GameObject>> Utils::getAABBGameObjectCollisions(Game* game, glm::vec3 origin, glm::vec3 direction)
+	{
+		std::vector<std::shared_ptr<GameObject>> collidingGameObjects;
+
+		for (auto& [id, gameObject] : game->getGameObjects()) 
+		{
+			if (auto meshComponent = gameObject->getComponent<MeshComponent>())
+			{
+				if (meshComponent->getBoundingBox().isRayIntersecting(origin, direction))
+				{
+					collidingGameObjects.push_back(gameObject);
+				}
+			}
+		}
+
+		return collidingGameObjects;
 	}
 }

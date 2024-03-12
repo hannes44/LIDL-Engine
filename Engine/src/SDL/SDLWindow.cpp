@@ -93,4 +93,11 @@ namespace engine
 
 		return false;
 	}
+	void SDLWindow::getMousePosition(int* x, int* y)
+	{
+		float mx, my;
+		SDL_GetMouseState(&mx, &my);
+		*x = (int)mx;
+		*y = (int)my;
+	}
 }
