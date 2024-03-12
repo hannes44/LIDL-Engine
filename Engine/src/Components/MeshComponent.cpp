@@ -219,7 +219,7 @@ namespace engine
 		std::vector<glm::vec3> vertexPositions = {};
 
 		for (auto& vertex : vertices)
-			vertexPositions.push_back(vertex.position);
+			vertexPositions.push_back(vertex.position * gameObject->transform.getScale());
 
 		const glm::quat rotation = gameObject->transform.getRotation();
 		glm::vec3 maxPoints = glm::vec3();
