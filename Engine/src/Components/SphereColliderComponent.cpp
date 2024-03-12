@@ -4,12 +4,12 @@
 namespace engine {
 	BoundingBox SphereColliderComponent::getBoundingBox() {
 		// The axis aligned bounding box for a sphere is not affected by the sphere's rotation, so we can return the same AABB for all rotations
-		return BoundingBox(gameObject->transform.getPosition() + offset, extent);
+		return BoundingBox(gameObject->transform.getPosition() + offset, glm::vec3(radius * 2, radius * 2, radius * 2));
 	}
 
 	void SphereColliderComponent::drawCollider(CameraComponent* camera) {
-		// TODO: Implement correct sphere drawing when we have support for drawing spheres
-		drawColliderAABB(camera, isCurrentlyColliding);
+		Renderer* renderer = Renderer::getInstance();
+		renderer->drawOutlineOfSphere(gameObject->transform.getPosition(), radius, camera);
 	}
 
 	std::string SphereColliderComponent::getName() {

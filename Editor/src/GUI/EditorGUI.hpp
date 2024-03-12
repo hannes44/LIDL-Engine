@@ -61,7 +61,7 @@ namespace engine
 
 		void drawPlayButtonToolbar();
 
-		void drawGuizmos();
+		void drawGizmos();
 
 		void drawInspectorSelectedGameObject();
 
@@ -75,7 +75,7 @@ namespace engine
 
 		void drawSerializableVariables(Serializable* serializable);
 
-		void drawGuizmoOperationsWindow();
+		void drawGizmoOperationsWindow();
 
 		void drawAssetItem(std::shared_ptr<AssetNode> assetNode);
 
@@ -95,9 +95,9 @@ namespace engine
 
 		std::weak_ptr<Selectable> selectedObject;
 
-		ImGuizmo::OPERATION guizmoOperation = ImGuizmo::TRANSLATE;
+		ImGuizmo::OPERATION gizmoOperation = ImGuizmo::TRANSLATE;
 
-		bool isGuizmoOperationInWorldSpace = true;
+		bool isGizmoOperationInWorldSpace = true;
 
 		std::shared_ptr<GameObject> editorCamera;
 

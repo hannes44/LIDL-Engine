@@ -87,11 +87,7 @@ namespace engine
 	}
 	bool SDLWindow::isWindowMinimized()
 	{
-		Uint32 flags = SDL_GetWindowFlags(window);
-		if (flags & SDL_WINDOW_MINIMIZED)
-			return true;
-
-		return false;
+		return SDL_GetWindowFlags(window) & SDL_WINDOW_MINIMIZED;
 	}
 	void SDLWindow::getMousePosition(int* x, int* y)
 	{

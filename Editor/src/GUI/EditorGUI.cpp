@@ -207,9 +207,7 @@ namespace engine
 	void EditorGUI::renderNewFrame()
 	{
 		if (window.isWindowMinimized())
-		{
 			return;
-		}
 
 		ImGui_ImplSDL3_NewFrame();
 		ImGui_ImplOpenGL3_NewFrame();
@@ -222,9 +220,7 @@ namespace engine
 #endif
 
 		if (noGUIMode)
-		{
 			return;
-		}
 
 		if (game == nullptr)
 		{
@@ -332,9 +328,7 @@ namespace engine
 	void EditorGUI::onEvent(EventType type, std::string message)
 	{
 		if (type == EventType::QuitProgram)
-		{
 			quitProgram = true;
-		}
 	}
 
 	void EditorGUI::drawMainMenu()
@@ -374,10 +368,10 @@ namespace engine
 			ImGui::GetIO().WantCaptureKeyboard = false;
 		}
 
-		drawGuizmos();
+		drawGizmos();
 
 		if (std::dynamic_pointer_cast<GameObject>(selectedObject.lock()))
-			drawGuizmoOperationsWindow();
+			drawGizmoOperationsWindow();
 
 		ImGui::End();
 	}
@@ -761,25 +755,25 @@ namespace engine
 		ImGui::End();
 	}
 
-	void EditorGUI::drawGuizmos()
+	void EditorGUI::drawGizmos()
 	{
-		// Only draw guizmos in scene view
+		// Only draw gizmos in scene view
 		if (!editorSettings.showGizmos || activeViewPort != ActiveViewPort::Scene)
 			return;
 
-		bool shouldDrawGuizmos = false;
+		bool shouldDrawGizmos = false;
 
 		float* modelMatrixPtr = nullptr;
 		if (auto lockedSelectedObject = selectedObject.lock())
 		{
 			if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
 			{
-				shouldDrawGuizmos = true;
+				shouldDrawGizmos = true;
 				modelMatrixPtr = glm::value_ptr(lockedGameObject->transform.transformMatrix);
 			}
 		}
 
-		if (shouldDrawGuizmos)
+		if (shouldDrawGizmos)
 		{
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();
@@ -792,7 +786,7 @@ namespace engine
 
 			glm::mat4 projectionMatrix = getActiveCamera()->getProjectionMatrix();
 
-			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(projectionMatrix), guizmoOperation, isGuizmoOperationInWorldSpace ? ImGuizmo::WORLD : ImGuizmo::LOCAL, modelMatrixPtr);
+			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(projectionMatrix), gizmoOperation, isGizmoOperationInWorldSpace ? ImGuizmo::WORLD : ImGuizmo::LOCAL, modelMatrixPtr);
 		}
 	}
 
@@ -1142,7 +1136,7 @@ namespace engine
 		}
 	}
 
-	void EditorGUI::drawGuizmoOperationsWindow()
+	void EditorGUI::drawGizmoOperationsWindow()
 	{
 		ImGuiWindowFlags windowFlags = 0;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
@@ -1153,46 +1147,43 @@ namespace engine
 		ImGui::Begin("Gizmo Operation", nullptr, windowFlags);
 
 		bool pushedStyleColor = false;
-		if (guizmoOperation == ImGuizmo::ROTATE)
+		if (gizmoOperation == ImGuizmo::ROTATE)
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered]);
 			pushedStyleColor = true;
 		}
 
 		if (ImGui::ImageButton("##rotateOperationButton", (void*)(intptr_t)rotateIconTexture->textureIDOpenGL, ImVec2(25, 25), { 0, 1 }, { 1, 0 }))
-		{
-			guizmoOperation = ImGuizmo::ROTATE;
-		}
+			gizmoOperation = ImGuizmo::ROTATE;
+		
 		if (pushedStyleColor)
 			ImGui::PopStyleColor();
 
 		pushedStyleColor = false;
 
-		if (guizmoOperation == ImGuizmo::TRANSLATE)
+		if (gizmoOperation == ImGuizmo::TRANSLATE)
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered]);
 			pushedStyleColor = true;
 		}
 
 		if (ImGui::ImageButton("##translateOperationButton", (void*)(intptr_t)translateIconTexture->textureIDOpenGL, ImVec2(25, 25), { 0, 1 }, { 1, 0 }))
-		{
-			guizmoOperation = ImGuizmo::TRANSLATE;
-		}
+			gizmoOperation = ImGuizmo::TRANSLATE;
+		
 		if (pushedStyleColor)
 			ImGui::PopStyleColor();
 
 		pushedStyleColor = false;
 
-		if (guizmoOperation == ImGuizmo::SCALE)
+		if (gizmoOperation == ImGuizmo::SCALE)
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered]);
 			pushedStyleColor = true;
 		}
 
 		if (ImGui::ImageButton("##scaleOperationButton", (void*)(intptr_t)scaleIconTexture->textureIDOpenGL, ImVec2(25, 25), { 0, 1 }, { 1, 0 }))
-		{
-			guizmoOperation = ImGuizmo::SCALE;
-		}
+			gizmoOperation = ImGuizmo::SCALE;
+		
 		if (pushedStyleColor)
 			ImGui::PopStyleColor();
 
@@ -1200,16 +1191,15 @@ namespace engine
 
 		ImGui::NewLine();
 
-		if (isGuizmoOperationInWorldSpace)
+		if (isGizmoOperationInWorldSpace)
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered]);
 			pushedStyleColor = true;
 		}
 
 		if (ImGui::ImageButton("##worldOperationButton", (void*)(intptr_t)worldIconTexture->textureIDOpenGL, ImVec2(25, 25), { 0, 1 }, { 1, 0 }))
-		{
-			isGuizmoOperationInWorldSpace = !isGuizmoOperationInWorldSpace;
-		}
+			isGizmoOperationInWorldSpace = !isGizmoOperationInWorldSpace;
+		
 		if (pushedStyleColor)
 			ImGui::PopStyleColor();
 
