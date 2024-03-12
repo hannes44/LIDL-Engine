@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Component.hpp"
+#include "Components/CameraComponent.hpp"
 #include "Renderer/Vertex.hpp"
+#include "Core/BoundingBox.hpp"
 
 #include <vector>
 #include <string>
@@ -56,6 +58,9 @@ namespace engine
 		PrimativeMeshType primativeType = NONE;
 
 		std::string primativeTypeAsString = primativeTypeToString(primativeType);
+
+		void drawBoundingBox(CameraComponent* camera);
+		BoundingBox getBoundingBox();
 
 		Material* getMaterial();
 

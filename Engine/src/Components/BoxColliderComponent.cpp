@@ -34,8 +34,8 @@ namespace engine {
 	}
 
 	void BoxColliderComponent::drawCollider(CameraComponent* camera) {
-		BoundingBox box = getBoundingBox();
-		drawBoundingBox(box, camera, isCurrentlyColliding);
+		// TODO: Replace with drawing the actual box, not the AABB
+		drawColliderAABB(camera, isCurrentlyColliding);
 	}
 
 	std::string BoxColliderComponent::getName() {

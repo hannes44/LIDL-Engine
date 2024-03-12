@@ -177,22 +177,19 @@ namespace engine
 	{
 		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
 		{
-			ColliderComponent* colliderComponent = nullptr;
+			std::shared_ptr<ColliderComponent> colliderComponent = gameObject->getComponent<ColliderComponent>();
+			std::shared_ptr<MeshComponent> meshComponent = gameObject->getComponent<MeshComponent>();
 
-			for (auto component : gameObject->getComponents())
-			{
-				if (dynamic_cast<ColliderComponent*>(component.get()))
-				{
-					colliderComponent = dynamic_cast<ColliderComponent*>(component.get());
-					break;
-				}
+			if (colliderComponent != nullptr) {
+				if (renderingSettings->drawColliders)
+					colliderComponent->drawCollider(camera);
+				
+				if (renderingSettings->drawColliderAABBs)
+					colliderComponent->drawColliderAABB(camera, colliderComponent->isCurrentlyColliding);
 			}
 
-			if (colliderComponent == nullptr)
-				continue;
-
-			if (renderingSettings->drawBoundingBoxes)
-				colliderComponent->drawCollider(camera);
+			if (renderingSettings->drawMeshBoundingBoxes && meshComponent != nullptr)
+				meshComponent->drawBoundingBox(camera);
 		}
 
 	}

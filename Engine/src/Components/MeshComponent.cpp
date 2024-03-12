@@ -1,7 +1,12 @@
+#define GLM_ENABLE_EXPERIMENTAL
+#include "glm/glm.hpp"
+#include <glm/gtx/quaternion.hpp>
+
 #include "MeshComponent.hpp"
 #include "Core/Logger.hpp"
 #include <iostream>
 #include "Core/ResourceManager.hpp"
+#include "Utils/Utils.hpp"
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "../../vendor/tinyobjloader/tiny_obj_loader.h"
 
@@ -187,6 +192,7 @@ namespace engine
 			return "";
 		}
 	}
+
 	PrimativeMeshType MeshComponent::stringToPrimativeType(const std::string& type)
 	{
 		if (type == "PLANE")
@@ -204,12 +210,42 @@ namespace engine
 		}
 	}
 
+	void MeshComponent::drawBoundingBox(CameraComponent* camera) {
+		BoundingBox box = getBoundingBox();
+		Utils::drawBoundingBox(box, camera, glm::vec3(0, 0.7f, 0.3f));
+	}
+
+	BoundingBox MeshComponent::getBoundingBox() {
+		std::vector<glm::vec3> vertexPositions = {};
+
+		for (auto& vertex : vertices)
+			vertexPositions.push_back(vertex.position);
+
+		const glm::quat rotation = gameObject->transform.getRotation();
+		glm::vec3 maxPoints = glm::vec3();
+
+		for (auto& vertexPosition : vertexPositions) {
+			glm::vec3 rotatedPos = glm::rotate(rotation, vertexPosition);
+
+			if (rotatedPos.x > maxPoints.x)
+				maxPoints.x = rotatedPos.x;
+
+			if (rotatedPos.y > maxPoints.y)
+				maxPoints.y = rotatedPos.y;
+
+			if (rotatedPos.z > maxPoints.z)
+				maxPoints.z = rotatedPos.z;
+		}
+
+		maxPoints = glm::vec3(maxPoints.x * 2, maxPoints.y * 2, maxPoints.z * 2);
+
+		return BoundingBox(gameObject->transform.getPosition(), maxPoints);
+	}
+
 	std::shared_ptr<VertexArray> MeshComponent::getVertexArray()
 	{
 		if (vertexArray == nullptr)
-		{
 			createVertexArray();
-		}
 
 		return vertexArray;
 
