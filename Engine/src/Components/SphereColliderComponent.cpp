@@ -8,8 +8,8 @@ namespace engine {
 	}
 
 	void SphereColliderComponent::drawCollider(CameraComponent* camera) {
-		BoundingBox box = getBoundingBox();
-		drawBoundingBox(box, camera, isCurrentlyColliding);
+		// TODO: Implement correct sphere drawing when we have support for drawing spheres
+		drawColliderAABB(camera, isCurrentlyColliding);
 	}
 
 	std::string SphereColliderComponent::getName() {

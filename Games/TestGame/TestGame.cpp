@@ -32,7 +32,10 @@ namespace engine {
 	void TestGame::initialize() {
 
 		std::shared_ptr<MeshComponent> meshComponent1 = engine::MeshComponent::createMeshFromObjFile("amugus.obj");
-		std::shared_ptr<MeshComponent> meshComponent2 = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
+		std::shared_ptr<MeshComponent> ball1Mesh = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
+		std::shared_ptr<MeshComponent> box1Mesh = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
+		std::shared_ptr<MeshComponent> box2Mesh = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
+		std::shared_ptr<MeshComponent> sphere1Mesh = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
 
 		engine::PhysicsComponent physicsComponentWithGravity = engine::PhysicsComponent();
 		physicsComponentWithGravity.setForce(glm::vec3(0, 10, 0));
@@ -57,7 +60,10 @@ namespace engine {
 
 		std::weak_ptr<Material> material = createMaterial("GLOCKEN :)");
 		material.lock()->diffuseTexture = loadTexture("glocken.png");
-		meshComponent2->setMaterial(material);
+		ball1Mesh->setMaterial(material);
+		box1Mesh->setMaterial(material);
+		box2Mesh->setMaterial(material);
+		sphere1Mesh->setMaterial(material);
 
 		auto boxColliderComponent = engine::BoxColliderComponent(glm::vec3(0, 0, 0), glm::vec3(1.f, 1.f, 1.f));
 		auto boxColliderOffsetComponent = engine::BoxColliderComponent(glm::vec3(0.3f, 0.1f, 0.1f), glm::vec3(1.1f, 1.1f, 1.1f));
@@ -66,7 +72,7 @@ namespace engine {
 
 		GameObject* ball1 = new GameObject();
 		ball1->transform.setPosition(glm::vec3(-10, 0, 0));
-		ball1->addComponent(meshComponent2);
+		ball1->addComponent(ball1Mesh);
 		ball1->name = "Ball without gravity";
 		ball1->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithoutGravity));
 		ball1->addComponent(std::make_unique<engine::BoxColliderComponent>(boxColliderComponent));
@@ -95,7 +101,7 @@ namespace engine {
 
 		GameObject* box1 = new GameObject();
 		box1->transform.setPosition(glm::vec3(0, 0, 0));
-		box1->addComponent(meshComponent2);
+		box1->addComponent(box1Mesh);
 		box1->name = "Box 1";
 		box1->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithoutGravityMovingRight));
 		box1->addComponent(std::make_unique<engine::BoxColliderComponent>(boxColliderComponent));
@@ -104,7 +110,7 @@ namespace engine {
 
 		GameObject* box2 = new GameObject();
 		box2->transform.setPosition(glm::vec3(6, 0, 0));
-		box2->addComponent(meshComponent2);
+		box2->addComponent(box2Mesh);
 		box2->name = "Box 2";
 		box2->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithoutGravityMovingLeft));
 		box2->addComponent(std::make_unique<engine::BoxColliderComponent>(boxColliderOffsetComponent));
@@ -143,7 +149,7 @@ namespace engine {
 
 		GameObject* sphere1 = new GameObject();
 		sphere1->transform.setPosition(glm::vec3(15, 0, 0));
-		sphere1->addComponent(meshComponent2);
+		sphere1->addComponent(sphere1Mesh);
 		sphere1->name = "Sphere 1";
 		sphere1->addComponent(std::make_unique<engine::PhysicsComponent>(physicsComponentWithoutGravity));
 		sphere1->addComponent(std::make_unique<engine::SphereColliderComponent>(sphereColliderComponent));

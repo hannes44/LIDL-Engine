@@ -8,11 +8,20 @@
 
 namespace engine {
 
+	struct ColliderColors {
+		glm::vec3 colliderColliding = { 1, 0, 0 };
+		glm::vec3 colliderNotColliding = { 0, 1, 0 };
+
+		glm::vec3 aabbColliding = { 0.5f, 0.5f, 0 };
+		glm::vec3 aabbNotColliding = { 0, 0.5f, 0.5f };
+	};
+
 	class ColliderComponent : public Component {
 	public:
 		friend class GamePhysics;
 		bool isColliding(ColliderComponent* other);
 		virtual void drawCollider(CameraComponent* camera) = 0;
+		void drawColliderAABB(CameraComponent* camera, bool isColliding);
 		virtual BoundingBox getBoundingBox() = 0;
 		ColliderComponent(glm::vec3 offset, glm::vec3 extent, bool isPlatform = false) : offset(offset), extent(extent), isPlatform(isPlatform) {}
 
@@ -28,16 +37,17 @@ namespace engine {
 			};
 		};
 
+		bool isCurrentlyColliding = false;
+
 	protected:
 		bool deepCollisionCheck(ColliderComponent* other);
 
-		static void drawBoundingBox(BoundingBox& box, CameraComponent* camera, bool isColliding = false);
+		ColliderColors colors{};
 
 		glm::vec3 offset{ 0 };
 		glm::vec3 extent{ 0 };
 		bool isPlatform = false;
 
-		bool isCurrentlyColliding = false;
 		std::function<void(Game*, GameObject*, ColliderComponent*)> onCollision;
 	};
 }
