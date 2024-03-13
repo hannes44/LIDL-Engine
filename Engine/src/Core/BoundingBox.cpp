@@ -28,22 +28,14 @@ namespace engine {
 			maxZ() >= other->minZ()
 			);
 	}
-	
-	glm::vec3 vec3min2(glm::vec3 a, glm::vec3 b) {
-		return glm::vec3(min(a.x, b.x), min(a.y, b.y), min(a.z, b.z));
-	}
-
-	glm::vec3 vec3max2(glm::vec3 a, glm::vec3 b) {
-		return glm::vec3(max(a.x, b.x), max(a.y, b.y), max(a.z, b.z));
-	}
 
 	bool BoundingBox::isRayIntersecting(glm::vec3 rayOrigin, glm::vec3 rayDirection)
 	{
 		glm::vec3 tMin = (getMin() - rayOrigin) / rayDirection;
 		glm::vec3 tMax = (getMax() - rayOrigin) / rayDirection;
 
-		glm::vec3 t1 = vec3min2(tMin, tMax);
-		glm::vec3 t2 = vec3max2(tMin, tMax);
+		glm::vec3 t1 = glm::vec3(min(a.x, b.x), min(a.y, b.y), min(a.z, b.z));
+		glm::vec3 t2 = glm::vec3(max(a.x, b.x), max(a.y, b.y), max(a.z, b.z));
 
 		float tNear = max(max(t1.x, t1.y), t1.z);
 		float tFar = min(min(t2.x, t2.y), t2.z);
