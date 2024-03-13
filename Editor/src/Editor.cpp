@@ -5,8 +5,11 @@
 #include "GUI/MainMenuGUI.hpp"
 #include "Serializer/EditorSerializer.hpp"
 #include "Project.hpp"
+
 #define _WINSOCKAPI_
+#define NOMINMAX
 #include <Windows.h>
+
 #include <iostream>
 
 namespace engine

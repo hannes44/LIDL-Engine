@@ -7,8 +7,11 @@
 #include <sstream>
 #include<iostream>
 #include<algorithm>
+
 #define _WINSOCKAPI_
-#include <windows.h>
+#define NOMINMAX
+#include <Windows.h>
+
 #include <atlstr.h>
 #include "Utils/Utils.hpp"
 #include "Core/Debug.hpp"

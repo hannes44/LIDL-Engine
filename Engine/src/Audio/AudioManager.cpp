@@ -1,8 +1,11 @@
 #include "AudioManager.hpp"
 #include "Core/Logger.hpp"
 #include "Core/Window.hpp"
+
 #define _WINSOCKAPI_
+#define NOMINMAX
 #include <Windows.h>
+
 #include <MMSystem.h>
 
 

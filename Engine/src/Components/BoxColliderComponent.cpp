@@ -19,7 +19,9 @@ namespace engine {
 			glm::vec3(-extent.x, -extent.y, -extent.z)
 		};
 
-		const glm::quat rotation = gameObject->transform.getRotation();
+		Transform globalTransform = gameObject->getGlobalTransform();
+
+		const glm::quat rotation = globalTransform.getRotation();
 		glm::vec3 maxPoints = glm::vec3();
 
 		for (auto& cornerOffset : cornerExtents) {
@@ -30,7 +32,7 @@ namespace engine {
 			maxPoints.z = std::max(maxPoints.z, corner.z);
 		}
 
-		return BoundingBox(gameObject->transform.getPosition() + offset, maxPoints);
+		return BoundingBox(globalTransform.getPosition() + offset, maxPoints);
 	}
 
 	void BoxColliderComponent::drawCollider(CameraComponent* camera) {

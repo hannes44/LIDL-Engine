@@ -7,6 +7,14 @@ namespace engine
 		return std::chrono::high_resolution_clock::now().time_since_epoch().count();
 	}
 
+	glm::vec3 Utils::vec3min(glm::vec3 a, glm::vec3 b) {
+		return glm::vec3(std::min(a.x, b.x), std::min(a.y, b.y), std::min(a.z, b.z));
+	}
+
+	glm::vec3 Utils::vec3max(glm::vec3 a, glm::vec3 b) {
+		return glm::vec3(std::max(a.x, b.x), std::max(a.y, b.y), std::max(a.z, b.z));
+	}
+
 	// https://stackoverflow.com/questions/478898/how-do-i-execute-a-command-and-get-the-output-of-the-command-within-c-using-po
 	//
 	// Execute a command and get the results. (Only standard output)
@@ -61,7 +69,9 @@ namespace engine
 				if (!dwAvail) // No data available, return
 					break;
 
-				if (!::ReadFile(hPipeRead, buf, min(sizeof(buf) - 1, dwAvail), &dwRead, NULL) || !dwRead)
+				DWORD bytesToRead = sizeof(buf) - 1 < dwAvail ? sizeof(buf) - 1 : dwAvail;
+
+				if (!::ReadFile(hPipeRead, buf, bytesToRead, &dwRead, NULL) || !dwRead)
 					// Error, the child process might ended
 					break;
 
@@ -112,6 +122,12 @@ namespace engine
 		}
 	}
 
+	void Utils::drawSphere(glm::vec3 position, float radius, CameraComponent* camera)
+	{
+		Renderer* renderer = Renderer::getInstance();
+		renderer->drawOutlineOfSphere(position, radius, camera);
+	}
+
 	glm::vec3 Utils::getMouseRayDirection(Window& window, CameraComponent& camera)
 	{
 		int mouseX, mouseY;
@@ -152,9 +168,7 @@ namespace engine
 			if (auto meshComponent = gameObject->getComponent<MeshComponent>())
 			{
 				if (meshComponent->getBoundingBox().isRayIntersecting(origin, direction))
-				{
 					collidingGameObjects.push_back(gameObject);
-				}
 			}
 		}
 

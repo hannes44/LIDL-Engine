@@ -19,13 +19,6 @@ namespace engine
 		this->vertices = vertices;
 		this->indices = indices;
 
-		// -----------------------------------------------------------------------
-		// TODO: BUILD THE BOUNDING BOX
-		// -----------------------------------------------------------------------
-
-
-
-
 		LOG_TRACE("MeshComponent: Created mesh with {0} vertices and {1} indices", vertices.size(), indices.size());
 	}
 
@@ -42,13 +35,9 @@ namespace engine
 	std::shared_ptr<Material> MeshComponent::getMaterial()
 	{
 		if (auto lockedMaterial = material.lock())
-		{
 			return lockedMaterial;
-		}
-		else
-		{
-			return defaultMaterial;
-		}
+		
+		return defaultMaterial;
 	}
 
 	void MeshComponent::setMaterial(std::weak_ptr<Material> material)
@@ -216,30 +205,18 @@ namespace engine
 	}
 
 	BoundingBox MeshComponent::getBoundingBox() {
-		std::vector<glm::vec3> vertexPositions = {};
-
-		for (auto& vertex : vertices)
-			vertexPositions.push_back(vertex.position * gameObject->transform.getScale());
-
-		const glm::quat rotation = gameObject->transform.getRotation();
 		glm::vec3 maxPoints = glm::vec3();
+		Transform globalTransform = gameObject->getGlobalTransform();
 
-		for (auto& vertexPosition : vertexPositions) {
-			glm::vec3 rotatedPos = glm::rotate(rotation, vertexPosition);
+		for (auto& vertex : vertices) {
+			glm::vec4 worldPosition = globalTransform.transformMatrix * glm::vec4(vertex.position, 0);
 
-			if (rotatedPos.x > maxPoints.x)
-				maxPoints.x = rotatedPos.x;
-
-			if (rotatedPos.y > maxPoints.y)
-				maxPoints.y = rotatedPos.y;
-
-			if (rotatedPos.z > maxPoints.z)
-				maxPoints.z = rotatedPos.z;
+			maxPoints.x = std::max(maxPoints.x, worldPosition.x);
+			maxPoints.y = std::max(maxPoints.y, worldPosition.y);
+			maxPoints.z = std::max(maxPoints.z, worldPosition.z);
 		}
 
-		maxPoints = glm::vec3(maxPoints.x * 2, maxPoints.y * 2, maxPoints.z * 2);
-
-		return BoundingBox(gameObject->transform.getPosition(), maxPoints);
+		return BoundingBox(globalTransform.getPosition(), maxPoints * glm::vec3(2));
 	}
 
 	std::shared_ptr<VertexArray> MeshComponent::getVertexArray()
