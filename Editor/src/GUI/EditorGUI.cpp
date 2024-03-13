@@ -1144,6 +1144,9 @@ namespace engine
 		windowFlags |= ImGuiWindowFlags_NoResize;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
 
+		// Hotfix for gizmo operations window getting overlayed by other windows
+		ImGui::SetNextWindowFocus();
+		
 		ImGui::SetNextWindowSize(ImVec2(50, 170));
 		ImGui::Begin("Gizmo Operation", nullptr, windowFlags);
 

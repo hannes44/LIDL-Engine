@@ -122,6 +122,12 @@ namespace engine
 		}
 	}
 
+	void Utils::drawSphere(glm::vec3 position, float radius, CameraComponent* camera)
+	{
+		Renderer* renderer = Renderer::getInstance();
+		renderer->drawOutlineOfSphere(position, radius, camera);
+	}
+
 	glm::vec3 Utils::getMouseRayDirection(Window& window, CameraComponent& camera)
 	{
 		int mouseX, mouseY;
