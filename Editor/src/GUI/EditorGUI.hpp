@@ -127,6 +127,12 @@ namespace engine
 
 		std::shared_ptr<Project> project;
 
+		// When a material is dragged from the asset explorer over a mesh component, this will be the material that is being overwritten
+		// If the mouse is then dragged away from the mesh component, the material will be reset to its original value
+		std::weak_ptr<Material> overwrittenMaterial;
+
+		std::weak_ptr<GameObject> overwrittenGameObject;
+
 		std::shared_ptr<Texture> rotateIconTexture;
 
 		std::shared_ptr<Texture> translateIconTexture;

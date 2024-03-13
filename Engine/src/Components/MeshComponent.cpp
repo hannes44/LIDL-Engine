@@ -39,15 +39,15 @@ namespace engine
 		return mesh;
 	}
 
-	Material* MeshComponent::getMaterial()
+	std::shared_ptr<Material> MeshComponent::getMaterial()
 	{
 		if (auto lockedMaterial = material.lock())
 		{
-			return lockedMaterial.get();
+			return lockedMaterial;
 		}
 		else
 		{
-			return &defaultMaterial;
+			return defaultMaterial;
 		}
 	}
 
