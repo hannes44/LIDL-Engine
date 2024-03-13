@@ -1323,10 +1323,6 @@ namespace engine
 			ImGui::SetCursorPosX(currentX + (75 - textWidth) / 2);
 
 			ImGui::Text(name.c_str());
-
-
-
-
 		}
 		ImGui::EndGroup();
 	}
