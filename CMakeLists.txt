@@ -20,4 +20,5 @@ foreach(dir ${sources_list})
     ENDIF()
 endforeach()
 
-add_subdirectory(editor)
+add_subdirectory(Editor/src)
+
