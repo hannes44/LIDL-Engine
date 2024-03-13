@@ -52,9 +52,7 @@ void engine::Transform::setRotationFromQuaternion(const glm::quat& orientation)
     for (int i = 0; i < 3; ++i)
     {
         for (int j = 0; j < 3; ++j)
-        {
             transformMatrix[i][j] = rotationMatrix[i][j];
-        }
     }
 
     transformMatrix[3] = glm::vec4(position, 1.0f);
