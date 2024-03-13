@@ -5,8 +5,8 @@
 namespace engine
 {
 #define CONFIG_FILE_EXTENSION ".yaml"
-#define PATH_TO_EDITOR_FOLDER "../../Editor/"
-#define PATH_TO_GAMES_FOLDER "../../Games/" // This is only for the editor to find the games
+#define PATH_TO_EDITOR_FOLDER "../../../Editor/"
+#define PATH_TO_GAMES_FOLDER "../../../Games/" // This is only for the editor to find the games
 
 	enum class ResourceType
 	{
