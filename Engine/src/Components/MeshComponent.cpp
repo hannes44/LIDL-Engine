@@ -32,12 +32,12 @@ namespace engine
 		return mesh;
 	}
 
-	Material* MeshComponent::getMaterial()
+	std::shared_ptr<Material> MeshComponent::getMaterial()
 	{
 		if (auto lockedMaterial = material.lock())
-			return lockedMaterial.get();
-
-		return &defaultMaterial;
+			return lockedMaterial;
+		
+		return defaultMaterial;
 	}
 
 	void MeshComponent::setMaterial(std::weak_ptr<Material> material)

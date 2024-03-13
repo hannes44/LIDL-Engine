@@ -139,12 +139,6 @@ namespace engine
 	{
 		std::string pathToSearch = PATH_TO_GAMES_FOLDER;
 
-		// TODO: This should be done with macros. PATH_TO_GAMES_FOLDER should be set to the correct path depending on if games or editor is building
-		if (std::filesystem::current_path().filename() != "Editor")
-		{
-			pathToSearch = "../" + pathToSearch;
-		}
-
 		pathToSearch += game->name + "/";
 
 		return pathToSearch;
@@ -202,7 +196,7 @@ namespace engine
 	
 	std::vector<std::string> ResourceManager::getAllGameNamesInGamesFolder()
 	{
-		std::string path = "../../games/";
+		std::string path = "../../../games/";
 		std::vector<std::string> gameNames{};
 
 		for (const auto& entry : fs::directory_iterator(path))

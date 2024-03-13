@@ -62,7 +62,7 @@ namespace engine
 		void drawBoundingBox(CameraComponent* camera);
 		BoundingBox getBoundingBox();
 
-		Material* getMaterial();
+		std::shared_ptr<Material> getMaterial();
 
 		void setMaterial(std::weak_ptr<Material> material);
 
@@ -92,7 +92,7 @@ namespace engine
 
 	private:
 		// If the material is expired, use the default material
-		Material defaultMaterial{};
+		std::shared_ptr<Material> defaultMaterial = std::make_shared<Material>();
 
 		std::weak_ptr<Material> material;
 

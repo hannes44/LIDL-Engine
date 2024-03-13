@@ -261,7 +261,7 @@ namespace engine
 
 		graphicsAPI->setClearColor(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
 
-		graphicsAPI->setCullFace(renderingSettings.enableFaceCulling);
+		graphicsAPI->setCullFace(false);
 
 		graphicsAPI->setDepthTest(renderingSettings.enableDepthTest);
 
@@ -321,7 +321,7 @@ namespace engine
 		modelViewMatrix = viewMatrix * gameObjectTransformMatrix;
 		Renderer::baseShader->setMat4("modelMatrix", &gameObjectTransformMatrix[0].x);
 
-		Material* material = meshComponent->getMaterial();
+		Material* material = meshComponent->getMaterial().get();
 		// Material
 		Renderer::baseShader->setFloat("material.shininess", material->shininess);
 		Renderer::baseShader->setVec3("material.baseColor", material->baseColor.x, material->baseColor.y, material->baseColor.z);
@@ -411,7 +411,7 @@ namespace engine
 		modelViewMatrix = viewMatrix * gameObjectTransformMatrix;
 		Renderer::baseShader->setMat4("modelMatrix", &gameObjectTransformMatrix[0].x);
 
-		Material* material = meshComponent->getMaterial();
+		Material* material = meshComponent->getMaterial().get();
 		Renderer::baseShader->setFloat("material.shininess", material->shininess);
 		Renderer::baseShader->setVec3("material.baseColor", material->baseColor.x, material->baseColor.y, material->baseColor.z);
 		Renderer::baseShader->setInt("material.hasDiffuseTexture", !material->diffuseTexture.expired());
