@@ -1229,6 +1229,62 @@ namespace engine
 					selectedObject = assetNode->asset;
 			}
 
+			// Drag and drop material to game object meshes
+			if (auto material = std::dynamic_pointer_cast<Material>(assetNode->asset.lock()))
+			{
+				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+				{
+					// Draw the material icon when dragging
+					ImGui::Image((void*)(intptr_t)openGLTextureId, ImVec2(30, 30), { 0, 1 }, { 1, 0 });
+
+					glm::vec3 rayDirection = Utils::getMouseRayDirection(window, *getActiveCamera());
+					glm::vec3 rayOrigin = getActiveCamera()->getTransform().getPosition();
+
+					auto gameObjects = Utils::getAABBGameObjectCollisions(game.get(), rayOrigin, rayDirection);
+					if (gameObjects.size() > 0)
+					{
+						if (auto mesh = gameObjects[0]->getComponent<MeshComponent>())
+						{
+							// Only saving the material on the first frame we drag over the mesh
+							if (overwrittenMaterial.expired())
+							{
+								overwrittenMaterial = mesh->getMaterial();
+								mesh->setMaterial(material);
+								overwrittenGameObject = gameObjects[0];
+							}
+							// If we drag the material over to a different mesh, we need to reset the overwritten mesh
+							else if (overwrittenMaterial.lock()->uuid.id == material->uuid.id)
+							{
+								mesh->setMaterial(overwrittenMaterial.lock());
+								overwrittenMaterial.reset();
+								overwrittenGameObject.reset();
+							}
+
+						}
+					}
+					else
+					{
+						// If the mouse is not over a game object, reset the overwritten mesh back to its original material
+						if (auto lockedOverWrittenGameObject = overwrittenGameObject.lock())
+						{
+							lockedOverWrittenGameObject->getComponent<MeshComponent>()->setMaterial(overwrittenMaterial.lock());
+						}
+						overwrittenMaterial.reset();
+						overwrittenGameObject.reset();
+					}
+
+					ImGui::EndDragDropSource();
+				}
+
+				// When the mouse is released, reset the overwritten model, texture
+				if (!ImGui::IsMouseDragging(0))
+				{
+					overwrittenGameObject.reset();
+					overwrittenMaterial.reset();
+				}
+			}
+
+
 			if (ImGui::BeginPopupContextItem())
 			{
 				static char name[32];
