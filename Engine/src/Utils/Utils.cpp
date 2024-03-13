@@ -1,7 +1,6 @@
 #include "Utils.hpp"
 #include "Renderer/Renderer.hpp"
 
-
 namespace engine
 {
 	long long Utils::getTimestampNS() {

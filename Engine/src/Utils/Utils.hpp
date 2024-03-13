@@ -22,6 +22,7 @@ namespace engine
 
 		static void drawBoundingBox(BoundingBox& box, CameraComponent* camera, glm::vec3 color);
 
+		// Returns the ray direction from the mouse position into the world space from the camera
 		static glm::vec3 getMouseRayDirection(Window& window, CameraComponent& camera);
 
 		// Will only check against the mesh AABB, not against colliders
