@@ -3,8 +3,12 @@
 #include "Core/BoundingBox.hpp"
 #include "Components/CameraComponent.hpp"
 #include <string>
+
 #define _WINSOCKAPI_
+#define NOMINMAX
 #include <Windows.h>
+
+#include "glm/glm.hpp"
 #include <atlstr.h>
 #include "Core/Window.hpp"
 
@@ -16,6 +20,9 @@ namespace engine
 	{
 	public:
 		static long long getTimestampNS();
+
+		static glm::vec3 vec3min(glm::vec3 a, glm::vec3 b);
+		static glm::vec3 vec3max(glm::vec3 a, glm::vec3 b);
 
 		// [in] command to execute
 		static CStringA ExecCmd(const wchar_t* cmd);

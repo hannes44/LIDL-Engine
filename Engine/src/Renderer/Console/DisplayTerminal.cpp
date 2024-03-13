@@ -1,8 +1,11 @@
 #include "Display.hpp"
 #include "DisplayTerminal.hpp"
 #include <stdlib.h>
+
 #define _WINSOCKAPI_
-#include <windows.h>
+#define NOMINMAX
+#include <Windows.h>
+
 #include <iostream>
 #include <algorithm>
 

@@ -12,8 +12,11 @@
 #include <set>
 #include <ranges>
 #include <imgui_internal.h>
+
 #define _WINSOCKAPI_
+#define NOMINMAX
 #include <Windows.h>
+
 #include <regex>
 #include <ShlDisp.h>
 #include "Utils/Utils.hpp"
@@ -236,9 +239,7 @@ namespace engine
 			drawBottomPanel();
 
 			if (!ScriptEngine::getInstance()->isSuccessfullyCompiled)
-			{
 				drawCompilationErrorWindow();
-			}
 		}
 	}
 

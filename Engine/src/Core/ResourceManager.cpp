@@ -3,8 +3,11 @@
 #include <string>
 #include <filesystem>
 #include "Core/Logger.hpp"
+
 #define _WINSOCKAPI_
+#define NOMINMAX
 #include <Windows.h>
+
 #include <ShlObj.h>
 #include <commdlg.h>
 #include <filesystem>
