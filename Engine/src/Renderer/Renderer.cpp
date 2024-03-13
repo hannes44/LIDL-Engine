@@ -261,7 +261,7 @@ namespace engine
 
 		graphicsAPI->setClearColor(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
 
-		graphicsAPI->setCullFace(renderingSettings.enableFaceCulling);
+		graphicsAPI->setCullFace(false);
 
 		graphicsAPI->setDepthTest(renderingSettings.enableDepthTest);
 
