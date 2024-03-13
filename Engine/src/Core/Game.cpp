@@ -251,7 +251,7 @@ namespace engine {
 			}
 		}
 	}
-
+	
 	glm::vec3 vec3min(glm::vec3 a, glm::vec3 b) {
 		return glm::vec3(min(a.x, b.x), min(a.y, b.y), min(a.z, b.z));
 	}

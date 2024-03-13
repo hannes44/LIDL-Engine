@@ -1,4 +1,6 @@
 #include "BoundingBox.hpp"
+#define _WINSOCKAPI_
+#include <Windows.h>
 
 namespace engine {
 	bool BoundingBox::isPointInside(glm::vec3 point) {
@@ -25,5 +27,19 @@ namespace engine {
 			minZ() <= other->maxZ() &&
 			maxZ() >= other->minZ()
 			);
+	}
+
+	bool BoundingBox::isRayIntersecting(glm::vec3 rayOrigin, glm::vec3 rayDirection)
+	{
+		glm::vec3 tMin = (getMin() - rayOrigin) / rayDirection;
+		glm::vec3 tMax = (getMax() - rayOrigin) / rayDirection;
+
+		glm::vec3 t1 = glm::vec3(min(a.x, b.x), min(a.y, b.y), min(a.z, b.z));
+		glm::vec3 t2 = glm::vec3(max(a.x, b.x), max(a.y, b.y), max(a.z, b.z));
+
+		float tNear = max(max(t1.x, t1.y), t1.z);
+		float tFar = min(min(t2.x, t2.y), t2.z);
+
+		return tNear >= 0 && tNear < tFar;
 	}
 }

@@ -38,6 +38,8 @@ namespace engine
 
 		virtual bool isWindowMinimized() = 0;
 
+		virtual void getMousePosition(int* x, int* y) = 0;
+
 		inline static Window* instance = nullptr;
 	private:
 
