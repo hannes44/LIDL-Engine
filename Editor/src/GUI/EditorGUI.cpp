@@ -179,7 +179,7 @@ namespace engine
 
 
 
-
+			Renderer::getInstance()->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings, viewPortPosition);
 			renderer->renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 
 			renderNewFrame();
@@ -297,7 +297,7 @@ namespace engine
 
 			if ((Key)event.getKey() == Key::B)
 			{
-				glm::vec3 rayDirection = Utils::getMouseRayDirection(window, *getActiveCamera(), viewPortSize, viewPortTexturePosition);
+				glm::vec3 rayDirection = Utils::getMouseRayDirection(window, *getActiveCamera(), viewPortSize, viewPortPosition);
 				glm::vec3 rayOrigin = getActiveCamera()->getTransform().getPosition();
 
 				auto gameObjects = Utils::getAABBGameObjectCollisions(game.get(), rayOrigin, rayDirection);
@@ -333,10 +333,8 @@ namespace engine
 		int w, h;
 		window.getWindowSize(&w, &h);
 
-		// Hotfix for padding/border around the BeginChild that needs to be accounted for
-		const int windowChildPadding = 10;
-		ImGui::SetNextWindowPos({ leftPanelWidth - windowChildPadding, IMGUI_TOP_MENU_HEIGHT + playButtonPanelHeight - windowChildPadding });
-		ImGui::SetNextWindowSize(ImVec2(w - leftPanelWidth - rightPanelWidth + windowChildPadding * 2, h - bottomPanelHeight));
+		ImGui::SetNextWindowPos({ leftPanelWidth, IMGUI_TOP_MENU_HEIGHT + playButtonPanelHeight });
+		ImGui::SetNextWindowSize(ImVec2(w - leftPanelWidth - rightPanelWidth, h - bottomPanelHeight));
 
 		ImGuiWindowFlags windowFlags = 0;
 
@@ -355,6 +353,9 @@ namespace engine
 		viewPortPosition.y = ImGui::GetWindowPos().y;
 		viewPortSize.x = ImGui::GetWindowSize().x;
 		viewPortSize.y = ImGui::GetWindowSize().y;
+		
+		editorSettings.rendererSettings.width = viewPortSize.x;
+		editorSettings.rendererSettings.height = viewPortSize.y;
 
 		bool isFocused = ImGui::IsWindowFocused();
 		bool isHovered = ImGui::IsWindowHovered();
@@ -369,25 +370,7 @@ namespace engine
 			ImGui::GetIO().WantCaptureKeyboard = false;
 		}
 
-
-		// Using a Child allow to fill all the space of the window.
-		// It also alows customization
-		ImGui::BeginChild("GameRender");
-		// Get the size of the child (i.e. the whole draw size of the windows).
-		ImVec2 wsize = ImGui::GetWindowSize();
-
-		editorSettings.rendererSettings.width = wsize.x;
-		editorSettings.rendererSettings.height = wsize.y;
-		viewPortTexturePosition = glm::vec2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
-
-		Renderer::getInstance()->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings, std::optional<std::shared_ptr<Texture>>(viewPortTexture));
-
-		// Because I use the texture from OpenGL, I need to invert the V from the UV.
-		ImGui::Image((ImTextureID)viewPortTexture->textureIDOpenGL, wsize, ImVec2(0, 1), ImVec2(1, 0));
 		drawGizmos();
-		ImGui::EndChild();
-
-		
 
 		if (std::dynamic_pointer_cast<GameObject>(selectedObject.lock()))
 			drawGizmoOperationsWindow();
@@ -401,13 +384,12 @@ namespace engine
 		window.getWindowSize(&w, &h);
 		int initialPanelWidth = w / 5;
 		ImGui::SetNextWindowPos(ImVec2(w - rightPanelWidth, IMGUI_TOP_MENU_HEIGHT));
-		ImGui::SetNextWindowSize(ImVec2(initialPanelWidth, h), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2(rightPanelWidth, h));
 
 
 		ImGuiWindowFlags windowFlags = 0;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 		windowFlags |= ImGuiWindowFlags_NoMove;
-		//windowFlags |= ImGuiWindowFlags_NoResize;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
 
 		
@@ -508,7 +490,7 @@ namespace engine
 		window.getWindowSize(&w, &h);
 		int panelWidth = w / 5;
 		ImGui::SetNextWindowPos(ImVec2(0, IMGUI_TOP_MENU_HEIGHT));
-		ImGui::SetNextWindowSize(ImVec2(panelWidth, h), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2(leftPanelWidth, h));
 
 		ImGuiWindowFlags windowFlags = 0;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
@@ -801,7 +783,7 @@ namespace engine
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();
 
-			ImGuizmo::SetRect(viewPortTexturePosition.x, viewPortTexturePosition.y, editorSettings.rendererSettings.width, editorSettings.rendererSettings.height);
+			ImGuizmo::SetRect(viewPortPosition.x, viewPortPosition.y, editorSettings.rendererSettings.width, editorSettings.rendererSettings.height);
 
 			glm::mat4 cameraView = getActiveCamera()->getViewMatrix();
 
@@ -1290,7 +1272,7 @@ namespace engine
 					// Draw the material icon when dragging
 					ImGui::Image((void*)(intptr_t)openGLTextureId, ImVec2(30, 30), { 0, 1 }, { 1, 0 });
 
-					glm::vec3 rayDirection = Utils::getMouseRayDirection(window, *getActiveCamera(), viewPortSize, viewPortTexturePosition);
+					glm::vec3 rayDirection = Utils::getMouseRayDirection(window, *getActiveCamera(), viewPortSize, viewPortPosition);
 					glm::vec3 rayOrigin = getActiveCamera()->getTransform().getPosition();
 
 					auto gameObjects = Utils::getAABBGameObjectCollisions(game.get(), rayOrigin, rayDirection);

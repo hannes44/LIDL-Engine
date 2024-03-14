@@ -17,7 +17,7 @@
 
 namespace engine
 {
-	void Renderer::renderGame(Game* game, CameraComponent* camera, RendererSettings* renderingSettings, std::optional<std::shared_ptr<Texture>> renderIntoTexture)
+	void Renderer::renderGame(Game* game, CameraComponent* camera, RendererSettings* renderingSettings, glm::vec2 viewPortPos)
 	{
 		if (!camera)
 		{
@@ -33,60 +33,12 @@ namespace engine
 		int pointLightIndex = 0;
 		int spotLightIndex = 0;
 
-		if (renderIntoTexture.has_value())
-		{
-			width = renderingSettings->width * 2;
-			height = renderingSettings->height * 2;
+		int windowHeight;
+		Window::getInstance().getWindowSize(nullptr, &windowHeight);
 
-			static GLuint textureFrameBuffer = -1;
-			if (textureFrameBuffer == -1)
-				glGenFramebuffers(1, &textureFrameBuffer);
+		int bottomLeftY = windowHeight - viewPortPos.y - height;
 
-			glBindFramebuffer(GL_FRAMEBUFFER, textureFrameBuffer);
-			
-			if (renderIntoTexture.value()->textureIDOpenGL == -1)
-				glGenTextures(1, &renderIntoTexture.value()->textureIDOpenGL);
-
-			// "Bind" the newly created texture : all future texture functions will modify this texture
-			glBindTexture(GL_TEXTURE_2D, renderIntoTexture.value()->textureIDOpenGL);
-
-			// Give an empty image to OpenGL ( the last "0" )
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-
-			// Poor filtering. Needed !
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-			// The depth buffer
-			static GLuint depthrenderbuffer = -1;
-			if (depthrenderbuffer == -1)
-				glGenRenderbuffers(1, &depthrenderbuffer);
-
-			glBindRenderbuffer(GL_RENDERBUFFER, depthrenderbuffer);
-			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);
-
-			// Set "renderedTexture" as our colour attachment #0
-			glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderIntoTexture.value()->textureIDOpenGL, 0);
-
-			// Set the list of draw buffers.
-			GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
-			glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
-
-			// Always check that our framebuffer is ok
-			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			{
-				LOG_FATAL("Framebuffer is not complete!");
-			}
-
-			glBindFramebuffer(GL_FRAMEBUFFER, textureFrameBuffer);
-		}
-		else
-		{
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		}
-
-		graphicsAPI->setViewport(0, 0, width, height);
+		graphicsAPI->setViewport(viewPortPos.x, bottomLeftY, width, height);
 
 		graphicsAPI->setClearColor(glm::vec4(renderingSettings->backgroundColor.x, renderingSettings->backgroundColor.y, renderingSettings->backgroundColor.z, 1.0f));
 

@@ -176,6 +176,11 @@ namespace engine
 			}
 		}
 
+		// Sort the colliding game objects by distance to the origin
+		std::sort(collidingGameObjects.begin(), collidingGameObjects.end(), [origin](std::shared_ptr<GameObject> a, std::shared_ptr<GameObject> b) {
+			return glm::distance(a->getGlobalTransform().getPosition(), origin) < glm::distance(b->getGlobalTransform().getPosition(), origin);
+		});
+
 		return collidingGameObjects;
 	}
 }

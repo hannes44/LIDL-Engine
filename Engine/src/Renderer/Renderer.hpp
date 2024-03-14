@@ -15,7 +15,7 @@ namespace engine
 	{
 	public:
 		// If renderIntoTexture is given, the game will be rendered into the texture instead of the window
-		void renderGame(Game* game, CameraComponent* camera, RendererSettings* renderingSettings, std::optional<std::shared_ptr<Texture>> renderIntoTexture = std::nullopt);
+		void renderGame(Game* game, CameraComponent* camera, RendererSettings* renderingSettings, glm::vec2 viewPortPos = glm::vec2(0));
 
 		void renderGizmos(Game* game, CameraComponent* camera, RendererSettings* renderingSettings);
 
