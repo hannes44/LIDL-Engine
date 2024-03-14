@@ -41,7 +41,5 @@ namespace engine
 		std::pair<glm::vec3, glm::vec3> resolveCollisionFullyElastic(std::shared_ptr<PhysicsComponent> pc1, std::shared_ptr<PhysicsComponent> pc2);
 		std::pair<glm::vec3, glm::vec3> resolveCollisionFullyInelastic(std::shared_ptr<PhysicsComponent> pc1, std::shared_ptr<PhysicsComponent> pc2);
 		void run(Game* game);
-
-		GamePhysicsSettings& getSettings();
 	};
 }
