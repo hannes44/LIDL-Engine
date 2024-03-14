@@ -1,4 +1,4 @@
-# GameEngineTDA572
+# LIDL Engine
 
 Setup:
 1. Clone the repository with `git clone --recurse-submodules https://github.com/hannes44/GameEngineTDA572.git`
