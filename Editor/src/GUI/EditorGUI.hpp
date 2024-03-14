@@ -150,7 +150,12 @@ namespace engine
 
 		std::shared_ptr<Texture> playIconTexture;
 
-		
+		// These widths will change dynamically when the user resizes the panels
+		float leftPanelWidth = 300;
+		float rightPanelWidth = 300;
+		float bottomPanelHeight = 300;
+		float playButtonPanelHeight = 30;
+
 		void setupMultiplayer(std::shared_ptr<Game> game);
 		SOCKET multiplayerSocket = INVALID_SOCKET;
 		std::string MULTIPLAYER_STATE_FOLDER = "../../MultiplayerStates/";

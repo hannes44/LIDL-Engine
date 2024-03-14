@@ -180,7 +180,7 @@ namespace engine
 
 
 
-		//renderer->renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
+			renderer->renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 
 			renderNewFrame();
 
@@ -236,11 +236,11 @@ namespace engine
 		}
 		else
 		{
+			drawPlayButtonToolbar();
 			drawViewPort();
 			drawRightSidePanel();
 			drawLeftSidePanel();
 			drawTopMenu();
-			drawPlayButtonToolbar();
 			drawBottomPanel();
 
 			if (!ScriptEngine::getInstance()->isSuccessfullyCompiled)
@@ -332,8 +332,8 @@ namespace engine
 	{
 		int w, h;
 		window.getWindowSize(&w, &h);
-		ImGui::SetNextWindowPos({ (float)w/5, 100 });
-		ImGui::SetNextWindowSize(ImVec2(w - (2*w/5), h - 500));
+		ImGui::SetNextWindowPos({ leftPanelWidth, IMGUI_TOP_MENU_HEIGHT + playButtonPanelHeight });
+		ImGui::SetNextWindowSize(ImVec2(w - leftPanelWidth - rightPanelWidth, h - bottomPanelHeight));
 
 		ImGuiWindowFlags windowFlags = 0;
 
@@ -388,17 +388,22 @@ namespace engine
 	{
 		int w, h;
 		window.getWindowSize(&w, &h);
-		int panelWidth = w / 5;
-		ImGui::SetNextWindowPos(ImVec2(w - panelWidth, IMGUI_TOP_MENU_HEIGHT));
-		ImGui::SetNextWindowSize(ImVec2(panelWidth, h));
+		int initialPanelWidth = w / 5;
+		ImGui::SetNextWindowPos(ImVec2(w - rightPanelWidth, IMGUI_TOP_MENU_HEIGHT));
+		ImGui::SetNextWindowSize(ImVec2(initialPanelWidth, h), ImGuiCond_FirstUseEver);
+
 
 		ImGuiWindowFlags windowFlags = 0;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 		windowFlags |= ImGuiWindowFlags_NoMove;
-		windowFlags |= ImGuiWindowFlags_NoResize;
+		//windowFlags |= ImGuiWindowFlags_NoResize;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
 
+		
 		ImGui::Begin("##RightPanel", nullptr, windowFlags);
+
+		rightPanelWidth = ImGui::GetWindowWidth();
+
 		if (ImGui::BeginTabBar("##RightPanelTabs", ImGuiTabBarFlags_AutoSelectNewTabs))
 		{
 			if (auto lockedSelectedObject = selectedObject.lock())
@@ -492,15 +497,18 @@ namespace engine
 		window.getWindowSize(&w, &h);
 		int panelWidth = w / 5;
 		ImGui::SetNextWindowPos(ImVec2(0, IMGUI_TOP_MENU_HEIGHT));
-		ImGui::SetNextWindowSize(ImVec2(panelWidth, h));
+		ImGui::SetNextWindowSize(ImVec2(panelWidth, h), ImGuiCond_FirstUseEver);
 
 		ImGuiWindowFlags windowFlags = 0;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 		windowFlags |= ImGuiWindowFlags_NoMove;
-		windowFlags |= ImGuiWindowFlags_NoResize;
+		//windowFlags |= ImGuiWindowFlags_NoResize;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
 
 		ImGui::Begin("##LeftPanel", nullptr, windowFlags);
+
+		leftPanelWidth = ImGui::GetWindowWidth();
+
 		if (ImGui::BeginTabBar("##LeftPanelTabs", ImGuiTabBarFlags_AutoSelectNewTabs))
 		{
 			if (ImGui::CollapsingHeader("Scene Hierarchy", ImGuiTreeNodeFlags_DefaultOpen))
@@ -681,8 +689,8 @@ namespace engine
 		int w, h;
 		window.getWindowSize(&w, &h);
 		int panelWidth = w / 5;
-		ImGui::SetNextWindowPos(ImVec2(panelWidth, IMGUI_TOP_MENU_HEIGHT));
-		ImGui::SetNextWindowSize(ImVec2(w - panelWidth * 2, 30));
+		ImGui::SetNextWindowPos(ImVec2(leftPanelWidth, IMGUI_TOP_MENU_HEIGHT));
+		ImGui::SetNextWindowSize(ImVec2(w - leftPanelWidth - rightPanelWidth, playButtonPanelHeight));
 
 		ImGuiWindowFlags windowFlags = 0;
 		windowFlags |= ImGuiWindowFlags_NoMove;
@@ -965,13 +973,15 @@ namespace engine
 
 		ImGuiWindowFlags windowFlags = 0;
 		windowFlags |= ImGuiWindowFlags_NoMove;
-		windowFlags |= ImGuiWindowFlags_NoResize;
+	//	windowFlags |= ImGuiWindowFlags_NoResize;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 
-		ImGui::SetNextWindowPos(ImVec2(panelWidth, h - 300));
-		ImGui::SetNextWindowSize(ImVec2(w - panelWidth * 2, 300));
+		ImGui::SetNextWindowPos(ImVec2(leftPanelWidth, h - bottomPanelHeight));
+		ImGui::SetNextWindowSize(ImVec2(w - leftPanelWidth - rightPanelWidth, 300));
 		ImGui::Begin("##BottomPanel", nullptr, windowFlags);
+
+		bottomPanelHeight = ImGui::GetWindowHeight();
 
 		if (ImGui::BeginTabBar("##BottomTabs", ImGuiTabBarFlags_None))
 		{
