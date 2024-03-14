@@ -69,12 +69,10 @@ namespace engine
 			return;
 
 		// Manual triggers of actions
-		if (event.getKey() == Key::SPACE) {
+		if (event.getKey() == Key::SPACE)
 			addBody();
-		}
-		else if (event.getKey() == Key::RCTRL) {
+		else if (event.getKey() == Key::RCTRL)
 			consumeApple();
-		}
 	}
 
 	Snake3D::Snake3D()
