@@ -178,8 +178,19 @@ namespace engine
 			deltaTime = ImGui::GetIO().DeltaTime;
 
 
+			if (noGUIMode)
+			{
+				// When in no GUI mode, render to entire window
+				window.getWindowSize(&editorSettings.rendererSettings.width, &editorSettings.rendererSettings.height);
+				Renderer::getInstance()->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings, glm::vec2(0));
+			}
+			else
+			{
+				Renderer::getInstance()->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings, viewPortPosition);
+			}
 
-			Renderer::getInstance()->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings, viewPortPosition);
+			
+			
 			renderer->renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 
 			renderNewFrame();
@@ -334,7 +345,7 @@ namespace engine
 		window.getWindowSize(&w, &h);
 
 		ImGui::SetNextWindowPos({ leftPanelWidth, IMGUI_TOP_MENU_HEIGHT + playButtonPanelHeight });
-		ImGui::SetNextWindowSize(ImVec2(w - leftPanelWidth - rightPanelWidth, h - bottomPanelHeight));
+		ImGui::SetNextWindowSize(ImVec2(w - leftPanelWidth - rightPanelWidth, h - bottomPanelHeight - IMGUI_TOP_MENU_HEIGHT - playButtonPanelHeight));
 
 		ImGuiWindowFlags windowFlags = 0;
 
