@@ -332,12 +332,15 @@ namespace engine
 	{
 		int w, h;
 		window.getWindowSize(&w, &h);
-		ImGui::SetNextWindowPos({ leftPanelWidth, IMGUI_TOP_MENU_HEIGHT + playButtonPanelHeight });
-		ImGui::SetNextWindowSize(ImVec2(w - leftPanelWidth - rightPanelWidth, h - bottomPanelHeight));
+
+		// Hotfix for padding/border around the BeginChild that needs to be accounted for
+		const int windowChildPadding = 10;
+		ImGui::SetNextWindowPos({ leftPanelWidth - windowChildPadding, IMGUI_TOP_MENU_HEIGHT + playButtonPanelHeight - windowChildPadding });
+		ImGui::SetNextWindowSize(ImVec2(w - leftPanelWidth - rightPanelWidth + windowChildPadding * 2, h - bottomPanelHeight));
 
 		ImGuiWindowFlags windowFlags = 0;
 
-		//windowFlags |= ImGuiWindowFlags_NoBackground;
+		windowFlags |= ImGuiWindowFlags_NoBackground;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 		windowFlags |= ImGuiWindowFlags_NoMove;
 		windowFlags |= ImGuiWindowFlags_NoResize;
@@ -347,6 +350,11 @@ namespace engine
 		windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 
 		ImGui::Begin("ViewPort", nullptr, windowFlags);
+
+		viewPortPosition.x = ImGui::GetWindowPos().x;
+		viewPortPosition.y = ImGui::GetWindowPos().y;
+		viewPortSize.x = ImGui::GetWindowSize().x;
+		viewPortSize.y = ImGui::GetWindowSize().y;
 
 		bool isFocused = ImGui::IsWindowFocused();
 		bool isHovered = ImGui::IsWindowHovered();
@@ -969,16 +977,14 @@ namespace engine
 	{
 		int w, h;
 		window.getWindowSize(&w, &h);
-		int panelWidth = w / 5;
 
 		ImGuiWindowFlags windowFlags = 0;
 		windowFlags |= ImGuiWindowFlags_NoMove;
-	//	windowFlags |= ImGuiWindowFlags_NoResize;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 
 		ImGui::SetNextWindowPos(ImVec2(leftPanelWidth, h - bottomPanelHeight));
-		ImGui::SetNextWindowSize(ImVec2(w - leftPanelWidth - rightPanelWidth, 300));
+		ImGui::SetNextWindowSize(ImVec2(w - leftPanelWidth - rightPanelWidth, bottomPanelHeight));
 		ImGui::Begin("##BottomPanel", nullptr, windowFlags);
 
 		bottomPanelHeight = ImGui::GetWindowHeight();
@@ -1157,11 +1163,40 @@ namespace engine
 		windowFlags |= ImGuiWindowFlags_NoResize;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
 
-		// Hotfix for gizmo operations window getting overlayed by other windows
-		ImGui::SetNextWindowFocus();
-		
-		ImGui::SetNextWindowSize(ImVec2(50, 170));
+		float windowWidth = 50;
+		float windowHeight = 170;
+
+		ImGui::SetNextWindowSize(ImVec2(windowWidth, windowHeight));
+
+		ImGuiWindow* operationWindow = ImGui::FindWindowByName("Gizmo Operation");
+
+		if (operationWindow != nullptr)
+		{
+			// There is an edge case where both x and y are out of bounds and one of them will be overwritten by the other
+			// Saving the initial position of the window to avoid this issue
+			int operationWindowPosX = operationWindow->Pos.x;
+
+			if (operationWindow->Pos.x < viewPortPosition.x)
+			{
+				ImGui::SetNextWindowPos(ImVec2(leftPanelWidth, operationWindow->Pos.y));
+				operationWindowPosX = leftPanelWidth;
+			}
+			else if ((operationWindow->Pos.x + windowWidth) > viewPortPosition.x + viewPortSize.x)
+			{
+				ImGui::SetNextWindowPos(ImVec2(viewPortPosition.x + viewPortSize.x - windowWidth, operationWindow->Pos.y));
+				operationWindowPosX = viewPortPosition.x + viewPortSize.x - windowWidth;
+			}
+
+
+			if (operationWindow->Pos.y < viewPortPosition.y)
+				ImGui::SetNextWindowPos(ImVec2(operationWindowPosX, viewPortPosition.y));
+			else if ((operationWindow->Pos.y + windowHeight)> viewPortPosition.y + viewPortSize.y)
+				ImGui::SetNextWindowPos(ImVec2(operationWindowPosX, viewPortPosition.y + viewPortSize.y - windowHeight));
+		}
+
+
 		ImGui::Begin("Gizmo Operation", nullptr, windowFlags);
+
 
 		bool pushedStyleColor = false;
 		if (gizmoOperation == ImGuizmo::ROTATE)
