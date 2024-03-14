@@ -664,7 +664,7 @@ namespace engine
 		{
 			if (ImGui::MenuItem("About"))
 			{
-				ShellExecute(NULL, "open", "https://github.com/hannes44/GameEngineTDA572", 0, 0, SW_SHOWDEFAULT);
+				ShellExecute(NULL, "open", "https://github.com/hannes44/LIDL-Engine", 0, 0, SW_SHOWDEFAULT);
 			}
 			ImGui::EndMenu();
 		}
