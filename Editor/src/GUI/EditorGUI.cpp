@@ -378,13 +378,16 @@ namespace engine
 
 		editorSettings.rendererSettings.width = wsize.x;
 		editorSettings.rendererSettings.height = wsize.y;
+		viewPortTexturePosition = glm::vec2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
+
 		Renderer::getInstance()->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings, std::optional<std::shared_ptr<Texture>>(viewPortTexture));
 
 		// Because I use the texture from OpenGL, I need to invert the V from the UV.
 		ImGui::Image((ImTextureID)viewPortTexture->textureIDOpenGL, wsize, ImVec2(0, 1), ImVec2(1, 0));
+		drawGizmos();
 		ImGui::EndChild();
 
-		drawGizmos();
+		
 
 		if (std::dynamic_pointer_cast<GameObject>(selectedObject.lock()))
 			drawGizmoOperationsWindow();
@@ -798,13 +801,11 @@ namespace engine
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();
 
-			int windowWidth, windowHeight;
-			window.getWindowSize(&windowWidth, &windowHeight);
-			ImGuizmo::SetRect(0, 0, windowWidth, windowHeight);
+			ImGuizmo::SetRect(viewPortTexturePosition.x, viewPortTexturePosition.y, editorSettings.rendererSettings.width, editorSettings.rendererSettings.height);
 
 			glm::mat4 cameraView = getActiveCamera()->getViewMatrix();
 
-			glm::mat4 projectionMatrix = getActiveCamera()->getProjectionMatrix();
+			glm::mat4 projectionMatrix = getActiveCamera()->getProjectionMatrix(editorSettings.rendererSettings.width, editorSettings.rendererSettings.height);
 
 			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(projectionMatrix), gizmoOperation, isGizmoOperationInWorldSpace ? ImGuizmo::WORLD : ImGuizmo::LOCAL, modelMatrixPtr);
 		}

@@ -159,6 +159,8 @@ namespace engine
 		glm::vec2 viewPortSize = glm::vec2(0, 0);
 		glm::vec2 viewPortPosition = glm::vec2(0, 0);
 
+		glm::vec2 viewPortTexturePosition = glm::vec2(0, 0);
+
 		void setupMultiplayer(std::shared_ptr<Game> game);
 		SOCKET multiplayerSocket = INVALID_SOCKET;
 		std::string MULTIPLAYER_STATE_FOLDER = "../../MultiplayerStates/";
