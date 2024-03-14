@@ -297,7 +297,7 @@ namespace engine
 
 			if ((Key)event.getKey() == Key::B)
 			{
-				glm::vec3 rayDirection = Utils::getMouseRayDirection(window, *getActiveCamera());
+				glm::vec3 rayDirection = Utils::getMouseRayDirection(window, *getActiveCamera(), viewPortSize, viewPortTexturePosition);
 				glm::vec3 rayOrigin = getActiveCamera()->getTransform().getPosition();
 
 				auto gameObjects = Utils::getAABBGameObjectCollisions(game.get(), rayOrigin, rayDirection);
@@ -1290,7 +1290,7 @@ namespace engine
 					// Draw the material icon when dragging
 					ImGui::Image((void*)(intptr_t)openGLTextureId, ImVec2(30, 30), { 0, 1 }, { 1, 0 });
 
-					glm::vec3 rayDirection = Utils::getMouseRayDirection(window, *getActiveCamera());
+					glm::vec3 rayDirection = Utils::getMouseRayDirection(window, *getActiveCamera(), viewPortSize, viewPortTexturePosition);
 					glm::vec3 rayOrigin = getActiveCamera()->getTransform().getPosition();
 
 					auto gameObjects = Utils::getAABBGameObjectCollisions(game.get(), rayOrigin, rayDirection);

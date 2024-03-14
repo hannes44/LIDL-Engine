@@ -128,17 +128,21 @@ namespace engine
 		renderer->drawOutlineOfSphere(position, radius, camera);
 	}
 
-	glm::vec3 Utils::getMouseRayDirection(Window& window, CameraComponent& camera)
+	glm::vec3 Utils::getMouseRayDirection(Window& window, CameraComponent& camera, glm::vec2 viewPortSize, glm::vec2 viewPortPosition)
 	{
 		int mouseX, mouseY;
 		window.getMousePosition(&mouseX, &mouseY);
 
-		int width, height;
-		window.getWindowSize(&width, &height);
+		// Convert the mouse position to the view port position
+		mouseX -= viewPortPosition.x;
+		mouseY -= viewPortPosition.y;
+
+		int width = viewPortSize.x;
+		int height = viewPortSize.y;
 
 		float aspectRatio = float(width) / float(height);
 
-		glm::mat4 projectionMatrix = camera.getProjectionMatrix();
+		glm::mat4 projectionMatrix = camera.getProjectionMatrix(width, height);
 
 		glm::vec3 rayDirection = glm::vec3(0, 0, 0);
 

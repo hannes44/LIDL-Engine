@@ -78,10 +78,6 @@ namespace engine
 			}
 
 			glBindFramebuffer(GL_FRAMEBUFFER, textureFrameBuffer);
-
-		//	glDrawArrays(GL_TRIANGLES, 0, 0);
-		//	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		//	return;
 		}
 		else
 		{
