@@ -4,7 +4,10 @@
 #include "Core/Window.hpp"
 #include "Renderer/Renderer.hpp"
 #include "Input/InputFramework.hpp"
+#include "Core/ResourceManager.hpp"
+#include "Serializer/GameSerializer.hpp"
 
+// The extern function createGame is defined in the game file
 extern engine::Game* engine::createGame();
 
 int main(int argc, char* argv[])
@@ -27,6 +30,11 @@ int main(int argc, char* argv[])
 
 	auto game = engine::createGame();
 	window.setWindowTitle(game->name);
+
+	engine::ResourceManager::getInstance()->changeGame(game);
+
+	engine::GameSerializer::deserializeGame(game);
+
 	game->initialize();
 	game->gameLoop();
 

@@ -89,6 +89,10 @@ namespace engine
 
 		void changeGame(std::shared_ptr<Game> game);
 
+		void copySelectedGameObject();
+
+		void pasteGameObject();
+
 		Window& window;
 
 		GUIHelper& UIHelper = GUIHelper::getInstance();

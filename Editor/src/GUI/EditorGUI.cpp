@@ -282,13 +282,7 @@ namespace engine
 
 			if ((Key)event.getKey() == Key::V)
 			{
-				if (auto lockedCopiedGameObject = copiedGameObject.lock())
-				{
-					LOG_INFO("Pasting game object");
-					std::shared_ptr<GameObject> newGameObject = lockedCopiedGameObject->clone();
-					game->addGameObject(newGameObject);
-					selectedObject = newGameObject;
-				}
+				pasteGameObject();
 			}
 			if ((Key)event.getKey() == Key::ESCAPE)
 			{
@@ -315,14 +309,7 @@ namespace engine
 
 		if (event.getAction() == "Copy" && event.getEventType() == InputEventType::ActionDown)
 		{
-			if (auto lockedSelectedObject = selectedObject.lock())
-			{
-				if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
-				{
-					LOG_INFO("Copying game object");
-					copiedGameObject = lockedGameObject;
-				}
-			}
+			copySelectedGameObject();	
 		}
 	}
 
@@ -546,13 +533,10 @@ namespace engine
 				EditorSerializer::serializeEditorSettings(editorSettings);
 				GameSerializer::serializeGame(game.get());
 			}
-			if (ImGui::MenuItem("Save As"))
-			{
-			}
 			ImGui::Separator();
 			if (ImGui::MenuItem("Exit", "Alt+F4"))
 			{
-				ImGui::End();
+				quitProgram = true;
 			}
 			ImGui::EndMenu();
 		}
@@ -565,14 +549,13 @@ namespace engine
 			{
 			}
 			ImGui::Separator();
-			if (ImGui::MenuItem("Cut", "Ctrl+X"))
-			{
-			}
 			if (ImGui::MenuItem("Copy", "Ctrl+C"))
 			{
+				copySelectedGameObject();
 			}
 			if (ImGui::MenuItem("Paste", "Ctrl+P"))
 			{
+				pasteGameObject();
 			}
 			ImGui::EndMenu();
 		}
@@ -1393,5 +1376,28 @@ namespace engine
 		this->game = game;
 
 		assetManager->changeGame(game.get());
+	}
+
+	void EditorGUI::copySelectedGameObject()
+	{
+		if (auto lockedSelectedObject = selectedObject.lock())
+		{
+			if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
+			{
+				LOG_INFO("Copying game object");
+				copiedGameObject = lockedGameObject;
+			}
+		}
+	}
+
+	void EditorGUI::pasteGameObject()
+	{
+		if (auto lockedCopiedGameObject = copiedGameObject.lock())
+		{
+			LOG_INFO("Pasting game object");
+			std::shared_ptr<GameObject> newGameObject = lockedCopiedGameObject->clone();
+			game->addGameObject(newGameObject);
+			selectedObject = newGameObject;
+		}
 	}
 }
