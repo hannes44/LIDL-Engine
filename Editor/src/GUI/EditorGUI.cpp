@@ -177,6 +177,11 @@ namespace engine
 		{
 			deltaTime = ImGui::GetIO().DeltaTime;
 
+			renderNewFrame();
+
+			inputFramework.getInput();
+
+			GamePhysics::getInstance().fixedUpdate(editorGameObjectSet, editorPhysicsSettings);
 
 			if (noGUIMode)
 			{
@@ -189,16 +194,7 @@ namespace engine
 				Renderer::getInstance()->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings, viewPortPosition);
 			}
 
-			
-			
 			renderer->renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
-
-			renderNewFrame();
-
-			inputFramework.getInput();
-
-			GamePhysics::getInstance().fixedUpdate(editorGameObjectSet, editorPhysicsSettings);
-
 
 			// Checking if any scripts have been updated
 			// TODO: This doesn't have to be done every frame
@@ -247,11 +243,11 @@ namespace engine
 		}
 		else
 		{
-			drawPlayButtonToolbar();
 			drawViewPort();
 			drawRightSidePanel();
 			drawLeftSidePanel();
 			drawTopMenu();
+			drawPlayButtonToolbar();
 			drawBottomPanel();
 
 			if (!ScriptEngine::getInstance()->isSuccessfullyCompiled)
@@ -506,7 +502,6 @@ namespace engine
 		ImGuiWindowFlags windowFlags = 0;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 		windowFlags |= ImGuiWindowFlags_NoMove;
-		//windowFlags |= ImGuiWindowFlags_NoResize;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
 
 		ImGui::Begin("##LeftPanel", nullptr, windowFlags);
@@ -709,7 +704,11 @@ namespace engine
 			ImGuiTabBarFlags tabFlags = ImGuiSelectableFlags_None;
 
 			if (wasStopButtonPressed)
+			{
 				tabFlags = ImGuiTabItemFlags_SetSelected;
+				wasStopButtonPressed = false;
+			}
+				
 
 			if (ImGui::BeginTabItem("Scene", nullptr, tabFlags))
 			{
@@ -720,7 +719,11 @@ namespace engine
 			tabFlags = ImGuiSelectableFlags_None;
 
 			if (wasPlayButtonPressed)
+			{
 				tabFlags = ImGuiTabItemFlags_SetSelected;
+				wasPlayButtonPressed = false;
+			}
+				
 
 			if (ImGui::BeginTabItem("Game", nullptr, tabFlags))
 			{
@@ -1152,6 +1155,10 @@ namespace engine
 
 	void EditorGUI::drawGizmoOperationsWindow()
 	{
+		// Only draw gizmos in scene view
+		if (!editorSettings.showGizmos || activeViewPort != ActiveViewPort::Scene)
+			return;
+
 		ImGuiWindowFlags windowFlags = 0;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 		windowFlags |= ImGuiWindowFlags_NoResize;
@@ -1164,6 +1171,7 @@ namespace engine
 
 		ImGuiWindow* operationWindow = ImGui::FindWindowByName("Gizmo Operation");
 
+		// We need to constraint the window to the viewport
 		if (operationWindow != nullptr)
 		{
 			// There is an edge case where both x and y are out of bounds and one of them will be overwritten by the other
@@ -1181,16 +1189,13 @@ namespace engine
 				operationWindowPosX = viewPortPosition.x + viewPortSize.x - windowWidth;
 			}
 
-
 			if (operationWindow->Pos.y < viewPortPosition.y)
 				ImGui::SetNextWindowPos(ImVec2(operationWindowPosX, viewPortPosition.y));
 			else if ((operationWindow->Pos.y + windowHeight)> viewPortPosition.y + viewPortSize.y)
 				ImGui::SetNextWindowPos(ImVec2(operationWindowPosX, viewPortPosition.y + viewPortSize.y - windowHeight));
 		}
 
-
 		ImGui::Begin("Gizmo Operation", nullptr, windowFlags);
-
 
 		bool pushedStyleColor = false;
 		if (gizmoOperation == ImGuizmo::ROTATE)
