@@ -28,7 +28,7 @@ namespace engine {
 			);
 	}
 
-	bool BoundingBox::isRayIntersecting(glm::vec3 rayOrigin, glm::vec3 rayDirection)
+	float BoundingBox::rayIntersecting(glm::vec3 rayOrigin, glm::vec3 rayDirection)
 	{
 		glm::vec3 tMin = (getMin() - rayOrigin) / rayDirection;
 		glm::vec3 tMax = (getMax() - rayOrigin) / rayDirection;
@@ -39,6 +39,9 @@ namespace engine {
 		float tNear = std::max(std::max(t1.x, t1.y), t1.z);
 		float tFar = std::min(std::min(t2.x, t2.y), t2.z);
 
-		return tNear >= 0 && tNear < tFar;
+		if (tNear >= 0 && tNear < tFar)
+			return tNear;
+
+		return -1;
 	}
 }

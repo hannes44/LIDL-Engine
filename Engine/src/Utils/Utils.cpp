@@ -165,22 +165,33 @@ namespace engine
 
 	std::vector<std::shared_ptr<GameObject>> Utils::getAABBGameObjectCollisions(Game* game, glm::vec3 origin, glm::vec3 direction)
 	{
-		std::vector<std::shared_ptr<GameObject>> collidingGameObjects;
+		// The colliding game objects and the distance to the origin
+		std::vector<std::tuple<std::shared_ptr<GameObject>, float>> collidingGameObjects;
 
 		for (auto& [id, gameObject] : game->getGameObjects()) 
 		{
 			if (auto meshComponent = gameObject->getComponent<MeshComponent>())
 			{
-				if (meshComponent->getBoundingBox().isRayIntersecting(origin, direction))
-					collidingGameObjects.push_back(gameObject);
+				float t = meshComponent->getBoundingBox().rayIntersecting(origin, direction);
+				if (t >= 0)
+				{
+					collidingGameObjects.push_back({ gameObject, t });
+				}
+					
 			}
 		}
 
-		// Sort the colliding game objects by distance to the origin
-		std::sort(collidingGameObjects.begin(), collidingGameObjects.end(), [origin](std::shared_ptr<GameObject> a, std::shared_ptr<GameObject> b) {
-			return glm::distance(a->getGlobalTransform().getPosition(), origin) < glm::distance(b->getGlobalTransform().getPosition(), origin);
+		// Sort the colliding game objects by distance t
+		std::sort(collidingGameObjects.begin(), collidingGameObjects.end(), [](auto& a, auto& b) {
+			return std::get<1>(a) < std::get<1>(b);
 		});
 
-		return collidingGameObjects;
+		std::vector<std::shared_ptr<GameObject>> collidingGameObjectsSorted;
+		for (auto& [gameObject, t] : collidingGameObjects)
+		{
+			collidingGameObjectsSorted.push_back(gameObject);
+		}
+
+		return collidingGameObjectsSorted;
 	}
 }

@@ -1299,13 +1299,12 @@ namespace engine
 								overwrittenGameObject = gameObjects[0];
 							}
 							// If we drag the material over to a different mesh, we need to reset the overwritten mesh
-							else if (overwrittenMaterial.lock()->uuid.id == material->uuid.id)
+							else if (overwrittenGameObject.lock()->uuid.id != gameObjects[0]->uuid.id)
 							{
-								mesh->setMaterial(overwrittenMaterial.lock());
+								overwrittenGameObject.lock()->getComponent<MeshComponent>()->setMaterial(overwrittenMaterial.lock());
 								overwrittenMaterial.reset();
 								overwrittenGameObject.reset();
 							}
-
 						}
 					}
 					else

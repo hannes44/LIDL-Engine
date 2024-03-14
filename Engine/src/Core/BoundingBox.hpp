@@ -9,7 +9,10 @@ namespace engine {
 
 		bool isPointInside(glm::vec3 point);
 		bool isIntersecting(BoundingBox* other);
-		bool isRayIntersecting(glm::vec3 rayOrigin, glm::vec3 rayDirection);
+
+		// Returns the lenght of where the ray intersects the box
+		// Returns -1 if no intersection
+		float rayIntersecting(glm::vec3 rayOrigin, glm::vec3 rayDirection);
 
 		glm::vec3 getCenter() { return center; }
 		glm::vec3 getExtent() { return extent; }
