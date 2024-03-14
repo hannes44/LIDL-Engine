@@ -93,6 +93,9 @@ namespace engine
 
 		void pasteGameObject();
 
+		// The framebuffer that the game will be rendered into
+		std::shared_ptr<Texture> viewPortTexture;
+
 		Window& window;
 
 		GUIHelper& UIHelper = GUIHelper::getInstance();

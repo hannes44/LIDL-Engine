@@ -17,7 +17,7 @@
 
 namespace engine
 {
-	void Renderer::renderGame(Game* game, CameraComponent* camera, RendererSettings* renderingSettings)
+	void Renderer::renderGame(Game* game, CameraComponent* camera, RendererSettings* renderingSettings, std::optional<std::shared_ptr<Texture>> renderIntoTexture)
 	{
 		if (!camera)
 		{
@@ -26,12 +26,69 @@ namespace engine
 			// TODO: Render text to the screen telling user to add a camera
 			return;
 		}
-		int width, height;
-		Window::getInstance().getWindowSize(&width, &height);
+		int width = renderingSettings->width;
+		int height = renderingSettings->height;
+
+
+
+		int pointLightIndex = 0;
+		int spotLightIndex = 0;
+
+		if (renderIntoTexture.has_value())
+		{
+			GLuint textureFrameBuffer = 0;
+			glGenFramebuffers(1, &textureFrameBuffer);
+			glBindFramebuffer(GL_FRAMEBUFFER, textureFrameBuffer);
+
+			GLuint renderedTexture;
+			glGenTextures(1, &renderedTexture);
+
+			// "Bind" the newly created texture : all future texture functions will modify this texture
+			glBindTexture(GL_TEXTURE_2D, renderedTexture);
+
+			// Give an empty image to OpenGL ( the last "0" )
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+
+			// Poor filtering. Needed !
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+			// The depth buffer
+			GLuint depthrenderbuffer;
+			glGenRenderbuffers(1, &depthrenderbuffer);
+			glBindRenderbuffer(GL_RENDERBUFFER, depthrenderbuffer);
+			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);
+
+			// Set "renderedTexture" as our colour attachment #0
+			glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderedTexture, 0);
+
+			// Set the list of draw buffers.
+			GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
+			glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
+
+			// Always check that our framebuffer is ok
+			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+			{
+				LOG_FATAL("Framebuffer is not complete!");
+			}
+
+			glBindFramebuffer(GL_FRAMEBUFFER, textureFrameBuffer);
+			renderIntoTexture.value()->textureIDOpenGL = renderedTexture;
+
+		//	glDrawArrays(GL_TRIANGLES, 0, 0);
+		//	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		//	return;
+		}
+		else
+		{
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		}
 
 		graphicsAPI->setViewport(0, 0, width, height);
 
 		graphicsAPI->setClearColor(glm::vec4(renderingSettings->backgroundColor.x, renderingSettings->backgroundColor.y, renderingSettings->backgroundColor.z, 1.0f));
+
 
 		graphicsAPI->setCullFace(renderingSettings->enableFaceCulling);
 
@@ -46,8 +103,6 @@ namespace engine
 
 		baseShader->bind();
 
-		int pointLightIndex = 0;
-		int spotLightIndex = 0;
 
 		// TODO: There should be a list of all the lights in the game to avoid this loop
 		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
@@ -130,7 +185,7 @@ namespace engine
 
 			renderGameObject(camera, gameObject.get());
 		}
-
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
 	void Renderer::drawVector(glm::vec3 dir, glm::vec3 pos, CameraComponent* camera)

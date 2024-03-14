@@ -7,13 +7,15 @@
 #include "Core/Game.hpp"
 #include "RendererSettings.hpp"
 #include "Components/MeshComponent.hpp"
+#include <optional>
 
 namespace engine
 {
 	class Renderer
 	{
 	public:
-		void renderGame(Game* game, CameraComponent* camera, RendererSettings* renderingSettings);
+		// If renderIntoTexture is given, the game will be rendered into the texture instead of the window
+		void renderGame(Game* game, CameraComponent* camera, RendererSettings* renderingSettings, std::optional<std::shared_ptr<Texture>> renderIntoTexture = std::nullopt);
 
 		void renderGizmos(Game* game, CameraComponent* camera, RendererSettings* renderingSettings);
 

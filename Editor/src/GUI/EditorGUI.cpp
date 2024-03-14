@@ -171,9 +171,16 @@ namespace engine
 
 		float deltaTime = 0.0f;
 
+		viewPortTexture = std::shared_ptr<Texture>(Texture::create());
+
 		while (!quitProgram)
 		{
 			deltaTime = ImGui::GetIO().DeltaTime;
+
+
+
+
+		//renderer->renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 
 			renderNewFrame();
 
@@ -181,8 +188,6 @@ namespace engine
 
 			GamePhysics::getInstance().fixedUpdate(editorGameObjectSet, editorPhysicsSettings);
 
-			renderer->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
-			renderer->renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 
 			// Checking if any scripts have been updated
 			// TODO: This doesn't have to be done every frame
@@ -327,12 +332,12 @@ namespace engine
 	{
 		int w, h;
 		window.getWindowSize(&w, &h);
-		ImGui::SetNextWindowPos({ 0, 0 });
-		ImGui::SetNextWindowSize(ImVec2(w, h));
+		ImGui::SetNextWindowPos({ (float)w/5, 100 });
+		ImGui::SetNextWindowSize(ImVec2(w - (2*w/5), h - 500));
 
 		ImGuiWindowFlags windowFlags = 0;
 
-		windowFlags |= ImGuiWindowFlags_NoBackground;
+		//windowFlags |= ImGuiWindowFlags_NoBackground;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 		windowFlags |= ImGuiWindowFlags_NoMove;
 		windowFlags |= ImGuiWindowFlags_NoResize;
@@ -355,6 +360,21 @@ namespace engine
 			ImGui::GetIO().WantCaptureMouse = false;
 			ImGui::GetIO().WantCaptureKeyboard = false;
 		}
+
+
+		// Using a Child allow to fill all the space of the window.
+		// It also alows customization
+		ImGui::BeginChild("GameRender");
+		// Get the size of the child (i.e. the whole draw size of the windows).
+		ImVec2 wsize = ImGui::GetWindowSize();
+
+		editorSettings.rendererSettings.width = wsize.x;
+		editorSettings.rendererSettings.height = wsize.y;
+		Renderer::getInstance()->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings, std::optional<std::shared_ptr<Texture>>(viewPortTexture));
+
+		// Because I use the texture from OpenGL, I need to invert the V from the UV.
+		ImGui::Image((ImTextureID)viewPortTexture->textureIDOpenGL, wsize, ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::EndChild();
 
 		drawGizmos();
 
