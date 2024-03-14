@@ -36,15 +36,17 @@ namespace engine
 
 		if (renderIntoTexture.has_value())
 		{
-			GLuint textureFrameBuffer = 0;
-			glGenFramebuffers(1, &textureFrameBuffer);
-			glBindFramebuffer(GL_FRAMEBUFFER, textureFrameBuffer);
+			static GLuint textureFrameBuffer = -1;
+			if (textureFrameBuffer == -1)
+				glGenFramebuffers(1, &textureFrameBuffer);
 
-			GLuint renderedTexture;
-			glGenTextures(1, &renderedTexture);
+			glBindFramebuffer(GL_FRAMEBUFFER, textureFrameBuffer);
+			
+			if (renderIntoTexture.value()->textureIDOpenGL == -1)
+				glGenTextures(1, &renderIntoTexture.value()->textureIDOpenGL);
 
 			// "Bind" the newly created texture : all future texture functions will modify this texture
-			glBindTexture(GL_TEXTURE_2D, renderedTexture);
+			glBindTexture(GL_TEXTURE_2D, renderIntoTexture.value()->textureIDOpenGL);
 
 			// Give an empty image to OpenGL ( the last "0" )
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
@@ -54,14 +56,16 @@ namespace engine
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 			// The depth buffer
-			GLuint depthrenderbuffer;
-			glGenRenderbuffers(1, &depthrenderbuffer);
+			static GLuint depthrenderbuffer = -1;
+			if (depthrenderbuffer == -1)
+				glGenRenderbuffers(1, &depthrenderbuffer);
+
 			glBindRenderbuffer(GL_RENDERBUFFER, depthrenderbuffer);
 			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
 			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);
 
 			// Set "renderedTexture" as our colour attachment #0
-			glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderedTexture, 0);
+			glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderIntoTexture.value()->textureIDOpenGL, 0);
 
 			// Set the list of draw buffers.
 			GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
@@ -74,7 +78,6 @@ namespace engine
 			}
 
 			glBindFramebuffer(GL_FRAMEBUFFER, textureFrameBuffer);
-			renderIntoTexture.value()->textureIDOpenGL = renderedTexture;
 
 		//	glDrawArrays(GL_TRIANGLES, 0, 0);
 		//	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -169,7 +172,7 @@ namespace engine
 			if (meshComponent->renderFromCameraTransform)
 				continue;
 
-			renderGameObject(camera, gameObject.get());
+			renderGameObject(camera, gameObject.get(), renderingSettings);
 		}
 
 		// Can be optimized to avoid looping through all game objects twice
@@ -183,7 +186,7 @@ namespace engine
 			if (!meshComponent->renderFromCameraTransform)
 				continue;
 
-			renderGameObject(camera, gameObject.get());
+			renderGameObject(camera, gameObject.get(), renderingSettings);
 		}
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
@@ -226,7 +229,7 @@ namespace engine
 
 		graphicsAPI->setDrawTriangleOutline(true);
 
-		renderGameObject(camera, &gameObject);
+		renderGameObject(camera, &gameObject, nullptr);
 	}
 
 	void Renderer::renderGizmos(Game* game, CameraComponent* camera, RendererSettings* renderingSettings)
@@ -441,7 +444,8 @@ namespace engine
 
 		return graphicsAPI->getType();
 	}
-	void Renderer::renderGameObject(CameraComponent* camera, GameObject* gameObject)
+
+	void Renderer::renderGameObject(CameraComponent* camera, GameObject* gameObject, RendererSettings* rendererSettings)
 	{
 		std::shared_ptr<MeshComponent> meshComponent = gameObject->getComponent<MeshComponent>();
 
@@ -449,6 +453,10 @@ namespace engine
 			return;
 
 		glm::mat4 projectionMatrix = camera->getProjectionMatrix();
+
+		if (rendererSettings != nullptr)
+			projectionMatrix = camera->getProjectionMatrix(rendererSettings->width, rendererSettings->height);
+
 		glm::mat4 viewMatrix = camera->getViewMatrix();
 		glm::mat4 gameObjectTransformMatrix = gameObject->getGlobalTransform().transformMatrix;
 

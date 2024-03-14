@@ -57,6 +57,6 @@ namespace engine
 		std::shared_ptr<Material> sphereDebugMaterial;
 
 	private:
-		void renderGameObject(CameraComponent* camera, GameObject* gameObject);
+		void renderGameObject(CameraComponent* camera, GameObject* gameObject, RendererSettings* rendererSettings);
 	};
 }

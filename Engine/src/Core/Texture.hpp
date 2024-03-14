@@ -21,7 +21,7 @@ namespace engine
 		// Empty texture, can be used to render into
 		static Texture* create();
 		// TODO: abstract away
-		GLuint textureIDOpenGL;
+		GLuint textureIDOpenGL = -1;
 
 		std::string name = "Texture";
 
