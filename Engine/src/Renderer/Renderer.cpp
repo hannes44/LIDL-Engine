@@ -26,16 +26,18 @@ namespace engine
 			// TODO: Render text to the screen telling user to add a camera
 			return;
 		}
+
 		int width = renderingSettings->width;
 		int height = renderingSettings->height;
-
-
 
 		int pointLightIndex = 0;
 		int spotLightIndex = 0;
 
 		if (renderIntoTexture.has_value())
 		{
+			width = renderingSettings->width * 2;
+			height = renderingSettings->height * 2;
+
 			static GLuint textureFrameBuffer = -1;
 			if (textureFrameBuffer == -1)
 				glGenFramebuffers(1, &textureFrameBuffer);
@@ -87,7 +89,6 @@ namespace engine
 		graphicsAPI->setViewport(0, 0, width, height);
 
 		graphicsAPI->setClearColor(glm::vec4(renderingSettings->backgroundColor.x, renderingSettings->backgroundColor.y, renderingSettings->backgroundColor.z, 1.0f));
-
 
 		graphicsAPI->setCullFace(renderingSettings->enableFaceCulling);
 

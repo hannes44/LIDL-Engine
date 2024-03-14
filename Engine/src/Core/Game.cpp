@@ -29,6 +29,7 @@ namespace engine {
 
 		InputFramework::getInstance().getInput();
 
+		Window::getInstance().getWindowSize(&renderingSettings.width, &renderingSettings.height);
 		Renderer::getInstance()->renderGame(this, getMainCamera(), &renderingSettings);
 
 		Window::getInstance().newFrame();
