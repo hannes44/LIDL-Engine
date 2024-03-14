@@ -441,9 +441,8 @@ namespace engine
 			if (open)
 			{
 				for (auto child : gameObject->getChildren())
-				{
 					drawGameObject(child);
-				}
+				
 				ImGui::TreePop();
 			}
 		}
