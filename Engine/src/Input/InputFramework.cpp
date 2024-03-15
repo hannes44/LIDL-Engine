@@ -47,6 +47,18 @@ namespace engine {
 			}
 		}
 
+		// Check if mouse buttons are being held
+		Uint32 buttons;
+		float x, y;
+		buttons = SDL_GetMouseState(&x, &y);
+		if (buttons & SDL_BUTTON(SDL_BUTTON_LEFT)) {
+			keysPressed.push_back(Key::MOUSE_LEFT);
+		} else if (buttons & SDL_BUTTON(SDL_BUTTON_RIGHT)) {
+			keysPressed.push_back(Key::MOUSE_RIGHT);
+		} else if (buttons & SDL_BUTTON(SDL_BUTTON_MIDDLE)) {
+			keysPressed.push_back(Key::MOUSE_MIDDLE);
+		}
+
 		std::list<std::string> actionsPressed{};
 		// Check if any set of keys responsible for an action are being held
 		if (keysPressed.size() >= 1) {
