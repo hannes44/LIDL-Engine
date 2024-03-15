@@ -51,7 +51,6 @@ namespace engine
 		std::filesystem::create_directory(folderPath);
 
 		std::string filePath = folderPath + "ParsedState" + MULTIPLAYER_STATE_FILE_EXTENSION;
-		
 
 		multiplayerReceiveLock.lock();
 		std::ofstream outfile(filePath);
@@ -891,13 +890,13 @@ namespace engine
 
 		if (ImGui::CollapsingHeader("Editor Settings", ImGuiTreeNodeFlags_DefaultOpen))
 		{
-			ImGui::Text("RENDERING SETTINGS");
+			ImGui::Text("Rendering Settings");
 
 			drawSerializableVariables(&editorSettings.rendererSettings);
 
 			ImGui::Separator();
 
-			ImGui::Text("EDITOR SETTINGS");
+			ImGui::Text("Editor Settings");
 
 			drawSerializableVariables(&editorSettings);
 
