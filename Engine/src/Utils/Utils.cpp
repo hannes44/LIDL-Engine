@@ -128,17 +128,21 @@ namespace engine
 		renderer->drawOutlineOfSphere(position, radius, camera);
 	}
 
-	glm::vec3 Utils::getMouseRayDirection(Window& window, CameraComponent& camera)
+	glm::vec3 Utils::getMouseRayDirection(Window& window, CameraComponent& camera, glm::vec2 viewPortSize, glm::vec2 viewPortPosition)
 	{
 		int mouseX, mouseY;
 		window.getMousePosition(&mouseX, &mouseY);
 
-		int width, height;
-		window.getWindowSize(&width, &height);
+		// Convert the mouse position to the view port position
+		mouseX -= viewPortPosition.x;
+		mouseY -= viewPortPosition.y;
+
+		int width = viewPortSize.x;
+		int height = viewPortSize.y;
 
 		float aspectRatio = float(width) / float(height);
 
-		glm::mat4 projectionMatrix = camera.getProjectionMatrix();
+		glm::mat4 projectionMatrix = camera.getProjectionMatrix(width, height);
 
 		glm::vec3 rayDirection = glm::vec3(0, 0, 0);
 
@@ -161,17 +165,33 @@ namespace engine
 
 	std::vector<std::shared_ptr<GameObject>> Utils::getAABBGameObjectCollisions(Game* game, glm::vec3 origin, glm::vec3 direction)
 	{
-		std::vector<std::shared_ptr<GameObject>> collidingGameObjects;
+		// The colliding game objects and the distance to the origin
+		std::vector<std::tuple<std::shared_ptr<GameObject>, float>> collidingGameObjects;
 
 		for (auto& [id, gameObject] : game->getGameObjects()) 
 		{
 			if (auto meshComponent = gameObject->getComponent<MeshComponent>())
 			{
-				if (meshComponent->getBoundingBox().isRayIntersecting(origin, direction))
-					collidingGameObjects.push_back(gameObject);
+				float t = meshComponent->getBoundingBox().rayIntersecting(origin, direction);
+				if (t >= 0)
+				{
+					collidingGameObjects.push_back({ gameObject, t });
+				}
+					
 			}
 		}
 
-		return collidingGameObjects;
+		// Sort the colliding game objects by distance t
+		std::sort(collidingGameObjects.begin(), collidingGameObjects.end(), [](auto& a, auto& b) {
+			return std::get<1>(a) < std::get<1>(b);
+		});
+
+		std::vector<std::shared_ptr<GameObject>> collidingGameObjectsSorted;
+		for (auto& [gameObject, t] : collidingGameObjects)
+		{
+			collidingGameObjectsSorted.push_back(gameObject);
+		}
+
+		return collidingGameObjectsSorted;
 	}
 }

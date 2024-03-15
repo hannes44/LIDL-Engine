@@ -483,12 +483,11 @@ namespace engine
 			fileNamesString += "\"" + fileNameNoExtension + "\"" + ",";
 		}
 
+		std::string sourcePath = ResourceManager::getPathToEditorResource("launcherTemplate.lua");
+		std::filesystem::copy(sourcePath, ResourceManager::getInstance()->getPathToActiveGameFolder() + "Scripts/launcher.lua", std::filesystem::copy_options::overwrite_existing);
+
 		// The launcher script is responsible for loading all other scripts into the lua state
 		std::string pathToLauncherScript = ResourceManager::getInstance()->getPathToGameResource("launcher.lua");
-		std::string sourcePath = ResourceManager::getPathToEditorResource("launcherTemplate.lua");
-
-		std::filesystem::copy(sourcePath, pathToLauncherScript, std::filesystem::copy_options::overwrite_existing);
-
 
 		std::ostringstream text;
 		std::ifstream in_file(pathToLauncherScript);

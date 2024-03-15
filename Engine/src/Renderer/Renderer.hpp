@@ -7,13 +7,15 @@
 #include "Core/Game.hpp"
 #include "RendererSettings.hpp"
 #include "Components/MeshComponent.hpp"
+#include <optional>
 
 namespace engine
 {
 	class Renderer
 	{
 	public:
-		void renderGame(Game* game, CameraComponent* camera, RendererSettings* renderingSettings);
+		// If renderIntoTexture is given, the game will be rendered into the texture instead of the window
+		void renderGame(Game* game, CameraComponent* camera, RendererSettings* renderingSettings, glm::vec2 viewPortPos = glm::vec2(0));
 
 		void renderGizmos(Game* game, CameraComponent* camera, RendererSettings* renderingSettings);
 
@@ -55,6 +57,6 @@ namespace engine
 		std::shared_ptr<Material> sphereDebugMaterial;
 
 	private:
-		void renderGameObject(CameraComponent* camera, GameObject* gameObject);
+		void renderGameObject(CameraComponent* camera, GameObject* gameObject, RendererSettings* rendererSettings);
 	};
 }

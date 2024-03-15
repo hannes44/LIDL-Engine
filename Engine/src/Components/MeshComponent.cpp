@@ -16,8 +16,7 @@ namespace engine
 	MeshComponent::MeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices)
 	{
 
-		this->vertices = vertices;
-		this->indices = indices;
+		meshData = std::make_shared<MeshData>(vertices, indices);
 
 		LOG_TRACE("MeshComponent: Created mesh with {0} vertices and {1} indices", vertices.size(), indices.size());
 	}
@@ -48,6 +47,14 @@ namespace engine
 	void MeshComponent::loadMeshFromOBJFile(const std::string& filename, MeshComponent* mesh, bool isGameAsset)
 	{
 		LOG_INFO("Loading mesh from file: {0}", filename);
+
+		std::optional<std::shared_ptr<MeshData>> cachedMeshData = ResourceManager::getInstance()->getCachedMeshData(filename);
+		if (cachedMeshData.has_value())
+		{
+			mesh->meshData = cachedMeshData.value();
+			LOG_INFO("Loaded mesh from cache: {0}", filename);
+			return;
+		}
 
 		tinyobj::attrib_t attrib;
 		std::vector<tinyobj::shape_t> shapes;
@@ -99,9 +106,11 @@ namespace engine
 			}
 		}
 
-		mesh->vertices = vertices;
-		mesh->indices = indices;
 		mesh->objFileName = filename;
+		std::shared_ptr<MeshData> meshData = std::make_shared<MeshData>(vertices, indices);
+		mesh->meshData = meshData;
+
+		ResourceManager::getInstance()->cacheMeshData(filename, meshData);
 
 		LOG_INFO("Loaded mesh from file: {0}", filename);
 		LOG_INFO("Mesh has {0} vertices and {1} indices", vertices.size(), indices.size());
@@ -158,8 +167,7 @@ namespace engine
 		{
 			return;
 		}
-		mesh->vertices = primative->vertices;
-		mesh->indices = primative->indices;
+		mesh->meshData = primative->meshData;
 	}
 
 	std::string MeshComponent::primativeTypeToString(PrimativeMeshType type)
@@ -208,7 +216,7 @@ namespace engine
 		glm::vec3 maxPoints = glm::vec3();
 		Transform globalTransform = gameObject->getGlobalTransform();
 
-		for (auto& vertex : vertices) {
+		for (auto& vertex : meshData->vertices) {
 			glm::vec4 worldPosition = globalTransform.transformMatrix * glm::vec4(vertex.position, 0);
 
 			maxPoints.x = std::max(maxPoints.x, worldPosition.x);
@@ -385,7 +393,7 @@ namespace engine
 		std::vector<glm::vec3> normals{};
 		std::vector<glm::vec2> uvs{};
 
-		for (auto vertex : vertices)
+		for (auto vertex : meshData->vertices)
 		{
 			positions.push_back(vertex.position);
 			colors.push_back(vertex.color);
@@ -450,7 +458,7 @@ namespace engine
 		// INDEX BUFFER
 		// -----------------------------------------------------------------------
 
-		std::shared_ptr<IndexBuffer> indexBuffer = std::shared_ptr<IndexBuffer>(IndexBuffer::create(indices.data(), indices.size()));
+		std::shared_ptr<IndexBuffer> indexBuffer = std::shared_ptr<IndexBuffer>(IndexBuffer::create(meshData->indices.data(), meshData->indices.size()));
 		vertexArray->setIndexBuffer(indexBuffer);
 	}
 }

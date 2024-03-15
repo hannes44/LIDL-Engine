@@ -1,8 +1,8 @@
 #include "OpenGLTexture.hpp"
 #include "Core/Logger.hpp"
+#include "Core/ResourceManager.hpp"
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../vendor/stb/stb_image.h"
-#include "Core/ResourceManager.hpp"
 
 namespace engine
 {
@@ -19,11 +19,39 @@ namespace engine
 		glGenTextures(1, &textureIDOpenGL);
 		glBindTexture(GL_TEXTURE_2D, textureIDOpenGL);
 
+		unsigned char* data = nullptr;
+
 		// Load and generate the texture
 		int width, height, nrChannels;
-		unsigned char* data = stbi_load(pathToFile.c_str(), &width, &height, &nrChannels, 0);
+
+		std::optional<std::shared_ptr<OpenGLTextureData>> textureData = ResourceManager::getInstance()->getCachedTextureData(textureFilename);
+
+		bool isCached = textureData.has_value();
+		if (isCached)
+		{
+			data = textureData.value()->data;
+			width = textureData.value()->width;
+			height = textureData.value()->height;
+			nrChannels = textureData.value()->channels;
+		}
+
+		if (data == nullptr)
+		{
+			data = stbi_load(pathToFile.c_str(), &width, &height, &nrChannels, 0);
+		}
+
 		if (data)
 		{
+			if (!isCached)
+			{
+				// Cache the texture data
+				std::shared_ptr<OpenGLTextureData> textureData = std::make_shared<OpenGLTextureData>();
+				textureData->data = data;
+				textureData->width = width;
+				textureData->height = height;
+				textureData->channels = nrChannels;
+				ResourceManager::getInstance()->cacheTextureData(textureFilename, textureData);
+			}
 
 			// Generate the texture
 			if (nrChannels == 3)
@@ -50,7 +78,6 @@ namespace engine
 			LOG_ERROR("Failed to load texture " + textureFilename);
 			throw std::runtime_error("Failed to load texture");
 		}
-		stbi_image_free(data);
 
 		LOG_INFO("Texture " + textureFilename + " created");
 	}
@@ -63,9 +90,15 @@ namespace engine
 	{
 		glBindTexture(GL_TEXTURE_2D, textureIDOpenGL);
 	}
+
 	void OpenGLTexture::unbind() const
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	OpenGLTextureData::~OpenGLTextureData()
+	{
+		stbi_image_free(data);
 	}
 }
 

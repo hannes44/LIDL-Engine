@@ -20,6 +20,10 @@ namespace engine
 		bool drawColliderAABBs = false;
 		bool drawMeshBoundingBoxes = false;
 
+		// The width and height to render into
+		int width = 1280;
+		int height = 720;
+
 		glm::vec3 backgroundColor = glm::vec3(0.0f, 0.0f, 1.0f);
 
 		std::vector<SerializableVariable> getSerializableVariables()

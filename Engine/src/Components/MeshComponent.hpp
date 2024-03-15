@@ -12,6 +12,7 @@
 
 #include "Core/Material.hpp"
 
+
 namespace engine
 {
 	enum PrimativeMeshType
@@ -23,13 +24,19 @@ namespace engine
 		NONE
 	};
 
+	// Storing the mesh data in a separate class to allow sharing between multiple meshes
+	struct MeshData
+	{
+		std::vector<Vertex> vertices{};
+		std::vector<uint32_t> indices{};
+	};
+
 	class MeshComponent : public Component
 	{
 	public:
 		MeshComponent(std::vector<Vertex> vertices = {}, std::vector<uint32_t> indices = {});
 
-		std::vector<Vertex> vertices{};
-		std::vector<uint32_t> indices{};
+		std::shared_ptr<MeshData> meshData = nullptr;
 
 
 		static void loadMeshFromOBJFile(const std::string& filename, MeshComponent* mesh, bool isGameAsset = true);

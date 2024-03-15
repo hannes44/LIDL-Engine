@@ -1,6 +1,9 @@
 #pragma once
 #include <string>
 #include "Core/Game.hpp"
+#include "Components/MeshComponent.hpp"
+#include <optional>
+#include "Renderer/OpenGL/OpenGLTexture.hpp"
 
 namespace engine
 {
@@ -60,6 +63,14 @@ namespace engine
 
 		static std::string getResourceFolderName(ResourceType type);
 
+		std::optional<std::shared_ptr<MeshData>> getCachedMeshData(const std::string& fileName);
+
+		void cacheMeshData(const std::string& fileName, std::shared_ptr<MeshData> meshData);
+
+		std::optional<std::shared_ptr<OpenGLTextureData>> getCachedTextureData(const std::string& fileName);
+
+		void cacheTextureData(const std::string& fileName, std::shared_ptr<OpenGLTextureData> textureData);
+
 		// Will map the given file name to a resource type based on the file extension
 		static ResourceType getResourceTypeFromFileName(const std::string& fileName);
 
@@ -77,6 +88,13 @@ namespace engine
 		inline static ResourceManager* instance;
 	private:
 		Game* game = nullptr;
+
+		// Storing all meshes vertices, indices to allow sharing between multiple meshes
+		// Currently not deleting unused meshes
+		// The key is the file name
+		std::unordered_map<std::string, std::shared_ptr<MeshData>> cachedMeshData{};
+
+		std::unordered_map<std::string, std::shared_ptr<OpenGLTextureData>> cachedTexturesData{};
 
 		ResourceManager() {};
 	};

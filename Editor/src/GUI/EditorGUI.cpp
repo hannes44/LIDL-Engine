@@ -171,6 +171,8 @@ namespace engine
 
 		float deltaTime = 0.0f;
 
+		viewPortTexture = std::shared_ptr<Texture>(Texture::create());
+
 		while (!quitProgram)
 		{
 			deltaTime = ImGui::GetIO().DeltaTime;
@@ -181,7 +183,17 @@ namespace engine
 
 			GamePhysics::getInstance().fixedUpdate(editorGameObjectSet, editorPhysicsSettings);
 
-			renderer->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
+			if (noGUIMode)
+			{
+				// When in no GUI mode, render to entire window
+				window.getWindowSize(&editorSettings.rendererSettings.width, &editorSettings.rendererSettings.height);
+				Renderer::getInstance()->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings, glm::vec2(0));
+			}
+			else
+			{
+				Renderer::getInstance()->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings, viewPortPosition);
+			}
+
 			renderer->renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
 
 			// Checking if any scripts have been updated
@@ -282,13 +294,7 @@ namespace engine
 
 			if ((Key)event.getKey() == Key::V)
 			{
-				if (auto lockedCopiedGameObject = copiedGameObject.lock())
-				{
-					LOG_INFO("Pasting game object");
-					std::shared_ptr<GameObject> newGameObject = lockedCopiedGameObject->clone();
-					game->addGameObject(newGameObject);
-					selectedObject = newGameObject;
-				}
+				pasteGameObject();
 			}
 			if ((Key)event.getKey() == Key::ESCAPE)
 			{
@@ -298,7 +304,7 @@ namespace engine
 
 			if ((Key)event.getKey() == Key::B)
 			{
-				glm::vec3 rayDirection = Utils::getMouseRayDirection(window, *getActiveCamera());
+				glm::vec3 rayDirection = Utils::getMouseRayDirection(window, *getActiveCamera(), viewPortSize, viewPortPosition);
 				glm::vec3 rayOrigin = getActiveCamera()->getTransform().getPosition();
 
 				auto gameObjects = Utils::getAABBGameObjectCollisions(game.get(), rayOrigin, rayDirection);
@@ -315,14 +321,7 @@ namespace engine
 
 		if (event.getAction() == "Copy" && event.getEventType() == InputEventType::ActionDown)
 		{
-			if (auto lockedSelectedObject = selectedObject.lock())
-			{
-				if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
-				{
-					LOG_INFO("Copying game object");
-					copiedGameObject = lockedGameObject;
-				}
-			}
+			copySelectedGameObject();	
 		}
 	}
 
@@ -340,8 +339,9 @@ namespace engine
 	{
 		int w, h;
 		window.getWindowSize(&w, &h);
-		ImGui::SetNextWindowPos({ 0, 0 });
-		ImGui::SetNextWindowSize(ImVec2(w, h));
+
+		ImGui::SetNextWindowPos({ leftPanelWidth, IMGUI_TOP_MENU_HEIGHT + playButtonPanelHeight });
+		ImGui::SetNextWindowSize(ImVec2(w - leftPanelWidth - rightPanelWidth, h - bottomPanelHeight - IMGUI_TOP_MENU_HEIGHT - playButtonPanelHeight));
 
 		ImGuiWindowFlags windowFlags = 0;
 
@@ -355,6 +355,14 @@ namespace engine
 		windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 
 		ImGui::Begin("ViewPort", nullptr, windowFlags);
+
+		viewPortPosition.x = ImGui::GetWindowPos().x;
+		viewPortPosition.y = ImGui::GetWindowPos().y;
+		viewPortSize.x = ImGui::GetWindowSize().x;
+		viewPortSize.y = ImGui::GetWindowSize().y;
+		
+		editorSettings.rendererSettings.width = viewPortSize.x;
+		editorSettings.rendererSettings.height = viewPortSize.y;
 
 		bool isFocused = ImGui::IsWindowFocused();
 		bool isHovered = ImGui::IsWindowHovered();
@@ -381,17 +389,21 @@ namespace engine
 	{
 		int w, h;
 		window.getWindowSize(&w, &h);
-		int panelWidth = w / 5;
-		ImGui::SetNextWindowPos(ImVec2(w - panelWidth, IMGUI_TOP_MENU_HEIGHT));
-		ImGui::SetNextWindowSize(ImVec2(panelWidth, h));
+		int initialPanelWidth = w / 5;
+		ImGui::SetNextWindowPos(ImVec2(w - rightPanelWidth, IMGUI_TOP_MENU_HEIGHT));
+		ImGui::SetNextWindowSize(ImVec2(rightPanelWidth, h));
+
 
 		ImGuiWindowFlags windowFlags = 0;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 		windowFlags |= ImGuiWindowFlags_NoMove;
-		windowFlags |= ImGuiWindowFlags_NoResize;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
 
+		
 		ImGui::Begin("##RightPanel", nullptr, windowFlags);
+
+		rightPanelWidth = ImGui::GetWindowWidth();
+
 		if (ImGui::BeginTabBar("##RightPanelTabs", ImGuiTabBarFlags_AutoSelectNewTabs))
 		{
 			if (auto lockedSelectedObject = selectedObject.lock())
@@ -484,15 +496,17 @@ namespace engine
 		window.getWindowSize(&w, &h);
 		int panelWidth = w / 5;
 		ImGui::SetNextWindowPos(ImVec2(0, IMGUI_TOP_MENU_HEIGHT));
-		ImGui::SetNextWindowSize(ImVec2(panelWidth, h));
+		ImGui::SetNextWindowSize(ImVec2(leftPanelWidth, h));
 
 		ImGuiWindowFlags windowFlags = 0;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 		windowFlags |= ImGuiWindowFlags_NoMove;
-		windowFlags |= ImGuiWindowFlags_NoResize;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
 
 		ImGui::Begin("##LeftPanel", nullptr, windowFlags);
+
+		leftPanelWidth = ImGui::GetWindowWidth();
+
 		if (ImGui::BeginTabBar("##LeftPanelTabs", ImGuiTabBarFlags_AutoSelectNewTabs))
 		{
 			if (ImGui::CollapsingHeader("Scene Hierarchy", ImGuiTreeNodeFlags_DefaultOpen))
@@ -545,13 +559,10 @@ namespace engine
 				EditorSerializer::serializeEditorSettings(editorSettings);
 				GameSerializer::serializeGame(game.get());
 			}
-			if (ImGui::MenuItem("Save As"))
-			{
-			}
 			ImGui::Separator();
 			if (ImGui::MenuItem("Exit", "Alt+F4"))
 			{
-				ImGui::End();
+				quitProgram = true;
 			}
 			ImGui::EndMenu();
 		}
@@ -564,14 +575,13 @@ namespace engine
 			{
 			}
 			ImGui::Separator();
-			if (ImGui::MenuItem("Cut", "Ctrl+X"))
-			{
-			}
 			if (ImGui::MenuItem("Copy", "Ctrl+C"))
 			{
+				copySelectedGameObject();
 			}
 			if (ImGui::MenuItem("Paste", "Ctrl+P"))
 			{
+				pasteGameObject();
 			}
 			ImGui::EndMenu();
 		}
@@ -677,8 +687,8 @@ namespace engine
 		int w, h;
 		window.getWindowSize(&w, &h);
 		int panelWidth = w / 5;
-		ImGui::SetNextWindowPos(ImVec2(panelWidth, IMGUI_TOP_MENU_HEIGHT));
-		ImGui::SetNextWindowSize(ImVec2(w - panelWidth * 2, 30));
+		ImGui::SetNextWindowPos(ImVec2(leftPanelWidth, IMGUI_TOP_MENU_HEIGHT));
+		ImGui::SetNextWindowSize(ImVec2(w - leftPanelWidth - rightPanelWidth, playButtonPanelHeight));
 
 		ImGuiWindowFlags windowFlags = 0;
 		windowFlags |= ImGuiWindowFlags_NoMove;
@@ -693,7 +703,11 @@ namespace engine
 			ImGuiTabBarFlags tabFlags = ImGuiSelectableFlags_None;
 
 			if (wasStopButtonPressed)
+			{
 				tabFlags = ImGuiTabItemFlags_SetSelected;
+				wasStopButtonPressed = false;
+			}
+				
 
 			if (ImGui::BeginTabItem("Scene", nullptr, tabFlags))
 			{
@@ -704,7 +718,11 @@ namespace engine
 			tabFlags = ImGuiSelectableFlags_None;
 
 			if (wasPlayButtonPressed)
+			{
 				tabFlags = ImGuiTabItemFlags_SetSelected;
+				wasPlayButtonPressed = false;
+			}
+				
 
 			if (ImGui::BeginTabItem("Game", nullptr, tabFlags))
 			{
@@ -778,13 +796,11 @@ namespace engine
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();
 
-			int windowWidth, windowHeight;
-			window.getWindowSize(&windowWidth, &windowHeight);
-			ImGuizmo::SetRect(0, 0, windowWidth, windowHeight);
+			ImGuizmo::SetRect(viewPortPosition.x, viewPortPosition.y, editorSettings.rendererSettings.width, editorSettings.rendererSettings.height);
 
 			glm::mat4 cameraView = getActiveCamera()->getViewMatrix();
 
-			glm::mat4 projectionMatrix = getActiveCamera()->getProjectionMatrix();
+			glm::mat4 projectionMatrix = getActiveCamera()->getProjectionMatrix(editorSettings.rendererSettings.width, editorSettings.rendererSettings.height);
 
 			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(projectionMatrix), gizmoOperation, isGizmoOperationInWorldSpace ? ImGuizmo::WORLD : ImGuizmo::LOCAL, modelMatrixPtr);
 		}
@@ -957,17 +973,17 @@ namespace engine
 	{
 		int w, h;
 		window.getWindowSize(&w, &h);
-		int panelWidth = w / 5;
 
 		ImGuiWindowFlags windowFlags = 0;
 		windowFlags |= ImGuiWindowFlags_NoMove;
-		windowFlags |= ImGuiWindowFlags_NoResize;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 
-		ImGui::SetNextWindowPos(ImVec2(panelWidth, h - 300));
-		ImGui::SetNextWindowSize(ImVec2(w - panelWidth * 2, 300));
+		ImGui::SetNextWindowPos(ImVec2(leftPanelWidth, h - bottomPanelHeight));
+		ImGui::SetNextWindowSize(ImVec2(w - leftPanelWidth - rightPanelWidth, bottomPanelHeight));
 		ImGui::Begin("##BottomPanel", nullptr, windowFlags);
+
+		bottomPanelHeight = ImGui::GetWindowHeight();
 
 		if (ImGui::BeginTabBar("##BottomTabs", ImGuiTabBarFlags_None))
 		{
@@ -1138,15 +1154,46 @@ namespace engine
 
 	void EditorGUI::drawGizmoOperationsWindow()
 	{
+		// Only draw gizmos in scene view
+		if (!editorSettings.showGizmos || activeViewPort != ActiveViewPort::Scene)
+			return;
+
 		ImGuiWindowFlags windowFlags = 0;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 		windowFlags |= ImGuiWindowFlags_NoResize;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
 
-		// Hotfix for gizmo operations window getting overlayed by other windows
-		ImGui::SetNextWindowFocus();
-		
-		ImGui::SetNextWindowSize(ImVec2(50, 170));
+		float windowWidth = 50;
+		float windowHeight = 170;
+
+		ImGui::SetNextWindowSize(ImVec2(windowWidth, windowHeight));
+
+		ImGuiWindow* operationWindow = ImGui::FindWindowByName("Gizmo Operation");
+
+		// We need to constraint the window to the viewport
+		if (operationWindow != nullptr)
+		{
+			// There is an edge case where both x and y are out of bounds and one of them will be overwritten by the other
+			// Saving the initial position of the window to avoid this issue
+			int operationWindowPosX = operationWindow->Pos.x;
+
+			if (operationWindow->Pos.x < viewPortPosition.x)
+			{
+				ImGui::SetNextWindowPos(ImVec2(leftPanelWidth, operationWindow->Pos.y));
+				operationWindowPosX = leftPanelWidth;
+			}
+			else if ((operationWindow->Pos.x + windowWidth) > viewPortPosition.x + viewPortSize.x)
+			{
+				ImGui::SetNextWindowPos(ImVec2(viewPortPosition.x + viewPortSize.x - windowWidth, operationWindow->Pos.y));
+				operationWindowPosX = viewPortPosition.x + viewPortSize.x - windowWidth;
+			}
+
+			if (operationWindow->Pos.y < viewPortPosition.y)
+				ImGui::SetNextWindowPos(ImVec2(operationWindowPosX, viewPortPosition.y));
+			else if ((operationWindow->Pos.y + windowHeight)> viewPortPosition.y + viewPortSize.y)
+				ImGui::SetNextWindowPos(ImVec2(operationWindowPosX, viewPortPosition.y + viewPortSize.y - windowHeight));
+		}
+
 		ImGui::Begin("Gizmo Operation", nullptr, windowFlags);
 
 		bool pushedStyleColor = false;
@@ -1240,7 +1287,7 @@ namespace engine
 					// Draw the material icon when dragging
 					ImGui::Image((void*)(intptr_t)openGLTextureId, ImVec2(30, 30), { 0, 1 }, { 1, 0 });
 
-					glm::vec3 rayDirection = Utils::getMouseRayDirection(window, *getActiveCamera());
+					glm::vec3 rayDirection = Utils::getMouseRayDirection(window, *getActiveCamera(), viewPortSize, viewPortPosition);
 					glm::vec3 rayOrigin = getActiveCamera()->getTransform().getPosition();
 
 					auto gameObjects = Utils::getAABBGameObjectCollisions(game.get(), rayOrigin, rayDirection);
@@ -1256,13 +1303,12 @@ namespace engine
 								overwrittenGameObject = gameObjects[0];
 							}
 							// If we drag the material over to a different mesh, we need to reset the overwritten mesh
-							else if (overwrittenMaterial.lock()->uuid.id == material->uuid.id)
+							else if (overwrittenGameObject.lock()->uuid.id != gameObjects[0]->uuid.id)
 							{
-								mesh->setMaterial(overwrittenMaterial.lock());
+								overwrittenGameObject.lock()->getComponent<MeshComponent>()->setMaterial(overwrittenMaterial.lock());
 								overwrittenMaterial.reset();
 								overwrittenGameObject.reset();
 							}
-
 						}
 					}
 					else
@@ -1392,5 +1438,28 @@ namespace engine
 		this->game = game;
 
 		assetManager->changeGame(game.get());
+	}
+
+	void EditorGUI::copySelectedGameObject()
+	{
+		if (auto lockedSelectedObject = selectedObject.lock())
+		{
+			if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
+			{
+				LOG_INFO("Copying game object");
+				copiedGameObject = lockedGameObject;
+			}
+		}
+	}
+
+	void EditorGUI::pasteGameObject()
+	{
+		if (auto lockedCopiedGameObject = copiedGameObject.lock())
+		{
+			LOG_INFO("Pasting game object");
+			std::shared_ptr<GameObject> newGameObject = lockedCopiedGameObject->clone();
+			game->addGameObject(newGameObject);
+			selectedObject = newGameObject;
+		}
 	}
 }

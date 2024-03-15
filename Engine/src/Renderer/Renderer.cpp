@@ -17,7 +17,7 @@
 
 namespace engine
 {
-	void Renderer::renderGame(Game* game, CameraComponent* camera, RendererSettings* renderingSettings)
+	void Renderer::renderGame(Game* game, CameraComponent* camera, RendererSettings* renderingSettings, glm::vec2 viewPortPos)
 	{
 		if (!camera)
 		{
@@ -26,10 +26,19 @@ namespace engine
 			// TODO: Render text to the screen telling user to add a camera
 			return;
 		}
-		int width, height;
-		Window::getInstance().getWindowSize(&width, &height);
 
-		graphicsAPI->setViewport(0, 0, width, height);
+		int width = renderingSettings->width;
+		int height = renderingSettings->height;
+
+		int pointLightIndex = 0;
+		int spotLightIndex = 0;
+
+		int windowHeight;
+		Window::getInstance().getWindowSize(nullptr, &windowHeight);
+
+		int bottomLeftY = windowHeight - viewPortPos.y - height;
+
+		graphicsAPI->setViewport(viewPortPos.x, bottomLeftY, width, height);
 
 		graphicsAPI->setClearColor(glm::vec4(renderingSettings->backgroundColor.x, renderingSettings->backgroundColor.y, renderingSettings->backgroundColor.z, 1.0f));
 
@@ -46,8 +55,6 @@ namespace engine
 
 		baseShader->bind();
 
-		int pointLightIndex = 0;
-		int spotLightIndex = 0;
 
 		// TODO: There should be a list of all the lights in the game to avoid this loop
 		for (const auto& [gameObjectId, gameObject] : game->getGameObjects())
@@ -114,7 +121,7 @@ namespace engine
 			if (meshComponent->renderFromCameraTransform)
 				continue;
 
-			renderGameObject(camera, gameObject.get());
+			renderGameObject(camera, gameObject.get(), renderingSettings);
 		}
 
 		// Can be optimized to avoid looping through all game objects twice
@@ -128,9 +135,9 @@ namespace engine
 			if (!meshComponent->renderFromCameraTransform)
 				continue;
 
-			renderGameObject(camera, gameObject.get());
+			renderGameObject(camera, gameObject.get(), renderingSettings);
 		}
-
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
 	void Renderer::drawVector(glm::vec3 dir, glm::vec3 pos, CameraComponent* camera)
@@ -171,7 +178,7 @@ namespace engine
 
 		graphicsAPI->setDrawTriangleOutline(true);
 
-		renderGameObject(camera, &gameObject);
+		renderGameObject(camera, &gameObject, nullptr);
 	}
 
 	void Renderer::renderGizmos(Game* game, CameraComponent* camera, RendererSettings* renderingSettings)
@@ -341,7 +348,7 @@ namespace engine
 			glBindTexture(GL_TEXTURE_2D, material->specularTexture.lock()->textureIDOpenGL);
 		}
 
-		graphicsAPI->drawIndexed(meshComponent->getVertexArray().get(), meshComponent->indices.size());
+		graphicsAPI->drawIndexed(meshComponent->getVertexArray().get(), meshComponent->meshData->indices.size());
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -386,7 +393,8 @@ namespace engine
 
 		return graphicsAPI->getType();
 	}
-	void Renderer::renderGameObject(CameraComponent* camera, GameObject* gameObject)
+
+	void Renderer::renderGameObject(CameraComponent* camera, GameObject* gameObject, RendererSettings* rendererSettings)
 	{
 		std::shared_ptr<MeshComponent> meshComponent = gameObject->getComponent<MeshComponent>();
 
@@ -394,6 +402,10 @@ namespace engine
 			return;
 
 		glm::mat4 projectionMatrix = camera->getProjectionMatrix();
+
+		if (rendererSettings != nullptr)
+			projectionMatrix = camera->getProjectionMatrix(rendererSettings->width, rendererSettings->height);
+
 		glm::mat4 viewMatrix = camera->getViewMatrix();
 		glm::mat4 gameObjectTransformMatrix = gameObject->getGlobalTransform().transformMatrix;
 
@@ -430,6 +442,6 @@ namespace engine
 			glBindTexture(GL_TEXTURE_2D, material->specularTexture.lock()->textureIDOpenGL);
 		}
 
-		graphicsAPI->drawIndexed(meshComponent->getVertexArray().get(), meshComponent->indices.size());
+		graphicsAPI->drawIndexed(meshComponent->getVertexArray().get(), meshComponent->meshData->indices.size());
 	}
 }

@@ -31,7 +31,7 @@ namespace engine
 		static void drawSphere(glm::vec3 position, float radius, CameraComponent* camera);
 
 		// Returns the ray direction from the mouse position into the world space from the camera
-		static glm::vec3 getMouseRayDirection(Window& window, CameraComponent& camera);
+		static glm::vec3 getMouseRayDirection(Window& window, CameraComponent& camera, glm::vec2 viewPortSize, glm::vec2 viewPortPosition = glm::vec2(0));
 
 		// Will only check against the mesh AABB, not against colliders
 		static std::vector<std::shared_ptr<GameObject>> getAABBGameObjectCollisions(Game* game, glm::vec3 origin, glm::vec3 direction);
