@@ -348,7 +348,7 @@ namespace engine
 			glBindTexture(GL_TEXTURE_2D, material->specularTexture.lock()->textureIDOpenGL);
 		}
 
-		graphicsAPI->drawIndexed(meshComponent->getVertexArray().get(), meshComponent->indices.size());
+		graphicsAPI->drawIndexed(meshComponent->getVertexArray().get(), meshComponent->meshData->indices.size());
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -442,6 +442,6 @@ namespace engine
 			glBindTexture(GL_TEXTURE_2D, material->specularTexture.lock()->textureIDOpenGL);
 		}
 
-		graphicsAPI->drawIndexed(meshComponent->getVertexArray().get(), meshComponent->indices.size());
+		graphicsAPI->drawIndexed(meshComponent->getVertexArray().get(), meshComponent->meshData->indices.size());
 	}
 }

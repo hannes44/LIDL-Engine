@@ -381,6 +381,21 @@ namespace engine
 		}
 	}
 
+	std::optional<std::shared_ptr<MeshData>> ResourceManager::getCachedMeshData(const std::string& fileName)
+	{
+		if (cachedMeshData.find(fileName) != cachedMeshData.end())
+		{
+			return cachedMeshData[fileName];
+		}
+
+		return std::nullopt;
+	}
+
+	void ResourceManager::cacheMeshData(const std::string& fileName, std::shared_ptr<MeshData> meshData)
+	{
+		cachedMeshData[fileName] = meshData;
+	}
+
 	ResourceType ResourceManager::getResourceTypeFromFileName(const std::string& fileName)
 	{
 		std::string extension = fileName.substr(fileName.find_last_of(".") + 1);
