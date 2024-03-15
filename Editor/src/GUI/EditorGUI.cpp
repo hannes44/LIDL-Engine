@@ -86,46 +86,13 @@ namespace engine
 
 	void EditorGUI::start()
 	{
-		ActionMap::getInstance().addAction("Copy", { Key::LCTRL, Key::C });
+		createEditorInputActions();
 
 		if (editorSettings.enableScripting)
 		{
 			ScriptEngine* scriptEngine = ScriptEngine::getInstance();
 			scriptEngine->loadScriptStatesIntoNewLuaState(project->game.get());
 		}
-
-		auto editorCameraGameObject = std::make_shared<GameObject>();
-
-		// Create a custom controllable component for the editor camera
-		auto editorCameraControllableComponent = std::make_shared<ControllableComponent>();
-		editorCameraControllableComponent->setGameObject(editorCameraGameObject.get());
-		editorCameraControllableComponent->movementSpeed = 5.f;
-		editorCameraControllableComponent->movementType = MovementType::OnHold;
-		editorCameraControllableComponent->enableForces = false;
-		editorCameraControllableComponent->initialize();
-
-		// Create a camera component for the editor camera
-		auto editorCameraComponent = std::make_shared<CameraComponent>();
-		auto editorCameraPhysicsComponent = std::make_shared<PhysicsComponent>();
-		// Hotfix for camera W/S inversed
-		editorCameraPhysicsComponent->forward = glm::vec3(0, 0, -1);
-
-		editorCameraGameObject->addComponent(editorCameraComponent);
-		editorCameraGameObject->addComponent(editorCameraPhysicsComponent);
-		editorCameraGameObject->addComponent(editorCameraControllableComponent);
-		editorCameraGameObject->name = "Editor Camera";
-		editorCameraGameObject->transform.setPosition(glm::vec3(0, 7.5f, -20));
-		editorCameraGameObject->transform.setRotationFromDirection(glm::vec3(0, 0.5f, -1), glm::vec3(0, 1, 0));
-
-		editorCamera = editorCameraGameObject;
-
-		auto editorGameObjects = std::map<std::string, std::shared_ptr<GameObject>>();
-		editorGameObjects[editorCameraGameObject->getUUID().id] = editorCameraGameObject;
-		auto editorPhysicsSettings = GamePhysicsSettings();
-		editorPhysicsSettings.enableGravity = false;
-		editorPhysicsSettings.enableCollisions = false;
-		editorPhysicsSettings.fixedUpdateIntervalMS = 10;
-		editorPhysicsSettings.enableFriction = false;
 
 		// We have to save the initial serialization state to avoid serializing the initiated game if the user changes settings
 		bool initialUseSerialization = editorSettings.useSerialization;
@@ -154,24 +121,13 @@ namespace engine
 
 		selectedAssetNodeFolder = assetManager->rootNode;
 
-		rotateIconTexture = std::shared_ptr<Texture>(Texture::create("rotation_icon.png", false));
-
-		scaleIconTexture = std::shared_ptr<Texture>(Texture::create("scale_icon.png", false));
-
-		translateIconTexture = std::shared_ptr<Texture>(Texture::create("translation_icon.png", false));
-
-		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png", false));
-		playIconTexture = std::shared_ptr<Texture>(Texture::create("play_icon.png", false));
+		createEditorTextures();
 
 		setupMultiplayer(game);
 
-		auto editorGameObjectSet = std::set<std::shared_ptr<GameObject>>();
-		for (auto const& [id, gameObject] : editorGameObjects)
-			editorGameObjectSet.insert(gameObject);
+		setupEditorCamera();
 
 		float deltaTime = 0.0f;
-
-		viewPortTexture = std::shared_ptr<Texture>(Texture::create());
 
 		while (!quitProgram)
 		{
@@ -181,7 +137,7 @@ namespace engine
 
 			inputFramework.getInput();
 
-			GamePhysics::getInstance().fixedUpdate(editorGameObjectSet, editorPhysicsSettings);
+			GamePhysics::getInstance().fixedUpdate(editorGameObjects, editorPhysicsSettings);
 
 			if (noGUIMode)
 			{
@@ -289,39 +245,53 @@ namespace engine
 						game->deleteTexture(lockedTexture->getUUID().id);
 						EventManager::getInstance().notify(EventType::SelectableDeleted, textureId);
 					}
-				}
-			}
 
-			if ((Key)event.getKey() == Key::V)
-			{
-				pasteGameObject();
+				}
 			}
 			if ((Key)event.getKey() == Key::ESCAPE)
 			{
 				noGUIMode = !noGUIMode;
 				window.setRelativeMouseMode(noGUIMode);
 			}
-
-			if ((Key)event.getKey() == Key::B)
+		}
+		if (EventType == InputEventType::MouseButtonDown)
+		{
+			// Select game object on mouse click
+			if ((Key)event.getButton() == Key::MOUSE_LEFT)
 			{
-				glm::vec3 rayDirection = Utils::getMouseRayDirection(window, *getActiveCamera(), viewPortSize, viewPortPosition);
-				glm::vec3 rayOrigin = getActiveCamera()->getTransform().getPosition();
+				// Only select objects if the mouse is inside the viewport and not over guizmos
+				if (isMouseInsideViewPort() && !isMouseOverGuizmo && !isMouseOverGuizmosOperationWindow)
+				{
+					glm::vec3 rayDirection = Utils::getMouseRayDirection(window, *getActiveCamera(), viewPortSize, viewPortPosition);
+					glm::vec3 rayOrigin = getActiveCamera()->getTransform().getPosition();
 
-				auto gameObjects = Utils::getAABBGameObjectCollisions(game.get(), rayOrigin, rayDirection);
-				if (gameObjects.size() > 0)
-				{
-					selectedObject = gameObjects[0];
-				}
-				else
-				{
-					selectedObject.reset();
+					auto gameObjects = Utils::getAABBGameObjectCollisions(game.get(), rayOrigin, rayDirection);
+					if (gameObjects.size() > 0)
+					{
+						selectedObject = gameObjects[0];
+					}
+					else
+					{
+						selectedObject.reset();
+					}
 				}
 			}
+		}
+
+		if (event.getAction() == "Paste" && event.getEventType() == InputEventType::ActionDown)
+		{
+			pasteGameObject();
 		}
 
 		if (event.getAction() == "Copy" && event.getEventType() == InputEventType::ActionDown)
 		{
 			copySelectedGameObject();	
+		}
+
+		if (event.getAction() == "Save" && event.getEventType() == InputEventType::ActionDown)
+		{
+			EditorSerializer::serializeEditorSettings(editorSettings);
+			GameSerializer::serializeGame(game.get());
 		}
 	}
 
@@ -804,6 +774,8 @@ namespace engine
 
 			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(projectionMatrix), gizmoOperation, isGizmoOperationInWorldSpace ? ImGuizmo::WORLD : ImGuizmo::LOCAL, modelMatrixPtr);
 		}
+
+		isMouseOverGuizmo = ImGuizmo::IsOver();
 	}
 
 	void EditorGUI::drawInspectorSelectedGameObject()
@@ -859,69 +831,58 @@ namespace engine
 				{
 					isAddComponentVisible = !isAddComponentVisible;
 				}
+				if (isAddComponentVisible)
+				{
+					ShowAddComponent();
+				}
 			}
-		}
-		if (isAddComponentVisible)
-		{
-			ShowAddComponent();
 		}
 	}
+
 	void EditorGUI::ShowAddComponent()
 	{
-		ImGuiTextFilter Filter;
+		ImGui::Text("Add Component");
+		ImGui::Separator();
 
-		ImGuiWindowFlags windowFlags = 0;
-		windowFlags |= ImGuiWindowFlags_NoTitleBar;
-		windowFlags |= ImGuiWindowFlags_NoResize;
-		windowFlags |= ImGuiWindowFlags_NoScrollbar;
+		std::vector<std::string> allComponentNames = { "Box Collider", "Camera", "Mesh", "Physics", "PointLight", "SpotLight", "Sphere Collider", "Controllable" };
+		std::vector<std::string> scriptComponentNames = ResourceManager::getInstance()->getAllCSharpScriptsInActiveGame();
 
-		ImGui::SetNextWindowSize(ImVec2(360, 500));
-
-		if (ImGui::Begin("Add Component", nullptr, windowFlags))
+		// Remove the extension from the script names
+		for (auto& scriptName : scriptComponentNames)
 		{
-			ImGui::Text("Add Component");
-			ImGui::Separator();
+			scriptName = scriptName.substr(0, scriptName.find_last_of('.'));
+		}
 
-			std::vector<std::string> allComponentNames = { "Box Collider", "Camera", "Mesh", "Physics", "PointLight", "SpotLight", "Sphere Collider", "Controllable" };
-			std::vector<std::string> scriptComponentNames = ResourceManager::getInstance()->getAllCSharpScriptsInActiveGame();
+		allComponentNames.insert(allComponentNames.end(), scriptComponentNames.begin(), scriptComponentNames.end());
 
-			// Remove the extension from the script names
-			for (auto& scriptName : scriptComponentNames)
+		if (ImGui::BeginListBox("##"))
+		{
+			for (auto componentName : allComponentNames)
 			{
-				scriptName = scriptName.substr(0, scriptName.find_last_of('.'));
-			}
-
-			allComponentNames.insert(allComponentNames.end(), scriptComponentNames.begin(), scriptComponentNames.end());
-
-			if (ImGui::BeginListBox("##"))
-			{
-				for (auto componentName : allComponentNames)
+				if (ImGui::Selectable(componentName.c_str(), false, ImGuiSelectableFlags_AllowDoubleClick))
 				{
-					if (ImGui::Selectable(componentName.c_str(), false, ImGuiSelectableFlags_AllowDoubleClick))
+					if (ImGui::IsMouseDoubleClicked(0))
 					{
-						if (ImGui::IsMouseDoubleClicked(0))
-						{
-							isAddComponentVisible = !isAddComponentVisible;
+						isAddComponentVisible = !isAddComponentVisible;
 
-							if (auto lockedSelectedObject = selectedObject.lock())
+						if (auto lockedSelectedObject = selectedObject.lock())
+						{
+							if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
 							{
-								if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
-								{
-									lockedGameObject->addComponent(ComponentFactory::createComponent(componentName));
-								}
+								lockedGameObject->addComponent(ComponentFactory::createComponent(componentName));
 							}
 						}
 					}
 				}
-				ImGui::EndListBox();
 			}
-			if (ImGui::Button("Close"))
-			{
-				isAddComponentVisible = !isAddComponentVisible;
-			}
+			ImGui::EndListBox();
 		}
-		ImGui::End();
+		if (ImGui::Button("Close"))
+		{
+			isAddComponentVisible = !isAddComponentVisible;
+		}
 	}
+
 	void EditorGUI::drawGameSettingsTab()
 	{
 		ImGui::Text("Application FPS: %.1f", ImGui::GetIO().Framerate);
@@ -1196,6 +1157,8 @@ namespace engine
 
 		ImGui::Begin("Gizmo Operation", nullptr, windowFlags);
 
+		isMouseOverGuizmosOperationWindow = ImGui::IsWindowHovered();
+
 		bool pushedStyleColor = false;
 		if (gizmoOperation == ImGuizmo::ROTATE)
 		{
@@ -1461,5 +1424,76 @@ namespace engine
 			game->addGameObject(newGameObject);
 			selectedObject = newGameObject;
 		}
+	}
+
+	bool EditorGUI::isMouseInsideViewPort()
+	{
+		int mouseX, mouseY;
+		window.getMousePosition(&mouseX, &mouseY);
+
+		if (mouseX < viewPortPosition.x || mouseX > (viewPortPosition.x + viewPortSize.x))
+			return false;
+
+		if (mouseY < viewPortPosition.y || mouseY >(viewPortPosition.y + viewPortSize.y))
+			return false;
+
+		return true;
+	}
+
+	void EditorGUI::setupEditorCamera()
+	{
+		auto editorCameraGameObject = std::make_shared<GameObject>();
+
+		// Create a custom controllable component for the editor camera
+		auto editorCameraControllableComponent = std::make_shared<ControllableComponent>();
+		editorCameraControllableComponent->setGameObject(editorCameraGameObject.get());
+		editorCameraControllableComponent->movementSpeed = 5.f;
+		editorCameraControllableComponent->movementType = MovementType::OnHold;
+		editorCameraControllableComponent->enableForces = false;
+		editorCameraControllableComponent->initialize();
+
+		// Create a camera component for the editor camera
+		auto editorCameraComponent = std::make_shared<CameraComponent>();
+		auto editorCameraPhysicsComponent = std::make_shared<PhysicsComponent>();
+		// Hotfix for camera W/S inversed
+		editorCameraPhysicsComponent->forward = glm::vec3(0, 0, -1);
+
+		editorCameraGameObject->addComponent(editorCameraComponent);
+		editorCameraGameObject->addComponent(editorCameraPhysicsComponent);
+		editorCameraGameObject->addComponent(editorCameraControllableComponent);
+		editorCameraGameObject->name = "Editor Camera";
+		editorCameraGameObject->transform.setPosition(glm::vec3(0, 7.5f, -20));
+		editorCameraGameObject->transform.setRotationFromDirection(glm::vec3(0, 0.5f, -1), glm::vec3(0, 1, 0));
+
+		editorCamera = editorCameraGameObject;
+
+		auto editorGameObjects = std::map<std::string, std::shared_ptr<GameObject>>();
+		editorGameObjects[editorCameraGameObject->getUUID().id] = editorCameraGameObject;
+		editorPhysicsSettings = GamePhysicsSettings();
+		editorPhysicsSettings.enableGravity = false;
+		editorPhysicsSettings.enableCollisions = false;
+		editorPhysicsSettings.fixedUpdateIntervalMS = 10;
+		editorPhysicsSettings.enableFriction = false;
+
+		this->editorGameObjects = std::set<std::shared_ptr<GameObject>>();
+		for (auto const& [id, gameObject] : editorGameObjects)
+			this->editorGameObjects.insert(gameObject);
+	}
+
+	void EditorGUI::createEditorTextures()
+	{
+		rotateIconTexture = std::shared_ptr<Texture>(Texture::create("rotation_icon.png", false));
+		scaleIconTexture = std::shared_ptr<Texture>(Texture::create("scale_icon.png", false));
+		translateIconTexture = std::shared_ptr<Texture>(Texture::create("translation_icon.png", false));
+		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png", false));
+		playIconTexture = std::shared_ptr<Texture>(Texture::create("play_icon.png", false));
+		viewPortTexture = std::shared_ptr<Texture>(Texture::create());
+	}
+
+	void EditorGUI::createEditorInputActions()
+	{
+		ActionMap::getInstance().addAction("Copy", { Key::LCTRL, Key::C });
+		ActionMap::getInstance().addAction("Paste", { Key::LCTRL, Key::V });
+		ActionMap::getInstance().addAction("Save", { Key::LCTRL, Key::S });
 	}
 }
