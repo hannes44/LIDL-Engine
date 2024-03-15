@@ -96,6 +96,10 @@ namespace engine
 		// The editor camera and its physics settings are set up here
 		void setupEditorCamera();
 
+		void createEditorTextures();
+
+		void createEditorInputActions();
+
 		// The framebuffer that the game will be rendered into
 		std::shared_ptr<Texture> viewPortTexture;
 

@@ -86,7 +86,7 @@ namespace engine
 
 	void EditorGUI::start()
 	{
-		ActionMap::getInstance().addAction("Copy", { Key::LCTRL, Key::C });
+		createEditorInputActions();
 
 		if (editorSettings.enableScripting)
 		{
@@ -121,22 +121,13 @@ namespace engine
 
 		selectedAssetNodeFolder = assetManager->rootNode;
 
-		rotateIconTexture = std::shared_ptr<Texture>(Texture::create("rotation_icon.png", false));
-
-		scaleIconTexture = std::shared_ptr<Texture>(Texture::create("scale_icon.png", false));
-
-		translateIconTexture = std::shared_ptr<Texture>(Texture::create("translation_icon.png", false));
-
-		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png", false));
-		playIconTexture = std::shared_ptr<Texture>(Texture::create("play_icon.png", false));
+		createEditorTextures();
 
 		setupMultiplayer(game);
 
 		setupEditorCamera();
 
 		float deltaTime = 0.0f;
-
-		viewPortTexture = std::shared_ptr<Texture>(Texture::create());
 
 		while (!quitProgram)
 		{
@@ -257,10 +248,6 @@ namespace engine
 				}
 			}
 
-			if ((Key)event.getKey() == Key::V)
-			{
-				pasteGameObject();
-			}
 			if ((Key)event.getKey() == Key::ESCAPE)
 			{
 				noGUIMode = !noGUIMode;
@@ -284,9 +271,20 @@ namespace engine
 			}
 		}
 
+		if (event.getAction() == "Paste" && event.getEventType() == InputEventType::ActionDown)
+		{
+			pasteGameObject();
+		}
+
 		if (event.getAction() == "Copy" && event.getEventType() == InputEventType::ActionDown)
 		{
 			copySelectedGameObject();	
+		}
+
+		if (event.getAction() == "Save" && event.getEventType() == InputEventType::ActionDown)
+		{
+			EditorSerializer::serializeEditorSettings(editorSettings);
+			GameSerializer::serializeGame(game.get());
 		}
 	}
 
@@ -1466,5 +1464,22 @@ namespace engine
 		this->editorGameObjects = std::set<std::shared_ptr<GameObject>>();
 		for (auto const& [id, gameObject] : editorGameObjects)
 			this->editorGameObjects.insert(gameObject);
+	}
+
+	void EditorGUI::createEditorTextures()
+	{
+		rotateIconTexture = std::shared_ptr<Texture>(Texture::create("rotation_icon.png", false));
+		scaleIconTexture = std::shared_ptr<Texture>(Texture::create("scale_icon.png", false));
+		translateIconTexture = std::shared_ptr<Texture>(Texture::create("translation_icon.png", false));
+		worldIconTexture = std::shared_ptr<Texture>(Texture::create("world_icon.png", false));
+		playIconTexture = std::shared_ptr<Texture>(Texture::create("play_icon.png", false));
+		viewPortTexture = std::shared_ptr<Texture>(Texture::create());
+	}
+
+	void EditorGUI::createEditorInputActions()
+	{
+		ActionMap::getInstance().addAction("Copy", { Key::LCTRL, Key::C });
+		ActionMap::getInstance().addAction("Paste", { Key::LCTRL, Key::V });
+		ActionMap::getInstance().addAction("Save", { Key::LCTRL, Key::S });
 	}
 }
