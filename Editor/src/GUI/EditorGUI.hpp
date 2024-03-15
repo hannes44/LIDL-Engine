@@ -93,6 +93,9 @@ namespace engine
 
 		void pasteGameObject();
 
+		// The editor camera and its physics settings are set up here
+		void setupEditorCamera();
+
 		// The framebuffer that the game will be rendered into
 		std::shared_ptr<Texture> viewPortTexture;
 
@@ -111,6 +114,12 @@ namespace engine
 		EditorSceneState sceneState = EditorSceneState::Scene;
 
 		ActiveViewPort activeViewPort = ActiveViewPort::Scene;
+
+		// The game objects that are only visible in the editor
+		std::set<std::shared_ptr<GameObject>> editorGameObjects;
+
+		// Physics settings for the editor camera
+		GamePhysicsSettings editorPhysicsSettings;
 
 		// Flag for when the play button is pressed
 		bool wasPlayButtonPressed = false;

@@ -94,39 +94,6 @@ namespace engine
 			scriptEngine->loadScriptStatesIntoNewLuaState(project->game.get());
 		}
 
-		auto editorCameraGameObject = std::make_shared<GameObject>();
-
-		// Create a custom controllable component for the editor camera
-		auto editorCameraControllableComponent = std::make_shared<ControllableComponent>();
-		editorCameraControllableComponent->setGameObject(editorCameraGameObject.get());
-		editorCameraControllableComponent->movementSpeed = 5.f;
-		editorCameraControllableComponent->movementType = MovementType::OnHold;
-		editorCameraControllableComponent->enableForces = false;
-		editorCameraControllableComponent->initialize();
-
-		// Create a camera component for the editor camera
-		auto editorCameraComponent = std::make_shared<CameraComponent>();
-		auto editorCameraPhysicsComponent = std::make_shared<PhysicsComponent>();
-		// Hotfix for camera W/S inversed
-		editorCameraPhysicsComponent->forward = glm::vec3(0, 0, -1);
-
-		editorCameraGameObject->addComponent(editorCameraComponent);
-		editorCameraGameObject->addComponent(editorCameraPhysicsComponent);
-		editorCameraGameObject->addComponent(editorCameraControllableComponent);
-		editorCameraGameObject->name = "Editor Camera";
-		editorCameraGameObject->transform.setPosition(glm::vec3(0, 7.5f, -20));
-		editorCameraGameObject->transform.setRotationFromDirection(glm::vec3(0, 0.5f, -1), glm::vec3(0, 1, 0));
-
-		editorCamera = editorCameraGameObject;
-
-		auto editorGameObjects = std::map<std::string, std::shared_ptr<GameObject>>();
-		editorGameObjects[editorCameraGameObject->getUUID().id] = editorCameraGameObject;
-		auto editorPhysicsSettings = GamePhysicsSettings();
-		editorPhysicsSettings.enableGravity = false;
-		editorPhysicsSettings.enableCollisions = false;
-		editorPhysicsSettings.fixedUpdateIntervalMS = 10;
-		editorPhysicsSettings.enableFriction = false;
-
 		// We have to save the initial serialization state to avoid serializing the initiated game if the user changes settings
 		bool initialUseSerialization = editorSettings.useSerialization;
 		if (initialUseSerialization)
@@ -165,9 +132,7 @@ namespace engine
 
 		setupMultiplayer(game);
 
-		auto editorGameObjectSet = std::set<std::shared_ptr<GameObject>>();
-		for (auto const& [id, gameObject] : editorGameObjects)
-			editorGameObjectSet.insert(gameObject);
+		setupEditorCamera();
 
 		float deltaTime = 0.0f;
 
@@ -181,7 +146,7 @@ namespace engine
 
 			inputFramework.getInput();
 
-			GamePhysics::getInstance().fixedUpdate(editorGameObjectSet, editorPhysicsSettings);
+			GamePhysics::getInstance().fixedUpdate(editorGameObjects, editorPhysicsSettings);
 
 			if (noGUIMode)
 			{
@@ -1461,5 +1426,45 @@ namespace engine
 			game->addGameObject(newGameObject);
 			selectedObject = newGameObject;
 		}
+	}
+
+	void EditorGUI::setupEditorCamera()
+	{
+		auto editorCameraGameObject = std::make_shared<GameObject>();
+
+		// Create a custom controllable component for the editor camera
+		auto editorCameraControllableComponent = std::make_shared<ControllableComponent>();
+		editorCameraControllableComponent->setGameObject(editorCameraGameObject.get());
+		editorCameraControllableComponent->movementSpeed = 5.f;
+		editorCameraControllableComponent->movementType = MovementType::OnHold;
+		editorCameraControllableComponent->enableForces = false;
+		editorCameraControllableComponent->initialize();
+
+		// Create a camera component for the editor camera
+		auto editorCameraComponent = std::make_shared<CameraComponent>();
+		auto editorCameraPhysicsComponent = std::make_shared<PhysicsComponent>();
+		// Hotfix for camera W/S inversed
+		editorCameraPhysicsComponent->forward = glm::vec3(0, 0, -1);
+
+		editorCameraGameObject->addComponent(editorCameraComponent);
+		editorCameraGameObject->addComponent(editorCameraPhysicsComponent);
+		editorCameraGameObject->addComponent(editorCameraControllableComponent);
+		editorCameraGameObject->name = "Editor Camera";
+		editorCameraGameObject->transform.setPosition(glm::vec3(0, 7.5f, -20));
+		editorCameraGameObject->transform.setRotationFromDirection(glm::vec3(0, 0.5f, -1), glm::vec3(0, 1, 0));
+
+		editorCamera = editorCameraGameObject;
+
+		auto editorGameObjects = std::map<std::string, std::shared_ptr<GameObject>>();
+		editorGameObjects[editorCameraGameObject->getUUID().id] = editorCameraGameObject;
+		editorPhysicsSettings = GamePhysicsSettings();
+		editorPhysicsSettings.enableGravity = false;
+		editorPhysicsSettings.enableCollisions = false;
+		editorPhysicsSettings.fixedUpdateIntervalMS = 10;
+		editorPhysicsSettings.enableFriction = false;
+
+		this->editorGameObjects = std::set<std::shared_ptr<GameObject>>();
+		for (auto const& [id, gameObject] : editorGameObjects)
+			this->editorGameObjects.insert(gameObject);
 	}
 }
