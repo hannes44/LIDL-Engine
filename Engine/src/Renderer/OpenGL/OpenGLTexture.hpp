@@ -4,6 +4,16 @@
 
 namespace engine
 {
+	struct OpenGLTextureData
+	{
+		unsigned char* data;
+		int width;
+		int height;
+		int channels;
+
+		~OpenGLTextureData();
+	};
+
 	class OpenGLTexture : public Texture
 	{
 	public:

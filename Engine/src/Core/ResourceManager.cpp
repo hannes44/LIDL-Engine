@@ -396,6 +396,21 @@ namespace engine
 		cachedMeshData[fileName] = meshData;
 	}
 
+	std::optional<std::shared_ptr<OpenGLTextureData>> ResourceManager::getCachedTextureData(const std::string& fileName)
+	{
+		if (cachedTexturesData.find(fileName) != cachedTexturesData.end())
+		{
+			return cachedTexturesData[fileName];
+		}
+		
+		return std::nullopt;
+	}
+
+	void ResourceManager::cacheTextureData(const std::string& fileName, std::shared_ptr<OpenGLTextureData> textureData)
+	{
+		cachedTexturesData[fileName] = textureData;
+	}
+
 	ResourceType ResourceManager::getResourceTypeFromFileName(const std::string& fileName)
 	{
 		std::string extension = fileName.substr(fileName.find_last_of(".") + 1);
