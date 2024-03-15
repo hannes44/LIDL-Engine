@@ -116,92 +116,92 @@ namespace engine
 		LOG_INFO("Mesh has {0} vertices and {1} indices", vertices.size(), indices.size());
 	}
 
-	std::shared_ptr<MeshComponent> MeshComponent::createPrimative(PrimativeMeshType type)
+	std::shared_ptr<MeshComponent> MeshComponent::createPrimitive(PrimitiveMeshType type)
 	{
 		std::vector<Vertex> vertices{};
 		std::vector<uint32_t> indices{};
 
-		// TODO: Implement primative mesh creation
+		// TODO: Implement primitive mesh creation
 		switch (type)
 		{
-		case PrimativeMeshType::PLANE:
+		case PrimitiveMeshType::PLANE:
 			return createPlane();
-		case PrimativeMeshType::CUBE:
+		case PrimitiveMeshType::CUBE:
 			return createCube();
-		case PrimativeMeshType::CYLINDER:
+		case PrimitiveMeshType::CYLINDER:
 			break;
-		case PrimativeMeshType::SPHERE:
+		case PrimitiveMeshType::SPHERE:
 			return createSphere();
 		default:
-			LOG_ERROR("createPrimative: {0} is not a valid primative mesh type", type);
+			LOG_ERROR("createPrimitive: {0} is not a valid primitive mesh type", type);
 
 			return nullptr;
 		}
 	}
 
-	void MeshComponent::loadPrimativeMesh(PrimativeMeshType type, MeshComponent* mesh)
+	void MeshComponent::loadPrimitiveMesh(PrimitiveMeshType type, MeshComponent* mesh)
 	{
-		std::shared_ptr<MeshComponent> primative;
+		std::shared_ptr<MeshComponent> primitive;
 		std::vector<Vertex> vertices{};
 		std::vector<uint32_t> indices{};
 
-		// TODO: Implement primative mesh creation
+		// TODO: Implement primitive mesh creation
 		switch (type)
 		{
-		case PrimativeMeshType::PLANE:
-			primative = createPlane();
+		case PrimitiveMeshType::PLANE:
+			primitive = createPlane();
 			break;
-		case PrimativeMeshType::CUBE:
-			primative = createCube();
+		case PrimitiveMeshType::CUBE:
+			primitive = createCube();
 			break;
-		case PrimativeMeshType::CYLINDER:
+		case PrimitiveMeshType::CYLINDER:
 			break;
-		case PrimativeMeshType::SPHERE:
-			primative = createSphere();
+		case PrimitiveMeshType::SPHERE:
+			primitive = createSphere();
 			break;
 		default:
-			LOG_ERROR("loadPrimativeMesh: {0} is not a valid primative mesh type", type);
+			LOG_ERROR("loadPrimitiveMesh: {0} is not a valid primitive mesh type", type);
 		}
-		if (primative == nullptr)
+		if (primitive == nullptr)
 			return;
 
-		mesh->meshData = primative->meshData;
+		mesh->meshData = primitive->meshData;
 	}
 
-	std::string MeshComponent::primativeTypeToString(PrimativeMeshType type)
+	std::string MeshComponent::primitiveTypeToString(PrimitiveMeshType type)
 	{
 		switch (type)
 		{
-		case PrimativeMeshType::PLANE:
+		case PrimitiveMeshType::PLANE:
 			return "PLANE";
-		case PrimativeMeshType::CUBE:
+		case PrimitiveMeshType::CUBE:
 			return "CUBE";
-		case PrimativeMeshType::CYLINDER:
+		case PrimitiveMeshType::CYLINDER:
 			return "CYLINDER";
-		case PrimativeMeshType::SPHERE:
+		case PrimitiveMeshType::SPHERE:
 			return "SPHERE";
-		case PrimativeMeshType::NONE:
+		case PrimitiveMeshType::NONE:
 			return "NONE";
 		default:
-			LOG_ERROR("primativeTypeToString: {0} is not a valid primative mesh type", type);
+			LOG_ERROR("primitiveTypeToString: {0} is not a valid primitive mesh type", type);
 			return "";
 		}
 	}
 
-	PrimativeMeshType MeshComponent::stringToPrimativeType(const std::string& type)
+	PrimitiveMeshType MeshComponent::stringToPrimitiveType(const std::string& type)
 	{
 		if (type == "PLANE")
-			return PrimativeMeshType::PLANE;
+			return PrimitiveMeshType::PLANE;
 		else if (type == "CUBE")
-			return PrimativeMeshType::CUBE;
+			return PrimitiveMeshType::CUBE;
 		else if (type == "CYLINDER")
-			return PrimativeMeshType::CYLINDER;
+			return PrimitiveMeshType::CYLINDER;
 		else if (type == "SPHERE")
-			return PrimativeMeshType::SPHERE;
+			return PrimitiveMeshType::SPHERE;
 		else
 		{
-			LOG_ERROR("stringToPrimativeType: {0} is not a valid primative mesh type", type);
-			return PrimativeMeshType::CUBE;
+			LOG_ERROR("stringToPrimitiveType: {0} is not a valid primitive mesh type", type);
+			return PrimitiveMeshType::CUBE;
 		}
 	}
 
@@ -316,8 +316,8 @@ namespace engine
 		indices.push_back(22); indices.push_back(23); indices.push_back(20);
 
 		MeshComponent cube = MeshComponent(vertices, indices);
-		cube.primativeType = PrimativeMeshType::CUBE;
-		cube.primativeTypeAsString = primativeTypeToString(PrimativeMeshType::CUBE);
+		cube.primitiveType = PrimitiveMeshType::CUBE;
+		cube.primitiveTypeAsString = primitiveTypeToString(PrimitiveMeshType::CUBE);
 		return std::make_shared<MeshComponent>(cube);
 	}
 	std::shared_ptr<MeshComponent> MeshComponent::createSphere(int stacks, int slices)
@@ -376,8 +376,8 @@ namespace engine
 		}
 
 		std::shared_ptr<MeshComponent> mesh = std::make_shared<MeshComponent>(vertices, indices);
-		mesh->primativeType = PrimativeMeshType::SPHERE;
-		mesh->primativeTypeAsString = primativeTypeToString(PrimativeMeshType::SPHERE);
+		mesh->primitiveType = PrimitiveMeshType::SPHERE;
+		mesh->primitiveTypeAsString = primitiveTypeToString(PrimitiveMeshType::SPHERE);
 		return mesh;
 	}
 	std::shared_ptr<MeshComponent> MeshComponent::createPlane()
@@ -396,8 +396,8 @@ namespace engine
 		indices.push_back(0); indices.push_back(3); indices.push_back(2);
 
 		std::shared_ptr<MeshComponent> mesh = std::make_shared<MeshComponent>(vertices, indices);
-		mesh->primativeType = PrimativeMeshType::PLANE;
-		mesh->primativeTypeAsString = primativeTypeToString(PrimativeMeshType::PLANE);
+		mesh->primitiveType = PrimitiveMeshType::PLANE;
+		mesh->primitiveTypeAsString = primitiveTypeToString(PrimitiveMeshType::PLANE);
 		return mesh;
 	}
 	void MeshComponent::createVertexArray()

@@ -87,8 +87,8 @@ namespace engine
 
 	void MultiplayerGame::initialize()
 	{
-		std::shared_ptr<MeshComponent> localMesh = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
-		std::shared_ptr<MeshComponent> remoteMesh = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
+		std::shared_ptr<MeshComponent> localMesh = engine::MeshComponent::createPrimitive(PrimitiveMeshType::CUBE);
+		std::shared_ptr<MeshComponent> remoteMesh = engine::MeshComponent::createPrimitive(PrimitiveMeshType::CUBE);
 
 		engine::PhysicsComponent localPhysicsComponent = engine::PhysicsComponent(false);
 		localPhysicsComponent.setForce(glm::vec3(0, 0, 0));

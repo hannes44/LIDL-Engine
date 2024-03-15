@@ -27,7 +27,7 @@ GameObjects:
       - name: Mesh
         Id: gpSgRZXGDOvFcawOHpXvxdqEVXdnBRNr
         OBJ File: ""
-        Primative Type: CUBE
+        Primitive Type: CUBE
         Material: ZDVtTczArxXwTkBBNKMJDVZSvHmrmuWR
         Render From Camera Transform: false
         Is Visible: true
@@ -55,7 +55,7 @@ GameObjects:
       - name: Mesh
         Id: gpSgRZXGDOvFcawOHpXvxdqEVXdnBRNr
         OBJ File: ""
-        Primative Type: CUBE
+        Primitive Type: CUBE
         Material: ZDVtTczArxXwTkBBNKMJDVZSvHmrmuWR
         Render From Camera Transform: false
         Is Visible: true
@@ -90,7 +90,7 @@ GameObjects:
       - name: Mesh
         Id: gpSgRZXGDOvFcawOHpXvxdqEVXdnBRNr
         OBJ File: ""
-        Primative Type: CUBE
+        Primitive Type: CUBE
         Material: ZDVtTczArxXwTkBBNKMJDVZSvHmrmuWR
         Render From Camera Transform: false
         Is Visible: true
@@ -133,7 +133,7 @@ GameObjects:
       - name: Mesh
         Id: gpSgRZXGDOvFcawOHpXvxdqEVXdnBRNr
         OBJ File: ""
-        Primative Type: CUBE
+        Primitive Type: CUBE
         Material: ZDVtTczArxXwTkBBNKMJDVZSvHmrmuWR
         Render From Camera Transform: false
         Is Visible: true

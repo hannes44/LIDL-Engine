@@ -35,9 +35,9 @@ namespace engine {
 		amogusMaterial.lock()->baseColor = glm::vec3(1.f, 0, 0);
 		meshComponent1->setMaterial(amogusMaterial);
 		
-		std::shared_ptr<MeshComponent> meshComponent2 = MeshComponent::createPrimative(PrimativeMeshType::CUBE);
+		std::shared_ptr<MeshComponent> meshComponent2 = MeshComponent::createPrimitive(PrimitiveMeshType::CUBE);
 
-		std::shared_ptr<MeshComponent> platformMesh = MeshComponent::createPrimative(PrimativeMeshType::CUBE);
+		std::shared_ptr<MeshComponent> platformMesh = MeshComponent::createPrimitive(PrimitiveMeshType::CUBE);
 		std::weak_ptr<engine::Material> platformMaterial = createMaterial("PlatformMaterial");
 		platformMaterial.lock()->baseColor = glm::vec3(0, 0.5f, 0);
 		platformMesh->setMaterial(platformMaterial);

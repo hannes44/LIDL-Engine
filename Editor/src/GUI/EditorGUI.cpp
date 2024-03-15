@@ -589,7 +589,7 @@ namespace engine
 				{
 					std::shared_ptr<GameObject> cube = std::make_shared<GameObject>();
 					cube->name = "Cube";
-					cube->addComponent(MeshComponent::createPrimative(PrimativeMeshType::CUBE));
+					cube->addComponent(MeshComponent::createPrimitive(PrimitiveMeshType::CUBE));
 					game->addGameObject(cube);
 					selectedObject = cube;
 				}
@@ -597,7 +597,7 @@ namespace engine
 				{
 					std::shared_ptr<GameObject> sphere = std::make_shared<GameObject>();
 					sphere->name = "Sphere";
-					sphere->addComponent(MeshComponent::createPrimative(PrimativeMeshType::SPHERE));
+					sphere->addComponent(MeshComponent::createPrimitive(PrimitiveMeshType::SPHERE));
 					game->addGameObject(sphere);
 					selectedObject = sphere;
 				}
@@ -605,7 +605,7 @@ namespace engine
 				{
 					std::shared_ptr<GameObject> plane = std::make_shared<GameObject>();
 					plane->name = "Plane";
-					plane->addComponent(MeshComponent::createPrimative(PrimativeMeshType::PLANE));
+					plane->addComponent(MeshComponent::createPrimitive(PrimitiveMeshType::PLANE));
 					game->addGameObject(plane);
 					selectedObject = plane;
 				}

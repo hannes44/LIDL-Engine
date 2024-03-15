@@ -11,7 +11,7 @@ GameObjects:
       - name: Mesh
         Id: rluPIYywQGnUlmCaWRfpNeZLgYNQWHOF
         OBJ File: ""
-        Primative Type: CUBE
+        Primitive Type: CUBE
         Material: ctrKNAPMdyjxTjVgLBOmGAQjlKVXGnkT
         Render From Camera Transform: false
         Is Visible: true
@@ -43,7 +43,7 @@ GameObjects:
       - name: Mesh
         Id: qzjCmBPCUfAKJTtzcpkUnjWmfENLhNIM
         OBJ File: ""
-        Primative Type: CUBE
+        Primitive Type: CUBE
         Material: CVwnqOlsimwerkqcOzAGUHHNCOOXGDWQ
         Render From Camera Transform: false
         Is Visible: true

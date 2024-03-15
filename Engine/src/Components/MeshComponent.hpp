@@ -15,7 +15,7 @@
 
 namespace engine
 {
-	enum PrimativeMeshType
+	enum PrimitiveMeshType
 	{
 		CUBE,
 		SPHERE,
@@ -43,13 +43,13 @@ namespace engine
 
 		static std::shared_ptr<MeshComponent> createMeshFromObjFile(const std::string& filename, bool isGameAsset = true);
 
-		static void loadPrimativeMesh(PrimativeMeshType type, MeshComponent* mesh);
+		static void loadPrimitiveMesh(PrimitiveMeshType type, MeshComponent* mesh);
 
-		static std::shared_ptr<MeshComponent> createPrimative(PrimativeMeshType type);
+		static std::shared_ptr<MeshComponent> createPrimitive(PrimitiveMeshType type);
 
-		static std::string primativeTypeToString(PrimativeMeshType type);
+		static std::string primitiveTypeToString(PrimitiveMeshType type);
 
-		static PrimativeMeshType stringToPrimativeType(const std::string& type);
+		static PrimitiveMeshType stringToPrimitiveType(const std::string& type);
 
 		std::string getName() override { return componentName; };
 
@@ -62,9 +62,9 @@ namespace engine
 
 		bool isVisible = true;
 
-		PrimativeMeshType primativeType = NONE;
+		PrimitiveMeshType primitiveType = NONE;
 
-		std::string primativeTypeAsString = primativeTypeToString(primativeType);
+		std::string primitiveTypeAsString = primitiveTypeToString(primitiveType);
 
 		void drawBoundingBox(CameraComponent* camera);
 		BoundingBox getBoundingBox();
@@ -80,7 +80,7 @@ namespace engine
 			return
 			{
 				{SerializableType::STRING, "OBJ File", "The file path to the obj file", &objFileName},
-				{SerializableType::STRING, "Primative Type", "The type of primative to create", &primativeTypeAsString},
+				{SerializableType::STRING, "Primitive Type", "The type of primitive to create", &primitiveTypeAsString},
 				{SerializableType::STRING, "Material", "Id of the meshes material", &getMaterial()->uuid.id},
 				{SerializableType::BOOLEAN, "Render From Camera Transform", "If true, the mesh will be rendered using the camera transform * model transform", &renderFromCameraTransform},
 				{SerializableType::BOOLEAN, "Is Visible", "If true, the mesh will be rendered", &isVisible}
