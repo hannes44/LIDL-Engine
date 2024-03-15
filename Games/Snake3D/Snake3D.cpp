@@ -69,7 +69,7 @@ namespace engine
 			return;
 
 		// Manual triggers of actions
-		if (event.getKey() == Key::SPACE)
+		if (event.getKey() == Key::B)
 			addBody();
 		else if (event.getKey() == Key::RCTRL)
 			consumeApple();
