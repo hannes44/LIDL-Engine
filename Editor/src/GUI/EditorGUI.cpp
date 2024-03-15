@@ -245,9 +245,9 @@ namespace engine
 						game->deleteTexture(lockedTexture->getUUID().id);
 						EventManager::getInstance().notify(EventType::SelectableDeleted, textureId);
 					}
+
 				}
 			}
-
 			if ((Key)event.getKey() == Key::ESCAPE)
 			{
 				noGUIMode = !noGUIMode;
@@ -838,69 +838,58 @@ namespace engine
 				{
 					isAddComponentVisible = !isAddComponentVisible;
 				}
+				if (isAddComponentVisible)
+				{
+					ShowAddComponent();
+				}
 			}
-		}
-		if (isAddComponentVisible)
-		{
-			ShowAddComponent();
 		}
 	}
+
 	void EditorGUI::ShowAddComponent()
 	{
-		ImGuiTextFilter Filter;
+		ImGui::Text("Add Component");
+		ImGui::Separator();
 
-		ImGuiWindowFlags windowFlags = 0;
-		windowFlags |= ImGuiWindowFlags_NoTitleBar;
-		windowFlags |= ImGuiWindowFlags_NoResize;
-		windowFlags |= ImGuiWindowFlags_NoScrollbar;
+		std::vector<std::string> allComponentNames = { "Box Collider", "Camera", "Mesh", "Physics", "PointLight", "SpotLight", "Sphere Collider", "Controllable" };
+		std::vector<std::string> scriptComponentNames = ResourceManager::getInstance()->getAllCSharpScriptsInActiveGame();
 
-		ImGui::SetNextWindowSize(ImVec2(360, 500));
-
-		if (ImGui::Begin("Add Component", nullptr, windowFlags))
+		// Remove the extension from the script names
+		for (auto& scriptName : scriptComponentNames)
 		{
-			ImGui::Text("Add Component");
-			ImGui::Separator();
+			scriptName = scriptName.substr(0, scriptName.find_last_of('.'));
+		}
 
-			std::vector<std::string> allComponentNames = { "Box Collider", "Camera", "Mesh", "Physics", "PointLight", "SpotLight", "Sphere Collider", "Controllable" };
-			std::vector<std::string> scriptComponentNames = ResourceManager::getInstance()->getAllCSharpScriptsInActiveGame();
+		allComponentNames.insert(allComponentNames.end(), scriptComponentNames.begin(), scriptComponentNames.end());
 
-			// Remove the extension from the script names
-			for (auto& scriptName : scriptComponentNames)
+		if (ImGui::BeginListBox("##"))
+		{
+			for (auto componentName : allComponentNames)
 			{
-				scriptName = scriptName.substr(0, scriptName.find_last_of('.'));
-			}
-
-			allComponentNames.insert(allComponentNames.end(), scriptComponentNames.begin(), scriptComponentNames.end());
-
-			if (ImGui::BeginListBox("##"))
-			{
-				for (auto componentName : allComponentNames)
+				if (ImGui::Selectable(componentName.c_str(), false, ImGuiSelectableFlags_AllowDoubleClick))
 				{
-					if (ImGui::Selectable(componentName.c_str(), false, ImGuiSelectableFlags_AllowDoubleClick))
+					if (ImGui::IsMouseDoubleClicked(0))
 					{
-						if (ImGui::IsMouseDoubleClicked(0))
-						{
-							isAddComponentVisible = !isAddComponentVisible;
+						isAddComponentVisible = !isAddComponentVisible;
 
-							if (auto lockedSelectedObject = selectedObject.lock())
+						if (auto lockedSelectedObject = selectedObject.lock())
+						{
+							if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
 							{
-								if (auto lockedGameObject = dynamic_pointer_cast<GameObject>(lockedSelectedObject))
-								{
-									lockedGameObject->addComponent(ComponentFactory::createComponent(componentName));
-								}
+								lockedGameObject->addComponent(ComponentFactory::createComponent(componentName));
 							}
 						}
 					}
 				}
-				ImGui::EndListBox();
 			}
-			if (ImGui::Button("Close"))
-			{
-				isAddComponentVisible = !isAddComponentVisible;
-			}
+			ImGui::EndListBox();
 		}
-		ImGui::End();
+		if (ImGui::Button("Close"))
+		{
+			isAddComponentVisible = !isAddComponentVisible;
+		}
 	}
+
 	void EditorGUI::drawGameSettingsTab()
 	{
 		ImGui::Text("Application FPS: %.1f", ImGui::GetIO().Framerate);
