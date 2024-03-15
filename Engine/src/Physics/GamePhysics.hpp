@@ -20,7 +20,7 @@ namespace engine
 		GamePhysics() {};
 
 		void sendMultiplayerState(Game* game);
-		std::string MULTIPLAYER_STATE_FOLDER = "../../MultiplayerStates/";
+		std::string MULTIPLAYER_STATE_FOLDER = "../../../MultiplayerStates/";
 		std::mutex multiplayerSendLock{};
 		int multiplayerStateUpdateIntervalMS = 25;
 		long long lastMultiplayerStateUpdateTimestamp = 0;
