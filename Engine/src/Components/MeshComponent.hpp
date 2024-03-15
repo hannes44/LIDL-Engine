@@ -107,6 +107,12 @@ namespace engine
 
 		static std::shared_ptr<MeshComponent> createPlane();
 
+		glm::vec3 maxPoints{};
+		void generateMaxPoints();
+		glm::mat4 lastTransformMatrix{};
+		bool isMaxPointsValid();
+		static glm::mat4 getComparableTransformMatrix(glm::mat4 transformMatrix);
+
 		void createVertexArray();
 
 		std::shared_ptr<VertexArray> vertexArray = nullptr;
