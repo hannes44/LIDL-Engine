@@ -93,6 +93,8 @@ namespace engine
 
 		void pasteGameObject();
 
+		bool isMouseInsideViewPort();
+
 		// The editor camera and its physics settings are set up here
 		void setupEditorCamera();
 
@@ -134,6 +136,8 @@ namespace engine
 
 		// In no GUI mode, the gui will not be rendered and the game will accept relative
 		bool noGUIMode = false;
+
+		bool isMouseOverGuizmo = false;
 
 		CameraComponent* getActiveCamera();
 

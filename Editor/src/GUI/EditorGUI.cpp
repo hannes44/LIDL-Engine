@@ -253,20 +253,27 @@ namespace engine
 				noGUIMode = !noGUIMode;
 				window.setRelativeMouseMode(noGUIMode);
 			}
-
-			if ((Key)event.getKey() == Key::B)
+		}
+		if (EventType == InputEventType::MouseButtonDown)
+		{
+			// Select game object on mouse click
+			if ((Key)event.getButton() == Key::MOUSE_LEFT)
 			{
-				glm::vec3 rayDirection = Utils::getMouseRayDirection(window, *getActiveCamera(), viewPortSize, viewPortPosition);
-				glm::vec3 rayOrigin = getActiveCamera()->getTransform().getPosition();
+				// Only select objects if the mouse is inside the viewport and not over guizmos
+				if (isMouseInsideViewPort() && !isMouseOverGuizmo)
+				{
+					glm::vec3 rayDirection = Utils::getMouseRayDirection(window, *getActiveCamera(), viewPortSize, viewPortPosition);
+					glm::vec3 rayOrigin = getActiveCamera()->getTransform().getPosition();
 
-				auto gameObjects = Utils::getAABBGameObjectCollisions(game.get(), rayOrigin, rayDirection);
-				if (gameObjects.size() > 0)
-				{
-					selectedObject = gameObjects[0];
-				}
-				else
-				{
-					selectedObject.reset();
+					auto gameObjects = Utils::getAABBGameObjectCollisions(game.get(), rayOrigin, rayDirection);
+					if (gameObjects.size() > 0)
+					{
+						selectedObject = gameObjects[0];
+					}
+					else
+					{
+						selectedObject.reset();
+					}
 				}
 			}
 		}
@@ -766,6 +773,15 @@ namespace engine
 			glm::mat4 projectionMatrix = getActiveCamera()->getProjectionMatrix(editorSettings.rendererSettings.width, editorSettings.rendererSettings.height);
 
 			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(projectionMatrix), gizmoOperation, isGizmoOperationInWorldSpace ? ImGuizmo::WORLD : ImGuizmo::LOCAL, modelMatrixPtr);
+		}
+
+		if (ImGuizmo::IsOver())
+		{
+			isMouseOverGuizmo = true;
+		}
+		else
+		{
+			isMouseOverGuizmo = false;
 		}
 	}
 
@@ -1424,6 +1440,20 @@ namespace engine
 			game->addGameObject(newGameObject);
 			selectedObject = newGameObject;
 		}
+	}
+
+	bool EditorGUI::isMouseInsideViewPort()
+	{
+		int mouseX, mouseY;
+		window.getMousePosition(&mouseX, &mouseY);
+
+		if (mouseX < viewPortPosition.x || mouseX > (viewPortPosition.x + viewPortSize.x))
+			return false;
+
+		if (mouseY < viewPortPosition.y || mouseY >(viewPortPosition.y + viewPortSize.y))
+			return false;
+
+		return true;
 	}
 
 	void EditorGUI::setupEditorCamera()
