@@ -93,6 +93,15 @@ namespace engine
 
 		void pasteGameObject();
 
+		bool isMouseInsideViewPort();
+
+		// The editor camera and its physics settings are set up here
+		void setupEditorCamera();
+
+		void createEditorTextures();
+
+		void createEditorInputActions();
+
 		// The framebuffer that the game will be rendered into
 		std::shared_ptr<Texture> viewPortTexture;
 
@@ -112,6 +121,12 @@ namespace engine
 
 		ActiveViewPort activeViewPort = ActiveViewPort::Scene;
 
+		// The game objects that are only visible in the editor
+		std::set<std::shared_ptr<GameObject>> editorGameObjects;
+
+		// Physics settings for the editor camera
+		GamePhysicsSettings editorPhysicsSettings;
+
 		// Flag for when the play button is pressed
 		bool wasPlayButtonPressed = false;
 
@@ -121,6 +136,10 @@ namespace engine
 
 		// In no GUI mode, the gui will not be rendered and the game will accept relative
 		bool noGUIMode = false;
+
+		bool isMouseOverGuizmo = false;
+
+		bool isMouseOverGuizmosOperationWindow = false;
 
 		CameraComponent* getActiveCamera();
 
