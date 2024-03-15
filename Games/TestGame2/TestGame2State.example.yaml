@@ -27,7 +27,7 @@ GameObjects:
       - name: Mesh
         Id: MYIeSkTLqsfQRfnmROOFsZZVAgeeveDR
         OBJ File: amugus.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: iMJtbLCfvhBwRDkBLOmkYFAJebmOhteB
         Render From Camera Transform: false
         Is Visible: true
@@ -62,7 +62,7 @@ GameObjects:
       - name: Mesh
         Id: fgfLomgfBvQQseYfBJntTbFwpTMKPkfd
         OBJ File: ""
-        Primative Type: CUBE
+        Primitive Type: CUBE
         Material: kGagaCRSWBYchrmjSpsnBDQDNATrNVJW
         Render From Camera Transform: false
         Is Visible: true
@@ -98,7 +98,7 @@ GameObjects:
       - name: Mesh
         Id: AXzpXcQJMJDkwnQpmZFRdSIxWSkXtBWl
         OBJ File: ""
-        Primative Type: CUBE
+        Primitive Type: CUBE
         Material: YjZDwhRNvdqwYcldoxudgWbXKjaCumAJ
         Render From Camera Transform: false
         Is Visible: true

@@ -11,7 +11,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYeVCuBWNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
@@ -27,7 +27,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYeVCuBWNaiQIgriOsyGFDHLMC
         OBJ File: raw2.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
@@ -43,7 +43,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYeVCuBWNaiQIgriOsySlHLJG
         OBJ File: ""
-        Primative Type: CUBE
+        Primitive Type: CUBE
         Material: hZYYcYtKpiPCHvMlODrrndOPQMbqNcru
         Render From Camera Transform: false
         Is Visible: true
@@ -69,7 +69,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYeVCuBWNaiGKDgriOsySlHLMC
         OBJ File: raw2.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
@@ -85,7 +85,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYeVCuBWNaiiOsySlHLMC
         OBJ File: raw2.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
@@ -101,7 +101,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYeVCugfdNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
@@ -117,7 +117,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYeVCuBhgfaiQIgriOsySlHLMC
         OBJ File: raw2.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
@@ -133,7 +133,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXdsfCuBWNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
@@ -149,7 +149,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXsaasCuBWNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
@@ -165,7 +165,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYeBWNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: ItXRTbrlfhBepfgdpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
@@ -181,7 +181,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYeVCuBWNaiQIgriOsySlHLMCdjgfkl
         OBJ File: raw2.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
@@ -197,7 +197,7 @@ GameObjects:
       - name: Mesh
         Id: EKElUQjpuVjLQltNcVcFaceeUzwNZTWc
         OBJ File: Lobster.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: AJwGhrIZOsYfVvbtpRmHJxupYJYZgrrn
         Render From Camera Transform: false
         Is Visible: true
@@ -213,7 +213,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYeVCuBWNaiQIgriOsySlHLfsdgsdMC
         OBJ File: KitchenKnife.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: UZVAVXNBfagCfyiPFCiALYYhQcCkfiTs
         Render From Camera Transform: false
         Is Visible: true
@@ -229,7 +229,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYeVCuBWNaiQIgdgfdOsySlHLMC
         OBJ File: Knife.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: JHnYLBHgMrJlEapYEEiJewGOxWIDdlOH
         Render From Camera Transform: true
         Is Visible: false
@@ -261,7 +261,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYeadsfasuBWNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
@@ -277,7 +277,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYeVCadfafdsBWNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
@@ -293,7 +293,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYesdfgVCuBWNaiQIgriOsySlHLMC
         OBJ File: FlashLight.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: inbGYwvvrCOUbkIgSZPVSjfRXOrVrbgt
         Render From Camera Transform: true
         Is Visible: true
@@ -309,7 +309,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYeVCuBWNaisgdfQIgriOsySlHLMC
         OBJ File: raw2.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
@@ -325,7 +325,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYeVCuBWNaiQIgriOsySlHLMCsdfggsdf
         OBJ File: House.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: jhlXRMcQvymIssELRfYEwWNFIGGUTuFa
         Render From Camera Transform: false
         Is Visible: true
@@ -341,7 +341,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYeVCuBWNaiQIgriOsySlHLMCdsfgdfg
         OBJ File: GLOCK19.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: COTEmqWtabZVUsHHEpmQVDpKbypoOODB
         Render From Camera Transform: true
         Is Visible: true
@@ -420,7 +420,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYeVCuBsdfgaiQIgriOsySlHLMC
         OBJ File: raw2.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
@@ -436,7 +436,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXgsdfCuBWNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
@@ -452,7 +452,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYswdfhuBWNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
@@ -468,7 +468,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYeVsdgfhWNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
@@ -484,7 +484,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYeVCshdQIgriOsySlHLMC
         OBJ File: AK-48.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: zjOREuYjBldEKQQErZkIggPbPzKYwBll
         Render From Camera Transform: true
         Is Visible: false
@@ -500,7 +500,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYeVCudfdaiQIgriOsySlHLMC
         OBJ File: ""
-        Primative Type: PLANE
+        Primitive Type: PLANE
         Material: bkbCvuwlPUqrIjktAUENfFgZDntkKrIZ
         Render From Camera Transform: false
         Is Visible: true
@@ -521,7 +521,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqXYsdfgaiQIgriOsySlHLMC
         OBJ File: raw2.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true
@@ -537,7 +537,7 @@ GameObjects:
       - name: Mesh
         Id: DRMzIdqasdBWNaiQIgriOsySlHLMC
         OBJ File: raw2.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: ItXRTbrlfhBepcJpCCYkCbOHaWTtsbsx
         Render From Camera Transform: false
         Is Visible: true

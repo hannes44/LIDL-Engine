@@ -849,10 +849,10 @@ namespace engine
 						MeshComponent::loadMeshFromOBJFile(meshComponent->objFileName, meshComponent);
 					}
 
-					if (meshComponent->primativeTypeAsString != "" && meshComponent->primativeTypeAsString != "NONE")
+					if (meshComponent->primitiveTypeAsString != "" && meshComponent->primitiveTypeAsString != "NONE")
 					{
-						meshComponent->primativeType = MeshComponent::stringToPrimativeType(meshComponent->primativeTypeAsString);
-						MeshComponent::loadPrimativeMesh(meshComponent->primativeType, meshComponent);
+						meshComponent->primitiveType = MeshComponent::stringToPrimitiveType(meshComponent->primitiveTypeAsString);
+						MeshComponent::loadPrimitiveMesh(meshComponent->primitiveType, meshComponent);
 					}
 
 					std::string materialId = node["Material"].as<std::string>();

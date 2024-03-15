@@ -32,7 +32,7 @@ namespace engine
 		ss << "Body " << index;
 		body->name = ss.str();
 		
-		body->addComponent(engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE));
+		body->addComponent(engine::MeshComponent::createPrimitive(PrimitiveMeshType::CUBE));
 		body->addComponent(std::make_unique<engine::BoxColliderComponent>(engine::BoxColliderComponent(glm::vec3(0, 0, 0), 0.7f * glm::vec3(1.f, 1.f, 1.f))));
 
 		return std::shared_ptr<GameObject>(body);

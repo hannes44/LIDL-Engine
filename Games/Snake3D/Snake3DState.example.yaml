@@ -32,7 +32,7 @@ GameObjects:
       - name: Mesh
         Id: FlYrKpCGMfMOQRjqUbTjTNHkjoMNtVSK
         OBJ File: apple.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: UEwBpZSsTMtxVjrCEVtAMWtGYTWWXhJP
         Render From Camera Transform: false
         Is Visible: true
@@ -63,7 +63,7 @@ GameObjects:
       - name: Mesh
         Id: XIHooOSXoOOoLsRlYiVggAGttPrZtBmH
         OBJ File: amugus.obj
-        Primative Type: NONE
+        Primitive Type: NONE
         Material: OtoySuUKRvQljOIIuRpMwjhfAWdcrTzQ
         Render From Camera Transform: false
         Is Visible: true

@@ -32,11 +32,11 @@ namespace engine {
 	void TestGame::initialize() {
 
 		std::shared_ptr<MeshComponent> meshComponent1 = engine::MeshComponent::createMeshFromObjFile("amugus.obj");
-		std::shared_ptr<MeshComponent> ball1Mesh = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
-		std::shared_ptr<MeshComponent> box1Mesh = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
-		std::shared_ptr<MeshComponent> box2Mesh = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
-		std::shared_ptr<MeshComponent> sphere1Mesh = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
-		std::shared_ptr<MeshComponent> sphere2Mesh = engine::MeshComponent::createPrimative(PrimativeMeshType::CUBE);
+		std::shared_ptr<MeshComponent> ball1Mesh = engine::MeshComponent::createPrimitive(PrimitiveMeshType::CUBE);
+		std::shared_ptr<MeshComponent> box1Mesh = engine::MeshComponent::createPrimitive(PrimitiveMeshType::CUBE);
+		std::shared_ptr<MeshComponent> box2Mesh = engine::MeshComponent::createPrimitive(PrimitiveMeshType::CUBE);
+		std::shared_ptr<MeshComponent> sphere1Mesh = engine::MeshComponent::createPrimitive(PrimitiveMeshType::CUBE);
+		std::shared_ptr<MeshComponent> sphere2Mesh = engine::MeshComponent::createPrimitive(PrimitiveMeshType::CUBE);
 
 		engine::PhysicsComponent physicsComponentWithGravity = engine::PhysicsComponent();
 		physicsComponentWithGravity.setForce(glm::vec3(0, 10, 0));
