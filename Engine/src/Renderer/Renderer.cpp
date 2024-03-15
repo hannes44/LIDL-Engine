@@ -284,6 +284,10 @@ namespace engine
 		glm::mat4 projectionMatrix = camera->getProjectionMatrix(width, height);
 
 		PointLightComponent light = PointLightComponent();
+		light.intensity = 10;
+		light.constant = 1;
+		light.linear = 0.09f;
+		light.quadratic = 0.032f;
 		light.color = glm::vec3(1, 1, 1);
 		glm::vec3 lightPosition = glm::vec3(2, 2, 0);
 

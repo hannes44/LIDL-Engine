@@ -11,9 +11,9 @@ namespace engine
 
 		float intensity = 10;
 
-		float constant = 1.0f;
-		float linear = 0.09f;
-		float quadratic = 0.032f;
+		float constant = 0.3f;
+		float linear = 0.11f;
+		float quadratic = 0.02f;
 
 		std::string getName() override { return name; };
 
