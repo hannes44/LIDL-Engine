@@ -139,6 +139,8 @@ namespace engine
 
 		bool isMouseOverGuizmo = false;
 
+		bool isMouseOverGuizmosOperationWindow = false;
+
 		CameraComponent* getActiveCamera();
 
 		EditorSettings editorSettings{};

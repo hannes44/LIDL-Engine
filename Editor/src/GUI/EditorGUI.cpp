@@ -260,7 +260,7 @@ namespace engine
 			if ((Key)event.getButton() == Key::MOUSE_LEFT)
 			{
 				// Only select objects if the mouse is inside the viewport and not over guizmos
-				if (isMouseInsideViewPort() && !isMouseOverGuizmo)
+				if (isMouseInsideViewPort() && !isMouseOverGuizmo && !isMouseOverGuizmosOperationWindow)
 				{
 					glm::vec3 rayDirection = Utils::getMouseRayDirection(window, *getActiveCamera(), viewPortSize, viewPortPosition);
 					glm::vec3 rayOrigin = getActiveCamera()->getTransform().getPosition();
@@ -1174,6 +1174,8 @@ namespace engine
 		}
 
 		ImGui::Begin("Gizmo Operation", nullptr, windowFlags);
+
+		isMouseOverGuizmosOperationWindow = ImGui::IsWindowHovered();
 
 		bool pushedStyleColor = false;
 		if (gizmoOperation == ImGuizmo::ROTATE)
