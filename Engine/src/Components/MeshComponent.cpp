@@ -1,6 +1,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/glm.hpp"
 #include <glm/gtx/quaternion.hpp>
+#include <glm/ext/matrix_relational.hpp>
 
 #include "MeshComponent.hpp"
 #include "Core/Logger.hpp"
@@ -15,7 +16,6 @@ namespace engine
 {
 	MeshComponent::MeshComponent(std::vector<Vertex> vertices, std::vector<uint32_t> indices)
 	{
-
 		meshData = std::make_shared<MeshData>(vertices, indices);
 
 		LOG_TRACE("MeshComponent: Created mesh with {0} vertices and {1} indices", vertices.size(), indices.size());
@@ -35,7 +35,7 @@ namespace engine
 	{
 		if (auto lockedMaterial = material.lock())
 			return lockedMaterial;
-		
+
 		return defaultMaterial;
 	}
 
@@ -161,12 +161,10 @@ namespace engine
 			break;
 		default:
 			LOG_ERROR("loadPrimativeMesh: {0} is not a valid primative mesh type", type);
-
 		}
 		if (primative == nullptr)
-		{
 			return;
-		}
+
 		mesh->meshData = primative->meshData;
 	}
 
@@ -212,19 +210,39 @@ namespace engine
 		Utils::drawBoundingBox(box, camera, glm::vec3(0, 0.7f, 0.3f));
 	}
 
-	BoundingBox MeshComponent::getBoundingBox() {
-		glm::vec3 maxPoints = glm::vec3();
+	void MeshComponent::generateMaxPoints() {
+		LOG_TRACE("Generating max points for mesh");
 		Transform globalTransform = gameObject->getGlobalTransform();
-
+		maxPoints = glm::vec3();
+		
 		for (auto& vertex : meshData->vertices) {
 			glm::vec4 worldPosition = globalTransform.transformMatrix * glm::vec4(vertex.position, 0);
-
-			maxPoints.x = std::max(maxPoints.x, worldPosition.x);
-			maxPoints.y = std::max(maxPoints.y, worldPosition.y);
-			maxPoints.z = std::max(maxPoints.z, worldPosition.z);
+			
+			maxPoints.x = std::max(maxPoints.x, std::abs(worldPosition.x));
+			maxPoints.y = std::max(maxPoints.y, std::abs(worldPosition.y));
+			maxPoints.z = std::max(maxPoints.z, std::abs(worldPosition.z));
 		}
 
-		return BoundingBox(globalTransform.getPosition(), maxPoints * glm::vec3(2));
+		lastTransformMatrix = getComparableTransformMatrix(globalTransform.transformMatrix);
+	}
+
+	// The max points are still valid if the transform matrix is translated, so we need to remove the translation data from the matrix to compare
+	glm::mat4 MeshComponent::getComparableTransformMatrix(glm::mat4 transformMatrix) {
+		glm::mat4 comparableMatrix = transformMatrix;
+		comparableMatrix[3] = glm::vec4{0, 0, 0, 1};
+		return comparableMatrix;
+	}
+
+	// If the transform matrix has changed, the max points need to be recalculated
+	bool MeshComponent::isMaxPointsValid() {
+		return glm::all(glm::equal(lastTransformMatrix, getComparableTransformMatrix(gameObject->getGlobalTransform().transformMatrix)));
+	}
+
+	BoundingBox MeshComponent::getBoundingBox() {
+		if(!isMaxPointsValid())
+			generateMaxPoints();
+		
+		return BoundingBox(gameObject->getGlobalTransform().getPosition(), maxPoints * glm::vec3(2));
 	}
 
 	std::shared_ptr<VertexArray> MeshComponent::getVertexArray()
