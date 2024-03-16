@@ -104,8 +104,6 @@ namespace engine
 			game->initialize();
 		}
 
-		AudioManager::getInstance().initialize();
-
 		Renderer* renderer = Renderer::getInstance();
 
 		assetManager = std::make_unique<AssetManager>(game.get());
@@ -216,7 +214,7 @@ namespace engine
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
-	void EditorGUI::handleInput(const InputEvent& event)
+	void EditorGUI::onInput(const InputEvent& event)
 	{
 		InputEventType EventType = event.getEventType();
 		if (EventType == InputEventType::KeyDown)
@@ -840,13 +838,13 @@ namespace engine
 				}
 				if (isAddComponentVisible)
 				{
-					ShowAddComponent();
+					drawAddComponent();
 				}
 			}
 		}
 	}
 
-	void EditorGUI::ShowAddComponent()
+	void EditorGUI::drawAddComponent()
 	{
 		ImGui::Text("Add Component");
 		ImGui::Separator();
@@ -920,8 +918,6 @@ namespace engine
 			ImGui::Separator();
 
 			ImGui::Text("Camera Settings");
-			ImGui::SliderFloat("Camera Speed", &editorCamera->getComponent<CameraComponent>()->movementSpeed, 0.001f, 1.0f);
-			ImGui::SliderFloat("Camera Sensitivity", &editorCamera->getComponent<CameraComponent>()->rotationSpeed, 0.001f, 0.1f);
 			ImGui::SliderFloat("Camera FOV", &editorCamera->getComponent<CameraComponent>()->fov, 0.1f, 120.0f);
 		}
 
@@ -1360,7 +1356,7 @@ namespace engine
 		ImGui::End();
 	}
 
-	bool EditorGUI::defaultCheckBox(const std::string& label, bool* value)
+	bool EditorGUI::drawDefaultCheckBox(const std::string& label, bool* value)
 	{
 		return ImGui::Checkbox(label.c_str(), value);
 	}

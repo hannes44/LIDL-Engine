@@ -14,16 +14,9 @@ namespace engine {
 	AudioManager::AudioManager() {
 	}
 
-	void AudioManager::initialize() {
-	}
-
 	AudioManager& AudioManager::getInstance() {
 		static AudioManager instance;
 		return instance;
-	}
-
-	void AudioManager::update() {
-
 	}
 
 	void AudioManager::playSound(const std::string& fileName) {

@@ -11,20 +11,6 @@ namespace engine
 		friend class GamePhysics;
 		PhysicsComponent(bool enableGravity = true) : enableGravity(enableGravity) {};
 
-		bool enableGravity = true;
-		bool overrideGravityCoefficient = false;
-
-		float gravityCoefficient = 9.82f;
-		float mass = 1.f;
-
-		glm::vec3 currentForce{ 0 };
-		glm::vec3 currentAcceleration{ 0 };
-		glm::vec3 currentVelocity{ 0 };
-
-		glm::vec3 forward = glm::vec3(0, 0, -1);
-		glm::vec3 right = glm::vec3(1, 0, 0);
-		glm::vec3 up = glm::vec3(0, 1, 0);
-
 		glm::vec3 getAcceleration() { return currentAcceleration; };
 		glm::vec3 getForce() { return currentForce; };
 		void applyForce(glm::vec3 force) { currentForce += force; };
@@ -39,6 +25,20 @@ namespace engine
 		std::shared_ptr<Component> clone() override {
 			return std::make_shared<PhysicsComponent>(*this);
 		}
+
+		bool enableGravity = true;
+		bool overrideGravityCoefficient = false;
+
+		float gravityCoefficient = 9.82f;
+		float mass = 1.f;
+
+		glm::vec3 currentForce{ 0 };
+		glm::vec3 currentAcceleration{ 0 };
+		glm::vec3 currentVelocity{ 0 };
+
+		glm::vec3 forward = glm::vec3(0, 0, -1);
+		glm::vec3 right = glm::vec3(1, 0, 0);
+		glm::vec3 up = glm::vec3(0, 1, 0);
 
 		std::vector<SerializableVariable> getSerializableVariables() override
 		{

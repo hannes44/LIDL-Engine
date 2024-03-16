@@ -11,7 +11,7 @@
 	  and subscribe to the InputSystem by calling InputSystem::addListener(this)
 
 	 handleInput function example:
-	 void handleInput(const InputEvent& event, const std::string& EventType) override {
+	 void onInput(const InputEvent& event, const std::string& EventType) override {
 		 if (EventType == "KEY_DOWN") {
 			 if (event.key == Key::A) {
 				 // Do something ex. set acceleration to 1
@@ -30,7 +30,7 @@ namespace engine {
 	public:
 		InputListener();
 
-		virtual void handleInput(const InputEvent& event);
+		virtual void onInput(const InputEvent& event);
 
 		std::string getInstance() const;
 

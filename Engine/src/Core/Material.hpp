@@ -11,23 +11,6 @@ namespace engine
 	class Material : public Selectable, public Serializable
 	{
 	public:
-		glm::vec3 baseColor{ 1,1,1 };
-
-		// Note: handeled separately, do not add to serializable variables
-		bool isExternalMultiplayerObject = false;
-
-		float transparency = 1;
-		glm::vec3 emission = { 0,0,0 };
-		float roughness = 0;
-		float shininess = 0.5;
-
-		std::string name = "Default Material";
-
-		std::weak_ptr<Texture> diffuseTexture;
-		std::weak_ptr<Texture> specularTexture;
-
-		UUID uuid{};
-
 		std::string getName() override
 		{
 			return name;
@@ -42,6 +25,22 @@ namespace engine
 		{
 			baseColor = color;
 		}
+
+		// Note: handeled separately, do not add to serializable variables
+		bool isExternalMultiplayerObject = false;
+
+		glm::vec3 baseColor{ 1,1,1 };
+		float transparency = 1;
+		glm::vec3 emission = { 0,0,0 };
+		float roughness = 0;
+		float shininess = 0.5;
+
+		std::string name = "Default Material";
+
+		std::weak_ptr<Texture> diffuseTexture;
+		std::weak_ptr<Texture> specularTexture;
+
+		UUID uuid{};
 
 		std::vector<SerializableVariable> getSerializableVariables() override
 		{
@@ -59,7 +58,6 @@ namespace engine
 				{ SerializableType::STRING, "Specular Texture", "", specularId},
 				{ SerializableType::STRING, "Id", "", &uuid}
 			};
-
 		};
 	private:
 		std::string dummyId = "";

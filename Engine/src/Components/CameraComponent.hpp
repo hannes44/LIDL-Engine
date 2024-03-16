@@ -11,9 +11,20 @@ namespace engine
 	public:
 		CameraComponent() {};
 		
-        void update();
+        void update(float deltaTime) override;
 
-        bool isMainCamera = false;
+		Transform getTransform();
+		glm::mat4 getViewMatrix();
+		glm::mat4 getProjectionMatrix();
+		glm::mat4 getProjectionMatrix(int width, int height);
+		std::string getName() override { return "Camera"; };
+
+		std::shared_ptr<Component> clone() override { return std::make_shared<CameraComponent>(*this); }
+
+		float fov = 50;
+		float nearPlane = 0.1;
+		float farPlane = 1000;
+		bool isMainCamera = false;
 
 		std::vector<SerializableVariable> getSerializableVariables() override
 		{
@@ -25,23 +36,5 @@ namespace engine
 				{SerializableType::BOOLEAN, "Is Main Camera", "Is this the camera that will render the game", &isMainCamera},
 			};
 		};
-
-		Transform getTransform();
-		glm::mat4 getViewMatrix();
-		glm::mat4 getProjectionMatrix();
-		glm::mat4 getProjectionMatrix(int width, int height);
-
-		float fov = 50;
-		float nearPlane = 0.1;
-		float farPlane = 1000;
-		float rotationSpeed = 0.005f;
-		float movementSpeed = 0.1f;
-		bool isMouseDragging;
-
-		std::string getName() override { return "Camera"; };
-
-		std::shared_ptr<Component> clone() override {
-			return std::make_shared<CameraComponent>(*this);
-		}
 	};
 }

@@ -15,26 +15,22 @@ namespace engine
 		ScriptableComponent();
 		~ScriptableComponent();
 		
-
 		std::string getName() override { return name; };
 
 		void update(float deltaTime) override;
-
 		void initialize() override;
+		void onEvent(EventType type, std::string message) override;
+		void onInput(const InputEvent& event) override;
 
 		void setScriptFileName(std::string scriptFileName);
+		std::string getScriptFileName() { return scriptFileName; }
 
 		bool enableInput = true;
 
-		std::string getScriptFileName() { return scriptFileName; }
-
-
-		sol::state state;
-
-		std::string name = "Scriptable";
-
 		// Since initialize can be called multiple times if we are using the editor, we need this flag to make sure that the state is only initialized once
 		bool stateIsInitialized = false;
+
+		std::string name = "Scriptable";
 
 		// Currently assuming that the class name is the same as the file name
 		std::string getScriptClassName();
@@ -47,16 +43,11 @@ namespace engine
 			return scriptVariables;
 		};
 
-		std::vector<SerializableVariable> serializableVariables { 
-			 
-		};
+		// The scripts serialized variables will be stored in this vector
+		std::vector<SerializableVariable> serializableVariables {};
 
 		// The scripts serialized variables will sync their values to a void pointer corresponding to a scriptable variable
 		std::vector<std::shared_ptr<void>> scriptVariablesData{};
-
-		void onEvent(EventType type, std::string message) override;
-
-		void handleInput(const InputEvent& event) override;
 
 		std::shared_ptr<Component> clone() override {
 			std::shared_ptr<ScriptableComponent> clone = std::make_shared<ScriptableComponent>();

@@ -45,9 +45,6 @@ add_library(engine
 	src/Components/SpotLightComponent.hpp
 	src/Components/MultiplayerComponent.hpp
 	src/Components/MultiplayerComponent.cpp
-	src/Renderer/Console/Display.hpp
-	src/Renderer/Console/DisplayTerminal.hpp
-	src/Renderer/Console/DisplayTerminal.cpp
 	src/Renderer/Renderer.hpp
 	src/Renderer/Renderer.cpp
 	src/Renderer/GraphicsAPI.hpp

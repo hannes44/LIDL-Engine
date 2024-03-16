@@ -20,6 +20,11 @@ namespace engine
 
 		// Empty texture, can be used to render into
 		static Texture* create();
+
+		UUID getUUID() override { return uuid; };
+
+		std::string getName() override { return name; };
+
 		// TODO: abstract away
 		GLuint textureIDOpenGL = -1;
 
@@ -27,11 +32,7 @@ namespace engine
 
 		std::string filename = "";
 
-		std::string getName() override { return name; };
-
 		UUID uuid{};
-
-		UUID getUUID() override { return uuid; };
 
 		std::vector<SerializableVariable> getSerializableVariables() override
 		{

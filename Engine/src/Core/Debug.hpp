@@ -14,7 +14,6 @@ namespace engine
 	public:
 		static void Log(const std::string& message);
 		inline static std::vector<LogEntry> LogQueue{};
-	private:
 	};
 
 }

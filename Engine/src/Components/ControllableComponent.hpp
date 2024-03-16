@@ -27,31 +27,27 @@ namespace engine {
 		ControllableComponent(bool allowJump = false, bool enableForces = true);
 		~ControllableComponent();
 
-		bool allowJump = false;
-
-		float movementSpeed = 3;
-		MovementType movementType = MovementType::OnHold;
-		bool allowInstantTurnaround = true;
-		bool enableForces = true;
-
+		std::set<std::string> getRequiredComponents() override;
+		void onInput(const InputEvent& event) override;
 		std::string getName() override;
 		void initialize() override;
-
 		bool serializeForMultiplayer() override { return false; }
 
+		MovementType movementType = MovementType::OnHold;
+
+		float movementSpeed = 3;
+		float rotationSpeed = 0.005f;
+
+		bool allowInstantTurnaround = true;
+		bool enableForces = true;
+		bool allowJump = false;
 		bool isMouseDragging;
 
 		glm::vec3 worldUp{ 0.0f, 1.0f, 0.0f };
 		glm::vec3 direction{ -1, -1, -1 };
 		glm::quat orientation{ 1, 0, 0, 0 };
 
-		float rotationSpeed = 0.005f;
-
 		std::set<Direction> currentDirections;
-
-		std::set<std::string> getRequiredComponents() override;
-
-		void handleInput(const InputEvent& event) override;
 
 		std::shared_ptr<Component> clone() override {
 			return std::make_shared<ControllableComponent>(*this);

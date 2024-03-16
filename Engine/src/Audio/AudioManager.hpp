@@ -19,10 +19,6 @@ namespace engine {
 
 		static AudioManager& getInstance();
 
-		void initialize();
-
-		void update();
-
 		void playSound(const std::string& fileName);
 
 		void stopSound();

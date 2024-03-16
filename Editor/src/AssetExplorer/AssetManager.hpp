@@ -14,17 +14,7 @@ namespace engine
 
 		void buildAssetTree();
 
-		std::shared_ptr<AssetNode> rootNode;
-
-		std::shared_ptr<AssetNode> materialsFolderNode;
-
-		std::shared_ptr<AssetNode> texturesFolderNode;
-
-		std::shared_ptr<AssetNode> scriptsFolderNode;
-		
 		void changeGame(Game* game);
-
-		static std::shared_ptr<Texture> getIconTextureForNode(AssetNode* node);
 
 		void onEvent(EventType type, std::string message);
 
@@ -35,16 +25,23 @@ namespace engine
 		void deleteAssetNode(std::shared_ptr<AssetNode> node);
 
 		void addNewScriptNode(const std::string& scriptFileName);
+
+		static std::shared_ptr<Texture> getIconTextureForNode(AssetNode* node);
+
+		std::shared_ptr<AssetNode> rootNode;
 	private:
 		void loadIconTextures();
+
+		Game* game;
 
 		// In order to be able to delete assets from their selectableId we map it to the assetNode
 		std::unordered_map<std::string, std::shared_ptr<AssetNode>> selectableIdToAssetNode{};
 
-		Game* game;
-
 		static inline std::shared_ptr<Texture> folderIconTexture;
-
 		static inline std::shared_ptr<Texture> csharpIconTexture;
+
+		std::shared_ptr<AssetNode> materialsFolderNode;
+		std::shared_ptr<AssetNode> texturesFolderNode;
+		std::shared_ptr<AssetNode> scriptsFolderNode;
 	};
 }

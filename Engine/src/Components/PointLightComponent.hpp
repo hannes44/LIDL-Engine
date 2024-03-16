@@ -10,7 +10,6 @@ namespace engine
 		glm::vec3 color{ 1, 1, 1 };
 
 		float intensity = 10;
-
 		float constant = 0.3f;
 		float linear = 0.11f;
 		float quadratic = 0.02f;

@@ -10,12 +10,13 @@ namespace engine
 	class SphereColliderComponent : public ColliderComponent
 	{
 	public:
-		float radius = 1;
+		SphereColliderComponent(glm::vec3 offset = glm::vec3(0, 0, 0), float radius = 1, bool isPlatform = false) : radius(radius), ColliderComponent(offset, glm::vec3(radius, radius, radius), isPlatform) {}
+	
 		void drawCollider(CameraComponent* camera);
 		BoundingBox getBoundingBox();
-		SphereColliderComponent(glm::vec3 offset = glm::vec3(0, 0, 0), float radius = 1, bool isPlatform = false) : radius(radius), ColliderComponent(offset, glm::vec3(radius, radius, radius), isPlatform) {}
-
 		std::string getName() override;
+
+		float radius = 1;
 
 		std::vector<SerializableVariable> getSerializableVariables() override
 		{

@@ -8,7 +8,7 @@ namespace engine {
 		void update() override;
 		void initialize() override;
 
-		void handleInput(const InputEvent& event) override;
+		void onInput(const InputEvent& event) override;
 
 		std::vector<std::weak_ptr<GameObject>> snake;
 		std::weak_ptr<GameObject> apple;

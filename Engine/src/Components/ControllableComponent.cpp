@@ -129,7 +129,7 @@ namespace engine
 		}
 	}
 
-	void ControllableComponent::handleInput(const InputEvent& event)
+	void ControllableComponent::onInput(const InputEvent& event)
 	{
 		InputEventType eventType = event.getEventType();
 

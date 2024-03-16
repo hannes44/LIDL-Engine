@@ -10,7 +10,7 @@ namespace engine {
 		void update() override;
 		void initialize() override;
 
-		void handleInput(const InputEvent& event) override;
+		void onInput(const InputEvent& event) override;
 		bool isMultiplayerGame() override;
 		
 	protected:

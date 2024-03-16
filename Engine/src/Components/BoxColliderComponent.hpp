@@ -14,7 +14,6 @@ namespace engine {
 
 		std::string getName() override;
 
-
 		std::shared_ptr<Component> clone() override {
 			return std::make_shared<BoxColliderComponent>(*this);
 		}
