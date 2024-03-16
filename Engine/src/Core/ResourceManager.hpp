@@ -34,34 +34,11 @@ namespace engine
 		void changeGame(Game* game);
 
 		std::string getPathToGameResource(const std::string& fileName);
-
-		static std::string getPathToEditorResource(const std::string& fileName);
-
-		static std::string getAbsolutePathToEditorGamesFolder();
-
 		std::string getPathToActiveGameFolder();
-
 		std::string getPathToActiveGameSpecificAssetFolder(ResourceType type);
-
 		std::string getPathToActiveGameAsset3DObjectsFolder();
 
 		std::vector<std::string> getAllCSharpScriptsInActiveGame();
-
-		void createNewScriptForActiveGame(const std::string& scriptFileName);
-
-		static std::vector<std::string> getAllGameNamesInGamesFolder();
-
-		static bool isProjectPathValid(const std::string& path);
-
-		static bool isProjectNameValid(const std::string& name);
-
-		static void createFolder(const std::string& path);
-
-		static std::string addFileFromWindowsExplorerToProject(char* fileExplorerFilter);
-
-		static std::string getFolderPathFromFileExplorer(const std::string initialPath = "");
-
-		static std::string getResourceFolderName(ResourceType type);
 
 		std::optional<std::shared_ptr<MeshData>> getCachedMeshData(const std::string& fileName);
 
@@ -70,6 +47,23 @@ namespace engine
 		std::optional<std::shared_ptr<OpenGLTextureData>> getCachedTextureData(const std::string& fileName);
 
 		void cacheTextureData(const std::string& fileName, std::shared_ptr<OpenGLTextureData> textureData);
+
+		void createNewScriptForActiveGame(const std::string& scriptFileName);
+
+		static std::string getPathToEditorResource(const std::string& fileName);
+		static std::string getAbsolutePathToEditorGamesFolder();
+
+		static std::vector<std::string> getAllGameNamesInGamesFolder();
+
+		static bool isProjectPathValid(const std::string& path);
+		static bool isProjectNameValid(const std::string& name);
+
+		static void createFolder(const std::string& path);
+
+		static std::string addFileFromWindowsExplorerToProject(char* fileExplorerFilter);
+
+		static std::string getFolderPathFromFileExplorer(const std::string initialPath = "");
+		static std::string getResourceFolderName(ResourceType type);
 
 		// Will map the given file name to a resource type based on the file extension
 		static ResourceType getResourceTypeFromFileName(const std::string& fileName);

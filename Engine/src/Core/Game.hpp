@@ -80,13 +80,13 @@ namespace engine
 		std::string getIdOfGameObjectHitByRay(float originX, float originY, float originZ, float dirX, float dirY, float dirZ);
 
 		// Clones a game object from a gameobject with the given tag
-		void spawnClonedGameObjectFromTag(std::string tag);
+		void spawnClonedGameObjectFromTag(const std::string& tag);
 		void setParent(std::shared_ptr<GameObject> gameObject, std::shared_ptr<GameObject> newParent);
 		void removeParent(std::shared_ptr<GameObject> gameObject);
-		std::string getTagOfGameObject(std::string id);
-		int getNumberOfGameObjectsWithTag(std::string tag);
-		std::tuple<float, float, float> getGameObjectPositionFromTag(std::string tag);
-		void setGameObjectMeshVisibilityFromTag(std::string tag, bool visible);
+		std::string getTagOfGameObject(const std::string& id);
+		int getNumberOfGameObjectsWithTag(const std::string& tag);
+		std::tuple<float, float, float> getGameObjectPositionFromTag(const std::string& tag);
+		void setGameObjectMeshVisibilityFromTag(const std::string& tag, bool visible);
 
 		std::string name = "Giga Game";
 		bool running = false;

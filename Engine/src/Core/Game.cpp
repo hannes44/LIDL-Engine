@@ -245,7 +245,7 @@ namespace engine {
 		return "";
 	}
 
-	void Game::spawnClonedGameObjectFromTag(std::string tag)
+	void Game::spawnClonedGameObjectFromTag(const std::string& tag)
 	{
 		LOG_INFO("Spawning object with tag: " + tag);
 		for (auto& [id, gameObject] : gameObjects)
@@ -315,7 +315,7 @@ namespace engine {
 		gameObject->parent = newParent;
 	}
 
-	std::string Game::getTagOfGameObject(std::string id)
+	std::string Game::getTagOfGameObject(const std::string& id)
 	{
 		std::string tag = "";
 		if (gameObjects.count(id))
@@ -325,7 +325,7 @@ namespace engine {
 		return tag;
 	}
 
-	int Game::getNumberOfGameObjectsWithTag(std::string tag)
+	int Game::getNumberOfGameObjectsWithTag(const std::string& tag)
 	{
 		int count = 0;
 		for (auto& [id, gameObject] : gameObjects)
@@ -338,7 +338,7 @@ namespace engine {
 		return count;
 	}
 
-	std::tuple<float, float, float> Game::getGameObjectPositionFromTag(std::string tag)
+	std::tuple<float, float, float> Game::getGameObjectPositionFromTag(const std::string& tag)
 	{
 		for (auto& [id, gameObject] : gameObjects)
 		{
@@ -352,7 +352,7 @@ namespace engine {
 		return std::make_tuple(0.0f, 0.0f, 0.0f);
 	}
 
-	void Game::setGameObjectMeshVisibilityFromTag(std::string tag, bool visible)
+	void Game::setGameObjectMeshVisibilityFromTag(const std::string& tag, bool visible)
 	{
 		for (auto& [id, gameObject] : gameObjects)
 		{
