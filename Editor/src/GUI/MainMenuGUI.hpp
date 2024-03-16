@@ -11,17 +11,10 @@ namespace engine
 		OpenProject,
 	};
 
-	enum class ProjectTemplate
-	{
-		Empty,
-		Game2D,
-		Game3D,
-	};
-
 	class MainMenuGUI
 	{
-	public:
-		std::shared_ptr<engine::Project> MainMenu();
+public:
+	std::shared_ptr<engine::Project> MainMenu();
 
 private:
 	void renderNewFrame();
