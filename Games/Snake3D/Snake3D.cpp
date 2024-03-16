@@ -63,7 +63,7 @@ namespace engine
 		addBody();
 	}
 
-	void Snake3D::handleInput(const InputEvent& event) {
+	void Snake3D::onInput(const InputEvent& event) {
 		const InputEventType eventType = event.getEventType();
 		if (eventType != InputEventType::KeyDown)
 			return;

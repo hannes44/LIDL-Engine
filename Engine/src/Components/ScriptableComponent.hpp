@@ -56,7 +56,7 @@ namespace engine
 
 		void onEvent(EventType type, std::string message) override;
 
-		void handleInput(const InputEvent& event) override;
+		void onInput(const InputEvent& event) override;
 
 		std::shared_ptr<Component> clone() override {
 			std::shared_ptr<ScriptableComponent> clone = std::make_shared<ScriptableComponent>();

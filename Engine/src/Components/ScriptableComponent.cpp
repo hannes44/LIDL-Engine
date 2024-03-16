@@ -44,7 +44,7 @@ namespace engine
 		}
 	}
 
-	void ScriptableComponent::handleInput(const InputEvent& event)
+	void ScriptableComponent::onInput(const InputEvent& event)
 	{
 		if (!enableInput)
 			InputFramework::getInstance().removeListener(this);

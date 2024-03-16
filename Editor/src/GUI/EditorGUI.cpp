@@ -216,7 +216,7 @@ namespace engine
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
-	void EditorGUI::handleInput(const InputEvent& event)
+	void EditorGUI::onInput(const InputEvent& event)
 	{
 		InputEventType EventType = event.getEventType();
 		if (EventType == InputEventType::KeyDown)

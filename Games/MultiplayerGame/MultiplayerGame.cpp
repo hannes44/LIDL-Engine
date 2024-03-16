@@ -60,7 +60,7 @@ namespace engine
 		material->setBaseColor(glm::vec3(0, greenValue, 0));
 	}
 
-	void MultiplayerGame::handleInput(const InputEvent& event) {
+	void MultiplayerGame::onInput(const InputEvent& event) {
 		const InputEventType eventType = event.getEventType();
 		if (eventType != InputEventType::KeyDown)
 			return;

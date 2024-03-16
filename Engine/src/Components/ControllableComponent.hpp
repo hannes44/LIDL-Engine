@@ -51,7 +51,7 @@ namespace engine {
 
 		std::set<std::string> getRequiredComponents() override;
 
-		void handleInput(const InputEvent& event) override;
+		void onInput(const InputEvent& event) override;
 
 		std::shared_ptr<Component> clone() override {
 			return std::make_shared<ControllableComponent>(*this);

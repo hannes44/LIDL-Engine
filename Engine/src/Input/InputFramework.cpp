@@ -179,7 +179,7 @@ namespace engine {
 		std::list<InputListener*> listenersCopy = listeners;
 		for (auto* listener : listenersCopy) {
 			if (listener) {
-				listener->handleInput(e);
+				listener->onInput(e);
 			}
 		}
 	}

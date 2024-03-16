@@ -34,7 +34,7 @@ namespace engine
 
 		void start();
 
-		void handleInput(const InputEvent& event) override;
+		void onInput(const InputEvent& event) override;
 		void onEvent(EventType type, std::string message);
 		void onMultiplayerStateReceived(std::shared_ptr<Game> game, std::string state);
 	private:
