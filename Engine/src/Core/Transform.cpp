@@ -16,12 +16,12 @@ void engine::Transform::setPosition(glm::vec3 position)
 	transformMatrix[3] = glm::vec4(position, 1.0f);
 }
 
-glm::quat engine::Transform::getRotation() 
+glm::quat engine::Transform::getRotation()
 {
 	return glm::quat(transformMatrix);
 }
 
-void engine::Transform::setRotationFromDirection(glm::vec3 direction, glm::vec3 normal) 
+void engine::Transform::setRotationFromDirection(glm::vec3 direction, glm::vec3 normal)
 {
 	glm::vec3 up = normal;
 
@@ -43,19 +43,19 @@ void engine::Transform::setRotationFromDirection(glm::vec3 direction, glm::vec3 
 
 }
 
-void engine::Transform::setRotationFromQuaternion(const glm::quat& orientation) 
+void engine::Transform::setRotationFromQuaternion(const glm::quat& orientation)
 {
-    glm::mat4 rotationMatrix = glm::mat4_cast(orientation);
+	glm::mat4 rotationMatrix = glm::mat4_cast(orientation);
 
-    glm::vec3 position = glm::vec3(transformMatrix[3]);
+	glm::vec3 position = glm::vec3(transformMatrix[3]);
 
-    for (int i = 0; i < 3; ++i)
-    {
-        for (int j = 0; j < 3; ++j)
-            transformMatrix[i][j] = rotationMatrix[i][j];
-    }
+	for (int i = 0; i < 3; ++i)
+	{
+		for (int j = 0; j < 3; ++j)
+			transformMatrix[i][j] = rotationMatrix[i][j];
+	}
 
-    transformMatrix[3] = glm::vec4(position, 1.0f);
+	transformMatrix[3] = glm::vec4(position, 1.0f);
 }
 
 void engine::Transform::shiftPosition(glm::vec3 offset)

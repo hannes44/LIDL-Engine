@@ -35,7 +35,7 @@ namespace engine
 		std::set<std::shared_ptr<GameObject>> getChildren() { return children; };
 		std::shared_ptr<GameObject> getParent() { return parent; };
 
-		std::vector<std::shared_ptr<Component>> &getComponents()
+		std::vector<std::shared_ptr<Component>>& getComponents()
 		{
 			return components;
 		}
@@ -43,7 +43,7 @@ namespace engine
 		template <typename T>
 		std::shared_ptr<T> getComponent()
 		{
-			for (auto &component : components)
+			for (auto& component : components)
 			{
 				if (std::dynamic_pointer_cast<T>(component))
 					return std::dynamic_pointer_cast<T>(component);
@@ -74,7 +74,7 @@ namespace engine
 		// TODO: Should limit each component to one of each type
 		std::vector<std::shared_ptr<Component>> components{};
 		std::set<std::shared_ptr<GameObject>> children{};
-		
+
 		bool added = false;
 
 		std::shared_ptr<GameObject> parent = nullptr;

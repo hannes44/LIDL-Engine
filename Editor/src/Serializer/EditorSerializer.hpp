@@ -10,13 +10,13 @@ namespace engine
 	class EditorSerializer
 	{
 	public:
-			EditorSerializer();
-			~EditorSerializer();
+		EditorSerializer();
+		~EditorSerializer();
 
-			static void createYAMLFile(const std::string& filePath, const std::string& fileName);
+		static void createYAMLFile(const std::string& filePath, const std::string& fileName);
 
-			static void serializeEditorSettings(EditorSettings& settings);
+		static void serializeEditorSettings(EditorSettings& settings);
 
-			static EditorSettings deSerializeEditorSettings();
+		static EditorSettings deSerializeEditorSettings();
 	};
 }

@@ -7,7 +7,7 @@ extern "C" {
 		engine::InputFramework::instance = inputFramework;
 		engine::Logger::init();
 		engine::ResourceManager::instance = resourceManager;
-		
+
 		engine::Game* game = new engine::TestGame2();
 		resourceManager->changeGame(game);
 		return game;
@@ -34,7 +34,7 @@ namespace engine {
 		std::weak_ptr<engine::Material> amogusMaterial = createMaterial("AmogusMaterial");
 		amogusMaterial.lock()->baseColor = glm::vec3(1.f, 0, 0);
 		meshComponent1->setMaterial(amogusMaterial);
-		
+
 		std::shared_ptr<MeshComponent> meshComponent2 = MeshComponent::createPrimitive(PrimitiveMeshType::CUBE);
 
 		std::shared_ptr<MeshComponent> platformMesh = MeshComponent::createPrimitive(PrimitiveMeshType::CUBE);

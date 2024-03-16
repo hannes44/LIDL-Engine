@@ -74,7 +74,7 @@ namespace engine
 		void changeMainCamera(GameObject* newCamera);
 
 		virtual bool isMultiplayerGame() { return false; }
-		
+
 		/// Returns a vector of the GameObjects that collided with the ray, sorted from closest to farthest
 		std::vector<std::shared_ptr<GameObject>> checkRayCollisions(glm::vec3 origin, glm::vec3 direction);
 		std::string getIdOfGameObjectHitByRay(float originX, float originY, float originZ, float dirX, float dirY, float dirZ);

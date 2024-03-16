@@ -17,7 +17,7 @@ extern "C"
 		engine::InputFramework::instance = inputFramework;
 		engine::Logger::init();
 		engine::ResourceManager::instance = resourceManager;
-		
+
 		engine::Game* game = new engine::MultiplayerGame();
 		resourceManager->changeGame(game);
 		return game;
@@ -54,7 +54,7 @@ namespace engine
 		auto remoteBox = getRemoteBox();
 		auto material = remoteBox->getComponent<MeshComponent>()->getMaterial();
 		float greenValue = material->baseColor.g + 1.f;
-		if(greenValue > 5.f)
+		if (greenValue > 5.f)
 			greenValue = 1.f;
 
 		material->setBaseColor(glm::vec3(0, greenValue, 0));

@@ -13,9 +13,9 @@ namespace engine
 
 	GUIHelper& GUIHelper::getInstance() {
 
-		if (instance == nullptr) {
+		if (instance == nullptr)
 			instance = new GUIHelper();
-		}
+
 		return *instance;
 	}
 
@@ -47,15 +47,15 @@ namespace engine
 	// Draw a help marker (question mark) with a tooltip
 	void GUIHelper::HelpMarker(const char* desc) {
 
-        ImGui::TextDisabled("(?)");
-        if (ImGui::BeginItemTooltip())
-        {
-            ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-            ImGui::TextUnformatted(desc);
-            ImGui::PopTextWrapPos();
-            ImGui::EndTooltip();
-        }
-    }
+		ImGui::TextDisabled("(?)");
+		if (ImGui::BeginItemTooltip())
+		{
+			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+			ImGui::TextUnformatted(desc);
+			ImGui::PopTextWrapPos();
+			ImGui::EndTooltip();
+		}
+	}
 
 	// Draw text at a specific window position (no widget)
 	void GUIHelper::drawText(float xpos, float ypos, float size, const std::string& text, float R, float G, float B, float A) {
@@ -106,7 +106,7 @@ namespace engine
 			ImVec2(0, 0), ImVec2(1, 1)
 		);
 	}
-	
+
 	void GUIHelper::setDarkStyle() {
 
 		ImVec4* colors = ImGui::GetStyle().Colors;

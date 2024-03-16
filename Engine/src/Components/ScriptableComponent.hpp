@@ -14,7 +14,7 @@ namespace engine
 	public:
 		ScriptableComponent();
 		~ScriptableComponent();
-		
+
 		std::string getName() override { return name; };
 
 		void update(float deltaTime) override;
@@ -35,8 +35,8 @@ namespace engine
 		// Currently assuming that the class name is the same as the file name
 		std::string getScriptClassName();
 
-		std::vector<SerializableVariable> getSerializableVariables() 
-		{ 
+		std::vector<SerializableVariable> getSerializableVariables()
+		{
 			std::vector<SerializableVariable> scriptVariables = serializableVariables;
 			scriptVariables.push_back({ SerializableType::STRING, "scriptFileName", "The file name of the C# or Lua files", &scriptFileName });
 			scriptVariables.push_back({ SerializableType::BOOLEAN, "enableInput", "Whether the script should handle input", &enableInput });
@@ -44,7 +44,7 @@ namespace engine
 		};
 
 		// The scripts serialized variables will be stored in this vector
-		std::vector<SerializableVariable> serializableVariables {};
+		std::vector<SerializableVariable> serializableVariables{};
 
 		// The scripts serialized variables will sync their values to a void pointer corresponding to a scriptable variable
 		std::vector<std::shared_ptr<void>> scriptVariablesData{};

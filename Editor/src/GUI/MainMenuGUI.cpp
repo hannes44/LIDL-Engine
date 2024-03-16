@@ -67,7 +67,7 @@ namespace engine
 		windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 
 		ImGui::Begin("MainMenu", nullptr, windowFlags);
-		
+
 
 		renderHeader();
 
@@ -105,7 +105,7 @@ namespace engine
 		float off = (avail - width) * 0.5;
 		if (off > 0.0f)
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);
-		
+
 		bool pushedColor = false;
 		if (state == MainMenuState::NewProject)
 		{
@@ -121,7 +121,7 @@ namespace engine
 		}
 
 		ImGui::SameLine(0, spacing);
-		
+
 		pushedColor = false;
 		if (state == MainMenuState::OpenProject)
 		{

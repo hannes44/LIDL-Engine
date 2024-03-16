@@ -12,7 +12,7 @@ extern "C"
 		engine::InputFramework::instance = inputFramework;
 		engine::Logger::init();
 		engine::ResourceManager::instance = resourceManager;
-		
+
 		engine::Game* game = new engine::Snake3D();
 		resourceManager->changeGame(game);
 		return game;
@@ -31,7 +31,7 @@ namespace engine
 		std::stringstream ss;
 		ss << "Body " << index;
 		body->name = ss.str();
-		
+
 		body->addComponent(engine::MeshComponent::createPrimitive(PrimitiveMeshType::CUBE));
 		body->addComponent(std::make_unique<engine::BoxColliderComponent>(engine::BoxColliderComponent(glm::vec3(0, 0, 0), 0.7f * glm::vec3(1.f, 1.f, 1.f))));
 
@@ -106,7 +106,7 @@ namespace engine
 		if (glm::length(vel) > 0.1f && !veceql(vel, direction)) {
 			direction = glm::normalize(vel);
 			glm::vec3 dir = direction;
-			
+
 			// TODO: Figure out why this works
 			// Hotfix for full revolution rotation causing identical angles for opposite directions
 			if (dir.x < 0)

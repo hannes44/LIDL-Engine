@@ -18,7 +18,7 @@ namespace engine {
 		instanceId = ss.str();
 		LOG_INFO("Game {} created", instanceId);
 	}
-	
+
 	const void Game::run() {
 		if (getTargetFrameRate() > 0 && Utils::getTimestampNS() - lastFrameTime < TIME_CONVERSION_FACTOR / (long long)getTargetFrameRate()) {
 			return;

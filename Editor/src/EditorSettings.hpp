@@ -21,7 +21,7 @@ namespace engine
 		bool enableScripting = true;
 
 		std::string defaultGame = "FPSGame";
-		
+
 		std::vector<SerializableVariable> getSerializableVariables() override
 		{
 			return
@@ -33,7 +33,7 @@ namespace engine
 				{SerializableType::STRING, "Default Game", "The default game to load", &defaultGame}
 			};
 		};
-		
+
 		RendererSettings rendererSettings{};
 	};
 }

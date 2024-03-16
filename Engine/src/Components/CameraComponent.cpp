@@ -11,9 +11,9 @@
 
 namespace engine
 {
-	void CameraComponent::update(float deltaTime) 
+	void CameraComponent::update(float deltaTime)
 	{
-		
+
 	}
 
 	Transform CameraComponent::getTransform()

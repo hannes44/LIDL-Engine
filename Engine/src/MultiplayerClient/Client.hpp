@@ -42,11 +42,11 @@ namespace engine {
 		T dequeue(void)
 		{
 			std::unique_lock<std::mutex> lock(m);
-			
+
 			// Release lock as long as the wait and reaquire it afterwards
 			while (q.empty())
 				c.wait(lock);
-			
+
 			T val = q.front();
 			q.pop();
 			return val;

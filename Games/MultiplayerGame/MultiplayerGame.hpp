@@ -12,7 +12,7 @@ namespace engine {
 
 		void onInput(const InputEvent& event) override;
 		bool isMultiplayerGame() override;
-		
+
 	protected:
 		double getTargetFrameRate() override;
 		GameObject* getRemoteBox();
