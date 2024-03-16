@@ -323,9 +323,6 @@ namespace engine
 		windowFlags |= ImGuiWindowFlags_NoCollapse;
 		windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 
-		// Set resize constraints for the window size 
-		//ImGui::SetNextWindowSizeConstraints(ImVec2(200, 200), ImVec2(w, h));
-
 		ImGui::Begin("ViewPort", nullptr, windowFlags);
 
 		// All sizes and positions are dependent on the viewport window size and position
