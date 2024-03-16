@@ -28,27 +28,12 @@ namespace engine
 		// Called at initialization
 		void initialize();
 
-		Transform transform;
-
 		Transform getGlobalTransform();
-
-		bool isVisible = true;
-
-		std::string name = "GameObject";
-
-		std::string tag = "";
-		std::set<std::shared_ptr<GameObject>> getChildren() { return children; };
-		std::shared_ptr<GameObject> getParent() { return parent; };
-
-		UUID uuid{};
-
-		bool isExternalMultiplayerObject = false;
 
 		UUID getUUID() override;
 
-		Game* game = nullptr;
-
-		void addComponent(std::shared_ptr<Component> component);
+		std::set<std::shared_ptr<GameObject>> getChildren() { return children; };
+		std::shared_ptr<GameObject> getParent() { return parent; };
 
 		std::vector<std::shared_ptr<Component>> &getComponents()
 		{
@@ -68,21 +53,31 @@ namespace engine
 		}
 
 		template <typename T>
-		bool hasComponent()
-		{
-			return getComponent<T>() != nullptr;
-		}
+		bool hasComponent() { return getComponent<T>() != nullptr; }
+		void addComponent(std::shared_ptr<Component> component);
 
 		std::string getName() override { return name; };
 
 		std::shared_ptr<GameObject> clone();
 
+		std::string name = "GameObject";
+		std::string tag = "";
+
+		Game* game = nullptr;
+		UUID uuid{};
+		Transform transform;
+
+		bool isExternalMultiplayerObject = false;
+		bool isVisible = true;
+
 	private:
 		// TODO: Should limit each component to one of each type
 		std::vector<std::shared_ptr<Component>> components{};
+		std::set<std::shared_ptr<GameObject>> children{};
+		
 		bool added = false;
 
 		std::shared_ptr<GameObject> parent = nullptr;
-		std::set<std::shared_ptr<GameObject>> children{};
+
 	};
 }
