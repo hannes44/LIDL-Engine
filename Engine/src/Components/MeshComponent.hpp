@@ -36,22 +36,27 @@ namespace engine
 	public:
 		MeshComponent(std::vector<Vertex> vertices = {}, std::vector<uint32_t> indices = {});
 
-		std::shared_ptr<MeshData> meshData = nullptr;
-
-
 		static void loadMeshFromOBJFile(const std::string& filename, MeshComponent* mesh, bool isGameAsset = true);
-
-		static std::shared_ptr<MeshComponent> createMeshFromObjFile(const std::string& filename, bool isGameAsset = true);
-
 		static void loadPrimitiveMesh(PrimitiveMeshType type, MeshComponent* mesh);
 
+		static std::shared_ptr<MeshComponent> createMeshFromObjFile(const std::string& filename, bool isGameAsset = true);
 		static std::shared_ptr<MeshComponent> createPrimitive(PrimitiveMeshType type);
+		static std::shared_ptr<MeshComponent> createSphere(int stacks = 100, int slices = 100);
 
 		static std::string primitiveTypeToString(PrimitiveMeshType type);
-
 		static PrimitiveMeshType stringToPrimitiveType(const std::string& type);
 
 		std::string getName() override { return componentName; };
+
+		void drawBoundingBox(CameraComponent* camera);
+
+		void setMaterial(std::weak_ptr<Material> material);
+		std::shared_ptr<Material> getMaterial();
+
+		BoundingBox getBoundingBox();
+
+		// Generating the vertex array on demand
+		std::shared_ptr<VertexArray> getVertexArray();
 
 		inline const static std::string componentName = "Mesh";
 
@@ -62,20 +67,17 @@ namespace engine
 
 		bool isVisible = true;
 
-		PrimitiveMeshType primitiveType = NONE;
+		std::shared_ptr<MeshData> meshData = nullptr;
 
+		PrimitiveMeshType primitiveType = NONE;
 		std::string primitiveTypeAsString = primitiveTypeToString(primitiveType);
 
-		void drawBoundingBox(CameraComponent* camera);
-		BoundingBox getBoundingBox();
+		std::string objFileName = "";
 
-		std::shared_ptr<Material> getMaterial();
-
-		void setMaterial(std::weak_ptr<Material> material);
-
-		static std::shared_ptr<MeshComponent> createSphere(int stacks = 100, int slices = 100);
-
-		virtual std::vector<SerializableVariable> getSerializableVariables()
+		std::shared_ptr<Component> clone() override {
+			return std::make_shared<MeshComponent>(*this);
+		}
+		std::vector<SerializableVariable> getSerializableVariables() override
 		{
 			return
 			{
@@ -87,33 +89,23 @@ namespace engine
 			};
 		};
 
-		// Generating the vertex array on demand
-		std::shared_ptr<VertexArray> getVertexArray();
-
-		std::string objFileName = "";
-
-		std::shared_ptr<Component> clone() override {
-			return std::make_shared<MeshComponent>(*this);
-		}
-		//--------------------------------------
-
 	private:
+		static std::shared_ptr<MeshComponent> createCube();
+		static std::shared_ptr<MeshComponent> createPlane();
+
+		static glm::mat4 getComparableTransformMatrix(glm::mat4 transformMatrix);
+
+		void createVertexArray();
+
 		// If the material is expired, use the default material
 		std::shared_ptr<Material> defaultMaterial = std::make_shared<Material>();
 
 		std::weak_ptr<Material> material;
 
-		static std::shared_ptr<MeshComponent> createCube();
-
-		static std::shared_ptr<MeshComponent> createPlane();
-
 		glm::vec3 maxPoints{};
 		void generateMaxPoints();
 		glm::mat4 lastTransformMatrix{};
 		bool isMaxPointsValid();
-		static glm::mat4 getComparableTransformMatrix(glm::mat4 transformMatrix);
-
-		void createVertexArray();
 
 		std::shared_ptr<VertexArray> vertexArray = nullptr;
 	};
