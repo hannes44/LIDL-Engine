@@ -840,13 +840,13 @@ namespace engine
 				}
 				if (isAddComponentVisible)
 				{
-					ShowAddComponent();
+					drawAddComponent();
 				}
 			}
 		}
 	}
 
-	void EditorGUI::ShowAddComponent()
+	void EditorGUI::drawAddComponent()
 	{
 		ImGui::Text("Add Component");
 		ImGui::Separator();
@@ -1360,7 +1360,7 @@ namespace engine
 		ImGui::End();
 	}
 
-	bool EditorGUI::defaultCheckBox(const std::string& label, bool* value)
+	bool EditorGUI::drawDefaultCheckBox(const std::string& label, bool* value)
 	{
 		return ImGui::Checkbox(label.c_str(), value);
 	}

@@ -19,7 +19,6 @@ namespace engine
 	{
 		Scene, // While in scene state, run no game logic
 		Play,  // While in play state, run all game logic
-		Pause  // While in pause state, pause the active game loop
 	};
 
 	enum class ActiveViewPort
@@ -35,62 +34,37 @@ namespace engine
 
 		void start();
 
-		void renderNewFrame();
-
-		void endFrame();
-
 		void handleInput(const InputEvent& event) override;
-
 		void onEvent(EventType type, std::string message);
-
-		std::shared_ptr<Game> game = nullptr;
-
 		void onMultiplayerStateReceived(std::shared_ptr<Game> game, std::string state);
 	private:
+		void renderNewFrame();
+		void endFrame();
+
 		void drawMainMenu();
-
 		void drawViewPort();
-
 		void drawRightSidePanel();
-
 		void drawLeftSidePanel();
-
 		void drawGameObject(std::shared_ptr<GameObject> gameObject);
-
 		void drawTopMenu();
-
 		void drawPlayButtonToolbar();
-
 		void drawGizmos();
-
 		void drawInspectorSelectedGameObject();
-
-		void ShowAddComponent();
-
+		void drawAddComponent();
 		void drawGameSettingsTab();
-
 		void drawBottomPanel();
-
 		void drawAssetsSection();
-
 		void drawSerializableVariables(Serializable* serializable);
-
 		void drawGizmoOperationsWindow();
-
 		void drawAssetItem(std::shared_ptr<AssetNode> assetNode);
-
 		void drawCompilationErrorWindow();
-
-		bool defaultCheckBox(const std::string& label, bool* value);
+		bool drawDefaultCheckBox(const std::string& label, bool* value);
 
 		void playGame();
-
 		void stopGame();
-
 		void changeGame(std::shared_ptr<Game> game);
 
 		void copySelectedGameObject();
-
 		void pasteGameObject();
 
 		bool isMouseInsideViewPort();
@@ -99,26 +73,25 @@ namespace engine
 		void setupEditorCamera();
 
 		void createEditorTextures();
-
 		void createEditorInputActions();
 
-		// The framebuffer that the game will be rendered into
-		std::shared_ptr<Texture> viewPortTexture;
+		void setupMultiplayer(std::shared_ptr<Game> game);
+
+		CameraComponent* getActiveCamera();
+
+		std::shared_ptr<Game> game = nullptr;
 
 		Window& window;
-
 		GUIHelper& UIHelper = GUIHelper::getInstance();
+		std::unique_ptr<AssetManager> assetManager;
+		std::shared_ptr<Project> project;
 
 		std::weak_ptr<Selectable> selectedObject;
-
-		ImGuizmo::OPERATION gizmoOperation = ImGuizmo::TRANSLATE;
-
-		bool isGizmoOperationInWorldSpace = true;
-
 		std::shared_ptr<GameObject> editorCamera;
 
+		// Editor states
+		ImGuizmo::OPERATION gizmoOperation = ImGuizmo::TRANSLATE;
 		EditorSceneState sceneState = EditorSceneState::Scene;
-
 		ActiveViewPort activeViewPort = ActiveViewPort::Scene;
 
 		// The game objects that are only visible in the editor
@@ -126,48 +99,33 @@ namespace engine
 
 		// Physics settings for the editor camera
 		GamePhysicsSettings editorPhysicsSettings;
-
-		// Flag for when the play button is pressed
-		bool wasPlayButtonPressed = false;
-
-		bool wasStopButtonPressed = false;
-
-		bool quitProgram = false;
-
-		// In no GUI mode, the gui will not be rendered and the game will accept relative
-		bool noGUIMode = false;
-
-		bool isMouseOverGuizmo = false;
-
-		bool isMouseOverGuizmosOperationWindow = false;
-
-		CameraComponent* getActiveCamera();
-
 		EditorSettings editorSettings{};
 
-		std::weak_ptr<GameObject> copiedGameObject;
-
-		std::weak_ptr<AssetNode> selectedAssetNodeFolder;
-
-		std::unique_ptr<AssetManager> assetManager;
-
-		std::shared_ptr<Project> project;
+		bool wasPlayButtonPressed = false;		// Flag for when the play button is pressed
+		bool wasStopButtonPressed = false;
+		bool quitProgram = false;
+		bool noGUIMode = false; // In no GUI mode, the gui will not be rendered and the game will accept relative
+		bool isMouseOverGuizmo = false;
+		bool isMouseOverGuizmosOperationWindow = false;
+		bool isGizmoOperationInWorldSpace = true;
 
 		// When a material is dragged from the asset explorer over a mesh component, this will be the material that is being overwritten
 		// If the mouse is then dragged away from the mesh component, the material will be reset to its original value
 		std::weak_ptr<Material> overwrittenMaterial;
-
 		std::weak_ptr<GameObject> overwrittenGameObject;
+		std::weak_ptr<GameObject> copiedGameObject;
+		std::weak_ptr<AssetNode> selectedAssetNodeFolder;
 
+		// Gizmos operation menu icons
 		std::shared_ptr<Texture> rotateIconTexture;
-
 		std::shared_ptr<Texture> translateIconTexture;
-
 		std::shared_ptr<Texture> scaleIconTexture;
-
 		std::shared_ptr<Texture> worldIconTexture;
 
 		std::shared_ptr<Texture> playIconTexture;
+
+		// The framebuffer that the game will be rendered into
+		std::shared_ptr<Texture> viewPortTexture; 
 
 		// These widths will change dynamically when the user resizes the panels
 		float leftPanelWidth = 300;
@@ -180,7 +138,6 @@ namespace engine
 		glm::vec2 viewPortPosition = glm::vec2(0, 0);
 		glm::vec2 viewPortPosistionInPercent = glm::vec2(0.25f, 0.25f);
 
-		void setupMultiplayer(std::shared_ptr<Game> game);
 		SOCKET multiplayerSocket = INVALID_SOCKET;
 		std::string MULTIPLAYER_STATE_FOLDER = "../../../MultiplayerStates/";
 		std::string MULTIPLAYER_STATE_FILE_EXTENSION = ".yaml";
