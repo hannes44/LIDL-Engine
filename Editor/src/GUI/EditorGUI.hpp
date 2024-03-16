@@ -175,8 +175,10 @@ namespace engine
 		float bottomPanelHeight = 300;
 		float playButtonPanelHeight = 30;
 
-		glm::vec2 viewPortSize = glm::vec2(0, 0);
+		glm::vec2 viewPortSize = glm::vec2(500, 500);
+		glm::vec2 viewPortSizeInPercent = glm::vec2(0.5f, 0.5f);
 		glm::vec2 viewPortPosition = glm::vec2(0, 0);
+		glm::vec2 viewPortPosistionInPercent = glm::vec2(0.25f, 0.25f);
 
 		void setupMultiplayer(std::shared_ptr<Game> game);
 		SOCKET multiplayerSocket = INVALID_SOCKET;

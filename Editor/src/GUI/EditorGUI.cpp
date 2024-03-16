@@ -309,29 +309,44 @@ namespace engine
 		int w, h;
 		window.getWindowSize(&w, &h);
 
-		ImGui::SetNextWindowPos({ leftPanelWidth, IMGUI_TOP_MENU_HEIGHT + playButtonPanelHeight });
-		ImGui::SetNextWindowSize(ImVec2(w - leftPanelWidth - rightPanelWidth, h - bottomPanelHeight - IMGUI_TOP_MENU_HEIGHT - playButtonPanelHeight));
+		viewPortPosistionInPercent.y = (IMGUI_TOP_MENU_HEIGHT + playButtonPanelHeight) / h;
+		ImGui::SetNextWindowPos({ viewPortPosistionInPercent.x * w, viewPortPosistionInPercent.y * h });
+		ImGui::SetNextWindowSize(ImVec2(viewPortSizeInPercent.x * w, viewPortSizeInPercent.y * h));
 
 		ImGuiWindowFlags windowFlags = 0;
 
 		windowFlags |= ImGuiWindowFlags_NoBackground;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 		windowFlags |= ImGuiWindowFlags_NoMove;
-		windowFlags |= ImGuiWindowFlags_NoResize;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
 		windowFlags |= ImGuiWindowFlags_NoScrollWithMouse;
 		windowFlags |= ImGuiWindowFlags_NoCollapse;
 		windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 
+		// Set resize constraints for the window size 
+		//ImGui::SetNextWindowSizeConstraints(ImVec2(200, 200), ImVec2(w, h));
+
 		ImGui::Begin("ViewPort", nullptr, windowFlags);
 
-		viewPortPosition.x = ImGui::GetWindowPos().x;
-		viewPortPosition.y = ImGui::GetWindowPos().y;
+		// All sizes and positions are dependent on the viewport window size and position
+		// The viewports size in percent will remain the same when the window is resized
+		viewPortSizeInPercent.x = ImGui::GetWindowSize().x / w;
+		viewPortSizeInPercent.y = ImGui::GetWindowSize().y / h;
 		viewPortSize.x = ImGui::GetWindowSize().x;
 		viewPortSize.y = ImGui::GetWindowSize().y;
-		
-		editorSettings.rendererSettings.width = viewPortSize.x;
-		editorSettings.rendererSettings.height = viewPortSize.y;
+		viewPortPosition.x = ImGui::GetWindowPos().x;
+		viewPortPosition.y = ImGui::GetWindowPos().y;
+		viewPortPosistionInPercent.x = viewPortPosition.x / w;
+		viewPortPosistionInPercent.y = viewPortPosition.y / h;
+
+
+		leftPanelWidth = viewPortPosition.x;
+		rightPanelWidth = w - ImGui::GetWindowSize().x - leftPanelWidth;
+		bottomPanelHeight = h - ImGui::GetWindowSize().y - viewPortPosition.y;
+		playButtonPanelHeight = viewPortPosition.y - IMGUI_TOP_MENU_HEIGHT;
+
+		editorSettings.rendererSettings.width = ImGui::GetWindowSize().x;
+		editorSettings.rendererSettings.height = ImGui::GetWindowSize().y;
 
 		bool isFocused = ImGui::IsWindowFocused();
 		bool isHovered = ImGui::IsWindowHovered();
@@ -362,16 +377,13 @@ namespace engine
 		ImGui::SetNextWindowPos(ImVec2(w - rightPanelWidth, IMGUI_TOP_MENU_HEIGHT));
 		ImGui::SetNextWindowSize(ImVec2(rightPanelWidth, h));
 
-
 		ImGuiWindowFlags windowFlags = 0;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 		windowFlags |= ImGuiWindowFlags_NoMove;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
-
+		windowFlags |= ImGuiWindowFlags_NoResize;
 		
 		ImGui::Begin("##RightPanel", nullptr, windowFlags);
-
-		rightPanelWidth = ImGui::GetWindowWidth();
 
 		if (ImGui::BeginTabBar("##RightPanelTabs", ImGuiTabBarFlags_AutoSelectNewTabs))
 		{
@@ -471,10 +483,9 @@ namespace engine
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
 		windowFlags |= ImGuiWindowFlags_NoMove;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
+		windowFlags |= ImGuiWindowFlags_NoResize;
 
 		ImGui::Begin("##LeftPanel", nullptr, windowFlags);
-
-		leftPanelWidth = ImGui::GetWindowWidth();
 
 		if (ImGui::BeginTabBar("##LeftPanelTabs", ImGuiTabBarFlags_AutoSelectNewTabs))
 		{
@@ -938,12 +949,11 @@ namespace engine
 		windowFlags |= ImGuiWindowFlags_NoMove;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
 		windowFlags |= ImGuiWindowFlags_NoTitleBar;
+		windowFlags |= ImGuiWindowFlags_NoResize;
 
 		ImGui::SetNextWindowPos(ImVec2(leftPanelWidth, h - bottomPanelHeight));
 		ImGui::SetNextWindowSize(ImVec2(w - leftPanelWidth - rightPanelWidth, bottomPanelHeight));
 		ImGui::Begin("##BottomPanel", nullptr, windowFlags);
-
-		bottomPanelHeight = ImGui::GetWindowHeight();
 
 		if (ImGui::BeginTabBar("##BottomTabs", ImGuiTabBarFlags_None))
 		{
@@ -1066,8 +1076,6 @@ namespace engine
 				memcpy(name, data.c_str(), 64);
 				ImGui::InputText(("##" + seralizableVariable.name).c_str(), name, IM_ARRAYSIZE(name));
 				*static_cast<std::string*>(seralizableVariable.data) = name;
-
-				// ImGui::Text(data.c_str());
 			}
 			else if (seralizableVariable.type == SerializableType::INT)
 			{
