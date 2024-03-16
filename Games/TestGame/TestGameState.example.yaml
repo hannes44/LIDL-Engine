@@ -1,167 +1,131 @@
 GameObjects:
-  - name: Light
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 20, 0, 1]
-    isVisible: true
-    isExternalMultiplayerObject: false
-    Id: VnAkBEyfrttMRtBCJIDhDLFPstlCdhnX
-    tag: ""
-    parent: NONE
-    children: []
-    Components:
-      - name: PointLight
-        Id: TQPZstemhROzkdnJxYaDalYqqWTPRkKa
-        Color: [1, 1, 1]
-        Intensity: 10
-        Constant: 2.5
-        Linear: 0
-        Quadratic: 0
-  - name: Box 2
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 6, 0, 0, 1]
-    isVisible: true
-    isExternalMultiplayerObject: false
-    Id: YPEfFurHNtwOgXyNGJJCksgpTeKXaDKC
-    tag: ""
-    parent: NONE
-    children: []
-    Components:
-      - name: Mesh
-        Id: gpSgRZXGDOvFcawOHpXvxdqEVXdnBRNr
-        OBJ File: ""
-        Primitive Type: CUBE
-        Material: ZDVtTczArxXwTkBBNKMJDVZSvHmrmuWR
-        Render From Camera Transform: false
-        Is Visible: true
-      - name: Physics
-        Id: QIPAjVweNpSZufppsCJdqXkrRlZwLISL
-        Gravity: false
-        Mass: 2
-        Force: [0, 0, 0]
-        Acceleration: [0, 0, 0]
-        Velocity: [-4, 0, 0]
-      - name: Box Collider
-        Id: JWucrQVjXZVpmYHjOdSDfAKloqKLKTYv
-        Offset: [0.300000012, 0.100000001, 0.100000001]
-        Extent: [1.10000002, 1.10000002, 1.10000002]
-        IsPlatform: false
-  - name: Ball without gravity
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -10, 0, 0, 1]
-    isVisible: true
-    isExternalMultiplayerObject: false
-    Id: erPGkXdGaylFSIaFimLfDzYkfoRKcAiv
-    tag: ""
-    parent: NONE
-    children: []
-    Components:
-      - name: Mesh
-        Id: gpSgRZXGDOvFcawOHpXvxdqEVXdnBRNr
-        OBJ File: ""
-        Primitive Type: CUBE
-        Material: ZDVtTczArxXwTkBBNKMJDVZSvHmrmuWR
-        Render From Camera Transform: false
-        Is Visible: true
-      - name: Physics
-        Id: aWDhaUxVhBdbKusFJAcmTGQYyrHpZGGj
-        Gravity: false
-        Mass: 1
-        Force: [0, 0, 0]
-        Acceleration: [0, 0, 0]
-        Velocity: [0, 0, 0]
-      - name: Box Collider
-        Id: ATUMXugNqtrDpNgmlNbRMKqQOdFZRAXn
-        Offset: [0, 0, 0]
-        Extent: [1, 1, 1]
-        IsPlatform: false
-      - name: Controllable
-        Id: XRjuKBfbDiPFMwhauaZaLZiAuPWDgSFX
-        Enable Forces: true
-        Movement Speed: 3
-        Rotation Speed: 0.00499999989
-        Allow Instant Turnaround: true
-        Allow Jump: false
-  - name: Box 1
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
-    isVisible: true
-    isExternalMultiplayerObject: false
-    Id: gmRwZIaCRlcvfUqTODYSsAtltTAnGdRN
-    tag: ""
-    parent: NONE
-    children: []
-    Components:
-      - name: Mesh
-        Id: gpSgRZXGDOvFcawOHpXvxdqEVXdnBRNr
-        OBJ File: ""
-        Primitive Type: CUBE
-        Material: ZDVtTczArxXwTkBBNKMJDVZSvHmrmuWR
-        Render From Camera Transform: false
-        Is Visible: true
-      - name: Physics
-        Id: ulzZJOSAIgKrFBdSlasWdvdlkMRAHFqu
-        Gravity: false
-        Mass: 1
-        Force: [0, 0, 0]
-        Acceleration: [0, 0, 0]
-        Velocity: [0, 0, 0]
-      - name: Box Collider
-        Id: ATUMXugNqtrDpNgmlNbRMKqQOdFZRAXn
-        Offset: [0, 0, 0]
-        Extent: [1, 1, 1]
-        IsPlatform: false
   - name: Camera
-    transform: [1, 0, 0, 0, 0, 0.89442718, -0.5, 0, -0, 0.44721359, 1, 0, 0, 10, 25, 1]
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1.51135445, 11.457242, 1]
     isVisible: true
     isExternalMultiplayerObject: false
-    Id: lwDdOInnCWlohtkunIhUEXSBwsYdrpov
+    Id: BQGdtjRoIcAaNwmchfBmkciwugCBecpu
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Camera
-        Id: YQrZojHURZTflljorvNPnDDIYUdXkrrG
+        Id: cjspLKhxSJNujYOYnFWzenvXjVNBUdLR
         FOV: 50
         Near Plane: 0.100000001
         Far Plane: 1000
         Is Main Camera: false
-  - name: Sphere 1
-    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 15, 0, 0, 1]
+  - name: Player
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0.810732245, -2.14827156, 1]
     isVisible: true
     isExternalMultiplayerObject: false
-    Id: usWFgiQoTctnwgTdXeQvZpqfmKSOWveP
+    Id: EampnzAjIwiOBnASUZWRhrxWJvnvZDRn
     tag: ""
     parent: NONE
     children: []
     Components:
       - name: Mesh
-        Id: gpSgRZXGDOvFcawOHpXvxdqEVXdnBRNr
+        Id: PrwbOuxurDVWjhekxeQsfubGOCDVPgvW
         OBJ File: ""
         Primitive Type: CUBE
-        Material: ZDVtTczArxXwTkBBNKMJDVZSvHmrmuWR
+        Material: UKDmCheZAbsWpcVQLBBsZqXGfxIwSRIn
         Render From Camera Transform: false
         Is Visible: true
-      - name: Physics
-        Id: aWDhaUxVhBdbKusFJAcmTGQYyrHpZGGj
-        Gravity: false
-        Mass: 1
-        Force: [0, 0, 0]
-        Acceleration: [0, 0, 0]
-        Velocity: [0, 0, 0]
-      - name: Sphere Collider
-        Id: JpPEFONARYwGgjSJiwTQaojpAZkcmGae
-        Offset: [0, 0, 0]
-        Extent: [1.10000002, 1.10000002, 1.10000002]
+  - name: Plane
+    transform: [10, 0, 0, 0, 0, 0.00999999978, 0, 0, 0, 0, 10, 0, 0, 0, 0, 1]
+    isVisible: true
+    isExternalMultiplayerObject: false
+    Id: ToQsKqMsTMTWvmoRitIeAZIOoqsZLetU
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        Id: KEoXHvbeAJAWTYVsceGDijaqfFcAuhRd
+        OBJ File: ""
+        Primitive Type: CUBE
+        Material: uhuHsDgjdeZtvznaULYIESgeuqtJDExQ
+        Render From Camera Transform: false
+        Is Visible: true
+  - name: Scenary
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 3.79363394, 0.893440008, 3.18038702, 1]
+    isVisible: true
+    isExternalMultiplayerObject: false
+    Id: mEoMlBUxVADcnVSgkmXEUZnhxZkiHMeP
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: Mesh
+        Id: aLWYORRipCGZQGtGRAcsBfslsuNUmjoh
+        OBJ File: ""
+        Primitive Type: SPHERE
+        Material: TlbexXKnxvmGYQihkiykhOVKGebopLqE
+        Render From Camera Transform: false
+        Is Visible: true
+  - name: Light
+    transform: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 7.22837353, 0, 1]
+    isVisible: true
+    isExternalMultiplayerObject: false
+    Id: rmSOQGdinnCwYameXLKMITuPNnfyzWRH
+    tag: ""
+    parent: NONE
+    children: []
+    Components:
+      - name: PointLight
+        Id: kaUHaYMhoTgXVAWTvcoFnavEyKMZQvCA
+        Color: [1, 1, 1]
+        Intensity: 10
+        Constant: 0.300000012
+        Linear: 0.109999999
+        Quadratic: 0.0199999996
 Textures:
-  - name: glocken
-    fileName: glocken.png
-    Id: gkFGVQpbQgHLhkOGKFacWuslvEOTfVJQ
+  - name: Lobster_material_1
+    fileName: Lobster_material_1.png
+    Id: HWVRtrEElhNgHnfehjYcSRvgNbGdgaMO
 Materials:
   - Base Color: [1, 1, 1]
     Transparency: 1
     Emission: [0, 0, 0]
     Roughness: 0
     Shininess: 0.5
-    Name: GLOCKEN :)
-    Diffuse Texture: gkFGVQpbQgHLhkOGKFacWuslvEOTfVJQ
+    Name: Lobster
+    Diffuse Texture: HWVRtrEElhNgHnfehjYcSRvgNbGdgaMO
+    Specular Texture: HWVRtrEElhNgHnfehjYcSRvgNbGdgaMO
+    Id: EkUeSwFMmJEKOiaKWYQrlvaqHVAuWqLp
+    isExternalMultiplayerObject: false
+  - Base Color: [0, 0.466666639, 0.0155555401]
+    Transparency: 1
+    Emission: [0, 0, 0]
+    Roughness: 0
+    Shininess: 0.5
+    Name: Green
+    Diffuse Texture: ""
     Specular Texture: ""
-    Id: ZDVtTczArxXwTkBBNKMJDVZSvHmrmuWR
+    Id: TlbexXKnxvmGYQihkiykhOVKGebopLqE
+    isExternalMultiplayerObject: false
+  - Base Color: [0.76111114, 0.308672845, 0.308672845]
+    Transparency: 1
+    Emission: [0, 0, 0]
+    Roughness: 0
+    Shininess: 0.5
+    Name: Red
+    Diffuse Texture: ""
+    Specular Texture: ""
+    Id: UKDmCheZAbsWpcVQLBBsZqXGfxIwSRIn
+    isExternalMultiplayerObject: false
+  - Base Color: [0.0516049229, 0.500880659, 0.844444454]
+    Transparency: 1
+    Emission: [0, 0, 0]
+    Roughness: 0
+    Shininess: 0.5
+    Name: Blue
+    Diffuse Texture: ""
+    Specular Texture: ""
+    Id: uhuHsDgjdeZtvznaULYIESgeuqtJDExQ
     isExternalMultiplayerObject: false
 Actions:
   - Copy: [224, 6]
+  - Save: [224, 22]
+  - Paste: [224, 25]
+  - Start: [22]
+  - SpawnObject: [44]
