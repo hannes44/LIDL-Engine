@@ -2,7 +2,7 @@ using Engine;
 using System;
 using System.Numerics;
 
-public class Player
+public class DemoPlayer
 {
     // The unique identifier for this component
     public string Id;
@@ -18,7 +18,8 @@ public class Player
     public void Update(float dt)
     {
         timeSinceMoved += dt;
-        if (started && timeSinceMoved > 2.0f) {
+        if (started && timeSinceMoved > 2.0f)
+        {
             Random random = new Random();
             gameObject.transform.SetTranslation(new Vector3(random.Next(-2, 2), random.Next(-2, 2), random.Next(-2, 2)));
             timeSinceMoved = 0;
