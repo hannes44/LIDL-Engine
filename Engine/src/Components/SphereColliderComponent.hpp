@@ -11,7 +11,7 @@ namespace engine
 	{
 	public:
 		SphereColliderComponent(glm::vec3 offset = glm::vec3(0, 0, 0), float radius = 1, bool isPlatform = false) : radius(radius), ColliderComponent(offset, glm::vec3(radius, radius, radius), isPlatform) {}
-	
+
 		void drawCollider(CameraComponent* camera);
 		BoundingBox getBoundingBox();
 		std::string getName() override;
@@ -23,7 +23,7 @@ namespace engine
 			return {
 				{SerializableType::FLOAT, "Radius", "The radius of the collider", &radius},
 				{SerializableType::VECTOR3, "Offset", "The offset of the collider", &offset},
-				{SerializableType::VECTOR3, "Extent", "The extent of the collider", &extent} 
+				{SerializableType::VECTOR3, "Extent", "The extent of the collider", &extent}
 			};
 		};
 

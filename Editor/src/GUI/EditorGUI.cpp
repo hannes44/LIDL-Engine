@@ -282,7 +282,7 @@ namespace engine
 
 		if (event.getAction() == "Copy" && event.getEventType() == InputEventType::ActionDown)
 		{
-			copySelectedGameObject();	
+			copySelectedGameObject();
 		}
 
 		if (event.getAction() == "Save" && event.getEventType() == InputEventType::ActionDown)
@@ -377,7 +377,7 @@ namespace engine
 		windowFlags |= ImGuiWindowFlags_NoMove;
 		windowFlags |= ImGuiWindowFlags_NoScrollbar;
 		windowFlags |= ImGuiWindowFlags_NoResize;
-		
+
 		ImGui::Begin("##RightPanel", nullptr, windowFlags);
 
 		if (ImGui::BeginTabBar("##RightPanelTabs", ImGuiTabBarFlags_AutoSelectNewTabs))
@@ -430,7 +430,7 @@ namespace engine
 			{
 				for (auto child : gameObject->getChildren())
 					drawGameObject(child);
-				
+
 				ImGui::TreePop();
 			}
 		}
@@ -682,7 +682,7 @@ namespace engine
 				tabFlags = ImGuiTabItemFlags_SetSelected;
 				wasStopButtonPressed = false;
 			}
-				
+
 
 			if (ImGui::BeginTabItem("Scene", nullptr, tabFlags))
 			{
@@ -697,7 +697,7 @@ namespace engine
 				tabFlags = ImGuiTabItemFlags_SetSelected;
 				wasPlayButtonPressed = false;
 			}
-				
+
 
 			if (ImGui::BeginTabItem("Game", nullptr, tabFlags))
 			{
@@ -709,7 +709,7 @@ namespace engine
 		}
 
 		ImGui::SameLine();
-	
+
 		if (sceneState == EditorSceneState::Scene)
 		{
 			ImVec4 color = ImGui::GetStyle().Colors[ImGuiCol_MenuBarBg];
@@ -1151,7 +1151,7 @@ namespace engine
 
 			if (operationWindow->Pos.y < viewPortPosition.y)
 				ImGui::SetNextWindowPos(ImVec2(operationWindowPosX, viewPortPosition.y));
-			else if ((operationWindow->Pos.y + windowHeight)> viewPortPosition.y + viewPortSize.y)
+			else if ((operationWindow->Pos.y + windowHeight) > viewPortPosition.y + viewPortSize.y)
 				ImGui::SetNextWindowPos(ImVec2(operationWindowPosX, viewPortPosition.y + viewPortSize.y - windowHeight));
 		}
 
@@ -1168,7 +1168,7 @@ namespace engine
 
 		if (ImGui::ImageButton("##rotateOperationButton", (void*)(intptr_t)rotateIconTexture->textureIDOpenGL, ImVec2(25, 25), { 0, 1 }, { 1, 0 }))
 			gizmoOperation = ImGuizmo::ROTATE;
-		
+
 		if (pushedStyleColor)
 			ImGui::PopStyleColor();
 
@@ -1182,7 +1182,7 @@ namespace engine
 
 		if (ImGui::ImageButton("##translateOperationButton", (void*)(intptr_t)translateIconTexture->textureIDOpenGL, ImVec2(25, 25), { 0, 1 }, { 1, 0 }))
 			gizmoOperation = ImGuizmo::TRANSLATE;
-		
+
 		if (pushedStyleColor)
 			ImGui::PopStyleColor();
 
@@ -1196,7 +1196,7 @@ namespace engine
 
 		if (ImGui::ImageButton("##scaleOperationButton", (void*)(intptr_t)scaleIconTexture->textureIDOpenGL, ImVec2(25, 25), { 0, 1 }, { 1, 0 }))
 			gizmoOperation = ImGuizmo::SCALE;
-		
+
 		if (pushedStyleColor)
 			ImGui::PopStyleColor();
 
@@ -1212,7 +1212,7 @@ namespace engine
 
 		if (ImGui::ImageButton("##worldOperationButton", (void*)(intptr_t)worldIconTexture->textureIDOpenGL, ImVec2(25, 25), { 0, 1 }, { 1, 0 }))
 			isGizmoOperationInWorldSpace = !isGizmoOperationInWorldSpace;
-		
+
 		if (pushedStyleColor)
 			ImGui::PopStyleColor();
 
@@ -1431,7 +1431,7 @@ namespace engine
 		int mouseX, mouseY;
 		window.getMousePosition(&mouseX, &mouseY);
 
-		if (mouseX < viewPortPosition.x || mouseX > (viewPortPosition.x + viewPortSize.x))
+		if (mouseX < viewPortPosition.x || mouseX >(viewPortPosition.x + viewPortSize.x))
 			return false;
 
 		if (mouseY < viewPortPosition.y || mouseY >(viewPortPosition.y + viewPortSize.y))

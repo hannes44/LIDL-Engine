@@ -13,7 +13,7 @@ namespace fs = std::filesystem;
 
 namespace engine
 {
-	#define EDITOR_CONFIG_FILE_NAME "editor_settings"
+#define EDITOR_CONFIG_FILE_NAME "editor_settings"
 
 	EditorSerializer::EditorSerializer()
 	{
@@ -51,7 +51,7 @@ namespace engine
 
 
 		std::string fileName = EDITOR_CONFIG_FILE_NAME;
-		
+
 		YAML::Node config = YAML::LoadFile(ResourceManager::getPathToEditorResource(fileName + CONFIG_FILE_EXTENSION));
 
 		EditorSettings settings{};
@@ -59,7 +59,7 @@ namespace engine
 		GameSerializer::deserializeSerializable(config, &settings);
 
 		GameSerializer::deserializeSerializable(config, &settings.rendererSettings);
-		
+
 		LOG_INFO("Deserialized editor settings: ");
 		return settings;
 	}

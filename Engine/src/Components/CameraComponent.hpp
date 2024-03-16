@@ -10,8 +10,8 @@ namespace engine
 	{
 	public:
 		CameraComponent() {};
-		
-        void update(float deltaTime) override;
+
+		void update(float deltaTime) override;
 
 		Transform getTransform();
 		glm::mat4 getViewMatrix();

@@ -13,34 +13,34 @@ namespace engine
 
 	class MainMenuGUI
 	{
-public:
-	std::shared_ptr<engine::Project> MainMenu();
+	public:
+		std::shared_ptr<engine::Project> MainMenu();
 
-private:
-	void renderNewFrame();
+	private:
+		void renderNewFrame();
 
-	void endFrame();
+		void endFrame();
 
-	void renderMainMenu();
+		void renderMainMenu();
 
-	void renderHeader();
+		void renderHeader();
 
-	void renderFooter();
+		void renderFooter();
 
-	void renderNewProjectTab();
+		void renderNewProjectTab();
 
-	void renderOpenProjectTab();
+		void renderOpenProjectTab();
 
-	Window& window = Window::getInstance();
+		Window& window = Window::getInstance();
 
-	MainMenuState state = MainMenuState::NewProject;
+		MainMenuState state = MainMenuState::NewProject;
 
-	const int inputBufferSize = 100;
+		const int inputBufferSize = 100;
 
-	inline static char projectName[100] = "New Project";
+		inline static char projectName[100] = "New Project";
 
-	inline static char projectPath[100] = "C:/Users/";
+		inline static char projectPath[100] = "C:/Users/";
 
-	bool stopStartMenu = false;
+		bool stopStartMenu = false;
 	};
 }

@@ -55,7 +55,7 @@ namespace engine
 				}
 			}
 		}
-			
+
 		// We also need to search the scripts folder
 		pathToSearch = getPathToActiveGameFolder() + "Scripts/";
 
@@ -166,7 +166,7 @@ namespace engine
 			if (entry.path().extension() == ".cs")
 				scriptNames.push_back(entry.path().filename().string());
 		}
-			
+
 		return scriptNames;
 	}
 
@@ -185,7 +185,7 @@ namespace engine
 
 		std::string className = scriptFileName.substr(0, scriptFileName.find_last_of("."));
 		std::string oldClassName = "TemplateComponent";
-		
+
 		std::string const result = std::regex_replace(str, std::regex(oldClassName), className);
 
 		in_file.close();
@@ -193,7 +193,7 @@ namespace engine
 		std::ofstream out_file(destinationPath);
 		out_file << result;
 	}
-	
+
 	std::vector<std::string> ResourceManager::getAllGameNamesInGamesFolder()
 	{
 		std::string path = "../../../games/";
@@ -402,7 +402,7 @@ namespace engine
 		{
 			return cachedTexturesData[fileName];
 		}
-		
+
 		return std::nullopt;
 	}
 

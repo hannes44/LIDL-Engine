@@ -168,7 +168,7 @@ namespace engine
 		// The colliding game objects and the distance to the origin
 		std::vector<std::tuple<std::shared_ptr<GameObject>, float>> collidingGameObjects;
 
-		for (auto& [id, gameObject] : game->getGameObjects()) 
+		for (auto& [id, gameObject] : game->getGameObjects())
 		{
 			if (auto meshComponent = gameObject->getComponent<MeshComponent>())
 			{
@@ -177,7 +177,7 @@ namespace engine
 				{
 					collidingGameObjects.push_back({ gameObject, t });
 				}
-					
+
 			}
 		}
 

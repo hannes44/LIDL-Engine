@@ -69,6 +69,6 @@ namespace engine {
 
 		void moveOnHold(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent);
 		void alwaysMove(const InputEvent& event, const InputEventType& eventType, std::shared_ptr<PhysicsComponent> physicsComponent);
-        void changeDirection(const InputEvent &event);
-    };
+		void changeDirection(const InputEvent& event);
+	};
 }

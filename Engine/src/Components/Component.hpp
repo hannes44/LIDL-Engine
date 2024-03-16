@@ -21,8 +21,8 @@ namespace engine
 	class Component : public Serializable
 	{
 	public:
-		virtual void initialize(){};
-		virtual void update(float deltaTime){};
+		virtual void initialize() {};
+		virtual void update(float deltaTime) {};
 
 		virtual std::string getName() = 0;
 
@@ -36,11 +36,11 @@ namespace engine
 
 		UUID uuid{};
 
-		void setGameObject(GameObject *gameObject)
+		void setGameObject(GameObject* gameObject)
 		{
 			this->gameObject = gameObject;
 		}
 
-		GameObject *gameObject = nullptr;
+		GameObject* gameObject = nullptr;
 	};
 }

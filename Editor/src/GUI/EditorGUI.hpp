@@ -125,7 +125,7 @@ namespace engine
 		std::shared_ptr<Texture> playIconTexture;
 
 		// The framebuffer that the game will be rendered into
-		std::shared_ptr<Texture> viewPortTexture; 
+		std::shared_ptr<Texture> viewPortTexture;
 
 		// These widths will change dynamically when the user resizes the panels
 		float leftPanelWidth = 300;

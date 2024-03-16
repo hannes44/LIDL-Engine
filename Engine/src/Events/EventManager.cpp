@@ -13,9 +13,8 @@ namespace engine
 	EventManager& EventManager::getInstance()
 	{
 		if (instance == nullptr)
-		{
 			instance = new EventManager();
-		}
+
 		return *instance;
 	}
 

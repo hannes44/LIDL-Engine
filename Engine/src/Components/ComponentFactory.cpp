@@ -60,8 +60,8 @@ namespace engine
 		}
 
 		LOG_INFO("Did not find component: {0} in list of default components, looking for script component");
-		
-		
+
+
 		// Add .cs extension to the component if it is not already there
 		if (componentName.find(".cs") == std::string::npos)
 		{

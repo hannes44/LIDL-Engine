@@ -53,9 +53,11 @@ namespace engine {
 		buttons = SDL_GetMouseState(&x, &y);
 		if (buttons & SDL_BUTTON(SDL_BUTTON_LEFT)) {
 			keysPressed.push_back(Key::MOUSE_LEFT);
-		} else if (buttons & SDL_BUTTON(SDL_BUTTON_RIGHT)) {
+		}
+		else if (buttons & SDL_BUTTON(SDL_BUTTON_RIGHT)) {
 			keysPressed.push_back(Key::MOUSE_RIGHT);
-		} else if (buttons & SDL_BUTTON(SDL_BUTTON_MIDDLE)) {
+		}
+		else if (buttons & SDL_BUTTON(SDL_BUTTON_MIDDLE)) {
 			keysPressed.push_back(Key::MOUSE_MIDDLE);
 		}
 

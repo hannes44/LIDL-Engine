@@ -9,7 +9,7 @@ extern "C" {
 		engine::Logger::init();
 		engine::ResourceManager::instance = resourceManager;
 		engine::Game* game = new engine::TestGame();
-		
+
 		resourceManager->changeGame(game);
 		return game;
 	}

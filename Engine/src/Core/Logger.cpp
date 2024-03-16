@@ -13,6 +13,3 @@ namespace engine
 
 	std::shared_ptr<spdlog::logger> Logger::coreLogger;
 }
-
-
-

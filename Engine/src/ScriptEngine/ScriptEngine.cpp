@@ -29,12 +29,12 @@ namespace engine
 {
 	extern "C"
 	{
-		#include "../../../vendor/Lua/include/lua.h"
-		#include "../../../vendor/Lua/include/lauxlib.h"
-		#include "../../../vendor/Lua/include/lualib.h"
+#include "../../../vendor/Lua/include/lua.h"
+#include "../../../vendor/Lua/include/lauxlib.h"
+#include "../../../vendor/Lua/include/lualib.h"
 	}
 
-	#pragma comment(lib, "../../../vendor/Lua/lua54.lib")
+#pragma comment(lib, "../../../vendor/Lua/lua54.lib")
 
 	void ScriptEngine::updateScriptableComponent(ScriptableComponent* component, float deltaTime)
 	{
@@ -56,7 +56,7 @@ namespace engine
 		}
 
 		sol::state_view lua(L);
-		
+
 		syncGameObjectStateEngineToScript(component);
 		syncScriptableVariablesToScript(component);
 		sol::table componentTable = lua[component->uuid.id];
@@ -64,7 +64,7 @@ namespace engine
 		syncGameObjectStateScriptToEngine(component);
 		syncScriptableVariablesToEngine(component);
 
-		
+
 		LOG_INFO("Initializing scriptable component");
 	}
 
@@ -90,7 +90,7 @@ namespace engine
 		// when "[SerializableData]" is found alone at a line, the next line will be the variable declaration
 		bool previousLineWasPatternAlone = false;
 
-		while (std::getline(file, line)) 
+		while (std::getline(file, line))
 		{
 			if (previousLineWasPatternAlone)
 			{
@@ -161,7 +161,7 @@ namespace engine
 	std::tuple<std::shared_ptr<void>, SerializableType> ScriptEngine::getVariableDataFromLine(const std::string& variableName, ScriptableComponent* component)
 	{
 		sol::state_view lua(L);
-		
+
 		// We need to create a shared pointer for the specific type first and then cast it to a shared void pointer
 		// if we do not create the void pointer from the type pointer, the destructor of the type pointer will
 		// not be added to the void pointer and the type pointer will not be deleted when the void pointer is deleted
@@ -216,7 +216,7 @@ namespace engine
 
 		auto [data, type] = getVariableDataFromLine(variableName, component);
 
-		SerializableVariable variable = { type , variableName, "", data.get()};
+		SerializableVariable variable = { type , variableName, "", data.get() };
 		component->serializableVariables.push_back(variable);
 		component->scriptVariablesData.push_back(data);
 	}
@@ -235,7 +235,7 @@ namespace engine
 			{
 				loadScriptStatesIntoNewLuaState(game);
 				return;
-			}	
+			}
 			int savedByteSize = scriptFileByteSizes[scriptName];
 
 			std::string pathToScript = ResourceManager::getInstance()->getPathToGameResource(scriptName);
@@ -434,7 +434,7 @@ namespace engine
 	// If the scriptable variables have been updated in the script, we need to sync the new values to the engine
 	void ScriptEngine::syncScriptableVariablesToEngine(ScriptableComponent* component)
 	{
-	
+
 		sol::state_view lua(L);
 
 		for (auto& variable : component->serializableVariables)
@@ -555,11 +555,11 @@ namespace engine
 		LOG_INFO("C# scripts compiled to lua");
 
 		decodeCompiledAPILuaFiles();
-		
+
 		LOG_INFO("Copying compiled scripts to build directory");
 		// Copying the compiled scripts to the build directory. 
 		// TODO: It should be possible to change the path of the lua launcher script instead
-		std::filesystem::copy("../../../Games/" + game->name +"/Scripts/Compiled/", "../../Debug/", std::filesystem::copy_options::overwrite_existing);
+		std::filesystem::copy("../../../Games/" + game->name + "/Scripts/Compiled/", "../../Debug/", std::filesystem::copy_options::overwrite_existing);
 		std::filesystem::copy("../../../Games/" + game->name + "/Scripts/Compiled/API/", "../../Debug/", std::filesystem::copy_options::overwrite_existing);
 		LOG_INFO("Compiled scripts copied to build directory");
 
@@ -582,7 +582,7 @@ namespace engine
 		bindEngineAPIToLuaState();
 
 		compileCSharpFilesToLua();
-		
+
 		// Require doesn't work if only sol is used, using base lua for loading state and sol for the rest
 		luaL_openlibs(L);
 

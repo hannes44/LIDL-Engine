@@ -581,7 +581,7 @@ namespace engine
 
 			auto existingTexture = game->getTexture(textureID);
 			bool exists = !existingTexture.expired();
-			
+
 			std::shared_ptr<Texture> texture;
 			if (!exists)
 				texture = std::shared_ptr<Texture>(Texture::create(filename));
@@ -810,10 +810,10 @@ namespace engine
 					component = ComponentFactory::createComponent(componentName);
 					component->uuid.id = componentID;
 				}
-					
+
 
 				deserializeComponent(componentNode, gameObject, game, component.get());
-				if(!exists)
+				if (!exists)
 					gameObject->addComponent(component);
 			}
 			catch (const std::exception& e)

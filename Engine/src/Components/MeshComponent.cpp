@@ -214,10 +214,10 @@ namespace engine
 		LOG_TRACE("Generating max points for mesh");
 		Transform globalTransform = gameObject->getGlobalTransform();
 		maxPoints = glm::vec3();
-		
+
 		for (auto& vertex : meshData->vertices) {
 			glm::vec4 worldPosition = globalTransform.transformMatrix * glm::vec4(vertex.position, 0);
-			
+
 			maxPoints.x = std::max(maxPoints.x, std::abs(worldPosition.x));
 			maxPoints.y = std::max(maxPoints.y, std::abs(worldPosition.y));
 			maxPoints.z = std::max(maxPoints.z, std::abs(worldPosition.z));
@@ -229,7 +229,7 @@ namespace engine
 	// The max points are still valid if the transform matrix is translated, so we need to remove the translation data from the matrix to compare
 	glm::mat4 MeshComponent::getComparableTransformMatrix(glm::mat4 transformMatrix) {
 		glm::mat4 comparableMatrix = transformMatrix;
-		comparableMatrix[3] = glm::vec4{0, 0, 0, 1};
+		comparableMatrix[3] = glm::vec4{ 0, 0, 0, 1 };
 		return comparableMatrix;
 	}
 
@@ -239,9 +239,9 @@ namespace engine
 	}
 
 	BoundingBox MeshComponent::getBoundingBox() {
-		if(!isMaxPointsValid())
+		if (!isMaxPointsValid())
 			generateMaxPoints();
-		
+
 		return BoundingBox(gameObject->getGlobalTransform().getPosition(), maxPoints * glm::vec3(2));
 	}
 

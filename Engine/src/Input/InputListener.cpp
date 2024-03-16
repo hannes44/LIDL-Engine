@@ -21,5 +21,4 @@ namespace engine {
 		// Add your input handling logic here || or override this function in a subclass
 		// You can access other information from the event, e.g., event.getX(), event.getY(), etc.
 	}
-
 }
