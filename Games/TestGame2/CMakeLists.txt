@@ -1,8 +1,8 @@
-project(Game2, VERSION 0.01)
+project(TestGame2Exe, VERSION 0.01)
 
 # Create executable
-add_executable(Game2)
-target_sources(Game2 PRIVATE 
+add_executable(TestGame2Exe)
+target_sources(TestGame2Exe PRIVATE 
 	TestGame2.hpp
 	TestGame2.cpp
 )
@@ -15,7 +15,7 @@ add_library(TestGame2 SHARED
 target_include_directories(TestGame2 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Link libraries
-target_link_libraries(Game2 PRIVATE
+target_link_libraries(TestGame2Exe PRIVATE
 	engine
 	vendor	
 	imgui
