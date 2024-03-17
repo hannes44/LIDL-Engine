@@ -1,5 +1,5 @@
 # LIDL Engine
-**Note: not affiliated with or in any way connected to LIDL or any of its subsidaries.**
+**Disclaimer: not affiliated with or in any way connected to LIDL or any of its subsidaries.**
 
 A custom game engine written in C++, as part of the course *TDA572 Game engine architecture* at Chalmers. It draws inspiration from the Unity game engine, which we all had prior experience with through [our bachelor's thesis project](https://github.com/marc7s/TrafficSimulator). It features a game editor allowing you to create games from within the editor, which then integrates with the game engine allowing you to play your games.
 
