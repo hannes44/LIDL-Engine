@@ -1335,7 +1335,7 @@ namespace engine
 				char buf[64];
 				sprintf(buf, "%s###Button", name);
 				ImGui::Button(buf);
-				if (ImGui::BeginPopupContextItem())
+				if (ImGui::BeginPopupContextItem("NamePopup", ImGuiPopupFlags_MouseButtonLeft))
 				{
 					ImGui::Text("Edit name:");
 					ImGui::InputText("##edit", name, IM_ARRAYSIZE(name));
