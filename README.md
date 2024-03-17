@@ -75,7 +75,9 @@ FPS Game is developed entirely through the game editor, using scriptable compone
 
 ## Setup
 1. Clone the repository with `git clone --recurse-submodules https://github.com/hannes44/LIDL-Engine.git`
-2. Install [CMake](https://cmake.org/download/)
-3. Run cmake at the top folder layer. For example: `cmake -G "Visual Studio 17 2022" -A x64 -S . -B build`
-4. Go to the generated build folder and open `GameEngine.sln` in Visual Studio 2022
-5. Right click either `Editor`, or a game exe project depending on what you want to run in the Solution explorer and select `Set as Startup Project`
+2. Create state and config files for the games according to their example files. For example, duplicate `Snake3DConfig.example.yaml` as `Snake3DConfig.yaml` and `Snake3DState.example.yaml` as `Snake3DState.yaml` to be able to run the Snake game
+3. Duplicate `Editor/editor_settings.example.yaml` as `Editor/editor_settings.yaml` and configure your settings
+4. Install [CMake](https://cmake.org/download/)
+5. Run cmake at the top folder layer. For example: `cmake -G "Visual Studio 17 2022" -A x64 -S . -B build`
+6. Go to the generated build folder and open `GameEngine.sln` in Visual Studio 2022
+7. Right click either `Editor`, or a game exe project depending on what you want to run in the Solution explorer and select `Set as Startup Project`
