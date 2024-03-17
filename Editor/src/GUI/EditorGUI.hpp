@@ -139,7 +139,7 @@ namespace engine
 		glm::vec2 viewPortPosistionInPercent = glm::vec2(0.25f, 0.25f);
 
 		SOCKET multiplayerSocket = INVALID_SOCKET;
-		std::string MULTIPLAYER_STATE_FOLDER = "../../../MultiplayerStates/";
+		std::string MULTIPLAYER_STATE_FOLDER = "../../../Multiplayer/MultiplayerStates/";
 		std::string MULTIPLAYER_STATE_FILE_EXTENSION = ".yaml";
 		std::mutex multiplayerReceiveLock{};
 	};
