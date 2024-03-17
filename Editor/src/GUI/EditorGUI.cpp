@@ -136,15 +136,18 @@ namespace engine
 
 			GamePhysics::getInstance().fixedUpdate(editorGameObjects, editorPhysicsSettings);
 
+			renderer->defaultRendererSettings.width = viewPortSize.x;
+			renderer->defaultRendererSettings.height = viewPortSize.y;
+
 			if (noGUIMode)
 			{
 				// When in no GUI mode, render to entire window
 				window.getWindowSize(&editorSettings.rendererSettings.width, &editorSettings.rendererSettings.height);
-				Renderer::getInstance()->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings, glm::vec2(0));
+				renderer->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings, glm::vec2(0));
 			}
 			else
 			{
-				Renderer::getInstance()->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings, viewPortPosition);
+				renderer->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings, viewPortPosition);
 			}
 
 			renderer->renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
@@ -816,7 +819,8 @@ namespace engine
 					ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, &(lockedGameObject->transform.transformMatrix[0][0]));
 				}
 
-				for (auto component : lockedGameObject->getComponents())
+				std::vector<std::shared_ptr<Component>> components = lockedGameObject->getComponents();
+				for (auto component : components)
 				{
 					std::string componentName = component->getName();
 
@@ -829,8 +833,16 @@ namespace engine
 					if (ImGui::CollapsingHeader(componentName.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 					{
 						drawSerializableVariables(component.get());
+
+						if (ImGui::Button(("Remove Component##" + component->uuid.id).c_str()))
+						{
+							lockedGameObject->removeComponent(component);
+						}
 					}
 				}
+
+				ImGui::Spacing();
+				ImGui::Separator();
 
 				if (ImGui::Button("Add Component"))
 				{
@@ -978,9 +990,12 @@ namespace engine
 
 				if (ImGui::SmallButton("New Script"))
 				{
-					std::string scriptName = newScriptName + std::string(".cs");
-					ResourceManager::getInstance()->createNewScriptForActiveGame(scriptName);
-					assetManager->addNewScriptNode(scriptName);
+					if (newScriptName[0] != '\0')
+					{
+						std::string scriptName = newScriptName + std::string(".cs");
+						ResourceManager::getInstance()->createNewScriptForActiveGame(scriptName);
+						assetManager->addNewScriptNode(scriptName);
+					}
 				}
 
 				ImGui::SameLine();
@@ -1243,10 +1258,23 @@ namespace engine
 			}
 
 			// Drag and drop material to game object meshes
-			if (auto material = std::dynamic_pointer_cast<Material>(assetNode->asset.lock()))
+			if (std::dynamic_pointer_cast<Material>(assetNode->asset.lock()) || std::dynamic_pointer_cast<Texture>(assetNode->asset.lock()))
 			{
+
+
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 				{
+					std::shared_ptr<Material> material = nullptr;
+
+					if (auto assetMaterial = std::dynamic_pointer_cast<Material>(assetNode->asset.lock()))
+						material = assetMaterial;
+
+					if (auto assetTexture = std::dynamic_pointer_cast<Texture>(assetNode->asset.lock()))
+					{
+						temporaryTextureMaterial->diffuseTexture = assetTexture;
+						material = temporaryTextureMaterial;
+					}
+
 					// Draw the material icon when dragging
 					ImGui::Image((void*)(intptr_t)openGLTextureId, ImVec2(30, 30), { 0, 1 }, { 1, 0 });
 
@@ -1291,6 +1319,21 @@ namespace engine
 				// When the mouse is released, reset the overwritten model, texture
 				if (!ImGui::IsMouseDragging(0))
 				{
+					// If the mouse is released over a mesh, we need to check if it used the temporary texture material
+					// and if so, add the material to the game
+					if (auto lockedOverWrittenGameObject = overwrittenGameObject.lock())
+					{
+						if (auto mesh = lockedOverWrittenGameObject->getComponent<MeshComponent>())
+						{
+							if (mesh->getMaterial()->uuid.id == temporaryTextureMaterial->uuid.id)
+							{
+								game->addMaterial(temporaryTextureMaterial);
+								temporaryTextureMaterial = std::make_shared<Material>();
+								EventManager::getInstance().notify(EventType::SelectableAdded, mesh->getMaterial()->uuid.id);
+							}
+						}
+					}
+
 					overwrittenGameObject.reset();
 					overwrittenMaterial.reset();
 				}
@@ -1304,7 +1347,7 @@ namespace engine
 				char buf[64];
 				sprintf(buf, "%s###Button", name);
 				ImGui::Button(buf);
-				if (ImGui::BeginPopupContextItem())
+				if (ImGui::BeginPopupContextItem("NamePopup", ImGuiPopupFlags_MouseButtonLeft))
 				{
 					ImGui::Text("Edit name:");
 					ImGui::InputText("##edit", name, IM_ARRAYSIZE(name));

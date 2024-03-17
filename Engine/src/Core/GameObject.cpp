@@ -53,6 +53,14 @@ namespace engine {
 		components.push_back(component);
 	}
 
+	void GameObject::removeComponent(std::shared_ptr<Component> component)
+	{
+		auto it = std::find(components.begin(), components.end(), component);
+		if (it != components.end()) {
+			components.erase(it);
+		}
+	}
+
 	std::shared_ptr<GameObject> GameObject::clone()
 	{
 		std::shared_ptr<GameObject> newGameObject = std::make_shared<GameObject>(*this);

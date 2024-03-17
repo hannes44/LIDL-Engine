@@ -56,6 +56,8 @@ namespace engine
 		std::shared_ptr<MeshComponent> sphereDebugMesh;
 		std::shared_ptr<Material> sphereDebugMaterial;
 
+		RendererSettings defaultRendererSettings{};
+
 	private:
 		void renderGameObject(CameraComponent* camera, GameObject* gameObject, RendererSettings* rendererSettings);
 	};

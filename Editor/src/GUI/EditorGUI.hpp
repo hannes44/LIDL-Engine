@@ -115,6 +115,7 @@ namespace engine
 		std::weak_ptr<GameObject> overwrittenGameObject;
 		std::weak_ptr<GameObject> copiedGameObject;
 		std::weak_ptr<AssetNode> selectedAssetNodeFolder;
+		std::shared_ptr<Material> temporaryTextureMaterial = std::make_shared<Material>(); // Temporary material created to display drag and drop texture preview
 
 		// Gizmos operation menu icons
 		std::shared_ptr<Texture> rotateIconTexture;

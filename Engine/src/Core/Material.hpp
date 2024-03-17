@@ -35,7 +35,7 @@ namespace engine
 		float roughness = 0;
 		float shininess = 0.5;
 
-		std::string name = "Default Material";
+		std::string name = "Material";
 
 		std::weak_ptr<Texture> diffuseTexture;
 		std::weak_ptr<Texture> specularTexture;

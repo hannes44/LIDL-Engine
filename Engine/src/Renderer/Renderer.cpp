@@ -178,7 +178,7 @@ namespace engine
 
 		graphicsAPI->setDrawTriangleOutline(true);
 
-		renderGameObject(camera, &gameObject, nullptr);
+		renderGameObject(camera, &gameObject, &defaultRendererSettings);
 	}
 
 	void Renderer::renderGizmos(Game* game, CameraComponent* camera, RendererSettings* renderingSettings)
@@ -204,7 +204,7 @@ namespace engine
 
 	void Renderer::drawLine(glm::vec3 start, glm::vec3 end, glm::vec3 color, CameraComponent* camera)
 	{
-		glm::mat4 modelViewProjection = camera->getProjectionMatrix() * camera->getViewMatrix() * glm::mat4(1.0f);
+		glm::mat4 modelViewProjection = camera->getProjectionMatrix(defaultRendererSettings.width, defaultRendererSettings.height) * camera->getViewMatrix() * glm::mat4(1.0f);
 		graphicsAPI->drawLine(start, end, color, modelViewProjection);
 	}
 
