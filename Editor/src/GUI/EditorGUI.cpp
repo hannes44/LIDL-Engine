@@ -1243,10 +1243,23 @@ namespace engine
 			}
 
 			// Drag and drop material to game object meshes
-			if (auto material = std::dynamic_pointer_cast<Material>(assetNode->asset.lock()))
+			if (std::dynamic_pointer_cast<Material>(assetNode->asset.lock()) || std::dynamic_pointer_cast<Texture>(assetNode->asset.lock()))
 			{
+
+
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 				{
+					std::shared_ptr<Material> material = nullptr;
+
+					if (auto assetMaterial = std::dynamic_pointer_cast<Material>(assetNode->asset.lock()))
+						material = assetMaterial;
+
+					if (auto assetTexture = std::dynamic_pointer_cast<Texture>(assetNode->asset.lock()))
+					{
+						temporaryTextureMaterial->diffuseTexture = assetTexture;
+						material = temporaryTextureMaterial;
+					}
+
 					// Draw the material icon when dragging
 					ImGui::Image((void*)(intptr_t)openGLTextureId, ImVec2(30, 30), { 0, 1 }, { 1, 0 });
 
@@ -1291,6 +1304,21 @@ namespace engine
 				// When the mouse is released, reset the overwritten model, texture
 				if (!ImGui::IsMouseDragging(0))
 				{
+					// If the mouse is released over a mesh, we need to check if it used the temporary texture material
+					// and if so, add the material to the game
+					if (auto lockedOverWrittenGameObject = overwrittenGameObject.lock())
+					{
+						if (auto mesh = lockedOverWrittenGameObject->getComponent<MeshComponent>())
+						{
+							if (mesh->getMaterial()->uuid.id == temporaryTextureMaterial->uuid.id)
+							{
+								game->addMaterial(temporaryTextureMaterial);
+								temporaryTextureMaterial = std::make_shared<Material>();
+								EventManager::getInstance().notify(EventType::SelectableAdded, mesh->getMaterial()->uuid.id);
+							}
+						}
+					}
+
 					overwrittenGameObject.reset();
 					overwrittenMaterial.reset();
 				}
