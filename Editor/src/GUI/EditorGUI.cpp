@@ -136,15 +136,18 @@ namespace engine
 
 			GamePhysics::getInstance().fixedUpdate(editorGameObjects, editorPhysicsSettings);
 
+			renderer->defaultRendererSettings.width = viewPortSize.x;
+			renderer->defaultRendererSettings.height = viewPortSize.y;
+
 			if (noGUIMode)
 			{
 				// When in no GUI mode, render to entire window
 				window.getWindowSize(&editorSettings.rendererSettings.width, &editorSettings.rendererSettings.height);
-				Renderer::getInstance()->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings, glm::vec2(0));
+				renderer->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings, glm::vec2(0));
 			}
 			else
 			{
-				Renderer::getInstance()->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings, viewPortPosition);
+				renderer->renderGame(game.get(), getActiveCamera(), &editorSettings.rendererSettings, viewPortPosition);
 			}
 
 			renderer->renderGizmos(game.get(), getActiveCamera(), &editorSettings.rendererSettings);
