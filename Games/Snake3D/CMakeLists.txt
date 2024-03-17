@@ -1,8 +1,8 @@
-project(Snake, VERSION 0.01)
+project(Snake3DExe, VERSION 0.01)
 
 # Create executable
-add_executable(Snake)
-target_sources(Snake PRIVATE 
+add_executable(Snake3DExe)
+target_sources(Snake3DExe PRIVATE 
 	Snake3D.hpp
 	Snake3D.cpp
 )
@@ -15,7 +15,7 @@ add_library(Snake3D SHARED
 target_include_directories(Snake3D PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Link libraries
-target_link_libraries(Snake PRIVATE
+target_link_libraries(Snake3DExe PRIVATE
 	engine
 	vendor	
 	imgui
