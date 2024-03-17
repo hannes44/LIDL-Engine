@@ -819,7 +819,8 @@ namespace engine
 					ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, &(lockedGameObject->transform.transformMatrix[0][0]));
 				}
 
-				for (auto component : lockedGameObject->getComponents())
+				std::vector<std::shared_ptr<Component>> components = lockedGameObject->getComponents();
+				for (auto component : components)
 				{
 					std::string componentName = component->getName();
 
@@ -832,8 +833,16 @@ namespace engine
 					if (ImGui::CollapsingHeader(componentName.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 					{
 						drawSerializableVariables(component.get());
+
+						if (ImGui::Button(("Remove Component##" + component->uuid.id).c_str()))
+						{
+							lockedGameObject->removeComponent(component);
+						}
 					}
 				}
+
+				ImGui::Spacing();
+				ImGui::Separator();
 
 				if (ImGui::Button("Add Component"))
 				{

@@ -55,6 +55,7 @@ namespace engine
 		template <typename T>
 		bool hasComponent() { return getComponent<T>() != nullptr; }
 		void addComponent(std::shared_ptr<Component> component);
+		void removeComponent(std::shared_ptr<Component> component);
 
 		std::string getName() override { return name; };
 
