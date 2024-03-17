@@ -978,9 +978,12 @@ namespace engine
 
 				if (ImGui::SmallButton("New Script"))
 				{
-					std::string scriptName = newScriptName + std::string(".cs");
-					ResourceManager::getInstance()->createNewScriptForActiveGame(scriptName);
-					assetManager->addNewScriptNode(scriptName);
+					if (newScriptName[0] != '\0')
+					{
+						std::string scriptName = newScriptName + std::string(".cs");
+						ResourceManager::getInstance()->createNewScriptForActiveGame(scriptName);
+						assetManager->addNewScriptNode(scriptName);
+					}
 				}
 
 				ImGui::SameLine();
