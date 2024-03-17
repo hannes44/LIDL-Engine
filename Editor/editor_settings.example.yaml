@@ -1,7 +1,6 @@
 Use Dark Theme: true
 Show Gizmos: true
 Use Serialization: true
-Enable User Retention: false
 Enable Scripting: false
 Default Game: Snake3D
 Enable Depth Test: true
